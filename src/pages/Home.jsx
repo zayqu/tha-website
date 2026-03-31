@@ -6,6 +6,7 @@ import CounterAnimation from '../components/CounterAnimation'
 import NewsCard from '../components/NewsCard'
 import AcademyCard from '../components/AcademyCard'
 import ButtonPrimary from '../components/ButtonPrimary'
+import ButtonSecondary from '../components/ButtonSecondary'
 import newsData from '../data/news.json'
 import academyData from '../data/academy.json'
 
