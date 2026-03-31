@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "THA Launches New Hepatitis Screening Campaign in Dodoma",
+    "slug": "tha-launches-hepatitis-screening-dodoma",
+    "excerpt": "Over 5,000 residents expected to benefit from free screening and vaccination services in partnership with the Ministry of Health.",
+    "content": "Tanzania Health Alliance is proud to announce the launch of our comprehensive hepatitis screening campaign in Dodoma region. This initiative, conducted in partnership with the Tanzania Ministry of Health and local healthcare facilities, aims to screen over 5,000 residents for hepatitis B and C.\n\nThe campaign will run for three weeks and includes free screening services, vaccination for hepatitis B, and referrals for treatment for those testing positive. Our team of trained healthcare professionals and volunteers will be deployed across 15 communities in the region.\n\n\"Early detection is crucial in combating viral hepatitis,\" said our Executive Director during the launch event. \"Through this campaign, we hope to identify cases early and link patients to care while also educating communities about prevention.\"\n\nThe initiative is supported by the World Hepatitis Alliance and local government authorities. We encourage all residents of Dodoma to take advantage of this opportunity for free health screening.",
+    "category": "Announcements",
+    "date": "2024-03-15",
+    "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "author": "THA Communications Team",
+    "tags": ["Hepatitis", "Screening", "Dodoma", "Campaign"]
+  },
+  {
+    "id": 2,
+    "title": "Annual General Meeting 2024: Call for Nominations",
+    "slug": "agm-2024-call-for-nominations",
+    "excerpt": "Members are invited to submit nominations for the Board of Directors ahead of our upcoming Annual General Meeting.",
+    "content": "The Tanzania Health Alliance will hold its Annual General Meeting on June 15, 2024, at the Julius Nyerere International Convention Centre in Dar es Salaam.\n\nWe are currently accepting nominations for three positions on our Board of Directors:\n\n- Treasurer\n- Programs Director\n- Community Representative\n\nEligible candidates must be active members of THA in good standing for at least one year. Nomination forms can be downloaded from our website or collected from our offices in Upanga.\n\nAll nominations must be submitted by May 1, 2024, accompanied by a brief biography and vision statement.\n\nWe look forward to seeing all members at the AGM as we review our achievements and plan for the coming year.",
+    "category": "Events",
+    "date": "2024-03-10",
+    "image": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "author": "Governance Committee",
+    "tags": ["AGM", "Governance", "Elections"]
+  },
+  {
+    "id": 3,
+    "title": "Success Story: Mary's Journey to Hepatitis C Cure",
+    "slug": "mary-hepatitis-c-cure-story",
+    "excerpt": "How early detection through our screening program led to successful treatment and a new lease on life for a Dar es Salaam resident.",
+    "content": "Mary Joseph, a 34-year-old mother of two from Temeke, Dar es Salaam, never suspected she had hepatitis C until she attended one of our community screening events last year.\n\n\"I felt completely healthy,\" Mary recalls. \"I only went to the screening because my neighbor encouraged me. When the results came back positive, I was shocked and scared for my children.\"\n\nThanks to our linkages with care program, Mary was immediately referred to Muhimbili National Hospital for confirmatory testing and treatment initiation. After 12 weeks of direct-acting antiviral therapy, Mary achieved sustained virologic response - effectively cured of hepatitis C.\n\n\"THA didn't just give me a test - they gave me support throughout my treatment journey,\" Mary says. \"Now I'm an advocate in my community, encouraging everyone to get screened.\"\n\nMary's story is just one of over 200 successful treatment linkages facilitated by THA in the past year. Her experience underscores the importance of our screening campaigns in identifying asymptomatic cases and preventing long-term liver disease.",
+    "category": "Success Stories",
+    "date": "2024-03-05",
+    "image": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "author": "Programs Team",
+    "tags": ["Testimonial", "Hepatitis C", "Treatment", "Success Story"]
+  }
+]

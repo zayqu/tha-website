@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-sans text-neutral bg-white leading-tight antialiased;
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply py-20 px-4 sm:px-6 lg:px-8;
+  }
+  .container-custom {
+    @apply max-w-7xl mx-auto;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
