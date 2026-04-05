@@ -62,7 +62,7 @@ export const Home = () => {
     title: area.name,
     icon: index === 0 ? 'local_hospital' : index === 1 ? 'favorite' : 'psychology',
     description: area.approach.join('. '),
-    color: index === 0 ? 'from-blue-500 to-blue-600' : index === 1 ? 'from-red-500 to-red-600' : 'from-purple-500 to-purple-600'
+    color: 'from-secondary to-secondary-dark' // THA Branding Color for all areas
   }));
 
   const latestNews = [
@@ -70,7 +70,7 @@ export const Home = () => {
       id: 1,
       title: 'World Hepatitis Day 2025: Zero Hepatitis by 2030',
       excerpt: 'Join us for a community awareness campaign across Dar es Salaam.',
-      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+      image: 'YOUR_HEPATITIS_DAY_IMAGE_PATH', // TODO: Replace with your image
       date: 'March 28, 2026',
       category: 'Events'
     },
@@ -78,7 +78,7 @@ export const Home = () => {
       id: 2,
       title: 'New Mental Health Clinic Opens in Mwanza',
       excerpt: 'Expanding our services to provide comprehensive mental health support.',
-      image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80',
+      image: 'YOUR_MENTAL_HEALTH_IMAGE_PATH', // TODO: Replace with your image
       date: 'March 25, 2026',
       category: 'Announcements'
     },
@@ -86,7 +86,7 @@ export const Home = () => {
       id: 3,
       title: 'Partnership with Ministry of Health Strengthened',
       excerpt: 'Collaborative efforts to improve healthcare outcomes nationwide.',
-      image: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&q=80',
+      image: 'YOUR_PARTNERSHIP_IMAGE_PATH', // TODO: Replace with your image
       date: 'March 20, 2026',
       category: 'Press Release'
     },
@@ -109,9 +109,9 @@ export const Home = () => {
             <source src="YOUR_VIDEO_URL" type="video/mp4" />
           </video> */}
           <div className="w-full h-full bg-gradient-to-br from-primary-light to-primary-dark"></div>
-          {/* TODO: Replace with your healthcare photo - recommended 1920x1080px */}
+          {/* TODO: Replace with your healthcare photo - recommended 1920x1080px - Place hero background image here */}
           <img 
-            src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1920&q=80"
+            src="YOUR_HERO_BACKGROUND_IMAGE_PATH"
             alt="Healthcare in Tanzania"
             className="absolute inset-0 w-full h-full object-cover opacity-30"
           />

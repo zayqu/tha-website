@@ -92,7 +92,7 @@ export const About = () => {
             <div className="order-1 md:order-2">
               <div className="img-zoom-container rounded-2xl shadow-2xl">
                 <img 
-                  src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80"
+                  src="YOUR_TEAM_IMAGE_PATH" // TODO: Replace with your team photo - recommended 800x400px
                   alt="THA Team"
                   className="w-full h-[400px] object-cover img-zoom"
                 />
