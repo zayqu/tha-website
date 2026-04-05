@@ -30,7 +30,6 @@ export const Footer = () => {
     { label: 'Hepatitis Programs', icon: 'local_hospital' },
     { label: 'HIV/AIDS Support', icon: 'favorite' },
     { label: 'Mental Health', icon: 'psychology' },
-    { label: 'Healthcare Access', icon: 'groups' },
   ];
 
   const socialLinks = [

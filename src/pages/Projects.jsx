@@ -40,7 +40,7 @@ export const Projects = () => {
     }
   ];
 
-  const categories = ['all', 'Hepatitis', 'HIV/AIDS', 'Mental Health', 'Healthcare Access'];
+  const categories = ['all', 'Hepatitis', 'HIV/AIDS', 'Mental Health'];
   const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
 
   return (
