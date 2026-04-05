@@ -36,9 +36,13 @@ export const Header = () => {
           {/* Logo */}
           <Link 
             to="/" 
-            className="text-xl font-bold tracking-tighter text-primary hover:text-primary-light transition"
+            className="flex items-center gap-2 hover:opacity-80 transition"
           >
-            <span className="font-heading">THA</span>
+            <img 
+              src="/logo/tha-logo.svg" 
+              alt="Tanzania Health Alliance"
+              className="h-12 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
