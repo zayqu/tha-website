@@ -1,0 +1,44 @@
+{
+  "faqs": [
+    {
+      "id": 1,
+      "question": "How can I become a volunteer?",
+      "answer": "Simply fill out the volunteer application form on our website. After reviewing your submission, we'll invite you to an orientation session where you'll learn more about our programs and how you can contribute your skills and passion."
+    },
+    {
+      "id": 2,
+      "question": "What should I know before applying?",
+      "answer": "Before applying, it's helpful to understand our mission and programs. We look for volunteers who are passionate about health advocacy and community service. You should be willing to commit time to our initiatives and work collaboratively with our team and community partners."
+    },
+    {
+      "id": 3,
+      "question": "What is the application process like?",
+      "answer": "The application process is straightforward: 1) Complete the volunteer application form available on our website, 2) We review your application and verify your information, 3) If selected, we invite you to an orientation session, 4) You complete any necessary training for your specific role, 5) You begin contributing to THA programs."
+    },
+    {
+      "id": 4,
+      "question": "How can I help spread awareness?",
+      "answer": "You can make a real difference by: 1) Sharing our mission on social media, 2) Inviting friends and family to join our initiatives, 3) Organizing community awareness campaigns, 4) Participating in screening events, 5) Speaking about health topics in your community, 6) Supporting our programs through word-of-mouth advocacy."
+    },
+    {
+      "id": 5,
+      "question": "How can I partner with Tanzania Health Alliance?",
+      "answer": "We welcome partnerships! Whether you represent a government agency, NGO, corporate entity, or academic institution, we can work together to advance health in Tanzania. Please contact us directly at info@tzhealthalliance.or.tz or call +255 578 393 4937 to discuss partnership opportunities."
+    },
+    {
+      "id": 6,
+      "question": "Where are your programs located?",
+      "answer": "Our programs are based in Dar es Salaam and operate across multiple regions of Tanzania. Our main office is located at Adda Estate, House No. 03, Kinondoni. We work with local partners to extend our reach to underserved communities."
+    },
+    {
+      "id": 7,
+      "question": "Are your services free?",
+      "answer": "Yes! Most of our community programs, screenings, and awareness events are provided free of charge. We believe access to health information and basic services should not be limited by ability to pay."
+    },
+    {
+      "id": 8,
+      "question": "How do you use donations?",
+      "answer": "Donations support our mission directly: funding screening programs, training health workers, conducting awareness campaigns, and providing support services. We're committed to transparency and efficient use of resources to maximize impact."
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "teamMembers": [
+    {
+      "id": "shaibu-issa",
+      "name": "Shaibu Issa",
+      "title": "Founder and Executive Director",
+      "bio": "Shaibu Issa is the visionary founder and Executive Director of Tanzania Health Alliance. Having personally faced hepatitis B and lost his brother to liver cancer in 2021, Shaibu is driven to ensure no one suffers from preventable diseases due to misinformation, late detection, or stigma. His passion for health advocacy has made him a recognized leader in the fight against hepatitis, HIV, and mental health challenges in Tanzania.",
+      "image": "/images/team/shaibu-issa.jpg",
+      "expertise": ["Hepatitis Advocacy", "Health Equity", "Community Engagement"]
+    },
+    {
+      "id": "juma-issa",
+      "name": "Juma Issa",
+      "title": "Treasurer",
+      "bio": "Juma Issa manages the financial operations of Tanzania Health Alliance, ensuring resources are effectively allocated to maximize impact on our health programs.",
+      "image": "/images/team/juma-issa.jpg",
+      "expertise": ["Financial Management", "Resource Allocation"]
+    },
+    {
+      "id": "mohammed-nandute",
+      "name": "Mohammed Nandute",
+      "title": "Head of Marketing and Publicity",
+      "bio": "Mohammed leads our communications strategy, ensuring THA's message reaches communities across Tanzania through strategic media partnerships and awareness campaigns.",
+      "image": "/images/team/mohammed-nandute.jpg",
+      "expertise": ["Communications", "Media Outreach", "Public Relations"]
+    },
+    {
+      "id": "enock-sichone",
+      "name": "Enock Sichone",
+      "title": "General Secretary",
+      "bio": "Enock oversees organizational operations and coordination, ensuring smooth execution of THA's programs and strategic initiatives.",
+      "image": "/images/team/enock-sichone.jpg",
+      "expertise": ["Operations", "Program Coordination", "Administration"]
+    },
+    {
+      "id": "edward-masele",
+      "name": "Edward Masele",
+      "title": "Project Coordinator",
+      "bio": "Edward coordinates our on-the-ground health initiatives, working directly with communities to implement and monitor THA programs.",
+      "image": "/images/team/edward-masele.jpg",
+      "expertise": ["Project Management", "Community Liaison", "Program Implementation"]
+    },
+    {
+      "id": "shuwena-ali",
+      "name": "Shuwena H. Ali",
+      "title": "Associate Director and Administrative Manager",
+      "bio": "Shuwena provides strategic support in program development and administrative oversight, ensuring THA's operations align with our mission.",
+      "image": "/images/team/shuwena-ali.jpg",
+      "expertise": ["Program Development", "Administration", "Strategic Planning"]
+    }
+  ],
+  "coreValues": [
+    {
+      "name": "Compassion",
+      "description": "We care deeply about the individuals and communities we serve, recognizing their unique needs and challenges."
+    },
+    {
+      "name": "Integrity",
+      "description": "We operate with honesty, transparency, and accountability in all our actions and partnerships."
+    },
+    {
+      "name": "Equity",
+      "description": "We believe every person deserves fair access to quality healthcare, regardless of background or circumstances."
+    },
+    {
+      "name": "Collaboration",
+      "description": "We work together with partners, communities, and stakeholders to achieve greater impact."
+    },
+    {
+      "name": "Innovation",
+      "description": "We embrace creative solutions and evidence-based approaches to address health challenges."
+    },
+    {
+      "name": "Empowerment",
+      "description": "We strengthen individuals and communities to take control of their health and futures."
+    },
+    {
+      "name": "Excellence",
+      "description": "We strive for the highest standards in all our programs, services, and advocacy work."
+    }
+  ]
+}

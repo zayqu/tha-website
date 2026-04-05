@@ -1,0 +1,52 @@
+{
+  "testimonials": [
+    {
+      "id": 1,
+      "quote": "Thanks Shaibu Issa.. Excellent advocacy and awareness raising. The momentum is growing and you are a star.",
+      "author": "Dr. 'Funmi Lesi",
+      "title": "Hepatitis Team Lead, Global Hepatitis Programme",
+      "organization": "WHO",
+      "image": "/images/testimonials/funmi-lesi.jpg"
+    },
+    {
+      "id": 2,
+      "quote": "So great to see you Shaibu Issa! Your passion is always such an inspiration.",
+      "author": "Jessica Hicks",
+      "title": "Senior Director",
+      "organization": "The World Hepatitis Alliance",
+      "image": "/images/testimonials/jessica-hicks.jpg"
+    },
+    {
+      "id": 3,
+      "quote": "Love seeing you two together at a meeting on triple elimination!",
+      "author": "Su Wang",
+      "title": "Medical Director",
+      "organization": "Center for Asian Health & Viral Hepatitis",
+      "image": "/images/testimonials/su-wang.jpg"
+    },
+    {
+      "id": 4,
+      "quote": "Congratulations Shaibu Issa, you are doing a great job, keep it up",
+      "author": "Dani Ngayonga",
+      "title": "Academician",
+      "organization": "MUHAS | Geriatric Specialist Resident",
+      "image": "/images/testimonials/dani-ngayonga.jpg"
+    },
+    {
+      "id": 5,
+      "quote": "Well done, Shuaibu. Keep the campaign going.",
+      "author": "Abdullateef Shanu",
+      "title": "Medical Doctor",
+      "organization": "Healthcare Data Analyst",
+      "image": "/images/testimonials/abdullateef-shanu.jpg"
+    },
+    {
+      "id": 6,
+      "quote": "Looking forward to meeting you in person Shaibu Issa",
+      "author": "Kenneth Kabagambe",
+      "title": "Joint Japan/World Bank Graduate Scholar",
+      "organization": "Global Health",
+      "image": "/images/testimonials/kenneth-kabagambe.jpg"
+    }
+  ]
+}
