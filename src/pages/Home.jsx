@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
+import campaigns from '../data/campaigns.json';
+import impact from '../data/impact.json';
+import partners from '../data/partners.json';
+import stories from '../data/stories.json';
 
 const AnimatedCounter = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
@@ -41,42 +45,12 @@ const AnimatedCounter = ({ end, duration = 2000 }) => {
 };
 
 export const Home = () => {
+  // Real impact metrics from data
   const impactStats = [
-    { label: 'People Reached', value: 50000 },
-    { label: 'Partnerships', value: 25 },
-    { label: 'Regions', value: 8 },
-    { label: 'Years Active', value: 6 },
-  ];
-
-  const focusAreas = [
-    {
-      id: 'hepatitis',
-      title: 'Hepatitis',
-      icon: 'local_hospital',
-      category: 'hepatitis',
-      description: 'Raising awareness and prevention strategies for viral hepatitis across Tanzania.',
-    },
-    {
-      id: 'hiv',
-      title: 'HIV/AIDS',
-      icon: 'favorite',
-      category: 'hiv',
-      description: 'Comprehensive support and education programs for HIV prevention and treatment.',
-    },
-    {
-      id: 'mental',
-      title: 'Mental Health',
-      icon: 'psychology',
-      category: 'mental',
-      description: 'Promoting mental wellbeing and addressing stigma in our communities.',
-    },
-    {
-      id: 'healthcare',
-      title: 'Healthcare Access',
-      icon: 'groups',
-      category: 'primary',
-      description: 'Ensuring equitable access to quality healthcare services for all Tanzanians.',
-    },
+    { label: 'People Reached', value: impact.impactMetrics.total.peopleReached },
+    { label: 'Social Followers', value: 1200000 },
+    { label: 'Partners', value: partners.partners.length },
+    { label: 'Regions Active', value: 5 },
   ];
 
   return (
@@ -98,9 +72,9 @@ export const Home = () => {
             <Link to="/make-a-difference" className="px-8 py-3 bg-secondary text-white font-bold rounded-md hover:bg-secondary-dark transition shadow-card">
               Get Involved
             </Link>
-            <button className="px-8 py-3 border-2 border-white text-white font-bold rounded-md hover:bg-white hover:text-primary transition">
+            <Link to="/about" className="px-8 py-3 border-2 border-white text-white font-bold rounded-md hover:bg-white hover:text-primary transition">
               Learn More
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -119,27 +93,51 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* Our Focus Section */}
+      {/* Our Campaigns Section */}
       <section className="py-16 md:py-24 bg-cool-gray">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter text-center mb-12">
-            Our Focus Areas
+            Our Campaigns
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {focusAreas.map((area) => (
+          <div className="grid md:grid-cols-3 gap-8">
+            {campaigns.campaigns.map((campaign) => (
               <div 
-                key={area.id}
-                className="bg-white rounded-lg shadow-card p-6 hover:shadow-elevated hover:scale-105 transition-all duration-300 cursor-pointer"
+                key={campaign.id}
+                className="bg-white rounded-lg shadow-card overflow-hidden hover:shadow-elevated transition-all duration-300"
               >
-                <div className="flex justify-center mb-4">
-                  <Icon name={area.icon} size={48} category={area.category} />
+                <div className={`h-32 bg-gradient-to-br from-${campaign.color}-light to-${campaign.color} flex items-center justify-center`}>
+                  <Icon name={campaign.icon} size={64} category={campaign.color} />
                 </div>
-                <h3 className="text-xl font-bold text-center mb-3 text-primary">
-                  {area.title}
-                </h3>
-                <p className="text-center text-gray-600 body-sm">
-                  {area.description}
-                </p>
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold mb-2 text-primary">
+                    {campaign.name}
+                  </h3>
+                  <p className="text-secondary font-bold mb-3">{campaign.tagline}</p>
+                  <p className="text-gray-600 body-md mb-4">
+                    {campaign.description}
+                  </p>
+                  
+                  {/* Key Metrics */}
+                  <div className="grid grid-cols-2 gap-4 mb-6 pb-6 border-b">
+                    {Object.entries(campaign.metrics).slice(0, 4).map(([key, value]) => (
+                      <div key={key}>
+                        <p className="text-secondary font-bold text-lg">
+                          {(value / 1000).toFixed(1)}k+
+                        </p>
+                        <p className="text-xs text-gray-500 capitalize">
+                          {key.replace(/([A-Z])/g, ' $1').trim()}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <Link 
+                    to={`/campaigns/${campaign.id}`}
+                    className="inline-block w-full text-center px-4 py-2 bg-secondary text-white font-bold rounded-md hover:bg-secondary-dark transition"
+                  >
+                    Learn More
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
@@ -205,7 +203,7 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* Partners Marquee - TODO: implement with real logos */}
+      {/* Partners Section */}
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
           <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter mb-2">
@@ -213,18 +211,23 @@ export const Home = () => {
           </h2>
           <p className="text-gray-600">Working together to strengthen health systems in Tanzania</p>
         </div>
-        <div className="bg-cool-gray py-12 overflow-hidden">
-          <div className="flex gap-12 animate-marquee">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="flex-shrink-0 w-32 h-16 bg-white rounded-lg flex items-center justify-center shadow-subtle hover:shadow-card transition cursor-pointer opacity-60 hover:opacity-100">
-                <span className="text-gray-400 text-sm">Partner {i + 1}</span>
-              </div>
-            ))}
-            {[...Array(8)].map((_, i) => (
-              <div key={`duplicate-${i}`} className="flex-shrink-0 w-32 h-16 bg-white rounded-lg flex items-center justify-center shadow-subtle hover:shadow-card transition cursor-pointer opacity-60 hover:opacity-100">
-                <span className="text-gray-400 text-sm">Partner {i + 1}</span>
-              </div>
-            ))}
+        <div className="bg-cool-gray py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+              {partners.partners.map((partner, idx) => (
+                <a 
+                  key={partner.id || idx}
+                  href={partner.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center h-24 bg-white rounded-lg shadow-subtle hover:shadow-card transition cursor-pointer group"
+                >
+                  <span className="font-bold text-center px-3 text-sm group-hover:text-secondary transition">
+                    {partner.name}
+                  </span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -238,9 +241,12 @@ export const Home = () => {
           <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
             Become a member and help us create lasting health impact in Tanzania. Whether you're an individual, organization, or healthcare professional, there's a way for you to get involved.
           </p>
-          <button className="px-8 py-3 bg-secondary text-white font-bold rounded-md hover:bg-secondary-dark transition shadow-card">
+          <Link 
+            to="/make-a-difference"
+            className="inline-block px-8 py-3 bg-secondary text-white font-bold rounded-md hover:bg-secondary-dark transition shadow-card"
+          >
             Become a Member
-          </button>
+          </Link>
         </div>
       </section>
     </div>

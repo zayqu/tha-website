@@ -9,6 +9,7 @@ import { Academy } from './pages/Academy';
 import { News } from './pages/News';
 import { Contact } from './pages/Contact';
 import { Projects } from './pages/Projects';
+import { CampaignDetail } from './pages/CampaignDetail';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -39,6 +40,7 @@ function App() {
               <Route path="/academy" element={<Academy />} />
               <Route path="/news" element={<News />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/campaigns/:campaignId" element={<CampaignDetail />} />
             </Routes>
           </main>
           <Footer />
