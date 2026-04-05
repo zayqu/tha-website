@@ -1,206 +1,145 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
-import { TypingText } from '../components/TypingText';
-import { thaData } from '../data/thaData';
-import { impactStats } from '../data/statsData';
 
-const CountUp = ({ end, duration = 2000, suffix = '' }) => {
+const AnimatedCounter = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
   const ref = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isVisible) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.3 }
-    );
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !isVisible) {
+        setIsVisible(true);
+      }
+    });
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
+    if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, [isVisible]);
 
   useEffect(() => {
     if (!isVisible) return;
 
-    let startTime;
-    const animate = (currentTime) => {
-      if (!startTime) startTime = currentTime;
-      const progress = Math.min((currentTime - startTime) / duration, 1);
-      
+    const startTime = Date.now();
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
       setCount(Math.floor(progress * end));
-      
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
 
-    requestAnimationFrame(animate);
+      if (progress === 1) clearInterval(interval);
+    }, 16);
+
+    return () => clearInterval(interval);
   }, [isVisible, end, duration]);
 
-  return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
+  return (
+    <div ref={ref} className="text-4xl md:text-5xl font-bold text-secondary">
+      {count.toLocaleString()}+
+    </div>
+  );
 };
 
 export const Home = () => {
-  const [activeCard, setActiveCard] = useState(null);
-
-  const impactStatsDisplay = [
-    { label: 'People Reached', value: impactStats.peopleReached, suffix: '+' },
-    { label: 'Active Partnerships', value: impactStats.partnerships, suffix: '' },
-    { label: 'Regions Served', value: impactStats.regions, suffix: '' },
-    { label: 'Years Active', value: impactStats.getYearsActive(), suffix: '' },
+  const impactStats = [
+    { label: 'People Reached', value: 50000 },
+    { label: 'Partnerships', value: 25 },
+    { label: 'Regions', value: 8 },
+    { label: 'Years Active', value: 6 },
   ];
 
-  const focusAreas = thaData.thematicAreas.map((area, index) => ({
-    title: area.name,
-    icon: index === 0 ? 'local_hospital' : index === 1 ? 'favorite' : 'psychology',
-    description: area.approach.join('. '),
-    color: 'from-secondary to-secondary-dark' // THA Branding Color for all areas
-  }));
-
-  const latestNews = [
+  const focusAreas = [
     {
-      id: 1,
-      title: 'World Hepatitis Day 2025: Zero Hepatitis by 2030',
-      excerpt: 'Join us for a community awareness campaign across Dar es Salaam.',
-      image: 'YOUR_HEPATITIS_DAY_IMAGE_PATH', // TODO: Replace with your image
-      date: 'March 28, 2026',
-      category: 'Events'
+      id: 'hepatitis',
+      title: 'Hepatitis',
+      icon: 'local_hospital',
+      category: 'hepatitis',
+      description: 'Raising awareness and prevention strategies for viral hepatitis across Tanzania.',
     },
     {
-      id: 2,
-      title: 'New Mental Health Clinic Opens in Mwanza',
-      excerpt: 'Expanding our services to provide comprehensive mental health support.',
-      image: 'YOUR_MENTAL_HEALTH_IMAGE_PATH', // TODO: Replace with your image
-      date: 'March 25, 2026',
-      category: 'Announcements'
+      id: 'hiv',
+      title: 'HIV/AIDS',
+      icon: 'favorite',
+      category: 'hiv',
+      description: 'Comprehensive support and education programs for HIV prevention and treatment.',
     },
     {
-      id: 3,
-      title: 'Partnership with Ministry of Health Strengthened',
-      excerpt: 'Collaborative efforts to improve healthcare outcomes nationwide.',
-      image: 'YOUR_PARTNERSHIP_IMAGE_PATH', // TODO: Replace with your image
-      date: 'March 20, 2026',
-      category: 'Press Release'
+      id: 'mental',
+      title: 'Mental Health',
+      icon: 'psychology',
+      category: 'mental',
+      description: 'Promoting mental wellbeing and addressing stigma in our communities.',
     },
-  ];
-
-  const partners = [
-    'WHO', 'World Hepatitis Alliance', 'UNAIDS', 'PEPFAR', 'Global Fund',
-    'CDC', 'USAID', 'MoH Tanzania', 'WHO', 'World Hepatitis Alliance'
+    {
+      id: 'healthcare',
+      title: 'Healthcare Access',
+      icon: 'groups',
+      category: 'primary',
+      description: 'Ensuring equitable access to quality healthcare services for all Tanzanians.',
+    },
   ];
 
   return (
-    <div className="pt-16 md:pt-20">
-      {/* Hero Section with Video Background */}
-      <section className="relative h-[85vh] md:h-screen flex items-center overflow-hidden bg-primary">
-        {/* Video Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/70 to-primary/90 z-10"></div>
-          {/* TODO: Replace with actual video background */}
-          {/* <video autoPlay muted loop className="w-full h-full object-cover">
-            <source src="YOUR_VIDEO_URL" type="video/mp4" />
-          </video> */}
-          <div className="w-full h-full bg-gradient-to-br from-primary-light to-primary-dark"></div>
-          {/* TODO: Replace with your healthcare photo - recommended 1920x1080px - Place hero background image here */}
-          <img 
-            src="YOUR_HERO_BACKGROUND_IMAGE_PATH"
-            alt="Healthcare in Tanzania"
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
-          />
-        </div>
-
+    <div className="pt-16 bg-cool-gray">
+      {/* Hero Section */}
+      <section className="relative h-[500px] md:h-screen flex items-center justify-center bg-gradient-to-br from-primary to-primary-dark overflow-hidden">
+        {/* Background video placeholder - TODO: add video */}
+        <div className="absolute inset-0 bg-black/30"></div>
+        
         {/* Hero Content */}
-        <div className="container-custom relative z-20 px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight min-h-[120px] md:min-h-[160px]">
-              <TypingText text={thaData.motto} speed={80} loop={true} />
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
-              {thaData.heroDescription}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/make-a-difference" className="btn-primary text-lg">
-                Get Involved
-                <Icon name="arrow_forward" size={24} />
-              </Link>
-              <Link to="/about" className="btn-secondary bg-white/10 text-white border-white hover:bg-white hover:text-primary text-lg">
-                Learn More
-                <Icon name="info" size={24} />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
-            <div className="w-1.5 h-3 bg-white/70 rounded-full animate-pulse"></div>
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-hero-lg font-heading font-bold tracking-tighter text-white mb-6 animate-fade-up">
+            Transforming Health Outcomes Across Tanzania
+          </h1>
+          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto opacity-animation">
+            Tanzania Health Alliance works to strengthen health systems through education, advocacy, and community engagement in the regions we serve.
+          </p>
+          <div className="flex gap-4 justify-center flex-col sm:flex-row">
+            <Link to="/make-a-difference" className="px-8 py-3 bg-secondary text-white font-bold rounded-md hover:bg-secondary-dark transition shadow-card">
+              Get Involved
+            </Link>
+            <button className="px-8 py-3 border-2 border-white text-white font-bold rounded-md hover:bg-white hover:text-primary transition">
+              Learn More
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Impact Stats */}
-      <section className="bg-gradient-to-br from-secondary to-secondary-dark text-white -mt-20 relative z-10">
-        <div className="container-custom section-padding">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {impactStatsDisplay.map((stat, index) => (
-              <div 
-                key={stat.label}
-                className="text-center p-6 bg-white/10 rounded-2xl backdrop-blur-sm hover:bg-white/20 transition-all duration-300 card-hover"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="text-3xl md:text-5xl font-bold mb-2">
-                  <CountUp end={stat.value} suffix={stat.suffix} />
-                </div>
-                <div className="text-sm md:text-base text-white/90 font-medium">{stat.label}</div>
+      {/* Impact Bar */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8 md:gap-12">
+            {impactStats.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <AnimatedCounter end={stat.value} />
+                <p className="text-gray-600 font-medium mt-3">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Our Focus */}
-      <section className="section-padding bg-neutral">
-        <div className="container-custom">
-          <div className="text-center mb-12 md:mb-16">
-            <h2 className="heading-lg mb-4">Our Focus Areas</h2>
-            <p className="body-lg max-w-3xl mx-auto">
-              We address critical health challenges through targeted programs and community partnerships
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {focusAreas.map((area, index) => (
-              <div
-                key={area.title}
-                className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-2xl transition-all duration-500 card-hover cursor-pointer"
-                onMouseEnter={() => setActiveCard(index)}
-                onMouseLeave={() => setActiveCard(null)}
+      {/* Our Focus Section */}
+      <section className="py-16 md:py-24 bg-cool-gray">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter text-center mb-12">
+            Our Focus Areas
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {focusAreas.map((area) => (
+              <div 
+                key={area.id}
+                className="bg-white rounded-lg shadow-card p-6 hover:shadow-elevated hover:scale-105 transition-all duration-300 cursor-pointer"
               >
-                <div className="p-8 md:p-10">
-                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${area.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon name={area.icon} size={32} className="text-white" />
-                  </div>
-                  <h3 className="heading-sm mb-3">{area.title}</h3>
-                  <p className="body-md text-neutral-dark/70 leading-relaxed">
-                    {area.description}
-                  </p>
-                  <div className={`flex items-center gap-2 mt-6 text-primary font-semibold transition-all duration-300 ${
-                    activeCard === index ? 'translate-x-2' : ''
-                  }`}>
-                    Learn More
-                    <Icon name="arrow_forward" size={20} />
-                  </div>
+                <div className="flex justify-center mb-4">
+                  <Icon name={area.icon} size={48} category={area.category} />
                 </div>
-                <div className={`absolute inset-0 bg-gradient-to-br ${area.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
+                <h3 className="text-xl font-bold text-center mb-3 text-primary">
+                  {area.title}
+                </h3>
+                <p className="text-center text-gray-600 body-sm">
+                  {area.description}
+                </p>
               </div>
             ))}
           </div>
@@ -208,97 +147,100 @@ export const Home = () => {
       </section>
 
       {/* Latest News */}
-      <section className="section-padding">
-        <div className="container-custom">
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <h2 className="heading-lg mb-4">Latest News</h2>
-              <p className="body-lg">Stay updated with our recent activities and announcements</p>
-            </div>
-            <Link to="/news" className="hidden md:flex items-center gap-2 text-primary font-semibold hover:text-secondary transition-colors">
-              View All
-              <Icon name="arrow_forward" size={20} />
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center mb-12">
+            <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter">
+              Latest News
+            </h2>
+            <Link to="/news" className="text-secondary font-bold hover:text-secondary-dark transition flex items-center gap-2">
+              View All <Icon name="arrow_forward" size={20} />
             </Link>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {latestNews.map((news) => (
-              <article key={news.id} className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 card-hover">
-                <div className="img-zoom-container h-56">
-                  <img 
-                    src={news.image}
-                    alt={news.title}
-                    className="w-full h-full object-cover img-zoom"
-                  />
+          
+          {/* News Grid Placeholder - TODO: implement with dynamic data */}
+          <div className="grid md:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-cool-gray rounded-lg shadow-card overflow-hidden hover:shadow-elevated transition-shadow">
+                <div className="h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                  <span className="text-gray-400">News Image {i}</span>
                 </div>
                 <div className="p-6">
-                  <div className="badge badge-category mb-3">{news.category}</div>
-                  <h3 className="heading-sm mb-3 line-clamp-2 group-hover:text-secondary transition-colors">
-                    {news.title}
-                  </h3>
-                  <p className="body-md text-neutral-dark/70 mb-4 line-clamp-2">
-                    {news.excerpt}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-neutral-dark/60">
-                      <Icon name="calendar_today" size={16} />
-                      {news.date}
-                    </div>
-                    <Icon name="arrow_forward" size={20} className="text-secondary group-hover:translate-x-2 transition-transform" />
+                  <p className="text-secondary font-bold text-sm mb-2">Announcement</p>
+                  <h3 className="text-lg font-bold mb-3">News Headline {i}</h3>
+                  <p className="text-gray-600 body-sm mb-4">Brief description of the news article goes here...</p>
+                  <div className="flex justify-between items-center text-sm text-gray-500">
+                    <span>April 5, 2024</span>
+                    <Icon name="arrow_forward" size={16} />
                   </div>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-8 text-center md:hidden">
-            <Link to="/news" className="btn-primary">
-              View All News
-              <Icon name="arrow_forward" size={20} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Academy Resource */}
-      <section className="section-padding bg-gradient-to-br from-primary to-primary-light text-white">
-        <div className="container-custom">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="badge badge-new mb-6 mx-auto">New Resource</div>
-            <h2 className="heading-lg text-white mb-4">Latest from THA Academy</h2>
-            <p className="text-xl text-white/90 mb-8">
-              WHO Guidelines: Comprehensive Hepatitis B and C Testing Services
-            </p>
-            <p className="body-lg text-white/80 mb-8 max-w-2xl mx-auto">
-              Access the latest evidence-based guidelines for hepatitis testing, diagnosis, and care coordination in resource-limited settings.
-            </p>
-            <Link to="/academy" className="btn-primary bg-white text-primary hover:bg-neutral">
-              Access Resource
-              <Icon name="download" size={20} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Partners Marquee */}
-      <section className="section-padding bg-neutral overflow-hidden">
-        <div className="container-custom mb-12">
-          <h2 className="heading-md text-center">Our Partners</h2>
-        </div>
-        
-        <div className="marquee-container">
-          <div className="marquee-content">
-            {[...partners, ...partners].map((partner, index) => (
-              <div 
-                key={index}
-                className="inline-flex items-center justify-center px-8 md:px-12"
-              >
-                <div className="text-2xl md:text-3xl font-bold text-primary/30 hover:text-secondary transition-colors whitespace-nowrap">
-                  {partner}
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Academy Highlight */}
+      <section className="py-16 md:py-24 bg-cool-gray">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-lg shadow-elevated overflow-hidden md:flex">
+            <div className="md:w-1/2 h-64 md:h-auto bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+              <span className="text-gray-400">Academy Resource Image</span>
+            </div>
+            <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+              <div className="inline-block w-fit mb-4 px-3 py-1 bg-secondary/10 text-secondary font-bold text-sm rounded-full">
+                NEW RESOURCE
+              </div>
+              <h3 className="text-2xl md:text-3xl font-heading font-bold tracking-tighter mb-4">
+                Health Education & Research
+              </h3>
+              <p className="body-md text-gray-600 mb-6">
+                Access our comprehensive library of WHO guidelines, research papers, training materials, and policy documents to stay informed on the latest in health.
+              </p>
+              <Link to="/academy" className="flex items-center gap-2 text-secondary font-bold hover:text-secondary-dark transition w-fit">
+                Explore Academy <Icon name="arrow_forward" size={20} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Partners Marquee - TODO: implement with real logos */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
+          <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter mb-2">
+            Our Partners
+          </h2>
+          <p className="text-gray-600">Working together to strengthen health systems in Tanzania</p>
+        </div>
+        <div className="bg-cool-gray py-12 overflow-hidden">
+          <div className="flex gap-12 animate-marquee">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="flex-shrink-0 w-32 h-16 bg-white rounded-lg flex items-center justify-center shadow-subtle hover:shadow-card transition cursor-pointer opacity-60 hover:opacity-100">
+                <span className="text-gray-400 text-sm">Partner {i + 1}</span>
+              </div>
+            ))}
+            {[...Array(8)].map((_, i) => (
+              <div key={`duplicate-${i}`} className="flex-shrink-0 w-32 h-16 bg-white rounded-lg flex items-center justify-center shadow-subtle hover:shadow-card transition cursor-pointer opacity-60 hover:opacity-100">
+                <span className="text-gray-400 text-sm">Partner {i + 1}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Block */}
+      <section className="py-16 md:py-24 bg-gradient-to-r from-primary to-primary-dark text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter mb-6">
+            Join the Alliance
+          </h2>
+          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            Become a member and help us create lasting health impact in Tanzania. Whether you're an individual, organization, or healthcare professional, there's a way for you to get involved.
+          </p>
+          <button className="px-8 py-3 bg-secondary text-white font-bold rounded-md hover:bg-secondary-dark transition shadow-card">
+            Become a Member
+          </button>
         </div>
       </section>
     </div>

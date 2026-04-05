@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-@import url('https://use.typekit.net/PROXIMANOVA.css');
 
 @tailwind base;
 @tailwind components;
@@ -7,7 +6,7 @@
 
 @layer base {
   body {
-    @apply bg-white text-neutral-dark font-sans antialiased;
+    @apply bg-white text-near-black font-sans antialiased;
     font-feature-settings: 'cv11', 'ss01';
   }
 
@@ -17,83 +16,50 @@
 }
 
 @layer components {
-  .glass-header {
-    @apply bg-white/80 backdrop-blur-md shadow-sm;
-  }
-
-  .card-hover {
-    @apply transition-all duration-300 ease-out;
-  }
-
-  .card-hover:hover {
-    @apply -translate-y-1 shadow-xl;
-  }
-
   .btn-primary {
-    @apply bg-secondary hover:bg-secondary-dark text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 inline-flex items-center gap-2 shadow-md hover:shadow-lg;
+    @apply px-6 py-3 bg-secondary text-white font-bold rounded-md hover:bg-secondary-dark transition shadow-subtle inline-flex items-center gap-2;
   }
 
   .btn-secondary {
-    @apply border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 inline-flex items-center gap-2;
+    @apply px-6 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold rounded-md transition inline-flex items-center gap-2;
   }
 
-  .section-padding {
-    @apply py-16 md:py-24 px-4 md:px-8;
-  }
-
-  .container-custom {
-    @apply max-w-7xl mx-auto;
-  }
-
-  .heading-xl {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-primary;
-  }
-
-  .heading-lg {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter text-primary;
-  }
-
-  .heading-md {
-    @apply text-2xl md:text-3xl font-bold tracking-tight text-primary;
-  }
-
-  .heading-sm {
-    @apply text-xl md:text-2xl font-semibold tracking-tight text-primary;
-  }
-
-  .body-lg {
-    @apply text-lg md:text-xl leading-relaxed text-neutral-dark/80;
+  .body-sm {
+    @apply text-sm text-gray-600;
   }
 
   .body-md {
-    @apply text-base md:text-lg leading-relaxed text-neutral-dark/80;
+    @apply text-base md:text-lg leading-relaxed text-gray-600;
   }
 
-  /* Custom scrollbar */
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  .body-lg {
+    @apply text-lg md:text-xl leading-relaxed text-gray-600;
   }
 
-  .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-neutral;
+  .heading-sm {
+    @apply text-xl md:text-2xl font-bold tracking-tighter text-primary;
   }
 
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-primary/20 rounded-full;
+  .heading-md {
+    @apply text-2xl md:text-3xl font-bold tracking-tighter text-primary;
   }
 
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary/40;
+  .heading-lg {
+    @apply text-3xl md:text-4xl font-bold tracking-tighter text-primary;
   }
 
-  /* Floating label inputs */
+  .opacity-animation {
+    animation: fadeUp 0.8s ease-out 0.2s both;
+  }
+
+  /* Input Groups */
   .input-group {
-    @apply relative mt-6;
+    @apply relative mt-4;
   }
 
   .input-group input,
-  .input-group textarea {
+  .input-group textarea,
+  .input-group select {
     @apply w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-secondary focus:outline-none transition-colors;
   }
 
@@ -108,110 +74,52 @@
     @apply -top-6 text-sm text-secondary;
   }
 
-  /* Image zoom effect */
-  .img-zoom-container {
-    @apply overflow-hidden rounded-lg;
+  /* Modal */
+  .modal-backdrop {
+    @apply fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4;
   }
 
-  .img-zoom {
-    @apply transition-transform duration-500 ease-out;
+  .modal-content {
+    @apply bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto;
   }
 
-  .img-zoom:hover {
-    @apply scale-105;
+  /* Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-cool-gray;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-primary/30 rounded-full;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/60;
   }
 }
 
-/* Scroll-triggered animations */
-.fade-in-up {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-
-.fade-in-up.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Loading skeleton */
-.skeleton {
-  @apply animate-pulse bg-gray-200 rounded;
-}
-
-/* Video overlay */
-.video-overlay {
-  position: relative;
-}
-
-.video-overlay::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(10, 37, 64, 0.8) 0%, rgba(10, 37, 64, 0.4) 100%);
-  z-index: 1;
-}
-
-.video-overlay > * {
-  position: relative;
-  z-index: 2;
-}
-
-/* Mobile menu */
-.mobile-menu {
-  transform: translateX(100%);
-  transition: transform 0.3s ease-out;
-}
-
-.mobile-menu.open {
-  transform: translateX(0);
-}
-
-/* Badge */
-.badge {
-  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
-}
-
-.badge-new {
-  @apply bg-accent text-white;
-}
-
-.badge-category {
-  @apply bg-secondary/10 text-secondary-dark;
-}
-
-/* Marquee */
-.marquee-container {
-  overflow: hidden;
-  position: relative;
-}
-
-.marquee-content {
-  display: flex;
-  animation: marquee 30s linear infinite;
-}
-
-.marquee-content:hover {
-  animation-play-state: paused;
-}
-
-/* Modal */
-.modal-backdrop {
-  @apply fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4;
-  animation: fadeIn 0.2s ease-out;
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.modal-content {
-  @apply bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto;
-  animation: slideUp 0.3s ease-out;
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
@@ -223,4 +131,22 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Smooth page transitions */
+.page-enter {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Utility classes for common patterns */
+.shadow-subtle {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.shadow-elevated {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
