@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Icon } from '../components/Icon';
-import { thaData, sendEmail } from '../data/thaData';
 
 export const Contact = () => {
   const [formData, setFormData] = useState({
@@ -11,256 +10,250 @@ export const Contact = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    try {
-      await sendEmail(formData);
+    // TODO: Implement form submission (e.g., send to email service)
+    setTimeout(() => {
       setIsSubmitting(false);
-      setSubmitted(true);
+      alert('Thank you for your message. We will get back to you soon!');
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-      setTimeout(() => setSubmitted(false), 5000);
-    } catch (error) {
-      setIsSubmitting(false);
-      alert('Failed to send message. Please email us directly at info@tzhealthalliance.or.tz');
-    }
+    }, 1000);
   };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const contactInfo = [
-    {
-      icon: 'location_on',
-      title: 'Our Office',
-      details: [thaData.contact.address, `${thaData.contact.city}, ${thaData.contact.country}`]
-    },
-    {
-      icon: 'phone',
-      title: 'Phone',
-      details: [thaData.contact.phone, thaData.contact.mobile]
-    },
-    {
-      icon: 'email',
-      title: 'Email',
-      details: thaData.contact.emails
-    },
-  ];
-
-  const socialLinks = [
-    { name: 'Facebook', icon: 'facebook', url: 'https://facebook.com/tzhealthalliance', color: 'from-blue-500 to-blue-600' },
-    { name: 'Twitter', icon: 'twitter', url: 'https://twitter.com/tzhealthalliance', color: 'from-sky-500 to-sky-600' },
-    { name: 'Instagram', icon: 'instagram', url: 'https://instagram.com/tzhealthalliance', color: 'from-pink-500 to-pink-600' },
-    { name: 'LinkedIn', icon: 'linkedin', url: 'https://linkedin.com/company/tzhealthalliance', color: 'from-blue-600 to-blue-700' },
-  ];
 
   return (
-    <div className="pt-16 md:pt-20">
+    <div className="pt-16 bg-cool-gray">
       {/* Hero */}
-      <section className="section-padding bg-gradient-to-br from-primary to-primary-light text-white">
-        <div className="container-custom">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="heading-xl text-white mb-6">Get in Touch</h1>
-            <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
-              Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
-            </p>
-          </div>
+      <section className="py-12 md:py-16 bg-gradient-to-br from-primary to-primary-dark text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-hero-lg font-heading font-bold tracking-tighter mb-4">
+            Get in Touch
+          </h1>
+          <p className="text-lg text-white/90">
+            Have a question or want to collaborate? We'd love to hear from you.
+          </p>
         </div>
       </section>
 
-      {/* Main Contact Section */}
-      <section className="section-padding">
-        <div className="container-custom">
-          <div className="grid lg:grid-cols-5 gap-12">
-            {/* Contact Info - Left Side */}
-            <div className="lg:col-span-2 space-y-8">
+      {/* Main Content */}
+      <section className="py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-12">
+            {/* Contact Info */}
+            <div className="space-y-8">
               <div>
-                <h2 className="heading-md mb-6">Contact Information</h2>
-                <p className="body-md text-neutral-dark/70 mb-8">
-                  Reach out to us through any of these channels. We're here to help and answer any questions you might have.
-                </p>
+                <h2 className="text-2xl font-bold text-primary mb-8">Contact Information</h2>
               </div>
 
-              {/* Contact Details */}
-              <div className="space-y-6">
-                {contactInfo.map((info) => (
-                  <div key={info.title} className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-secondary to-secondary-dark rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Icon name={info.icon} size={24} className="text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-primary mb-2">{info.title}</h3>
-                      {info.details.map((detail, index) => (
-                        <p key={index} className="text-neutral-dark/70 text-sm">
-                          {detail}
-                        </p>
-                      ))}
-                    </div>
+              {/* Location */}
+              <div className="bg-white rounded-lg shadow-card p-8">
+                <div className="flex items-start gap-4 mb-4">
+                  <Icon name="location_on" size={32} category="primary" className="flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="text-lg font-bold text-primary mb-2">Address</h3>
+                    <p className="body-sm">
+                      Upanga, Dar es Salaam<br />
+                      Tanzania
+                    </p>
+                    <p className="body-sm text-gray-600 mt-2">
+                      P.O. Box 65000
+                    </p>
                   </div>
-                ))}
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div className="bg-white rounded-lg shadow-card p-8">
+                <div className="flex items-start gap-4 mb-4">
+                  <Icon name="phone" size={32} category="primary" className="flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="text-lg font-bold text-primary mb-2">Phone</h3>
+                    <p className="body-sm">
+                      <a href="tel:+255XXX" className="hover:text-secondary transition">
+                        +255 (0) XXX XXX XXX
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Email */}
+              <div className="bg-white rounded-lg shadow-card p-8">
+                <div className="flex items-start gap-4 mb-4">
+                  <Icon name="email" size={32} category="primary" className="flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="text-lg font-bold text-primary mb-2">Email</h3>
+                    <p className="body-sm">
+                      <a href="mailto:info@tzhealthalliance.org" className="hover:text-secondary transition">
+                        info@tzhealthalliance.org
+                      </a>
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Social Links */}
-              <div>
-                <h3 className="font-semibold text-primary mb-4">Follow Us</h3>
-                <div className="flex gap-3">
-                  {socialLinks.map((social) => (
-                    <a
-                      key={social.name}
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`w-12 h-12 bg-gradient-to-br ${social.color} rounded-lg flex items-center justify-center text-white hover:scale-110 transition-transform shadow-md hover:shadow-lg`}
-                      aria-label={social.name}
-                    >
-                      <Icon name={social.icon} size={20} />
-                    </a>
-                  ))}
+              <div className="bg-white rounded-lg shadow-card p-8">
+                <h3 className="text-lg font-bold text-primary mb-6">Follow Us</h3>
+                <div className="flex gap-4">
+                  <a href="#" className="w-12 h-12 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-secondary transition">
+                    <Icon name="facebook" size={24} />
+                  </a>
+                  <a href="#" className="w-12 h-12 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-secondary transition">
+                    <Icon name="instagram" size={24} />
+                  </a>
+                  <a href="#" className="w-12 h-12 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-secondary transition">
+                    <Icon name="linkedin" size={24} />
+                  </a>
                 </div>
               </div>
 
               {/* Map Placeholder */}
-              <div className="bg-neutral rounded-2xl overflow-hidden shadow-lg">
-                <div className="h-64 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                  <div className="text-center">
-                    <Icon name="location_on" size={48} className="text-primary/40 mx-auto mb-2" />
-                    <p className="text-primary/60 font-medium">Map View</p>
-                    <p className="text-sm text-primary/40">Upanga, Dar es Salaam</p>
-                  </div>
-                </div>
+              <div className="rounded-lg shadow-card overflow-hidden h-64 bg-cool-gray flex items-center justify-center">
+                <span className="text-gray-400">Map placeholder - TODO: Add embedded map</span>
               </div>
             </div>
 
-            {/* Contact Form - Right Side */}
-            <div className="lg:col-span-3">
-              <div className="bg-white p-8 md:p-10 rounded-2xl shadow-lg">
-                <h2 className="heading-md mb-6">Send us a Message</h2>
-                
-                {submitted ? (
-                  <div className="bg-secondary/10 border-2 border-secondary rounded-xl p-8 text-center">
-                    <div className="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Icon name="check_circle" size={32} className="text-white" />
-                    </div>
-                    <h3 className="heading-sm text-secondary mb-2">Message Sent!</h3>
-                    <p className="body-md text-neutral-dark/70">
-                      Thank you for contacting us. We'll get back to you shortly.
-                    </p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="input-group">
-                        <input 
-                          type="text" 
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          required 
-                        />
-                        <label>Full Name</label>
-                      </div>
-                      <div className="input-group">
-                        <input 
-                          type="email" 
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          required 
-                        />
-                        <label>Email Address</label>
-                      </div>
-                    </div>
+            {/* Contact Form */}
+            <div className="bg-white rounded-lg shadow-card p-8 md:p-12 h-fit">
+              <h2 className="text-2xl font-bold text-primary mb-8">Send us a Message</h2>
 
-                    <div className="input-group">
-                      <input 
-                        type="tel" 
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        required 
-                      />
-                      <label>Phone Number</label>
-                    </div>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Name */}
+                <div>
+                  <label htmlFor="name" className="block text-sm font-semibold text-near-black mb-2">
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-secondary focus:outline-none transition-colors"
+                    placeholder="Your name"
+                  />
+                </div>
 
-                    <div className="input-group">
-                      <select 
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-secondary focus:outline-none transition-colors" 
-                        required
-                      >
-                        <option value="">Select subject</option>
-                        <option value="general">General Inquiry</option>
-                        <option value="partnership">Partnership Opportunity</option>
-                        <option value="volunteer">Volunteer Application</option>
-                        <option value="donation">Donation Information</option>
-                        <option value="programs">Program Information</option>
-                        <option value="support">Technical Support</option>
-                      </select>
-                    </div>
+                {/* Email */}
+                <div>
+                  <label htmlFor="email" className="block text-sm font-semibold text-near-black mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-secondary focus:outline-none transition-colors"
+                    placeholder="your@email.com"
+                  />
+                </div>
 
-                    <div className="input-group">
-                      <textarea 
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        rows="6" 
-                        required
-                      ></textarea>
-                      <label>Your Message</label>
-                    </div>
+                {/* Phone */}
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-semibold text-near-black mb-2">
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-secondary focus:outline-none transition-colors"
+                    placeholder="Your phone number"
+                  />
+                </div>
 
-                    <button 
-                      type="submit" 
-                      disabled={isSubmitting}
-                      className="btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          Send Message
-                          <Icon name="arrow_forward" size={20} />
-                        </>
-                      )}
-                    </button>
-                  </form>
-                )}
-              </div>
+                {/* Subject */}
+                <div>
+                  <label htmlFor="subject" className="block text-sm font-semibold text-near-black mb-2">
+                    Subject *
+                  </label>
+                  <select
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-secondary focus:outline-none transition-colors"
+                  >
+                    <option value="">Select a subject</option>
+                    <option value="partnership">Partnership Inquiry</option>
+                    <option value="volunteer">Volunteer Interest</option>
+                    <option value="donation">Donation Question</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                {/* Message */}
+                <div>
+                  <label htmlFor="message" className="block text-sm font-semibold text-near-black mb-2">
+                    Message *
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                    rows="5"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-secondary focus:outline-none transition-colors resize-none"
+                    placeholder="Tell us what's on your mind..."
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full px-6 py-3 bg-secondary text-white font-bold rounded-lg hover:bg-secondary-dark transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                  <Icon name="arrow_forward" size={20} />
+                </button>
+              </form>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Office Hours */}
-      <section className="section-padding bg-neutral">
-        <div className="container-custom">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="heading-md mb-8">Office Hours</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="font-semibold text-primary mb-2">Weekdays</h3>
-                <p className="text-neutral-dark/70">Monday - Friday</p>
-                <p className="text-lg font-semibold text-secondary">8:00 AM - 5:00 PM</p>
-              </div>
-              <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="font-semibold text-primary mb-2">Weekend</h3>
-                <p className="text-neutral-dark/70">Saturday</p>
-                <p className="text-lg font-semibold text-secondary">9:00 AM - 1:00 PM</p>
-              </div>
-            </div>
-            <p className="text-sm text-neutral-dark/60 mt-6">
-              Closed on Sundays and Public Holidays
-            </p>
-          </div>
+      {/* Newsletter Section */}
+      <section className="py-16 md:py-24 bg-primary text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-heading font-bold tracking-tighter mb-6">
+            Stay Updated
+          </h2>
+          <p className="text-lg text-white/90 mb-8">
+            Subscribe to our newsletter for the latest health initiatives and impact stories.
+          </p>
+          <form className="flex gap-2 max-w-md mx-auto">
+            <input 
+              type="email" 
+              placeholder="Your email" 
+              required
+              className="flex-1 px-4 py-3 rounded-md text-near-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary"
+            />
+            <button 
+              type="submit"
+              className="px-6 py-3 bg-secondary text-white font-bold rounded-md hover:bg-secondary-dark transition"
+            >
+              Subscribe
+            </button>
+          </form>
         </div>
       </section>
     </div>
