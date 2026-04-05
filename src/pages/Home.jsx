@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { TypingText } from '../components/TypingText';
 import { thaData } from '../data/thaData';
+import { impactStats } from '../data/statsData';
 
 const CountUp = ({ end, duration = 2000, suffix = '' }) => {
   const [count, setCount] = useState(0);
@@ -50,11 +51,11 @@ const CountUp = ({ end, duration = 2000, suffix = '' }) => {
 export const Home = () => {
   const [activeCard, setActiveCard] = useState(null);
 
-  const impactStats = [
-    { label: 'People Reached', value: 50000, suffix: '+' },
-    { label: 'Active Partnerships', value: 25, suffix: '' },
-    { label: 'Regions Served', value: 12, suffix: '' },
-    { label: 'Years Active', value: 6, suffix: '+' },
+  const impactStatsDisplay = [
+    { label: 'People Reached', value: impactStats.peopleReached, suffix: '+' },
+    { label: 'Active Partnerships', value: impactStats.partnerships, suffix: '' },
+    { label: 'Regions Served', value: impactStats.regions, suffix: '' },
+    { label: 'Years Active', value: impactStats.getYearsActive(), suffix: '' },
   ];
 
   const focusAreas = thaData.thematicAreas.map((area, index) => ({
@@ -103,8 +104,12 @@ export const Home = () => {
         {/* Video Background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/70 to-primary/90 z-10"></div>
-          {/* Placeholder for video - In production, replace with actual video */}
+          {/* TODO: Replace with actual video background */}
+          {/* <video autoPlay muted loop className="w-full h-full object-cover">
+            <source src="YOUR_VIDEO_URL" type="video/mp4" />
+          </video> */}
           <div className="w-full h-full bg-gradient-to-br from-primary-light to-primary-dark"></div>
+          {/* TODO: Replace with your healthcare photo - recommended 1920x1080px */}
           <img 
             src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1920&q=80"
             alt="Healthcare in Tanzania"
@@ -146,7 +151,7 @@ export const Home = () => {
       <section className="bg-gradient-to-br from-secondary to-secondary-dark text-white -mt-20 relative z-10">
         <div className="container-custom section-padding">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {impactStats.map((stat, index) => (
+            {impactStatsDisplay.map((stat, index) => (
               <div 
                 key={stat.label}
                 className="text-center p-6 bg-white/10 rounded-2xl backdrop-blur-sm hover:bg-white/20 transition-all duration-300 card-hover"

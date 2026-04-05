@@ -27,10 +27,10 @@ export const Footer = () => {
   ];
 
   const focusAreas = [
-    { label: 'Viral Hepatitis', icon: 'local_hospital' },
-    { label: 'HIV', icon: 'favorite' },
+    { label: 'Hepatitis Programs', icon: 'local_hospital' },
+    { label: 'HIV/AIDS Support', icon: 'favorite' },
     { label: 'Mental Health', icon: 'psychology' },
-    
+    { label: 'Healthcare Access', icon: 'groups' },
   ];
 
   const socialLinks = [
@@ -152,7 +152,7 @@ export const Footer = () => {
               <div className="flex items-start gap-3">
                 <Icon name="location_on" size={20} className="text-secondary mt-0.5 flex-shrink-0" />
                 <div>
-                  <div>Adda Estate, House No. 03, Kinondoni</div>
+                  <div>Upanga, Dar es Salaam</div>
                   <div>P.O. Box 65000</div>
                 </div>
               </div>

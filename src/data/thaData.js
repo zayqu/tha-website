@@ -4,7 +4,7 @@ export const thaData = {
   mission: "To strengthen public health systems through advocacy, research, partnerships, and capacity building, ensuring sustainable and resilient healthcare solutions.",
   vision: "To build a healthier Tanzania where everyone has equitable access to quality healthcare services.",
   motto: "Together for a Healthier Tanzania",
-  heroDescription: "We work to combat the challenges of Viral Hepatitis, HIV, and Mental Health through advocacy, awareness, and access to care across Tanzania.",
+  heroDescription: "We address critical public health challenges including Viral Hepatitis, HIV, and Mental Health through awareness, advocacy, and improved access to care across Tanzania.",
   foundedYear: 2025,
   founder: {
     name: "Shaibu Issa",

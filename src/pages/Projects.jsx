@@ -7,7 +7,7 @@ export const Projects = () => {
   const projects = [
     {
       id: 1,
-      title: "Hepatitis Awareness Campaign, Dar es Salaam",
+      title: "Hepatitis Awareness Campaign - Dar es Salaam",
       description: "Comprehensive community outreach program reaching 5,000+ individuals with free testing and vaccination services",
       category: "Hepatitis",
       location: "Dar es Salaam",
@@ -40,7 +40,7 @@ export const Projects = () => {
     }
   ];
 
-  const categories = ['all', 'Hepatitis', 'HIV/AIDS', 'Mental Health'];
+  const categories = ['all', 'Hepatitis', 'HIV/AIDS', 'Mental Health', 'Healthcare Access'];
   const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
 
   return (
