@@ -1,21 +1,20 @@
 // Material Design OUTLINED Icons with Context-Aware Colors
-// Healthcare professional color palette:
-// - Blue: Trust & Medical Authority (primary)
-// - Green: Healing & Health (secondary)
-// - Red: Hepatitis & Urgency (hepatitis)
-// - Pink: HIV & Compassion (hiv)
-// - Purple: Mental Health & Calm (mental)
-// - Orange: Action & Call-to-Action (accent)
+// Tanzania Health Alliance (THA) Professional Color Palette:
+// - Dark Blue (#024d85): Trust, Authority, Primary actions
+// - Green (#26b805): Health, Healing, Growth
+// - Orange (#ff9c1a): Action, Urgency, CTA
+// - Black (#000000): Text, Emphasis
 
 export const Icon = ({ name, className = "", size = 24, color = "currentColor", category = "default" }) => {
-  // Determine color based on category context
+  // Determine color based on category context - using THA brand colors
   const colorMap = {
-    hepatitis: '#EF4444',    // Warm Red - Urgency & Warning
-    hiv: '#EC4899',          // Compassion Pink - Support
-    mental: '#8B5CF6',       // Calming Purple - Peace
-    health: '#10B981',       // Healing Green - Health
-    primary: '#0F5A7C',      // Medical Blue - Trust
-    accent: '#F59E0B',       // Action Orange - CTA
+    hepatitis: '#024d85',        // Dark Blue - Primary & medical authority
+    hiv: '#24b805',              // Green - Health & compassion
+    mental: '#ff9c1a',           // Orange - Action & awareness
+    health: '#26b805',           // Green - Health & healing
+    primary: '#024d85',          // Dark Blue - Trust & medical
+    secondary: '#26b805',        // Green - Growth & health
+    accent: '#ff9c1a',           // Orange - CTA & action
     default: 'currentColor'
   };
 
