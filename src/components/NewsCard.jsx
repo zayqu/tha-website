@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
-import { Calendar, ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom';
+import { Icon } from './Icon';
 
 export default function NewsCard({ news }) {
   return (
@@ -20,7 +20,7 @@ export default function NewsCard({ news }) {
       
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex items-center text-sm text-neutral/60 mb-3">
-          <Calendar className="w-4 h-4 mr-2" />
+          <Icon name="calendar_today" size={16} className="mr-2" />
           {new Date(news.date).toLocaleDateString('en-US', { 
             year: 'numeric', 
             month: 'long', 
@@ -40,9 +40,9 @@ export default function NewsCard({ news }) {
           to={`/news/${news.slug}`}
           className="inline-flex items-center text-accent font-semibold text-sm hover:underline mt-auto"
         >
-          Read More <ArrowRight className="w-4 h-4 ml-1" />
+          Read More <Icon name="arrow_forward" size={16} className="ml-1" />
         </Link>
       </div>
     </article>
-  )
+  );
 }
