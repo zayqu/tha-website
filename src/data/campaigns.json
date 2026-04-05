@@ -1,0 +1,121 @@
+{
+  "campaigns": [
+    {
+      "id": "kapime",
+      "name": "KAPIME",
+      "tagline": "Get Tested",
+      "subtitle": "Hepatitis Awareness & Prevention",
+      "icon": "heart-check",
+      "color": "hepatitis",
+      "description": "Kapime means 'Get Tested' in Swahili. This flagship initiative raises awareness about Hepatitis B, encourages vaccination, and connects communities to testing and care.",
+      "whatIs": "A comprehensive hepatitis screening and vaccination campaign designed to eliminate viral hepatitis by 2030.",
+      "whyMatters": "Viral hepatitis is a silent epidemic in Tanzania, with thousands unaware of their infection status. Without early detection and treatment, it can lead to liver cancer and cirrhosis.",
+      "howWorks": [
+        "Community awareness sessions via radio and public forums",
+        "Training health ambassadors in local communities",
+        "Mobile testing units visiting underserved areas",
+        "Vaccination programs in partnership with healthcare providers",
+        "Educational materials in Swahili"
+      ],
+      "whereActive": [
+        "Dar es Salaam",
+        "Kinondoni",
+        "Ilala",
+        "Temeke",
+        "Surrounding regions"
+      ],
+      "metrics": {
+        "peopleScreened": 12500,
+        "peopleVaccinated": 8300,
+        "positivesCaught": 340,
+        "healthWorkersTraining": 450,
+        "communitySessions": 95
+      },
+      "testimonial": {
+        "quote": "Getting tested through KAPIME saved my life. I discovered my hepatitis B status early and started treatment immediately.",
+        "name": "Fatima M.",
+        "role": "KAPIME Beneficiary"
+      },
+      "ctaText": "Find a Screening Near You",
+      "ctaLink": "/campaigns/kapime"
+    },
+    {
+      "id": "life-unlocked",
+      "name": "Life Unlocked",
+      "tagline": "Youth Mental Health",
+      "subtitle": "Mental Health for Youth Transitions",
+      "icon": "brain",
+      "color": "mental",
+      "description": "Supporting young Tanzanians through mental health awareness, resilience-building, life skills, and peer support, especially during the challenging post-college period.",
+      "whatIs": "A youth-focused mental health initiative providing counseling, life skills training, and peer support communities.",
+      "whyMatters": "Mental health challenges are growing among young Tanzanians, with inadequate resources and high stigma preventing people from seeking help. The post-college transition period is particularly challenging.",
+      "howWorks": [
+        "Mental health awareness workshops in schools and universities",
+        "Youth clubs providing peer support and life skills training",
+        "One-on-one counseling with trained mental health professionals",
+        "Resilience-building programs",
+        "Digital peer support community"
+      ],
+      "whereActive": [
+        "Dar es Salaam",
+        "Dodoma",
+        "Arusha",
+        "Mbeya",
+        "University campuses"
+      ],
+      "metrics": {
+        "youthReached": 5600,
+        "clubsEstablished": 28,
+        "counselingSessionsProvided": 1340,
+        "schoolsPartnered": 15,
+        "universityPartnered": 4
+      },
+      "testimonial": {
+        "quote": "Life Unlocked gave me tools to manage my anxiety and connect with others facing similar challenges. I don't feel alone anymore.",
+        "name": "Hassan K.",
+        "role": "Life Unlocked Member"
+      },
+      "ctaText": "Join a Youth Club",
+      "ctaLink": "/campaigns/life-unlocked"
+    },
+    {
+      "id": "talk-to-heal",
+      "name": "Talk To Heal",
+      "tagline": "Peer Support",
+      "subtitle": "Mental Health Conversations & Support",
+      "icon": "group",
+      "color": "mental",
+      "description": "Creating safe, stigma-free spaces for mental health conversations. Talk To Heal connects individuals with mental health professionals and trained peer supporters.",
+      "whatIs": "A community-based mental health support network offering counseling, dialogue circles, and peer support.",
+      "whyMatters": "Mental health stigma prevents many Tanzanians from seeking help. Peer support creates safe spaces where people feel understood and not judged.",
+      "howWorks": [
+        "Community dialogue circles for mental health discussion",
+        "Trained peer supporters offering confidential support",
+        "Connection to professional mental health counselors",
+        "Stigma-reduction campaigns",
+        "Crisis support hotline"
+      ],
+      "whereActive": [
+        "Dar es Salaam communities",
+        "Kinondoni wards",
+        "Ilala districts",
+        "Community health centers",
+        "Mobile support units"
+      ],
+      "metrics": {
+        "supportGroupsActive": 35,
+        "peerSupporters": 89,
+        "peopleServed": 3400,
+        "counselingHoursProvided": 2100,
+        "crisisInterventions": 156
+      },
+      "testimonial": {
+        "quote": "Talk To Heal saved me from dark thoughts. Having someone listen without judgment made all the difference.",
+        "name": "Amina S.",
+        "role": "Talk To Heal Participant"
+      },
+      "ctaText": "Get Peer Support",
+      "ctaLink": "/campaigns/talk-to-heal"
+    }
+  ]
+}

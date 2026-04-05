@@ -7,25 +7,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Primary: Midnight Blue - Authority, Depth, Trust
+        // Primary: Dark Blue #024d85 - Authority, Trust, Depth
         primary: {
-          DEFAULT: '#0A2540',
-          light: '#1a3f5f',
-          dark: '#051529'
+          DEFAULT: '#024d85',
+          light: '#1b6ba8',
+          dark: '#013557'
         },
-        // Secondary: Vital Green - Health, Growth, CTAs
+        // Secondary: Green #26b805 - Health, Growth, CTAs
         secondary: {
-          DEFAULT: '#00D26A',
-          light: '#33dd88',
-          dark: '#00a852'
+          DEFAULT: '#26b805',
+          light: '#4dce2e',
+          dark: '#1f8c04'
         },
-        // Accent: Warm Orange - Urgency, Highlights
+        // Accent: Orange #ff9c1a - Urgency, Highlights, Energy
         accent: {
-          DEFAULT: '#FF6B35',
-          light: '#ff8855',
-          dark: '#cc5428'
+          DEFAULT: '#ff9c1a',
+          light: '#ffb84d',
+          dark: '#e68900'
         },
-        // Neutral: Cool Gray & Near Black
+        // Neutral: Black & Grays
+        black: '#000000',
         'cool-gray': {
           DEFAULT: '#F6F9FC',
           light: '#FFFFFF',
@@ -50,8 +51,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Proxima Nova', 'Inter', 'system-ui', 'sans-serif'],
+        heading: ['Proxima Nova', 'Inter', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'hero-lg': '56px',

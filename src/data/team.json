@@ -1,0 +1,94 @@
+{
+  "team": [
+    {
+      "id": 1,
+      "name": "Shaibu Issa",
+      "title": "Founder & Executive Director",
+      "photo": "/images/team/shaibu-issa.jpg",
+      "background": "Social entrepreneur and public health advocate",
+      "credentials": [
+        "World Hepatitis Alliance Board Member (2025)",
+        "Featured in WHO Documentary on Hepatitis Response",
+        "Personal Hepatitis B diagnosis survivor",
+        "Brother's loss to liver cancer (2021) - catalyst for THA"
+      ],
+      "bioShort": "Shaibu founded THA after losing his brother Latifu to liver cancer in 2021—a preventable disease if diagnosed early. Having personally faced Hepatitis B and the stigma associated with it, Shaibu transformed his personal tragedy into purpose.",
+      "bioFull": "After losing his brother Latifu to liver cancer in 2021, Shaibu Issa was driven to action. Latifu's death was preventable—a consequence of late diagnosis and lack of access to care. Shaibu, having personally faced Hepatitis B and the stigma it carries, realized that thousands of Tanzanians suffer from the same challenges.\n\nIn January 2025, Shaibu founded Tanzania Health Alliance to ensure no one else dies from a preventable disease due to misinformation, late detection, or stigma. His mission is to transform Tanzania's response to Hepatitis, HIV, and Mental Health.\n\nIn 2025, Shaibu was recognized globally when THA was featured in a WHO documentary highlighting innovative hepatitis responses. By March 2026, he had been elected to the World Hepatitis Alliance Board—a testament to his advocacy impact.\n\nShaibu believes that health equity is achievable, and that every Tanzanian—regardless of wealth or location—deserves access to prevention, testing, and care.",
+      "role": "Leadership, vision, advocacy, global representation",
+      "why": "Channeling personal loss into systemic change. Every life saved is Latifu's legacy.",
+      "linkedIn": "https://www.linkedin.com/in/shaibu-issa-89b6391b8/",
+      "instagram": "https://www.instagram.com/shaibu_issa0/"
+    },
+    {
+      "id": 2,
+      "name": "Shuwena H. Ali",
+      "title": "Associate Director & Administrative Manager",
+      "photo": "/images/team/associate-director.jpg",
+      "background": "Operations and administration professional",
+      "credentials": [
+        "Program management experience",
+        "Community health background",
+        "Administrative leadership"
+      ],
+      "bioShort": "Shuwena leads THA's operations, ensuring programs run smoothly and resources reach communities effectively.",
+      "role": "Operations, program coordination, community partnerships",
+      "why": "Building the systems that allow THA to serve communities at scale.",
+      "linkedIn": "https://www.linkedin.com/in/shuwena-h-ali-8a575929b/",
+      "instagram": "https://www.instagram.com/shuwena_h.ali/"
+    },
+    {
+      "id": 3,
+      "name": "Enock Sichone",
+      "title": "General Secretary",
+      "photo": "/images/team/general-secretary.jpg",
+      "background": "Administrative and governance specialist",
+      "credentials": [
+        "NGO governance experience",
+        "Community engagement background",
+        "Policy advocacy"
+      ],
+      "bioShort": "Enock ensures THA maintains strong governance, compliance, and strategic direction aligned with our mission.",
+      "role": "Governance, strategic planning, compliance",
+      "why": "Strong foundations enable lasting impact.",
+      "linkedIn": "https://www.linkedin.com/in/enock-sichone-6028442b5/",
+      "instagram": "https://www.instagram.com/enock_sichone2/"
+    }
+  ],
+  "coreValues": [
+    {
+      "value": "Compassion",
+      "description": "We treat every person with empathy, dignity, and care.",
+      "icon": "heart"
+    },
+    {
+      "value": "Integrity",
+      "description": "We act with honesty, transparency, and accountability.",
+      "icon": "shield"
+    },
+    {
+      "value": "Equity",
+      "description": "We ensure quality healthcare is accessible to all, regardless of wealth or location.",
+      "icon": "scale"
+    },
+    {
+      "value": "Collaboration",
+      "description": "We work together with communities, partners, and stakeholders to achieve greater impact.",
+      "icon": "group"
+    },
+    {
+      "value": "Innovation",
+      "description": "We embrace new ideas and creative solutions to health challenges.",
+      "icon": "lightbulb"
+    },
+    {
+      "value": "Empowerment",
+      "description": "We believe communities are agents of their own change.",
+      "icon": "zap"
+    },
+    {
+      "value": "Excellence",
+      "description": "We strive for the highest standards in everything we do.",
+      "icon": "star"
+    }
+  ]
+}
