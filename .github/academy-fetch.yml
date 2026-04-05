@@ -1,0 +1,35 @@
+name: Daily Academy Content Fetch
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # Run at 2:00 AM UTC daily
+  workflow_dispatch:
+
+jobs:
+  fetch-and-commit:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm install axios xml2js node-html-parser
+        
+    - name: Fetch academy resources
+      run: node scripts/fetchAcademy.js
+        
+    - name: Commit and push if changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add src/data/academy.json
+        git diff --staged --quiet || (git commit -m "Update academy resources - $(date +%Y-%m-%d)" && git push)

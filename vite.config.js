@@ -1,5 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+<<<<<<< HEAD
+=======
+import { resolve } from 'path'
+>>>>>>> 5ac31723d5b9b56bde9fed84c9a0ddf1a28941a9
 
 export default defineConfig({
   plugins: [react()],
@@ -7,6 +11,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+<<<<<<< HEAD
     rollupOptions: {
       output: {
         manualChunks: {
@@ -16,3 +21,13 @@ export default defineConfig({
     }
   }
 })
+=======
+    emptyOutDir: true,
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+    },
+  },
+})
+>>>>>>> 5ac31723d5b9b56bde9fed84c9a0ddf1a28941a9
