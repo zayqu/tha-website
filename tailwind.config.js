@@ -25,21 +25,13 @@ export default {
         neutral: {
           DEFAULT: '#F6F9FC',
           dark: '#000000'
-        },
-        background: '#F5F5F5'
+        }
       },
       fontFamily: {
         sans: ['Proxima Nova', 'Inter', 'system-ui', 'sans-serif'],
       },
       letterSpacing: {
         tighter: '-0.02em',
-      },
-      lineHeight: {
-        tight: '1.4',
-      },
-      boxShadow: {
-        card: '0 2px 8px rgba(0,0,0,0.08)',
-        'card-hover': '0 8px 24px rgba(0,0,0,0.12)',
       },
       animation: {
         'fade-up': 'fadeUp 0.6s ease-out',

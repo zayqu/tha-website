@@ -104,6 +104,7 @@ export const Header = () => {
       <div className={`fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-white z-50 lg:hidden transition-transform duration-300 ease-out shadow-2xl ${
         isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
+        {/* Mobile Menu Header */}
         <div className="h-16 md:h-20 flex items-center justify-between px-6 border-b border-gray-100">
           <div className="text-primary font-bold text-lg">Menu</div>
           <button
@@ -114,6 +115,7 @@ export const Header = () => {
           </button>
         </div>
 
+        {/* Mobile Menu Content */}
         <nav className="py-8 px-6 space-y-2">
           {navItems.map((item, index) => (
             <Link
@@ -132,6 +134,7 @@ export const Header = () => {
           ))}
         </nav>
 
+        {/* Mobile CTA */}
         <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-100 bg-gradient-to-t from-neutral to-white">
           <button 
             onClick={() => {
