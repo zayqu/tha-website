@@ -71,7 +71,7 @@ export const Home = () => {
         </picture>
 
         {/* Dark overlay for text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/60 to-primary-dark/80" />
+        <div className="absolute inset-0 bg-primary-dark/85" />
 
         {/* Hero Content */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
