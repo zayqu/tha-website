@@ -57,16 +57,28 @@ export const Home = () => {
   return (
     <div className="pt-16 bg-cool-gray">
       {/* Hero Section */}
-      <section className="relative h-[500px] md:h-screen flex items-center justify-center bg-gradient-to-br from-primary to-primary-dark overflow-hidden">
-        {/* Background video placeholder - TODO: add video */}
-        <div className="absolute inset-0 bg-black/30"></div>
-        
+      <section className="relative h-[560px] md:h-screen flex items-center justify-center overflow-hidden">
+        {/* Background image — responsive sizes */}
+        <picture className="absolute inset-0 w-full h-full">
+          <source media="(min-width: 1280px)" srcSet="/images/hero-bg-xl.jpg" />
+          <source media="(min-width: 768px)"  srcSet="/images/hero-bg-lg.jpg" />
+          <img
+            src="/images/hero-bg-sm.jpg"
+            alt=""
+            className="w-full h-full object-cover object-center"
+            fetchpriority="high"
+          />
+        </picture>
+
+        {/* Dark overlay for text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/60 to-primary-dark/80" />
+
         {/* Hero Content */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-hero-lg font-heading font-bold tracking-tighter text-white mb-6 animate-fade-up">
             Together for a Healthier Tanzania
           </h1>
-          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto opacity-animation">
+          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
             We work to combat the challenges of Viral Hepatitis, HIV, and Mental Health through advocacy, awareness, and access to care across Tanzania.
           </p>
           <div className="flex gap-4 justify-center flex-col sm:flex-row">
