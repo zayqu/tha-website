@@ -2,31 +2,39 @@ import { useState } from 'react';
 import { Icon } from '../components/Icon';
 import { newsArticles } from '../data/newsData';
 
+// Map categories to brand colors
+const categoryColor = {
+  'Events':         'bg-primary/10 text-primary',
+  'Press Releases': 'bg-secondary/10 text-secondary-dark',
+  'Success Stories':'bg-accent/10 text-accent-dark',
+  'Announcements':  'bg-primary/10 text-primary',
+};
+
 export const News = () => {
   const [activeCategory, setActiveCategory] = useState('all');
 
   const categories = [
-    { id: 'all', label: 'All News' },
-    { id: 'Announcements', label: 'Announcements' },
-    { id: 'Events', label: 'Events' },
+    { id: 'all',            label: 'All News' },
+    { id: 'Announcements',  label: 'Announcements' },
+    { id: 'Events',         label: 'Events' },
     { id: 'Press Releases', label: 'Press Releases' },
-    { id: 'Success Stories', label: 'Success Stories' },
+    { id: 'Success Stories',label: 'Success Stories' },
   ];
 
-  const filteredNews = activeCategory === 'all' 
-    ? newsArticles 
-    : newsArticles.filter(article => article.category === activeCategory);
+  const filteredNews = activeCategory === 'all'
+    ? newsArticles
+    : newsArticles.filter(a => a.category === activeCategory);
 
-  const featuredArticle = newsArticles.find(article => article.isFeatured);
-  const regularArticles = filteredNews.filter(article => !article.isFeatured);
+  const featuredArticle = newsArticles.find(a => a.isFeatured);
+  const regularArticles  = filteredNews.filter(a => !a.isFeatured);
 
   return (
     <div className="pt-16 md:pt-20">
       {/* Hero */}
-      <section className="section-padding bg-gradient-to-br from-primary to-primary-light text-white">
+      <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="heading-xl text-white mb-6">News & Updates</h1>
+            <h1 className="heading-xl text-white mb-6">News &amp; Updates</h1>
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
               Stay informed about our latest programs, events, and impact stories
             </p>
@@ -38,17 +46,17 @@ export const News = () => {
       <section className="bg-white shadow-md sticky top-16 md:top-20 z-30">
         <div className="container-custom px-4 overflow-x-auto custom-scrollbar">
           <div className="flex gap-2 py-4 min-w-max md:justify-center">
-            {categories.map((category) => (
+            {categories.map((cat) => (
               <button
-                key={category.id}
-                onClick={() => setActiveCategory(category.id)}
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
                 className={`px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${
-                  activeCategory === category.id
-                    ? 'bg-secondary text-white shadow-md'
-                    : 'bg-neutral text-primary hover:bg-gray-200'
+                  activeCategory === cat.id
+                    ? 'bg-primary text-white shadow-md'
+                    : 'bg-neutral text-primary hover:bg-cool-gray-dark'
                 }`}
               >
-                {category.label}
+                {cat.label}
               </button>
             ))}
           </div>
@@ -59,21 +67,40 @@ export const News = () => {
       {activeCategory === 'all' && featuredArticle && (
         <section className="section-padding bg-neutral">
           <div className="container-custom">
-            <div className="bg-white rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all card-hover">
+            <a
+              href={featuredArticle.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300"
+            >
               <div className="grid md:grid-cols-2 gap-0">
-                <div className="img-zoom-container h-64 md:h-full">
-                  <img 
+                {/* Image */}
+                <div className="img-zoom-container h-64 md:h-full min-h-[280px]">
+                  <img
                     src={featuredArticle.image}
                     alt={featuredArticle.title}
                     className="w-full h-full object-cover img-zoom"
                   />
                 </div>
+
+                {/* Content */}
                 <div className="p-8 md:p-12 flex flex-col justify-center">
-                  <div className="badge badge-new mb-4">Featured</div>
-                  <h2 className="heading-lg mb-4">{featuredArticle.title}</h2>
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="px-3 py-1 bg-accent text-white text-xs font-bold rounded-full">
+                      Featured
+                    </span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${categoryColor[featuredArticle.category] || 'bg-primary/10 text-primary'}`}>
+                      {featuredArticle.category}
+                    </span>
+                  </div>
+
+                  <h2 className="heading-lg mb-4 group-hover:text-secondary transition-colors">
+                    {featuredArticle.title}
+                  </h2>
                   <p className="body-lg text-neutral-dark/70 mb-6">
                     {featuredArticle.excerpt}
                   </p>
+
                   <div className="flex items-center gap-4 mb-6 text-sm text-neutral-dark/60">
                     <div className="flex items-center gap-2">
                       <Icon name="person" size={16} />
@@ -84,13 +111,16 @@ export const News = () => {
                       {featuredArticle.date}
                     </div>
                   </div>
-                  <button className="btn-primary">
+
+                  <span className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl w-fit group-hover:bg-secondary transition-colors duration-300">
                     Read Full Story
-                    <Icon name="arrow_forward" size={20} />
-                  </button>
+                    <div className="w-6 h-6 bg-white/20 rounded-md flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                      <Icon name="arrow_forward" size={14} color="white" />
+                    </div>
+                  </span>
                 </div>
               </div>
-            </div>
+            </a>
           </div>
         </section>
       )}
@@ -101,44 +131,53 @@ export const News = () => {
           {regularArticles.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {regularArticles.map((article) => (
-                <article 
+                <a
                   key={article.id}
-                  className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 card-hover"
+                  href={article.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col card-hover"
                 >
-                  <div className="img-zoom-container h-56">
-                    <img 
+                  {/* Image */}
+                  <div className="img-zoom-container h-52 flex-shrink-0">
+                    <img
                       src={article.image}
                       alt={article.title}
                       className="w-full h-full object-cover img-zoom"
                     />
-                    <div className="absolute top-4 left-4">
-                      <div className="badge badge-category backdrop-blur-sm">
+                    <div className="absolute top-3 left-3">
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${categoryColor[article.category] || 'bg-primary/10 text-primary'}`}>
                         {article.category}
-                      </div>
+                      </span>
                     </div>
                   </div>
-                  <div className="p-6">
+
+                  {/* Content */}
+                  <div className="p-6 flex flex-col flex-grow">
                     <h3 className="heading-sm mb-3 line-clamp-2 group-hover:text-secondary transition-colors">
                       {article.title}
                     </h3>
-                    <p className="body-md text-neutral-dark/70 mb-4 line-clamp-2">
+                    <p className="body-md text-neutral-dark/70 mb-4 line-clamp-2 flex-grow">
                       {article.excerpt}
                     </p>
+
                     <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                       <div className="text-sm text-neutral-dark/60">
                         <div className="flex items-center gap-1 mb-1">
-                          <Icon name="person" size={14} />
-                          {article.author}
+                          <Icon name="person" size={13} />
+                          <span>{article.author}</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Icon name="calendar_today" size={14} />
-                          {article.date}
+                          <Icon name="calendar_today" size={13} />
+                          <span>{article.date}</span>
                         </div>
                       </div>
-                      <Icon name="arrow_forward" size={20} className="text-secondary group-hover:translate-x-2 transition-transform" />
+                      <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-secondary group-hover:translate-x-1 transition-all duration-300">
+                        <Icon name="arrow_forward" size={16} className="text-primary group-hover:text-white" />
+                      </div>
                     </div>
                   </div>
-                </article>
+                </a>
               ))}
             </div>
           ) : (
@@ -150,16 +189,6 @@ export const News = () => {
               <p className="body-md text-neutral-dark/70">
                 Check back soon for updates in {activeCategory}
               </p>
-            </div>
-          )}
-
-          {/* Load More */}
-          {regularArticles.length > 0 && (
-            <div className="text-center mt-12">
-              <button className="btn-secondary">
-                Load More Articles
-                <Icon name="arrow_forward" size={20} />
-              </button>
             </div>
           )}
         </div>

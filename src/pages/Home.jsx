@@ -105,10 +105,11 @@ export const Home = () => {
           </p>
 
           {(() => {
+            // Brand colors only: #ff9c1a orange · #26b805 green · #024d85 blue
             const campaignConfig = {
-              'kapime':       { gradient: 'from-hepatitis to-hepatitis-dark',  icon: 'local_hospital' },
-              'life-unlocked':{ gradient: 'from-mental to-mental-dark',        icon: 'psychology'     },
-              'talk-to-heal': { gradient: 'from-accent to-accent-dark',        icon: 'forum'          },
+              'kapime':       { gradient: 'from-accent to-accent-dark',          icon: 'local_hospital' },
+              'life-unlocked':{ gradient: 'from-secondary to-secondary-dark',    icon: 'psychology'     },
+              'talk-to-heal': { gradient: 'from-primary to-primary-dark',        icon: 'forum'          },
             };
 
             return (
