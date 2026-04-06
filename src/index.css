@@ -7,21 +7,103 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply font-sans text-neutral bg-white leading-tight antialiased;
+    @apply font-sans text-near-black bg-white leading-tight antialiased;
   }
 }
 
 @layer components {
+  /* Layout */
   .section-padding {
     @apply py-20 px-4 sm:px-6 lg:px-8;
   }
   .container-custom {
     @apply max-w-7xl mx-auto;
   }
+
+  /* Typography */
+  .heading-xl {
+    @apply text-4xl md:text-5xl lg:text-6xl font-heading font-bold tracking-tighter leading-tight;
+  }
+  .heading-lg {
+    @apply text-3xl md:text-4xl font-heading font-bold tracking-tighter leading-tight;
+  }
+  .heading-md {
+    @apply text-2xl md:text-3xl font-heading font-bold tracking-tighter leading-tight;
+  }
+  .heading-sm {
+    @apply text-xl font-heading font-bold leading-tight;
+  }
+  .body-lg {
+    @apply text-lg leading-relaxed;
+  }
+  .body-md {
+    @apply text-base leading-relaxed;
+  }
+  .body-sm {
+    @apply text-sm leading-relaxed;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-secondary text-white font-semibold rounded-lg hover:bg-secondary-dark transition-all shadow-subtle;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-white text-primary font-semibold rounded-lg border-2 border-primary hover:bg-primary hover:text-white transition-all;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+  }
+  .badge-category {
+    @apply bg-primary/10 text-primary;
+  }
+  .badge-new {
+    @apply bg-secondary text-white;
+  }
+
+  /* Cards */
+  .card-hover {
+    @apply hover:-translate-y-1 transition-transform duration-300;
+  }
+
+  /* Image zoom */
+  .img-zoom-container {
+    @apply relative overflow-hidden;
+  }
+  .img-zoom {
+    @apply transition-transform duration-500 group-hover:scale-105;
+  }
+
+  /* Input group (label above input) */
+  .input-group {
+    @apply flex flex-col-reverse gap-1;
+  }
+  .input-group label {
+    @apply text-sm font-semibold text-primary transition-colors;
+  }
+  .input-group:focus-within label {
+    @apply text-secondary;
+  }
+  .input-group input,
+  .input-group textarea {
+    @apply w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-secondary focus:outline-none bg-white;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    height: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-primary/30 rounded-full;
   }
 }

@@ -85,7 +85,8 @@ export const About = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {teamData.coreValues.map((value, index) => (
               <div key={index} className="bg-cool-gray rounded-lg p-6 md:p-8 border-l-4 border-secondary hover:shadow-card transition">
-                <h3 className="text-lg font-bold text-primary">{value}</h3>
+                <h3 className="text-lg font-bold text-primary">{value.name}</h3>
+                <p className="text-sm text-gray-600 mt-2">{value.description}</p>
               </div>
             ))}
           </div>
@@ -100,7 +101,7 @@ export const About = () => {
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamData.team.map((member) => (
+            {teamData.teamMembers.map((member) => (
               <div key={member.name} className="bg-white rounded-lg shadow-card overflow-hidden hover:shadow-elevated transition-all">
                 {/* Image */}
                 <div className="h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">

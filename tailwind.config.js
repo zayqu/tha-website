@@ -33,6 +33,10 @@ export default {
           dark: '#E8EDF4'
         },
         'near-black': '#1A1A1A',
+        neutral: {
+          DEFAULT: '#F8FAFC',
+          dark: '#374151',
+        },
         // Health Category Colors (retained from previous)
         hepatitis: {
           DEFAULT: '#EF4444',

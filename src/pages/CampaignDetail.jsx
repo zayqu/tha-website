@@ -1,7 +1,6 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import campaigns from '../data/campaigns.json';
-import stories from '../data/stories.json';
 
 export const CampaignDetail = () => {
   const { campaignId } = useParams();
@@ -61,7 +60,7 @@ export const CampaignDetail = () => {
             {Object.entries(campaign.metrics).map(([key, value]) => (
               <div key={key} className="bg-white rounded-lg shadow-card p-8 text-center">
                 <p className="text-4xl font-bold text-secondary mb-2">
-                  {(value / 1000).toFixed(1)}k+
+                  {value >= 1000 ? `${(value / 1000).toFixed(1)}k+` : value.toLocaleString()}
                 </p>
                 <p className="text-gray-600 capitalize">
                   {key.replace(/([A-Z])/g, ' $1').trim()}
