@@ -5,6 +5,8 @@ import campaigns from '../data/campaigns.json';
 import impact from '../data/impact.json';
 import partners from '../data/partners.json';
 import testimonials from '../data/testimonials.json';
+import { PartnersCarousel } from '../components/PartnersCarousel';
+import { TestimonialsCarousel } from '../components/TestimonialCarousel';
 import { thaData } from '../data/thaData';
 
 const AnimatedCounter = ({ end, duration = 2000 }) => {
@@ -311,21 +313,7 @@ export const Home = () => {
         </div>
         <div className="bg-cool-gray py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-              {partners.partners.map((partner, idx) => (
-                <a 
-                  key={partner.id || idx}
-                  href={partner.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center h-24 bg-white rounded-lg shadow-subtle hover:shadow-card transition cursor-pointer group"
-                >
-                  <span className="font-bold text-center px-3 text-sm group-hover:text-secondary transition">
-                    {partner.name}
-                  </span>
-                </a>
-              ))}
-            </div>
+            <PartnersCarousel partners={partners.partners} />
           </div>
         </div>
       </section>
@@ -341,18 +329,7 @@ export const Home = () => {
               Hear from the people whose lives have been changed through our work.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.testimonials.map((t) => (
-              <div key={t.id} className="bg-white rounded-lg shadow-card p-6 hover:shadow-elevated transition flex flex-col">
-                <p className="text-gray-600 italic mb-5 flex-grow">"{t.quote}"</p>
-                <div className="border-t border-cool-gray-dark pt-4">
-                  <p className="font-bold text-primary text-sm">{t.author}</p>
-                  <p className="text-secondary text-xs mt-0.5">{t.title}</p>
-                  <p className="text-gray-500 text-xs">{t.organization}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <TestimonialsCarousel testimonials={testimonials.testimonials} />
         </div>
       </section>
 
