@@ -1,92 +1,60 @@
-# CLAUDE.md — THA Website
+# CLAUDE.md
 
-## Project
-Website for **Tanzania Health Alliance (THA)**, a registered NGO (No. 00NGO/R/8379) based in Dar es Salaam, Tanzania. Public-facing site supporting their health advocacy mission.
+This file provides guidance to Claude Code when working with the Tanzania Health Alliance (THA) website repository. Content reflects the current codebase structure, development workflow, and architectural considerations.
 
-## Stack
-- **React 18** + **Vite 5** + **Tailwind CSS 3**
-- **react-router-dom v6** — uses `HashRouter` (static hosting compatibility, no server-side routing)
-- **react-helmet-async** — SEO meta tags
+## Project Overview
+### Tanzania Health Alliance
+- **Purpose:** Public-facing website supporting THA's health advocacy mission
+- **Organization:** Registered NGO (No. 00NGO/R/8379) in Dar es Salaam
+- **Contact:** info@tzhealthalliance.or.tz | +255 659 114 754
 
-## Commands
+## Technology Stack
+- React 18 with Vite 5
+- Routing: `ReactRouterDOM v6` using `HashRouter`
+- Tailwind CSS 3 + Custom CSS
+- SEO: `react-helmet-async`
+- Third-party: web3forms integration
+
+## Development Commands
 ```bash
-npm run dev      # start dev server
-npm run build    # production build
-npm run preview  # preview production build
+npm run dev     # Start dev server
+npm run build   # Build production
+npm run preview # Preview production
+npm test       # Run unit/integration tests
+npm run lint    # Lint codebase
 ```
 
-## Project Structure
+## File Structure
 ```
 src/
-  App.jsx              # router + layout shell
-  components/          # shared UI components
-    Header.jsx         # sticky nav, mobile hamburger, "Join the Alliance" CTA
-    Footer.jsx
-    Icon.jsx           # custom icon wrapper
-    ButtonPrimary.jsx
-    ButtonSecondary.jsx
-    SectionHeader.jsx
-    CounterAnimation.jsx
-    TypingText.jsx
-    AcademyCard.jsx
-    NewsCard.jsx
-  pages/               # page-level components
-    Home.jsx
-    About.jsx
-    MakeADifference.jsx
-    Projects.jsx
-    Academy.jsx
-    News.jsx
-    NewsDetail.jsx
-    Contact.jsx
-    CampaignDetail.jsx
-    MakeDifference.jsx
-  data/                # all content data
-    thaData.js         # canonical org data + sendEmail() via web3forms
-    newsData.js
-    statsData.js
-    campaigns.json
-    impact.json
-    partners.json
-    stories.json
-    team.json
-    testimonials.json
-    # ...and more JSON files
-  styles/              # custom CSS beyond Tailwind
+├ App.jsx      # Main router
+├ components/  # Reusable UI
+├ pages/       # Page components
+├ data/        # Content JSON/JS
+└ styles/      # Custom CSS
 ```
 
-## Routes
-| Path | Page |
-|------|------|
-| `/` | Home |
-| `/about` | About |
-| `/make-a-difference` | MakeADifference |
-| `/projects` | Projects |
-| `/academy` | Academy |
-| `/news` | News |
-| `/contact` | Contact |
-| `/campaigns/:campaignId` | CampaignDetail |
+## Key Routes
+| Path                  | Page                  |
+|-----------------------|-----------------------|
+| `/`                   | Home                  |
+| `/about`              | About                 |
+| `/campaigns/:id`      | CampaignDetail        |
 
-## Design System (Tailwind)
-Custom tokens defined in `tailwind.config.js`:
-- **Colors:** `primary`, `primary-dark`, `secondary`, `secondary-dark`, `cool-gray`, `cool-gray-dark`, `near-black`
-- **Shadows:** `shadow-subtle`, `shadow-card`, `shadow-elevated`
-- **Font sizes:** `text-hero-lg`, `text-hero-md`
-- **Font:** `font-heading` for display/headings
+## Design System
+- Tailwind CSS tokens in `tailwind.config.js`
+- Font elecciones: `font-heading` for headings
 
-## Org Identity — Do Not Fabricate
-All org data is real. Never invent or placeholder org details.
-- **Motto:** "Together for a Healthier Tanzania"
-- **Founder & Executive Director:** Shaibu Issa
-- **Contact:** info@tzhealthalliance.or.tz | +255 659 114 754
-- **Address:** Adda Estate, Kinondoni, Dar es Salaam
-- **Socials:** Instagram, LinkedIn, Facebook
-- **Programs:** KAPIME Campaign (Hepatitis B), Life Unlocked (Mental Health — youth), Talk To Heal (Mental Health — community)
+## Rules
+1. Use `HashRouter` (no SSR)
+2. All data in `src/data/` (JSON files)
+3. Logo: `public/logo/tha-logo.svg`
+4. Web3forms access key needs replacement before deployment
 
-## Contact Form
-Uses **web3forms** (`sendEmail()` in `src/data/thaData.js`). The `access_key` in that file needs to be replaced with the real web3forms key before deploying.
+## Developer Notes
+- Use `HashRouter` for static hosting compatibility
+- Optimize for mobile users in Tanzania
+- Update web3forms key before deploy
+- Avoid hardcoding org details
 
-## Key Rules
-- Use `HashRouter` — do not switch to `BrowserRouter` without configuring server-side fallback
-- Logo lives at `public/logo/tha-logo.svg` — referenced as `/logo/tha-logo.svg`
-- All data is in `src/data/` — edit JSON/JS files there, not hardcoded in components
+This document will be updated as the repository evolves.
