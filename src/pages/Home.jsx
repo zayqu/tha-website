@@ -4,7 +4,8 @@ import { Icon } from '../components/Icon';
 import campaigns from '../data/campaigns.json';
 import impact from '../data/impact.json';
 import partners from '../data/partners.json';
-import stories from '../data/stories.json';
+import testimonials from '../data/testimonials.json';
+import { thaData } from '../data/thaData';
 
 const AnimatedCounter = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
@@ -216,6 +217,30 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* Objectives Section */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter mb-4">
+              Our Objectives
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Transforming lives through health advocacy, awareness, and accessibility.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {thaData.objectives.map((obj, i) => (
+              <div key={i} className="flex gap-4 p-6 bg-cool-gray rounded-lg hover:shadow-card transition">
+                <div className="w-8 h-8 bg-secondary text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold text-sm mt-0.5">
+                  {i + 1}
+                </div>
+                <p className="text-gray-700 leading-relaxed">{obj}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Partners Section */}
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
@@ -241,6 +266,32 @@ export const Home = () => {
                 </a>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-16 md:py-24 bg-cool-gray">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter mb-4">
+              Testimonials
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Hear from the people whose lives have been changed through our work.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {testimonials.testimonials.map((t) => (
+              <div key={t.id} className="bg-white rounded-lg shadow-card p-6 hover:shadow-elevated transition flex flex-col">
+                <p className="text-gray-600 italic mb-5 flex-grow">"{t.quote}"</p>
+                <div className="border-t border-cool-gray-dark pt-4">
+                  <p className="font-bold text-primary text-sm">{t.author}</p>
+                  <p className="text-secondary text-xs mt-0.5">{t.title}</p>
+                  <p className="text-gray-500 text-xs">{t.organization}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

@@ -1,121 +1,137 @@
 import { Link } from 'react-router-dom';
 import { Icon } from './Icon';
+import { thaData } from '../data/thaData';
 
 export const Footer = () => {
   return (
-    <footer className="bg-primary text-white">
-      {/* Newsletter Section */}
-      <div className="bg-primary-dark py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-2xl md:text-3xl font-heading font-bold tracking-tighter mb-4">
-            Stay Updated
-          </h3>
-          <p className="body-md mb-6 max-w-2xl mx-auto opacity-90">
-            Subscribe to our newsletter for the latest on our health initiatives and impact stories.
-          </p>
-          <form className="flex gap-2 max-w-md mx-auto mb-4">
-            <input 
-              type="email" 
-              placeholder="Your email" 
-              required
-              className="flex-1 px-4 py-3 rounded-md text-near-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary"
-            />
-            <button 
-              type="submit"
-              className="px-6 py-3 bg-secondary text-white font-medium rounded-md hover:bg-secondary-dark transition"
-            >
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </div>
-
+    <footer className="bg-primary-dark text-white">
       {/* Main Footer Content */}
       <div className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+
             {/* About */}
             <div>
-              <h4 className="text-lg font-bold font-heading tracking-tighter mb-4">
-                Tanzania Health Alliance
+              <h4 className="text-base font-bold font-heading tracking-tight mb-4 text-white">
+                About Tanzania Health Alliance
               </h4>
-              <p className="body-sm opacity-80 mb-4">
-                Transforming health outcomes across Tanzania through education, advocacy, and community engagement.
+              <p className="text-sm text-white/75 leading-relaxed mb-3">
+                Tanzania Health Alliance (THA) is a registered non-profit organization focused on improving health outcomes in Tanzania by addressing Viral Hepatitis, HIV, and Mental Health.
               </p>
-              <div className="flex gap-4">
-                <a href="#" className="hover:text-secondary transition">
-                  <Icon name="facebook" size={20} />
+              <p className="text-sm text-white/75 leading-relaxed mb-5">
+                We work closely with communities, government institutions, and partners to deliver impactful health programs that respond to real community needs.
+              </p>
+              <div className="flex gap-3">
+                <a
+                  href={thaData.social.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-md bg-white/10 flex items-center justify-center hover:bg-secondary transition"
+                  aria-label="Facebook"
+                >
+                  <Icon name="facebook" size={18} color="white" />
                 </a>
-                <a href="#" className="hover:text-secondary transition">
-                  <Icon name="instagram" size={20} />
+                <a
+                  href={thaData.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-md bg-white/10 flex items-center justify-center hover:bg-secondary transition"
+                  aria-label="Instagram"
+                >
+                  <Icon name="instagram" size={18} color="white" />
                 </a>
-                <a href="#" className="hover:text-secondary transition">
-                  <Icon name="linkedin" size={20} />
+                <a
+                  href={thaData.social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-md bg-white/10 flex items-center justify-center hover:bg-secondary transition"
+                  aria-label="LinkedIn"
+                >
+                  <Icon name="linkedin" size={18} color="white" />
                 </a>
               </div>
             </div>
 
-            {/* Quick Links */}
+            {/* Important Links */}
             <div>
-              <h4 className="text-lg font-bold font-heading tracking-tighter mb-4">
-                Quick Links
+              <h4 className="text-base font-bold font-heading tracking-tight mb-4 text-white">
+                Important Links
               </h4>
               <ul className="space-y-2">
-                <li><Link to="/" className="opacity-80 hover:text-secondary transition body-sm">Home</Link></li>
-                <li><Link to="/about" className="opacity-80 hover:text-secondary transition body-sm">About Us</Link></li>
-                <li><Link to="/academy" className="opacity-80 hover:text-secondary transition body-sm">Academy</Link></li>
-                <li><Link to="/news" className="opacity-80 hover:text-secondary transition body-sm">News</Link></li>
+                <li><a href="#" className="text-sm text-white/75 hover:text-secondary transition">Privacy Policy</a></li>
+                <li><a href="#" className="text-sm text-white/75 hover:text-secondary transition">Cookies Policy</a></li>
+                <li><a href="#" className="text-sm text-white/75 hover:text-secondary transition">Terms &amp; Conditions</a></li>
+              </ul>
+
+              <h4 className="text-base font-bold font-heading tracking-tight mt-8 mb-4 text-white">
+                Useful Links
+              </h4>
+              <ul className="space-y-2">
+                <li><Link to="/" className="text-sm text-white/75 hover:text-secondary transition">Introduction</Link></li>
+                <li><Link to="/#partners" className="text-sm text-white/75 hover:text-secondary transition">Our Partners</Link></li>
+                <li><Link to="/about" className="text-sm text-white/75 hover:text-secondary transition">About Us</Link></li>
+                <li><Link to="/news" className="text-sm text-white/75 hover:text-secondary transition">Our Journeys</Link></li>
               </ul>
             </div>
 
-            {/* Get Involved */}
+            {/* Quick Nav */}
             <div>
-              <h4 className="text-lg font-bold font-heading tracking-tighter mb-4">
-                Get Involved
+              <h4 className="text-base font-bold font-heading tracking-tight mb-4 text-white">
+                Quick Links
               </h4>
               <ul className="space-y-2">
-                <li><Link to="/make-a-difference" className="opacity-80 hover:text-secondary transition body-sm">Volunteer</Link></li>
-                <li><Link to="/make-a-difference" className="opacity-80 hover:text-secondary transition body-sm">Donate</Link></li>
-                <li><Link to="/make-a-difference" className="opacity-80 hover:text-secondary transition body-sm">Partner With Us</Link></li>
-                <li><Link to="/contact" className="opacity-80 hover:text-secondary transition body-sm">Contact</Link></li>
+                <li><Link to="/" className="text-sm text-white/75 hover:text-secondary transition">Home</Link></li>
+                <li><Link to="/about" className="text-sm text-white/75 hover:text-secondary transition">About</Link></li>
+                <li><Link to="/make-a-difference" className="text-sm text-white/75 hover:text-secondary transition">Make a Difference</Link></li>
+                <li><Link to="/academy" className="text-sm text-white/75 hover:text-secondary transition">Academy</Link></li>
+                <li><Link to="/news" className="text-sm text-white/75 hover:text-secondary transition">News</Link></li>
+                <li><Link to="/contact" className="text-sm text-white/75 hover:text-secondary transition">Contact</Link></li>
               </ul>
             </div>
 
             {/* Contact Info */}
             <div>
-              <h4 className="text-lg font-bold font-heading tracking-tighter mb-4">
-                Contact
+              <h4 className="text-base font-bold font-heading tracking-tight mb-4 text-white">
+                Contact Info
               </h4>
-              <div className="space-y-3">
-                <p className="body-sm opacity-80">
-                  <strong>Address:</strong><br />
-                  Upanga, Dar es Salaam<br />
-                  P.O. Box 65000
-                </p>
-                <p className="body-sm opacity-80">
-                  <strong>Phone:</strong><br />
-                  +255 (0) XXX XXX XXX
-                </p>
-                <p className="body-sm opacity-80">
-                  <strong>Email:</strong><br />
-                  info@tzhealthalliance.org
-                </p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <Icon name="location_on" size={18} color="white" className="mt-0.5 flex-shrink-0 opacity-75" />
+                  <p className="text-sm text-white/75 leading-relaxed">
+                    Adda Estate, House No. 03, Kinondoni,<br />
+                    P.O. Box 31902,<br />
+                    Dar es Salaam, Tanzania
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Icon name="phone" size={18} color="white" className="flex-shrink-0 opacity-75" />
+                  <div>
+                    <p className="text-sm text-white/75">+255 659-114-754</p>
+                    <p className="text-sm text-white/75">+255 659-114-754</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Icon name="email" size={18} color="white" className="flex-shrink-0 opacity-75" />
+                  <a
+                    href="mailto:info@tzhealthalliance.or.tz"
+                    className="text-sm text-white/75 hover:text-secondary transition"
+                  >
+                    info@tzhealthalliance.or.tz
+                  </a>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="body-sm opacity-80">
-              © 2024 Tanzania Health Alliance. All rights reserved.
+          <div className="border-t border-white/15 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-white/60">
+              Copyright &copy; 2025 - Tanzania Health Alliance
             </p>
             <div className="flex gap-6">
-              <a href="#" className="body-sm opacity-80 hover:text-secondary transition">
-                Privacy Policy
-              </a>
-              <a href="#" className="body-sm opacity-80 hover:text-secondary transition">
-                Terms of Service
-              </a>
+              <a href="#" className="text-sm text-white/60 hover:text-secondary transition">Privacy Policy</a>
+              <a href="#" className="text-sm text-white/60 hover:text-secondary transition">Cookies Policy</a>
+              <a href="#" className="text-sm text-white/60 hover:text-secondary transition">Terms &amp; Conditions</a>
             </div>
           </div>
         </div>
