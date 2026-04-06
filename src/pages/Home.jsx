@@ -103,34 +103,81 @@ export const Home = () => {
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
             Real solutions to real health challenges in Tanzania
           </p>
-          <div className="grid md:grid-cols-3 gap-8">
-            {campaigns.campaigns.map((campaign) => (
-              <div 
-                key={campaign.id}
-                className="bg-white rounded-lg shadow-card overflow-hidden hover:shadow-elevated transition-all duration-300"
-              >
-                <div className="h-32 bg-gradient-to-br from-primary/10 to-primary/20 flex items-center justify-center border-b-4 border-secondary">
-                  <Icon name="favorite" size={64} category="secondary" />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold mb-2 text-primary">
-                    {campaign.name}
-                  </h3>
-                  <p className="text-secondary font-bold mb-3 text-sm">{campaign.tagline}</p>
-                  <p className="text-gray-600 body-md mb-4">
-                    {campaign.description}
-                  </p>
-                  
-                  <Link 
-                    to={`/campaigns/${campaign.id}`}
-                    className="inline-block w-full text-center px-4 py-2 bg-secondary text-white font-bold rounded-md hover:bg-secondary-dark transition"
-                  >
-                    Learn More
-                  </Link>
-                </div>
+
+          {(() => {
+            const campaignConfig = {
+              'kapime':       { gradient: 'from-hepatitis to-hepatitis-dark',  icon: 'local_hospital' },
+              'life-unlocked':{ gradient: 'from-mental to-mental-dark',        icon: 'psychology'     },
+              'talk-to-heal': { gradient: 'from-accent to-accent-dark',        icon: 'forum'          },
+            };
+
+            return (
+              <div className="grid md:grid-cols-3 gap-8">
+                {campaigns.campaigns.map((campaign) => {
+                  const cfg = campaignConfig[campaign.id] || { gradient: 'from-primary to-primary-dark', icon: 'favorite' };
+                  const [firstKey, firstVal] = Object.entries(campaign.metrics)[0];
+                  const metricLabel = firstKey.replace(/([A-Z])/g, ' $1').toLowerCase();
+                  const metricDisplay = firstVal >= 1000 ? `${(firstVal / 1000).toFixed(1)}k+` : firstVal.toLocaleString();
+
+                  return (
+                    <div
+                      key={campaign.id}
+                      className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col"
+                    >
+                      {/* Gradient header */}
+                      <div className={`relative h-52 bg-gradient-to-br ${cfg.gradient} flex items-center justify-center overflow-hidden`}>
+                        {/* Decorative blobs */}
+                        <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full bg-white/10 pointer-events-none" />
+                        <div className="absolute -bottom-10 -left-6 w-32 h-32 rounded-full bg-white/10 pointer-events-none" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
+
+                        {/* Icon */}
+                        <div className="relative z-10 w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform duration-500">
+                          <Icon name={cfg.icon} size={40} color="white" />
+                        </div>
+
+                        {/* Tagline badge */}
+                        <span className="absolute top-4 right-4 px-3 py-1 bg-black/20 backdrop-blur-sm text-white text-xs font-bold rounded-full border border-white/20">
+                          {campaign.tagline}
+                        </span>
+
+                        {/* Bottom fade */}
+                        <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-black/15 to-transparent pointer-events-none" />
+                      </div>
+
+                      {/* Card body */}
+                      <div className="p-6 flex flex-col flex-grow">
+                        <h3 className="text-xl font-heading font-bold text-primary mb-1">{campaign.name}</h3>
+                        <p className="text-secondary font-semibold text-sm mb-3">{campaign.subtitle}</p>
+                        <p className="text-gray-600 text-sm leading-relaxed mb-5 flex-grow line-clamp-3">
+                          {campaign.description}
+                        </p>
+
+                        {/* Featured metric */}
+                        <div className="flex items-center gap-2 bg-cool-gray rounded-xl px-4 py-3 mb-5">
+                          <Icon name="check_circle" size={16} category="secondary" />
+                          <span className="text-sm font-semibold text-primary">
+                            {metricDisplay} {metricLabel}
+                          </span>
+                        </div>
+
+                        {/* CTA */}
+                        <Link
+                          to={`/campaigns/${campaign.id}`}
+                          className="flex items-center justify-between px-5 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-secondary transition-colors duration-300"
+                        >
+                          <span>Learn More</span>
+                          <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center group-hover:translate-x-1 transition-transform duration-300">
+                            <Icon name="arrow_forward" size={16} color="white" />
+                          </div>
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            ))}
-          </div>
+            );
+          })()}
         </div>
       </section>
 
