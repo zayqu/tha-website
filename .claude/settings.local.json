@@ -3,7 +3,10 @@
     "allow": [
       "Bash(git -C \"e:/Creative/Web/tha-website\" status)",
       "Bash(grep -h \"section-padding\\\\|container-custom\\\\|badge\\\\|card-hover\\\\|img-zoom\" /e/Creative/Web/tha-website/src/pages/*.jsx)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }

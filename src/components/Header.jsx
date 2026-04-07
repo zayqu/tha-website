@@ -46,7 +46,7 @@ export const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex gap-1 items-center">
+          <nav className="hidden md:flex gap-1 items-center bottom-0 w-full shadow-md bg-white p-2" id="mobile-menu-bottom">
             {navLinks.map((link) => (
               <Link
                 key={link.path}

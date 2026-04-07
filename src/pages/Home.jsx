@@ -8,6 +8,7 @@ import testimonials from '../data/testimonials.json';
 import { PartnersCarousel } from '../components/PartnersCarousel';
 import { TestimonialsCarousel } from '../components/TestimonialCarousel';
 import { thaData } from '../data/thaData';
+import { newsArticles } from '../data/newsData';
 
 const AnimatedCounter = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
@@ -108,8 +109,59 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* Our Programs Section */}
-      <section className="py-16 md:py-24 bg-cool-gray">
+      {/* Latest News Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
+          <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter mb-4">
+            Latest News
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Stay informed about THA's work and impact across Tanzania
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {newsArticles.slice(0, 3).map((article) => (
+            <div key={article.id} className="bg-white p-6 shadow-card hover:shadow-elevated transition-shadow">
+              <img src={article.image} alt={article.title} className="w-full h-40 object-cover object-center mb-4"/>
+              <h3 className="text-xl font-bold mb-2">{article.title}</h3>
+              <p className="text-gray-600 line-clamp-2 mb-4">{article.excerpt}</p>
+              <Link to="/news" className="text-primary text-sm hover:underline">Read more →</Link>
+            </div>
+          ))}
+        </div>
+      </section>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
+          <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter mb-2">
+            Our Programs
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto mb-12">
+            Transforming lives through health advocacy, awareness, and accessibility.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-white rounded-lg shadow-card p-6 hover:shadow-elevated transition-shadow">
+            <div className="h-12 w-12 bg-secondary rounded-lg flex items-center justify-center mb-4">
+              <Icon name="groups" size={24} color="white" />
+            </div>
+            <h3 className="text-xl font-bold mb-3 text-primary">Our Vision</h3>
+            <p className="text-gray-600 leading-relaxed">To achieve a healthier Tanzania where every individual has access to equitable and quality healthcare.</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-card p-6 hover-shadow-elevated transition-shadow">
+            <div className="h-12 w-12 bg-secondary rounded-lg flex items-center justify-center mb-4">
+              <Icon name="favorite" size={24} color="white" />
+            </div>
+            <h3 className="text-xl font-bold mb-3 text-primary">Our Mission</h3>
+            <p className="text-gray-600 leading-relaxed">Transforming lives through health advocacy, awareness, and accessibility.</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-card p-6 hover-shadow-elevated transition-shadow">
+            <div className="h-12 w-12 bg-secondary rounded-lg flex items-center justify-center mb-4">
+              <Icon name="person" size={24} color="white" />
+            </div>
+            <h3 className="text-xl font-bold mb-3 text-primary">About THA</h3>
+            <p className="text-gray-600 leading-relaxed">Tanzania Health Alliance (THA) is a registered NGO (No. 00NGO/R/8379) based in Dar es Salaam, dedicated to tackling key health challenges in Tanzania.</p>
+          </div>
+        </div>
+      </
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter text-center mb-4">
             Our Programs
