@@ -8,6 +8,8 @@ import testimonials from '../data/testimonials.json';
 import { PartnersCarousel } from '../components/PartnersCarousel';
 import { TestimonialsCarousel } from '../components/TestimonialCarousel';
 import { thaData } from '../data/thaData';
+import { newsArticles } from '../data/newsData';
+import NewsCard from '../components/NewsCard';
 
 const AnimatedCounter = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
@@ -77,7 +79,7 @@ export const Home = () => {
 
         {/* Hero Content */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-hero-lg font-heading font-bold tracking-tighter text-white mb-6 animate-fade-up">
+          <h1 className="text-4xl md:text-hero-lg font-bold tracking-tighter text-white mb-6 animate-fade-up">
             Together for a Healthier Tanzania
           </h1>
           <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
@@ -204,7 +206,7 @@ export const Home = () => {
               Featured Causes
             </h2>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-cool-gray rounded-lg shadow-card overflow-hidden hover:shadow-elevated transition-shadow p-6">
               <div className="h-12 w-12 bg-secondary rounded-lg flex items-center justify-center mb-4">
@@ -253,13 +255,17 @@ export const Home = () => {
               </p>
             </div>
             <div className="bg-white rounded-lg shadow-card p-8">
-              <h3 className="text-2xl font-bold mb-4 text-primary">Our Mission</h3>
+              <h3 className="text-2xl font-bold mb-4 text-primary")>
+                Our Mission
+              </h3>
               <p className="text-gray-600 body-md leading-relaxed">
                 To advance public health through advocacy, capacity building, research, and partnerships, contributing to sustainable and resilient healthcare systems in Tanzania.
               </p>
             </div>
             <div className="bg-white rounded-lg shadow-card p-8">
-              <h3 className="text-2xl font-bold mb-4 text-primary">About THA</h3>
+              <h3 className="text-2xl font-bold mb-4 text-primary">
+                About THA
+              </h3>
               <p className="text-gray-600 body-md leading-relaxed">
                 Tanzania Health Alliance (THA) is a registered NGO (No. 00NGO/R/8379) based in Dar es Salaam, dedicated to tackling key health challenges in Tanzania.
               </p>
@@ -333,6 +339,25 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* News Section - Added */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter mb-4">
+              Latest News
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Stay updated with our recent initiatives and impact.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {newsArticles.map((article) => (
+              <NewsCard key={article.id} news={article} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Get Involved Section */}
       <section className="py-16 md:py-24 bg-gradient-to-r from-primary to-primary-dark text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -342,7 +367,7 @@ export const Home = () => {
           <p className="text-lg md:text-xl text-white/90 mb-12 max-w-2xl mx-auto">
             Join us in creating a healthier Tanzania!
           </p>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
               <Icon name="groups" size={48} color="white" className="mx-auto mb-4" />
