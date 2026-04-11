@@ -8,21 +8,20 @@
       "icon": "favorite",
       "color": "hepatitis",
       "description": "Kapime means 'Get Tested' in Swahili. This flagship initiative raises awareness about Hepatitis B, encourages vaccination, and connects communities to testing and care.",
-      "whatIs": "A comprehensive hepatitis screening and vaccination campaign designed to eliminate viral hepatitis by 2030.",
+      "whatIs": "A community-driven hepatitis awareness campaign focused on education, early screening promotion, and preventive health practices.",
       "whyMatters": "Viral hepatitis is a silent epidemic in Tanzania, with thousands unaware of their infection status. Without early detection and treatment, it can lead to liver cancer and cirrhosis.",
       "howWorks": [
         "Community awareness sessions via radio and public forums",
-        "Training health ambassadors in local communities",
-        "Mobile testing units visiting underserved areas",
-        "Vaccination programs in partnership with healthcare providers",
-        "Educational materials in Swahili"
+        "Health marathons to engage the public on hepatitis prevention",
+        "School and university hepatitis education outreaches",
+        "Educational materials distributed in Swahili",
+        "Encouraging early testing and preventive practices"
       ],
       "whereActive": [
         "Dar es Salaam",
-        "Kinondoni",
-        "Ilala",
-        "Temeke",
-        "Surrounding regions"
+        "City College (Main Campus)",
+        "Temeke Secondary School",
+        "Community radio platforms"
       ],
       "activities2025": [
         "World Hepatitis Day media engagement (radio broadcast)",
@@ -35,18 +34,16 @@
         "Increased hepatitis awareness across communities"
       ],
       "metrics": {
-        "peopleScreened": 12500,
-        "peopleVaccinated": 8300,
-        "positivesCaught": 340,
-        "healthWorkersTraining": 450,
-        "communitySessions": 95
+        "individualsEngaged": 500,
+        "mediaEngagements": 1,
+        "communityMarathons": 1
       },
       "testimonial": {
-        "quote": "Getting tested through KAPIME saved my life. I discovered my hepatitis B status early and started treatment immediately.",
-        "name": "Fatima M.",
-        "role": "KAPIME Beneficiary"
+        "quote": "The KAPIME campaign opened my eyes to hepatitis — I never knew how serious and preventable it was until I attended the marathon.",
+        "name": "Community Participant",
+        "role": "World Hepatitis Day, Dar es Salaam 2025"
       },
-      "ctaText": "Find a Screening Near You",
+      "ctaText": "Join Our Next Awareness Campaign",
       "ctaLink": "/campaigns/kapime"
     },
     {
@@ -56,22 +53,20 @@
       "subtitle": "Mental Health for Youth Transitions",
       "icon": "psychology",
       "color": "mental",
-      "description": "Supporting young Tanzanians through mental health awareness, resilience-building, life skills, and peer support, especially during the challenging post-college period.",
-      "whatIs": "A youth-focused mental health initiative providing counseling, life skills training, and peer support communities.",
-      "whyMatters": "Mental health challenges are growing among young Tanzanians, with inadequate resources and high stigma preventing people from seeking help.",
+      "description": "Supporting young Tanzanians through mental health awareness, resilience-building, and peer support — especially during the challenging transitions from school to life.",
+      "whatIs": "A youth-focused mental health initiative delivering awareness sessions in schools and universities to reduce stigma and build resilience.",
+      "whyMatters": "Mental health challenges are growing among young Tanzanians, yet stigma and limited resources prevent most from seeking help. Early education is key to changing this.",
       "howWorks": [
-        "Mental health awareness workshops in schools and universities",
-        "Youth clubs providing peer support and life skills training",
-        "One-on-one counseling with trained mental health professionals",
-        "Resilience-building programs",
-        "Digital peer support community"
+        "Mental health awareness workshops in secondary schools",
+        "University outreach sessions on stress, anxiety and wellbeing",
+        "Youth community engagement programs",
+        "Peer-led conversations to reduce stigma",
+        "Connecting youth to available mental health resources"
       ],
       "whereActive": [
-        "Dar es Salaam",
-        "Dodoma",
-        "Arusha",
-        "Mbeya",
-        "University campuses"
+        "City College (Main Campus), Dar es Salaam",
+        "Temeke Secondary School, Dar es Salaam",
+        "Community youth centers"
       ],
       "activities2025": [
         "Mental health awareness sessions at City College (main campus)",
@@ -84,43 +79,40 @@
         "Improved mental health understanding among students"
       ],
       "metrics": {
-        "youthReached": 5600,
-        "clubsEstablished": 28,
-        "counselingSessionsProvided": 1340,
-        "schoolsPartnered": 15,
-        "universityPartnered": 4
+        "studentsReached": 1000,
+        "institutionsEngaged": 3,
+        "outreachSessions": 2
       },
       "testimonial": {
-        "quote": "Life Unlocked gave me tools to manage my anxiety and connect with others facing similar challenges. I don't feel alone anymore.",
-        "name": "Hassan K.",
-        "role": "Life Unlocked Member"
+        "quote": "This session made me realize mental health is just as important as physical health. I finally felt comfortable talking about what I was going through.",
+        "name": "Student Participant",
+        "role": "City College Outreach, 2025"
       },
-      "ctaText": "Join a Youth Club",
+      "ctaText": "Support Youth Mental Health",
       "ctaLink": "/campaigns/life-unlocked"
     },
     {
       "id": "talk-to-heal",
       "name": "Talk To Heal",
-      "tagline": "Peer Support",
+      "tagline": "Community Health Conversations",
       "subtitle": "Mental Health Conversations & Support",
       "icon": "forum",
       "color": "mental",
-      "description": "Creating safe, stigma-free spaces for mental health conversations. Talk To Heal connects individuals with mental health professionals and trained peer supporters.",
-      "whatIs": "A community-based mental health support network offering counseling, dialogue circles, and peer support.",
-      "whyMatters": "Mental health stigma prevents many Tanzanians from seeking help. Peer support creates safe spaces where people feel understood and not judged.",
+      "description": "Creating safe, open spaces for health conversations in communities — covering mental health, HIV testing awareness, and hepatitis prevention through community engagement events.",
+      "whatIs": "A community engagement program bringing health awareness and open conversations directly to communities through organized events.",
+      "whyMatters": "Many Tanzanians lack access to accurate health information in their communities. Stigma around HIV and mental health prevents early help-seeking. Community conversations break these barriers.",
       "howWorks": [
-        "Community dialogue circles for mental health discussion",
-        "Trained peer supporters offering confidential support",
-        "Connection to professional mental health counselors",
-        "Stigma-reduction campaigns",
-        "Crisis support hotline"
+        "Organizing community health engagement events",
+        "Facilitating open discussions on mental health in communities",
+        "Educating communities on HIV and hepatitis testing",
+        "Empowering community members with preventive health knowledge",
+        "Building trust through peer-to-peer conversations"
       ],
       "whereActive": [
         "Dar es Salaam communities",
-        "Kinondoni wards",
-        "Ilala districts",
-        "Community health centers",
-        "Mobile support units"
+        "Kinondoni",
+        "Temeke",
+        "Community gathering spaces"
       ],
       "activities2025": [
         "2 community engagement events on mental health",
@@ -128,23 +120,20 @@
         "Mental health awareness programs for communities"
       ],
       "impact2025": [
-        "Increased community participation in health programs",
-        "Improved mental health conversations in communities",
-        "Strengthened community engagement"
+        "2 community engagement events conducted",
+        "Improved understanding of HIV & hepatitis testing",
+        "Enhanced mental health awareness and community participation"
       ],
       "metrics": {
-        "supportGroupsActive": 35,
-        "peerSupporters": 89,
-        "peopleServed": 3400,
-        "counselingHoursProvided": 2100,
-        "crisisInterventions": 156
+        "communityEvents": 2,
+        "healthTopicsAddressed": 3
       },
       "testimonial": {
-        "quote": "Talk To Heal saved me from dark thoughts. Having someone listen without judgment made all the difference.",
-        "name": "Amina S.",
-        "role": "Talk To Heal Participant"
+        "quote": "For the first time our community had an open conversation about mental health. People who never spoke up before started sharing their experiences.",
+        "name": "Community Member",
+        "role": "Talk To Heal Event Participant, 2025"
       },
-      "ctaText": "Get Peer Support",
+      "ctaText": "Bring Talk To Heal to Your Community",
       "ctaLink": "/campaigns/talk-to-heal"
     }
   ]

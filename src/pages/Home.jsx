@@ -235,16 +235,16 @@ export const Home = () => {
               <p className="text-white/80 mt-2">People Reached</p>
             </div>
             <div>
+              <Counter end={1000} />
+              <p className="text-white/80 mt-2">Students Reached</p>
+            </div>
+            <div>
               <Counter end={3} suffix="" />
               <p className="text-white/80 mt-2">Institutions Engaged</p>
             </div>
             <div>
-              <Counter end={3} suffix="" />
-              <p className="text-white/80 mt-2">Active Campaigns</p>
-            </div>
-            <div>
-              <Counter end={45} />
-              <p className="text-white/80 mt-2">Countries Following</p>
+              <Counter end={2} suffix="" />
+              <p className="text-white/80 mt-2">Community Events</p>
             </div>
           </div>
         </div>

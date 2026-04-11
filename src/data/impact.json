@@ -46,9 +46,9 @@
   "impactMetrics": {
     "total": {
       "peopleReached": 1500,
+      "studentsReached": 1000,
       "institutionsEngaged": 3,
-      "activeCampaigns": 3,
-      "countriesFollowing": 45
+      "communityEvents": 2
     },
     "byProgram": {
       "kapime": {

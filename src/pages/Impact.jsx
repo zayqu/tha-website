@@ -148,16 +148,16 @@ export const Impact = () => {
               <p className="text-white/80 mt-2 font-medium">People Reached</p>
             </div>
             <div>
+              <Counter end={1000} />
+              <p className="text-white/80 mt-2 font-medium">Students Reached</p>
+            </div>
+            <div>
               <Counter end={3} suffix="" />
               <p className="text-white/80 mt-2 font-medium">Institutions Engaged</p>
             </div>
             <div>
-              <Counter end={3} suffix="" />
-              <p className="text-white/80 mt-2 font-medium">Active Campaigns</p>
-            </div>
-            <div>
-              <Counter end={45} />
-              <p className="text-white/80 mt-2 font-medium">Countries Following</p>
+              <Counter end={2} suffix="" />
+              <p className="text-white/80 mt-2 font-medium">Community Events</p>
             </div>
           </div>
         </div>
