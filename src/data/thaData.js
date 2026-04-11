@@ -1,8 +1,8 @@
 // Real THA data - Final Version
 export const thaData = {
   registrationNo: "00NGO/R/8379",
-  mission: "To strengthen public health systems through advocacy, research, partnerships, and capacity building, ensuring sustainable and resilient healthcare solutions.",
-  vision: "To build a healthier Tanzania where everyone has equitable access to quality healthcare services.",
+  mission: "To advance public health through advocacy, capacity building, research, and partnerships, contributing to sustainable and resilient healthcare in Tanzania.",
+  vision: "To achieve a healthier Tanzania where every individual has access to equitable and quality healthcare.",
   motto: "Together for a Healthier Tanzania",
   heroDescription: "We address critical public health challenges including Viral Hepatitis, HIV, and Mental Health through awareness, advocacy, and improved access to care across Tanzania.",
   foundedYear: 2025,
@@ -20,7 +20,7 @@ export const thaData = {
     { name: "Edward Masele", title: "Project Coordinator" }
   ],
   coreValues: [
-    "Compassion", "Integrity", "Equity", "Collaboration", "Innovation", "Empowerment", "Excellence"
+    "Integrity", "Equity", "Collaboration", "Innovation", "Empowerment", "Excellence"
   ],
   objectives: [
     "Promote equitable access to affordable and quality healthcare",

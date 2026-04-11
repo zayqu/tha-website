@@ -56,11 +56,6 @@
   ],
   "coreValues": [
     {
-      "value": "Compassion",
-      "description": "We treat every person with empathy, dignity, and care.",
-      "icon": "heart"
-    },
-    {
       "value": "Integrity",
       "description": "We act with honesty, transparency, and accountability.",
       "icon": "shield"

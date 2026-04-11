@@ -10,7 +10,11 @@
       "Bash(git checkout:*)",
       "Bash(xargs wc:*)",
       "Bash(find . -name \"*.jsx\" -type f -exec sh -c 'echo \"{}: $\\(wc -l < \"{}\"\\)\"' \\\\;)",
-      "Skill(claude-api)"
+      "Skill(claude-api)",
+      "Bash(rm -rf node_modules)",
+      "Bash(npm install:*)",
+      "Bash(powershell:*)",
+      "Bash(ADMIN_IDENTIFIER=admin@tzhealthalliance.or.tz ADMIN_PASSWORD=ThaAdmin2026! ADMIN_NAME=\"THA Admin\" node seed.js)"
     ]
   }
 }
