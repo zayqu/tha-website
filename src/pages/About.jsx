@@ -22,10 +22,65 @@ const useReveal = () => {
     return () => observer.disconnect();
   }, [ref]);
 
-  return [ref, show];
+  return [setRef, show];
+};
+
+const CoreValueCard = ({ value, index }) => {
+  const [ref, show] = useReveal();
+  return (
+    <div
+      ref={ref}
+      className={`bg-cool-gray rounded-xl p-6 border-l-4 border-secondary hover:shadow-card transition-all ${
+        show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      }`}
+      style={{ transitionDelay: `${index * 100}ms` }}
+    >
+      <Icon name={value.icon} size={32} category="secondary" className="mb-4" />
+      <h3 className="text-lg font-bold text-primary mb-2">{value.value}</h3>
+      <p className="text-sm text-gray-600">{value.description}</p>
+    </div>
+  );
 };
 
 export const About = () => {
+  const coreValues = [
+    {
+      value: "Compassion",
+      icon: "favorite",
+      description: "We lead with empathy and care for every individual and community we serve."
+    },
+    {
+      value: "Integrity",
+      icon: "shield",
+      description: "We uphold honesty, transparency, and ethical practices in all our work."
+    },
+    {
+      value: "Equity",
+      icon: "balance",
+      description: "We ensure fair access to health resources and opportunities for all."
+    },
+    {
+      value: "Collaboration",
+      icon: "groups",
+      description: "We work together with partners, communities, and stakeholders to achieve shared goals."
+    },
+    {
+      value: "Innovation",
+      icon: "lightbulb",
+      description: "We embrace creative solutions and evidence-based approaches to health challenges."
+    },
+    {
+      value: "Empowerment",
+      icon: "psychology",
+      description: "We enable communities and individuals to take charge of their health and well-being."
+    },
+    {
+      value: "Excellence",
+      icon: "star",
+      description: "We strive for the highest standards in everything we do to create lasting impact."
+    }
+  ];
+
   return (
     <div className="pt-16 bg-cool-gray">
 
@@ -140,23 +195,9 @@ export const About = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {teamJson.coreValues.map((value, index) => {
-              const [ref, show] = useReveal();
-              return (
-                <div
-                  key={index}
-                  ref={ref}
-                  className={`bg-cool-gray rounded-xl p-6 border-l-4 border-secondary hover:shadow-card transition-all ${
-                    show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                  }`}
-                  style={{ transitionDelay: `${index * 100}ms` }}
-                >
-                  <Icon name={value.icon} size={32} category="secondary" className="mb-4" />
-                  <h3 className="text-lg font-bold text-primary mb-2">{value.value}</h3>
-                  <p className="text-sm text-gray-600">{value.description}</p>
-                </div>
-              );
-            })}
+            {coreValues.map((value, index) => (
+              <CoreValueCard key={index} value={value} index={index} />
+            ))}
           </div>
         </div>
       </section>

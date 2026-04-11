@@ -94,7 +94,7 @@ export const Impact = () => {
           <div className="text-center mb-16">
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">Our Journey</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2">Year One Timeline</h2>
-            <p className="text-gray-600 mt-4">From founding to government partnership in just 15 months</p>
+            <p className="text-gray-600 mt-4">From founding to national health partnership in just 15 months</p>
           </div>
 
           <div className="relative">

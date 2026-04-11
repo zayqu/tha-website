@@ -37,8 +37,8 @@
     },
     {
       "month": "March 2026",
-      "milestone": "Government Partnership",
-      "description": "Official partnership with Tanzania's Ministry of Health to scale impact nationally",
+      "milestone": "National Health Partnership",
+      "description": "Strategic partnership with Tanzania's Ministry of Health to scale health interventions nationally",
       "icon": "building",
       "color": "primary"
     }
@@ -87,18 +87,18 @@
     }
   },
   "governmentPartnership": {
-    "headline": "Backed by Tanzania's Ministry of Health",
+    "headline": "Formally Recognized at the National Level",
     "description": "In March 2026, THA formalized a strategic partnership with Tanzania's Ministry of Health, marking a historic commitment to scaling health interventions across the country.",
     "permanentSecretaryQuote": "We are proud to partner with Tanzania Health Alliance in our mission to strengthen healthcare systems and improve health outcomes for all Tanzanians. Their work in hepatitis, HIV, and mental health aligns perfectly with our national health priorities.",
     "permanentSecretaryTitle": "Permanent Secretary, Ministry of Health, Tanzania",
     "whatItMeans": [
-      "Official government endorsement and support for THA's programs",
-      "Access to government health facilities for testing and screening",
+      "National-level recognition and alignment with Tanzania's health priorities",
+      "Access to public health facilities for testing and screening",
       "Integration of THA programs into national health strategy",
       "Joint funding and resource allocation",
       "Pathway to scale across all regions of Tanzania"
     ],
-    "impact": "This partnership ensures THA's programs are not just community-led but also government-backed, creating sustainable, nationwide health infrastructure improvement."
+    "impact": "This partnership ensures THA's programs are not just community-led but also nationally recognized, creating sustainable, nationwide health infrastructure improvement."
   },
   "internationalRecognition": {
     "whoDocumentary": {
