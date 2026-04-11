@@ -12,6 +12,7 @@ import { Contact } from './pages/Contact';
 import { Projects } from './pages/Projects';
 import { Impact } from './pages/Impact';
 import { CampaignDetail } from './pages/CampaignDetail';
+import NewsDetail from './pages/NewsDetail';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
