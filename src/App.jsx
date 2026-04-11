@@ -10,6 +10,7 @@ import { Academy } from './pages/Academy';
 import { News } from './pages/News';
 import { Contact } from './pages/Contact';
 import { Projects } from './pages/Projects';
+import { Impact } from './pages/Impact';
 import { CampaignDetail } from './pages/CampaignDetail';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -38,6 +39,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/make-a-difference" element={<MakeADifference />} />
               <Route path="/projects" element={<Projects />} />
+              <Route path="/impact" element={<Impact />} />
               <Route path="/academy" element={<Academy />} />
               <Route path="/news" element={<News />} />
               <Route path="/contact" element={<Contact />} />

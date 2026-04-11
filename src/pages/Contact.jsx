@@ -103,17 +103,17 @@ export const Contact = () => {
                     <Icon name="phone" size={22} category="primary" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-primary mb-1">Phone Numbers</h3>
+                    <h3 className="font-bold text-primary mb-1">Phone & Mobile</h3>
                     <p className="text-sm text-gray-600">
                       Phone:{' '}
-                      <a href="tel:+255578393493" className="hover:text-secondary transition">
-                        +255 578 393 4937
+                      <a href={`tel:${thaData.contact.phone}`} className="hover:text-secondary transition">
+                        {thaData.contact.phone}
                       </a>
                     </p>
                     <p className="text-sm text-gray-600 mt-1">
                       Mobile:{' '}
-                      <a href="tel:+255578393493" className="hover:text-secondary transition">
-                        +255 578 393 4937
+                      <a href={`tel:${thaData.contact.mobile}`} className="hover:text-secondary transition">
+                        {thaData.contact.mobile}
                       </a>
                     </p>
                   </div>

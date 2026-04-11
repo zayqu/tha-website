@@ -8,30 +8,32 @@ export const MakeADifference = () => {
 
   const roles = [
     {
-      title: 'Community Outreach Coordinator',
+      title: 'Health Ambassador',
       time: '10-15 hours/week',
-      description: 'Engage with communities, organize health awareness campaigns, and facilitate workshops.',
-      icon: 'groups'
-    },
-    {
-      title: 'Administrative Support',
-      time: '5-10 hours/week',
-      description: 'Assist with office operations, data entry, scheduling, and general administrative tasks.',
-      icon: 'person'
-    },
-    {
-      title: 'Healthcare Professional',
-      time: 'Flexible',
-      description: 'Provide clinical services, health education, or technical expertise in your specialty.',
+      description: 'Conduct community outreach for hepatitis testing, vaccination drives, and health education sessions.',
       icon: 'local_hospital'
+    },
+    {
+      title: 'Youth Peer Supporter',
+      time: '5-10 hours/week',
+      description: 'Support young people through Life Unlocked programs, facilitating youth clubs and peer support groups.',
+      icon: 'psychology'
+    },
+    {
+      title: 'Mental Health Advocate',
+      time: 'Flexible',
+      description: 'Lead stigma-reduction campaigns and facilitate Talk To Heal support groups in your community.',
+      icon: 'forum'
     },
   ];
 
   const impactCalculations = {
-    50000: 'Provides health education materials for 100 community members',
-    100000: 'Sponsors hepatitis testing for 50 individuals',
-    250000: 'Funds mental health counseling sessions for 10 people',
-    500000: 'Supports a full community health screening event',
+    50000: 'Tests 10 people for Hepatitis B (KAPIME)',
+    100000: 'Screens 25 community members and provides education',
+    250000: 'Funds 5 counseling sessions for youth (Life Unlocked)',
+    500000: 'Trains 1 peer supporter for Talk To Heal program',
+    1000000: 'Supports a full community health screening event',
+    2000000: 'Funds 1 support group for an entire month',
   };
 
   return (
@@ -117,9 +119,9 @@ export const MakeADifference = () => {
                 <div className="input-group">
                   <select className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-secondary focus:outline-none" required>
                     <option value="">Select preferred role</option>
-                    <option>Community Outreach Coordinator</option>
-                    <option>Administrative Support</option>
-                    <option>Healthcare Professional</option>
+                    <option>Health Ambassador</option>
+                    <option>Youth Peer Supporter</option>
+                    <option>Mental Health Advocate</option>
                   </select>
                 </div>
                 <div className="input-group">
@@ -269,13 +271,15 @@ export const MakeADifference = () => {
             </div>
             <div className="bg-white/10 backdrop-blur-sm p-8 md:p-12 rounded-2xl">
               <blockquote className="text-xl md:text-2xl text-white/95 mb-6 leading-relaxed italic">
-                "THA's hepatitis screening program saved my life. I had no idea I was infected until their team came to our village. Today, I'm healthy, educated about my condition, and helping others get tested."
+                "Getting tested through KAPIME saved my life. I discovered my hepatitis B status early and started treatment immediately. Now I help others in my community get tested too."
               </blockquote>
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-white/20 rounded-full"></div>
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                  <Icon name="person" size={32} color="white" />
+                </div>
                 <div>
-                  <div className="font-bold text-white">Sarah M.</div>
-                  <div className="text-white/80">Program Participant, Mwanza</div>
+                  <div className="font-bold text-white">Fatima M.</div>
+                  <div className="text-white/80">KAPIME Beneficiary, Dar es Salaam</div>
                 </div>
               </div>
             </div>

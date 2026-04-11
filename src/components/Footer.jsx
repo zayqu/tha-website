@@ -12,6 +12,12 @@ export const Footer = () => {
 
             {/* About */}
             <div>
+              {/* Logo */}
+              <img
+                src="/logo/tha-logo.svg"
+                alt="Tanzania Health Alliance"
+                className="h-12 w-auto mb-4 brightness-0 invert"
+              />
               <h4 className="text-base font-bold font-heading tracking-tight mb-4 text-white">
                 About Tanzania Health Alliance
               </h4>

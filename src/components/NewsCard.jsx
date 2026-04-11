@@ -3,7 +3,7 @@ import { Icon } from './Icon';
 
 export default function NewsCard({ news }) {
   return (
-    <article className="group bg-white rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden flex flex-col h-full">
+    <article className="group bg-white rounded-xl shadow-card hover:shadow-elevated transition-all duration-300 overflow-hidden flex flex-col h-full">
       <div className="relative overflow-hidden aspect-video">
         <img
           src={news.image}
@@ -17,31 +17,29 @@ export default function NewsCard({ news }) {
           </span>
         </div>
       </div>
-      
+
       <div className="p-6 flex flex-col flex-grow">
-        <div className="flex items-center text-sm text-neutral/60 mb-3">
+        <div className="flex items-center text-sm text-gray-500 mb-3">
           <Icon name="calendar_today" size={16} className="mr-2" />
-          {new Date(news.date).toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-          })}
+          {news.date}
         </div>
-        
-        <h3 className="text-xl font-bold text-neutral mb-3 line-clamp-2 group-hover:text-accent transition-colors">
+
+        <h3 className="text-xl font-bold text-primary mb-3 line-clamp-2 group-hover:text-secondary transition-colors">
           {news.title}
         </h3>
-        
-        <p className="text-neutral/70 text-sm leading-relaxed line-clamp-3 mb-4 flex-grow">
+
+        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4 flex-grow">
           {news.excerpt}
         </p>
-        
-        <Link 
-          to={`/news/${news.slug}`}
-          className="inline-flex items-center text-accent font-semibold text-sm hover:underline mt-auto"
+
+        <a
+          href={news.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center text-secondary font-semibold text-sm hover:underline mt-auto"
         >
-          Read More <Icon name="arrow_forward" size={16} className="ml-1" />
-        </Link>
+          Read Full Story <Icon name="arrow_forward" size={16} className="ml-1" />
+        </a>
       </div>
     </article>
   );
