@@ -103,47 +103,28 @@ const CampaignCard = ({ campaign, index }) => {
       </div>
 
       <div className="p-6">
-        <h3 className="font-bold text-xl text-primary mb-2">{campaign.name}</h3>
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{campaign.subtitle}</p>
+        <h3 className="font-bold text-xl text-primary mb-1">{campaign.name}</h3>
+        <p className="text-gray-500 text-sm mb-4">{campaign.subtitle}</p>
 
-        {/* Metrics */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          {campaign.id === 'kapime' && (
-            <>
-              <div className="bg-cool-gray rounded-lg p-3 text-center">
-                <div className="text-lg font-bold text-primary">{campaign.metrics.peopleScreened.toLocaleString()}</div>
-                <div className="text-xs text-gray-500">Screened</div>
-              </div>
-              <div className="bg-cool-gray rounded-lg p-3 text-center">
-                <div className="text-lg font-bold text-secondary">{campaign.metrics.peopleVaccinated.toLocaleString()}</div>
-                <div className="text-xs text-gray-500">Vaccinated</div>
-              </div>
-            </>
-          )}
-          {campaign.id === 'life-unlocked' && (
-            <>
-              <div className="bg-cool-gray rounded-lg p-3 text-center">
-                <div className="text-lg font-bold text-primary">{campaign.metrics.youthReached.toLocaleString()}</div>
-                <div className="text-xs text-gray-500">Youth Reached</div>
-              </div>
-              <div className="bg-cool-gray rounded-lg p-3 text-center">
-                <div className="text-lg font-bold text-secondary">{campaign.metrics.clubsEstablished}</div>
-                <div className="text-xs text-gray-500">Youth Clubs</div>
-              </div>
-            </>
-          )}
-          {campaign.id === 'talk-to-heal' && (
-            <>
-              <div className="bg-cool-gray rounded-lg p-3 text-center">
-                <div className="text-lg font-bold text-primary">{campaign.metrics.supportGroupsActive}</div>
-                <div className="text-xs text-gray-500">Support Groups</div>
-              </div>
-              <div className="bg-cool-gray rounded-lg p-3 text-center">
-                <div className="text-lg font-bold text-secondary">{campaign.metrics.peopleServed.toLocaleString()}</div>
-                <div className="text-xs text-gray-500">People Served</div>
-              </div>
-            </>
-          )}
+        {/* Activities */}
+        <div className="mb-4">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Key Activities</p>
+          <ul className="space-y-1.5">
+            {campaign.activities2025.map((act, i) => (
+              <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                <Icon name="check_circle" size={14} category="secondary" className="mt-0.5 flex-shrink-0" />
+                {act}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Impact */}
+        <div className="bg-cool-gray rounded-lg p-3 mb-4">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">2025 Impact</p>
+          {campaign.impact2025.slice(0, 2).map((imp, i) => (
+            <p key={i} className="text-sm font-semibold text-primary leading-snug">{imp}</p>
+          ))}
         </div>
 
         <Link
@@ -153,6 +134,25 @@ const CampaignCard = ({ campaign, index }) => {
           Learn More <Icon name="arrow_forward" size={18} />
         </Link>
       </div>
+    </div>
+  );
+};
+
+/* =========================
+   Objective Card
+========================= */
+const ObjectiveCard = ({ obj, index }) => {
+  const [ref, show] = useReveal();
+  return (
+    <div
+      ref={ref}
+      className={`p-6 bg-white rounded-lg shadow-card border-l-4 border-secondary ${
+        show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      }`}
+      style={{ transitionDelay: `${index * 100}ms` }}
+    >
+      <Icon name="check_circle" size={24} category="secondary" className="mb-3" />
+      <p className="text-gray-700">{obj}</p>
     </div>
   );
 };
@@ -254,9 +254,10 @@ export const Home = () => {
       <section className="py-20 bg-cool-gray">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Our Programs</h2>
+            <span className="text-accent font-semibold text-sm uppercase tracking-wider">What We Do</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2 mb-4">Our Campaigns & Impact</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Three integrated campaigns addressing Tanzania's most pressing health challenges
+              Three strategic campaigns addressing Tanzania's most pressing health challenges, each grounded in real community action.
             </p>
           </div>
 
@@ -315,22 +316,9 @@ export const Home = () => {
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-primary mb-12">What We Do</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {thaData.objectives.map((obj, i) => {
-              const [ref, show] = useReveal();
-              return (
-                <div
-                  key={i}
-                  ref={ref}
-                  className={`p-6 bg-white rounded-lg shadow-card border-l-4 border-secondary ${
-                    show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                  }`}
-                  style={{ transitionDelay: `${i * 100}ms` }}
-                >
-                  <Icon name="check_circle" size={24} category="secondary" className="mb-3" />
-                  <p className="text-gray-700">{obj}</p>
-                </div>
-              );
-            })}
+            {thaData.objectives.map((obj, i) => (
+              <ObjectiveCard key={i} obj={obj} index={i} />
+            ))}
           </div>
         </div>
       </section>

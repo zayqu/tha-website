@@ -45,11 +45,6 @@ const CoreValueCard = ({ value, index }) => {
 export const About = () => {
   const coreValues = [
     {
-      value: "Compassion",
-      icon: "favorite",
-      description: "We lead with empathy and care for every individual and community we serve."
-    },
-    {
       value: "Integrity",
       icon: "shield",
       description: "We uphold honesty, transparency, and ethical practices in all our work."
@@ -198,6 +193,81 @@ export const About = () => {
             {coreValues.map((value, index) => (
               <CoreValueCard key={index} value={value} index={index} />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Campaign Approach */}
+      <section className="py-16 md:py-24 bg-cool-gray">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="text-accent font-semibold text-sm uppercase tracking-wider">How We Work</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2">Our Campaign Approach</h2>
+            <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
+              THA delivers impact through three structured campaigns. Every activity, outreach, and program maps to one of these campaigns — ensuring focused, measurable results.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* KAPIME */}
+            <div className="bg-white rounded-2xl shadow-card p-8 border-t-4 border-hepatitis">
+              <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mb-4">
+                <Icon name="favorite" size={28} color="#EF4444" />
+              </div>
+              <h3 className="text-xl font-bold text-primary mb-1">KAPIME</h3>
+              <p className="text-sm font-semibold text-gray-500 mb-3">Hepatitis Awareness & Prevention</p>
+              <p className="text-gray-600 text-sm mb-4">
+                Raising awareness about Hepatitis B through community outreach, school education, and public campaigns to eliminate viral hepatitis by 2030.
+              </p>
+              <ul className="space-y-2">
+                {["World Hepatitis Day campaign", "School & university hepatitis education", "Community health marathons"].map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                    <Icon name="check_circle" size={14} category="secondary" className="mt-0.5 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Life Unlocked */}
+            <div className="bg-white rounded-2xl shadow-card p-8 border-t-4 border-mental">
+              <div className="w-14 h-14 rounded-full bg-purple-50 flex items-center justify-center mb-4">
+                <Icon name="psychology" size={28} color="#8B5CF6" />
+              </div>
+              <h3 className="text-xl font-bold text-primary mb-1">Life Unlocked</h3>
+              <p className="text-sm font-semibold text-gray-500 mb-3">Mental Health for Youth</p>
+              <p className="text-gray-600 text-sm mb-4">
+                Supporting young Tanzanians through mental health awareness, resilience-building, and peer support during life transitions.
+              </p>
+              <ul className="space-y-2">
+                {["School & university mental health sessions", "Youth engagement programs", "Peer support communities"].map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                    <Icon name="check_circle" size={14} category="secondary" className="mt-0.5 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Talk To Heal */}
+            <div className="bg-white rounded-2xl shadow-card p-8 border-t-4 border-mental">
+              <div className="w-14 h-14 rounded-full bg-purple-50 flex items-center justify-center mb-4">
+                <Icon name="forum" size={28} color="#8B5CF6" />
+              </div>
+              <h3 className="text-xl font-bold text-primary mb-1">Talk To Heal</h3>
+              <p className="text-sm font-semibold text-gray-500 mb-3">Mental Health Conversations & Support</p>
+              <p className="text-gray-600 text-sm mb-4">
+                Creating safe spaces for mental health conversations through community programs, peer support, and stigma reduction.
+              </p>
+              <ul className="space-y-2">
+                {["Community engagement events", "Mental health awareness sessions", "Stigma-reduction programs"].map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                    <Icon name="check_circle" size={14} category="secondary" className="mt-0.5 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>

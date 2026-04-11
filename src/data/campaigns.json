@@ -5,7 +5,7 @@
       "name": "KAPIME",
       "tagline": "Get Tested",
       "subtitle": "Hepatitis Awareness & Prevention",
-      "icon": "heart-check",
+      "icon": "favorite",
       "color": "hepatitis",
       "description": "Kapime means 'Get Tested' in Swahili. This flagship initiative raises awareness about Hepatitis B, encourages vaccination, and connects communities to testing and care.",
       "whatIs": "A comprehensive hepatitis screening and vaccination campaign designed to eliminate viral hepatitis by 2030.",
@@ -23,6 +23,16 @@
         "Ilala",
         "Temeke",
         "Surrounding regions"
+      ],
+      "activities2025": [
+        "World Hepatitis Day media engagement (radio broadcast)",
+        "Community health marathon for hepatitis awareness",
+        "Hepatitis education outreach in schools & universities"
+      ],
+      "impact2025": [
+        "500+ individuals reached at World Hepatitis Day",
+        "1,000+ students reached through school outreach",
+        "Increased hepatitis awareness across communities"
       ],
       "metrics": {
         "peopleScreened": 12500,
@@ -44,11 +54,11 @@
       "name": "Life Unlocked",
       "tagline": "Youth Mental Health",
       "subtitle": "Mental Health for Youth Transitions",
-      "icon": "brain",
+      "icon": "psychology",
       "color": "mental",
       "description": "Supporting young Tanzanians through mental health awareness, resilience-building, life skills, and peer support, especially during the challenging post-college period.",
       "whatIs": "A youth-focused mental health initiative providing counseling, life skills training, and peer support communities.",
-      "whyMatters": "Mental health challenges are growing among young Tanzanians, with inadequate resources and high stigma preventing people from seeking help. The post-college transition period is particularly challenging.",
+      "whyMatters": "Mental health challenges are growing among young Tanzanians, with inadequate resources and high stigma preventing people from seeking help.",
       "howWorks": [
         "Mental health awareness workshops in schools and universities",
         "Youth clubs providing peer support and life skills training",
@@ -62,6 +72,16 @@
         "Arusha",
         "Mbeya",
         "University campuses"
+      ],
+      "activities2025": [
+        "Mental health awareness sessions at City College (main campus)",
+        "Mental health outreach at Temeke Secondary School",
+        "Youth community engagement programs"
+      ],
+      "impact2025": [
+        "1,000+ students reached across 3 institutions",
+        "Increased youth awareness on mental health",
+        "Improved mental health understanding among students"
       ],
       "metrics": {
         "youthReached": 5600,
@@ -83,7 +103,7 @@
       "name": "Talk To Heal",
       "tagline": "Peer Support",
       "subtitle": "Mental Health Conversations & Support",
-      "icon": "group",
+      "icon": "forum",
       "color": "mental",
       "description": "Creating safe, stigma-free spaces for mental health conversations. Talk To Heal connects individuals with mental health professionals and trained peer supporters.",
       "whatIs": "A community-based mental health support network offering counseling, dialogue circles, and peer support.",
@@ -101,6 +121,16 @@
         "Ilala districts",
         "Community health centers",
         "Mobile support units"
+      ],
+      "activities2025": [
+        "2 community engagement events on mental health",
+        "HIV & hepatitis testing education sessions",
+        "Mental health awareness programs for communities"
+      ],
+      "impact2025": [
+        "Increased community participation in health programs",
+        "Improved mental health conversations in communities",
+        "Strengthened community engagement"
       ],
       "metrics": {
         "supportGroupsActive": 35,
