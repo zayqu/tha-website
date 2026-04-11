@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { newsArticles } from '../data/newsData';
 
@@ -67,10 +68,8 @@ export const News = () => {
       {activeCategory === 'all' && featuredArticle && (
         <section className="section-padding bg-neutral">
           <div className="container-custom">
-            <a
-              href={featuredArticle.url}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to={`/news/${featuredArticle.slug}`}
               className="group block bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300"
             >
               <div className="grid md:grid-cols-2 gap-0">
@@ -120,7 +119,7 @@ export const News = () => {
                   </span>
                 </div>
               </div>
-            </a>
+            </Link>
           </div>
         </section>
       )}
@@ -131,11 +130,9 @@ export const News = () => {
           {regularArticles.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {regularArticles.map((article) => (
-                <a
+                <Link
                   key={article.id}
-                  href={article.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  to={`/news/${article.slug}`}
                   className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col card-hover"
                 >
                   {/* Image */}
@@ -177,7 +174,7 @@ export const News = () => {
                       </div>
                     </div>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
           ) : (

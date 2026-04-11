@@ -42,6 +42,7 @@ function App() {
               <Route path="/impact" element={<Impact />} />
               <Route path="/academy" element={<Academy />} />
               <Route path="/news" element={<News />} />
+              <Route path="/news/:slug" element={<NewsDetail />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/campaigns/:campaignId" element={<CampaignDetail />} />
             </Routes>

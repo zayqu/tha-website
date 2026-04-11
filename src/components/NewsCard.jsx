@@ -32,14 +32,12 @@ export default function NewsCard({ news }) {
           {news.excerpt}
         </p>
 
-        <a
-          href={news.url}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to={`/news/${news.slug}`}
           className="inline-flex items-center text-secondary font-semibold text-sm hover:underline mt-auto"
         >
           Read Full Story <Icon name="arrow_forward" size={16} className="ml-1" />
-        </a>
+        </Link>
       </div>
     </article>
   );

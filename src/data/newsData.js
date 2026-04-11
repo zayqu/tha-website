@@ -1,68 +1,128 @@
 export const newsArticles = [
   {
     id: 1,
+    slug: "tha-unicef-strategic-meeting-hepatitis-b-birth-dose-vaccination",
     title: "THA–UNICEF Strategic Meeting on Hepatitis B Birth-Dose Vaccination",
-    excerpt: "Tanzania Health Alliance (THA) recently convened a strategic meeting with UNICEF Tanzania to advance national efforts toward introducing a timely hepatitis B birth-dose vaccine in Tanzania, administered within 24 hours of birth. This early vaccination is widely recognized as the most effective way to prevent mother-to-child transmission of hepatitis B. Without protection at birth, newborns exposed to the virus face a significantly higher risk of developing chronic hepatitis B, which can later lead to liver cirrhosis or liver cancer. The discussion between THA and UNICEF Tanzania focused on what is required to integrate the hepatitis B birth-dose into routine immunization services and maternal–newborn health programs nationwide.",
+    excerpt: "Tanzania Health Alliance (THA) recently convened a strategic meeting with UNICEF Tanzania to advance national efforts toward introducing a timely hepatitis B birth-dose vaccine in Tanzania, administered within 24 hours of birth.",
+    content: `Tanzania Health Alliance (THA) recently convened a strategic meeting with UNICEF Tanzania to advance national efforts toward introducing a timely hepatitis B birth-dose vaccine in Tanzania, administered within 24 hours of birth. This early vaccination is widely recognized as the most effective way to prevent mother-to-child transmission of hepatitis B.
+
+Without protection at birth, newborns exposed to the virus face a significantly higher risk of developing chronic hepatitis B, which can later lead to liver cirrhosis or liver cancer. The discussion between THA and UNICEF Tanzania focused on what is required to integrate the hepatitis B birth-dose into routine immunization services and maternal–newborn health programs nationwide.
+
+During the meeting, both organizations reviewed the current status of hepatitis B vaccination coverage in Tanzania and identified key barriers preventing timely birth-dose administration. These include limited health facility capacity in rural areas, gaps in health worker training, and the need for stronger community awareness about the importance of early vaccination.
+
+THA and UNICEF agreed to explore collaborative pathways that would support the Tanzanian government in building the policy, infrastructure, and community trust necessary for a successful roll-out. Tanzania Health Alliance brings its community engagement experience and advocacy network, while UNICEF contributes global expertise and on-the-ground program capacity.
+
+Tanzania Health Alliance remains committed to ensuring that no child is born into a preventable risk of chronic disease. This collaboration represents an important step toward protecting the next generation of Tanzanians from viral hepatitis.`,
     image: "https://tzhealthalliance.or.tz/wp-content/uploads/2026/02/WhatsApp-Image-2026-02-17-at-17.52.03.jpeg",
-    url: "https://tzhealthalliance.or.tz/tha-unicef-strategic-meeting-on-hepatitis-b-birth-dose-vaccination/",
     category: "Events",
     author: "THA Communications",
     date: "February 18, 2026",
+    tags: ["Hepatitis B", "Vaccination", "UNICEF", "Prevention"],
     isFeatured: true
   },
   {
     id: 2,
+    slug: "why-viral-hepatitis-awareness-still-matters-in-tanzania",
     title: "Why Viral Hepatitis Awareness Still Matters in Tanzania",
-    excerpt: "On the morning of 16 February 2026, the Executive Director of Tanzania Health Alliance (THA) participated in a national radio program to raise public awareness about viral hepatitis in Tanzania and its strong connection to liver cancer. During the program, key routes of hepatitis infection in Tanzania were explained including mother-to-child transmission at birth, unsafe medical practices, and low community awareness. The discussion also highlighted the connection between hepatitis and mental health, noting that stigma, fear, and misinformation continue to discourage many people from getting tested or staying on treatment.",
+    excerpt: "On the morning of 16 February 2026, the Executive Director of Tanzania Health Alliance (THA) participated in a national radio program to raise public awareness about viral hepatitis in Tanzania and its strong connection to liver cancer.",
+    content: `On the morning of 16 February 2026, the Executive Director of Tanzania Health Alliance (THA) participated in a national radio program to raise public awareness about viral hepatitis in Tanzania and its strong connection to liver cancer. The program reached thousands of listeners across the country.
+
+During the broadcast, key routes of hepatitis infection in Tanzania were explained — including mother-to-child transmission at birth, unsafe medical practices, and low community awareness. The discussion also highlighted the connection between hepatitis and mental health, noting that stigma, fear, and misinformation continue to discourage many people from getting tested or staying on treatment.
+
+A central message of the program was the importance of early testing. Many people living with hepatitis B or C in Tanzania are unaware of their status because the virus often shows no symptoms for years. By the time symptoms appear, the damage to the liver may already be severe. Regular testing, especially for at-risk groups, remains the most effective early intervention.
+
+The Executive Director emphasized that viral hepatitis is preventable and treatable. With available vaccines for Hepatitis B and effective treatment options for both Hepatitis B and C, awareness and access to healthcare services are the critical missing links for most Tanzanians.
+
+Tanzania Health Alliance continues to use media platforms as a key tool to reach communities beyond the reach of in-person outreach. Radio remains one of the most accessible communication channels in Tanzania, making it essential for public health messaging.`,
     image: "https://tzhealthalliance.or.tz/wp-content/uploads/2026/02/Banner-3.jpg",
-    url: "https://tzhealthalliance.or.tz/why-viral-hepatitis-awareness-still-matters-in-tanzania/",
     category: "Press Releases",
     author: "Shaibu Issa",
     date: "February 16, 2026",
+    tags: ["Hepatitis", "Awareness", "Radio", "Testing"],
     isFeatured: false
   },
   {
     id: 3,
+    slug: "tha-youth-mental-health-session-actionaid-tanzania",
     title: "Tanzania Health Alliance Hosts Youth Mental Health Session with ActionAid Tanzania",
-    excerpt: "Tanzania Health Alliance (THA), in partnership with ActionAid Tanzania, successfully hosted a youth-focused mental health session under the Life Unlock Programme, aimed at supporting young people as they transition from college into the world of work. The session provided a safe and practical space for young people to openly reflect on the psychosocial pressures they face after completing college. Discussions focused on the gap between academic training and the realities of employment, underemployment, and economic uncertainty. Youth actively engaged in conversations around building resilience and protecting their mental wellbeing.",
+    excerpt: "Tanzania Health Alliance (THA), in partnership with ActionAid Tanzania, successfully hosted a youth-focused mental health session under the Life Unlocked programme, aimed at supporting young people as they transition from college into the world of work.",
+    content: `Tanzania Health Alliance (THA), in partnership with ActionAid Tanzania, successfully hosted a youth-focused mental health session under the Life Unlocked programme, aimed at supporting young people as they transition from college into the world of work.
+
+The session provided a safe and practical space for young people to openly reflect on the psychosocial pressures they face after completing college. Discussions focused on the gap between academic training and the realities of employment, underemployment, and economic uncertainty. Youth actively engaged in conversations around building resilience and protecting their mental wellbeing.
+
+Participants shared their personal experiences navigating post-college life — from financial stress to feelings of isolation, identity challenges, and the fear of failure. Many expressed that this was the first time they had an open, non-judgmental conversation about their mental health in a group setting.
+
+Practical coping strategies were introduced during the session, including mindfulness techniques, how to build a personal support network, and when and how to seek professional mental health support. The facilitators also addressed stigma around mental health — emphasizing that struggling is not a weakness, and that seeking help is a sign of strength.
+
+The Life Unlocked programme by THA is designed specifically for youth navigating major life transitions. This partnership with ActionAid Tanzania demonstrates the growing commitment among civil society organizations to address mental health as a core component of youth development and wellbeing in Tanzania.`,
     image: "https://tzhealthalliance.or.tz/wp-content/uploads/2026/02/WhatsApp-Image-2026-02-07-at-23.21.04.jpeg",
-    url: "https://tzhealthalliance.or.tz/tanzania-health-alliance-hosts-youth-mental-health-session-in-partnership-with-actionaid-tanzania/",
     category: "Success Stories",
     author: "THA Programs Team",
     date: "February 7, 2026",
+    tags: ["Mental Health", "Youth", "Life Unlocked", "ActionAid"],
     isFeatured: false
   },
   {
     id: 4,
+    slug: "supporting-mental-health-postgraduate-researchers-duce",
     title: "Supporting Mental Health Among Postgraduate Researchers at DUCE",
-    excerpt: "Tanzania Health Alliance (THA) participated in a mental health workshop for postgraduate students at the Dar es Salaam University College of Education (DUCE). The workshop aimed to help students cope with mental health challenges during academic research and build resilience in managing research-related stress. It was part of THA's mission to advocate for mental health support in universities and improve the emotional well-being of students. The event provided practical strategies for managing the pressures of postgraduate research.",
+    excerpt: "Tanzania Health Alliance (THA) participated in a mental health workshop for postgraduate students at the Dar es Salaam University College of Education (DUCE), addressing the unique mental health challenges faced by researchers.",
+    content: `Tanzania Health Alliance (THA) participated in a mental health workshop for postgraduate students at the Dar es Salaam University College of Education (DUCE), addressing the unique mental health challenges faced by researchers and providing practical resources for support.
+
+Postgraduate research is a demanding process that can take a toll on mental wellbeing. Students often face prolonged periods of isolation, uncertainty about research outcomes, high academic pressure, financial constraints, and the challenge of balancing study with personal responsibilities. THA's participation in this workshop was part of its broader commitment to bringing mental health conversations into university settings.
+
+During the workshop, THA representatives facilitated open discussions on recognizing signs of burnout, anxiety, and depression among postgraduate students. Participants were encouraged to reflect on their own mental health and discuss the barriers that prevent them from seeking help — including academic culture that normalizes overwork, fear of judgment from peers and supervisors, and lack of awareness about available support services.
+
+The session also covered practical strategies: how to set healthy boundaries in academic work, the importance of peer support, and how to have conversations with supervisors about mental health challenges. Information about counseling services available at the institution was shared.
+
+THA believes that universities play a critical role in shaping mental health culture in Tanzania. By equipping postgraduate students with awareness and coping tools, we invest in a generation of researchers and educators who will carry healthier approaches to mental wellbeing into their communities and workplaces.`,
     image: "https://tzhealthalliance.or.tz/wp-content/uploads/2026/02/005.jpeg",
-    url: "https://tzhealthalliance.or.tz/supporting-mental-health-among-postgraduate-researchers-at-duce/",
     category: "Events",
     author: "THA Team",
     date: "January 17, 2026",
+    tags: ["Mental Health", "Education", "University", "DUCE"],
     isFeatured: false
   },
   {
     id: 5,
+    slug: "tha-advocacy-hepatitis-b-birth-dose-introduction-tanzania",
     title: "THA Leads Advocacy for Hepatitis B Birth Dose Introduction in Tanzania",
-    excerpt: "Tanzania Health Alliance (THA) announced its role as a leading partner in a strategic collaboration with the Coalition for Global Hepatitis Elimination (CGHE), hosted by the Task Force for Global Health. This partnership aims to advance the introduction of the hepatitis B birth dose (HepB-BD) vaccine in Tanzania. Despite WHO recommendations, fewer than one in five newborns in sub-Saharan Africa currently receive the hepatitis B birth dose. Consequently, two out of every three new chronic HBV infections globally occur in children across Africa.",
+    excerpt: "Tanzania Health Alliance (THA) announced its role as a leading partner in a strategic collaboration with the Coalition for Global Hepatitis Elimination (CGHE), hosted by the Task Force for Global Health, to advance the introduction of the hepatitis B birth dose vaccine in Tanzania.",
+    content: `Tanzania Health Alliance (THA) announced its role as a leading partner in a strategic collaboration with the Coalition for Global Hepatitis Elimination (CGHE), hosted by the Task Force for Global Health, to advance the introduction of the hepatitis B birth dose (HepB-BD) vaccine in Tanzania.
+
+Despite WHO recommendations that all newborns receive the hepatitis B vaccine within 24 hours of birth, fewer than one in five newborns in sub-Saharan Africa currently receive the hepatitis B birth dose. As a result, two out of every three new chronic HBV infections globally occur in children across Africa — many of whom will not know they are infected until significant liver damage has already occurred.
+
+In Tanzania, the hepatitis B birth dose has not yet been integrated into the national routine immunization schedule. THA's advocacy work focuses on building the evidence base, stakeholder support, and policy momentum necessary to change this. Through the CGHE collaboration, THA will contribute community-level insights and civil society advocacy alongside global technical expertise.
+
+This partnership reflects THA's evolution from community awareness campaigns toward high-level policy advocacy. The organization recognizes that lasting change in hepatitis outcomes requires not only public education but also structural interventions — including immunization policy reform, health worker training, and sustainable financing for vaccines and treatment.
+
+Tanzania Health Alliance calls on all stakeholders — government, health professionals, donors, and communities — to join in prioritizing the hepatitis B birth dose as a critical, life-saving intervention for Tanzania's newborns.`,
     image: "https://tzhealthalliance.or.tz/wp-content/uploads/2026/02/WhatsApp-Image-2026-02-08-at-08.36.26-1.jpeg",
-    url: "https://tzhealthalliance.or.tz/advancing-high-level-advocacy-for-hepatitis-b-birth-dose-introduction-in-tanzania/",
     category: "Announcements",
     author: "THA Advocacy Team",
     date: "January 6, 2026",
+    tags: ["Hepatitis B", "Advocacy", "Birth Dose", "Prevention"],
     isFeatured: false
   },
   {
     id: 6,
-    title: "Tanzania Health Alliance Leads Mass Awareness Campaign for World Hepatitis Testing Week at Kigamboni College",
-    excerpt: "Tanzania Health Alliance (THA) successfully hosted a mass awareness campaign to mark World Hepatitis Testing Week at Kigamboni College of Health and Allied Sciences, reaching more than 300 medical students. The campaign focused on increasing awareness of hepatitis prevention, testing, and vaccination, particularly among future health professionals. Medical students are among the groups at highest risk, as health workers are four times more likely to be exposed to hepatitis infections.",
+    slug: "tha-mass-awareness-world-hepatitis-testing-week-kigamboni-college",
+    title: "THA Leads Mass Awareness Campaign for World Hepatitis Testing Week at Kigamboni College",
+    excerpt: "Tanzania Health Alliance (THA) successfully hosted a mass awareness campaign to mark World Hepatitis Testing Week at Kigamboni College of Health and Allied Sciences, reaching more than 300 medical students.",
+    content: `Tanzania Health Alliance (THA) successfully hosted a mass awareness campaign to mark World Hepatitis Testing Week at Kigamboni College of Health and Allied Sciences, reaching more than 300 medical students with critical information on hepatitis prevention, testing, and vaccination.
+
+The campaign focused on increasing awareness among future health professionals — a group that is four times more likely than the general population to be exposed to hepatitis infections through their work. Despite this elevated risk, studies show that health workers often have low awareness of their own hepatitis B status and limited access to post-exposure prophylaxis.
+
+During the event, students participated in interactive sessions covering the modes of hepatitis B and C transmission, the importance of hepatitis B vaccination for health workers, how to perform safe practices to prevent occupational exposure, and the role health professionals play in encouraging their future patients to test and vaccinate.
+
+THA also used the occasion to distribute educational materials and facilitate a Q&A session where students could ask questions anonymously — an approach that proved effective in surfacing concerns that many students were too hesitant to raise publicly. Several students disclosed that they had never been tested for hepatitis B and were unaware that the vaccine was available to them.
+
+This campaign under the KAPIME initiative reinforces THA's commitment to embedding hepatitis awareness within Tanzania's health education system. By reaching health professionals at the start of their careers, THA aims to create a generation of clinicians who are not only protected themselves, but who also champion hepatitis testing and vaccination among their patients and communities.`,
     image: "https://tzhealthalliance.or.tz/wp-content/uploads/2026/02/Banner-1.jpg",
-    url: "https://tzhealthalliance.or.tz/tanzania-health-alliance-leads-mass-awareness-campaign-for-world-hepatitis-testing-week-at-kigamboni-college/",
     category: "Events",
     author: "KAPIME Team",
     date: "December 7, 2025",
+    tags: ["Hepatitis", "Testing", "Awareness", "KAPIME", "Kigamboni"],
     isFeatured: false
   }
 ];
