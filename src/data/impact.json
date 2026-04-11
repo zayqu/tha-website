@@ -45,11 +45,10 @@
   ],
   "impactMetrics": {
     "total": {
-      "peopleReached": 21500,
-      "communitiesTouched": 35,
-      "healthcareWorkersReached": 450,
-      "socialMediaFollowers": 1200000,
-      "countriesRecognized": 45
+      "peopleReached": 1500,
+      "institutionsEngaged": 3,
+      "activeCampaigns": 3,
+      "countriesFollowing": 45
     },
     "byProgram": {
       "kapime": {

@@ -231,16 +231,16 @@ export const Home = () => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <Counter end={21500} />
-              <p className="text-white/80 mt-2">Lives Reached</p>
+              <Counter end={1500} />
+              <p className="text-white/80 mt-2">People Reached</p>
             </div>
             <div>
-              <Counter end={35} />
-              <p className="text-white/80 mt-2">Communities Touched</p>
+              <Counter end={3} suffix="" />
+              <p className="text-white/80 mt-2">Institutions Engaged</p>
             </div>
             <div>
-              <Counter end={450} />
-              <p className="text-white/80 mt-2">Healthcare Workers</p>
+              <Counter end={3} suffix="" />
+              <p className="text-white/80 mt-2">Active Campaigns</p>
             </div>
             <div>
               <Counter end={45} />

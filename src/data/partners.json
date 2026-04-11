@@ -10,14 +10,6 @@
     },
     {
       "id": 2,
-      "name": "Global Liver Institute",
-      "logo": "/images/partners/global-liver-logo.svg",
-      "description": "International organization dedicated to liver health",
-      "relationship": "Research and awareness collaboration",
-      "website": "https://globalliver.org/"
-    },
-    {
-      "id": 3,
       "name": "World Hepatitis Alliance",
       "logo": "/images/partners/wha-logo.svg",
       "description": "Global network of 800+ organizations working on viral hepatitis",
@@ -25,23 +17,15 @@
       "website": "https://www.worldhepatitisalliance.org/"
     },
     {
+      "id": 3,
+      "name": "Global Liver Institute",
+      "logo": "/images/partners/global-liver-logo.svg",
+      "description": "International organization dedicated to liver health",
+      "relationship": "Research and awareness collaboration",
+      "website": "https://globalliver.org/"
+    },
+    {
       "id": 4,
-      "name": "Task Force for Global Health",
-      "logo": "/images/partners/taskforce-logo.svg",
-      "description": "International health security and disease prevention",
-      "relationship": "Health intervention collaboration",
-      "website": "https://www.taskforce.org/"
-    },
-    {
-      "id": 5,
-      "name": "Abaché Hepatitis B Foundation",
-      "logo": "/images/partners/abaché-logo.svg",
-      "description": "Organization dedicated to hepatitis B elimination",
-      "relationship": "Vaccination and screening partnerships",
-      "website": "https://abachepb.org/"
-    },
-    {
-      "id": 6,
       "name": "Tanzania Ministry of Health",
       "logo": "/images/partners/ministry-health-logo.svg",
       "description": "Strategic partner for nationwide health initiatives",

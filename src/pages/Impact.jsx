@@ -8,16 +8,16 @@ import campaigns from '../data/campaigns.json';
    Scroll Reveal Hook
 ========================= */
 const useReveal = () => {
-  const [ref, setRef] = React.useState(null);
+  const ref = React.useRef(null);
   const [show, setShow] = React.useState(false);
 
   React.useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) setShow(true);
     });
-    if (ref) observer.observe(ref);
+    if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
-  }, [ref]);
+  }, []);
 
   return [ref, show];
 };
@@ -47,14 +47,89 @@ const Counter = ({ end, suffix = '+' }) => {
   );
 };
 
+/* =========================
+   Timeline Item — extracted to follow Rules of Hooks
+========================= */
+const TimelineItem = ({ milestone, index }) => {
+  const [ref, show] = useReveal();
+  const colorClasses = {
+    primary: 'bg-primary text-white',
+    secondary: 'bg-secondary text-white',
+    accent: 'bg-accent text-white',
+  };
+  const isLeft = index % 2 === 0;
+
+  return (
+    <div
+      ref={ref}
+      className={`relative flex items-center gap-4 ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+    >
+      <div className={`absolute left-6 md:left-1/2 w-4 h-4 rounded-full transform -translate-x-1/2 ${colorClasses[milestone.color] || colorClasses.primary}`} />
+
+      <div className={`w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 ml-4 md:ml-0 ${colorClasses[milestone.color] || colorClasses.primary} ${
+        show ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+      } transition-all duration-500`} style={{ transitionDelay: `${index * 150}ms` }}>
+        <Icon name={milestone.icon} size={28} color="white" />
+      </div>
+
+      <div
+        className={`flex-1 ml-12 md:ml-0 md:w-5/12 bg-cool-gray rounded-xl p-6 shadow-card ${
+          show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        } transition-all duration-500`}
+        style={{ transitionDelay: `${index * 100 + 200}ms` }}
+      >
+        <span className="text-sm font-semibold text-accent">{milestone.month}</span>
+        <h4 className="font-bold text-lg text-primary mt-1">{milestone.milestone}</h4>
+        <p className="text-gray-600 text-sm mt-2">{milestone.description}</p>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   Campaign Impact Card — data-driven, no hardcoded numbers
+========================= */
+const colorMap = {
+  hepatitis: { header: 'from-hepatitis to-red-400', icon: 'favorite' },
+  mental: { header: 'from-mental to-purple-400', icon: 'psychology' },
+};
+
+const CampaignImpactCard = ({ campaign }) => {
+  const colors = colorMap[campaign.color] || { header: 'from-primary to-primary-dark', icon: 'check_circle' };
+  return (
+    <div className="bg-white rounded-2xl shadow-card overflow-hidden">
+      <div className={`h-20 bg-gradient-to-br ${colors.header} flex items-center justify-center`}>
+        <Icon name={campaign.icon} size={40} color="white" />
+      </div>
+      <div className="p-6">
+        <h3 className="text-xl font-bold text-primary mb-4">{campaign.name}: {campaign.tagline}</h3>
+        <ul className="space-y-3 mb-6">
+          {campaign.impact2025.map((item, i) => (
+            <li key={i} className="flex items-start gap-3 p-3 bg-cool-gray rounded-lg">
+              <Icon name="check_circle" size={16} category="secondary" className="mt-0.5 flex-shrink-0" />
+              <span className="text-gray-700 text-sm font-medium">{item}</span>
+            </li>
+          ))}
+        </ul>
+        <Link
+          to={`/campaigns/${campaign.id}`}
+          className="block text-center bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition font-semibold"
+        >
+          Learn More
+        </Link>
+      </div>
+    </div>
+  );
+};
+
 export const Impact = () => {
   return (
     <div className="pt-16 bg-cool-gray">
 
-      {/* Hero Section */}
+      {/* Hero */}
       <section className="py-20 md:py-28 bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Our Track Record</span>
+          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Annual Report 2025</span>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mt-4 mb-6">
             Making an Impact
           </h1>
@@ -69,20 +144,20 @@ export const Impact = () => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <Counter end={21500} />
-              <p className="text-white/80 mt-2 font-medium">Lives Reached</p>
+              <Counter end={1500} />
+              <p className="text-white/80 mt-2 font-medium">People Reached</p>
             </div>
             <div>
-              <Counter end={35} />
-              <p className="text-white/80 mt-2 font-medium">Communities</p>
+              <Counter end={3} suffix="" />
+              <p className="text-white/80 mt-2 font-medium">Institutions Engaged</p>
             </div>
             <div>
-              <Counter end={450} />
-              <p className="text-white/80 mt-2 font-medium">Healthcare Workers</p>
+              <Counter end={3} suffix="" />
+              <p className="text-white/80 mt-2 font-medium">Active Campaigns</p>
             </div>
             <div>
               <Counter end={45} />
-              <p className="text-white/80 mt-2 font-medium">Countries</p>
+              <p className="text-white/80 mt-2 font-medium">Countries Following</p>
             </div>
           </div>
         </div>
@@ -98,157 +173,33 @@ export const Impact = () => {
           </div>
 
           <div className="relative">
-            {/* Timeline Line */}
             <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent" />
-
             <div className="space-y-8">
-              {impactData.yearOneTimeline.map((milestone, index) => {
-                const [ref, show] = useReveal();
-                const colorClasses = {
-                  primary: 'bg-primary text-white',
-                  secondary: 'bg-secondary text-white',
-                  accent: 'bg-accent text-white'
-                };
-                const isLeft = index % 2 === 0;
-
-                return (
-                  <div
-                    key={index}
-                    ref={ref}
-                    className={`relative flex items-center gap-4 ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'}`}
-                  >
-                    {/* Dot on timeline */}
-                    <div className={`absolute left-6 md:left-1/2 w-4 h-4 rounded-full transform -translate-x-1/2 ${colorClasses[milestone.color] || colorClasses.primary}`} />
-
-                    {/* Icon Circle */}
-                    <div className={`w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 ml-4 md:ml-0 ${colorClasses[milestone.color] || colorClasses.primary} ${
-                      show ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-                    } transition-all duration-500`} style={{ transitionDelay: `${index * 150}ms` }}>
-                      <Icon name={milestone.icon} size={28} color="white" />
-                    </div>
-
-                    {/* Content Card */}
-                    <div
-                      className={`flex-1 ml-12 md:ml-0 md:w-5/12 bg-cool-gray rounded-xl p-6 shadow-card ${
-                        show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                      }`}
-                      style={{ transitionDelay: `${index * 100 + 200}ms` }}
-                    >
-                      <span className="text-sm font-semibold text-accent">{milestone.month}</span>
-                      <h4 className="font-bold text-lg text-primary mt-1">{milestone.milestone}</h4>
-                      <p className="text-gray-600 text-sm mt-2">{milestone.description}</p>
-                    </div>
-                  </div>
-                );
-              })}
+              {impactData.yearOneTimeline.map((milestone, i) => (
+                <TimelineItem key={i} milestone={milestone} index={i} />
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Impact by Program */}
+      {/* Impact by Campaign — data-driven from campaigns.json */}
       <section className="py-20 bg-cool-gray">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <span className="text-accent font-semibold text-sm uppercase tracking-wider">Program Results</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2">Impact by Program</h2>
+            <span className="text-accent font-semibold text-sm uppercase tracking-wider">2025 Results</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2">Impact by Campaign</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* KAPIME */}
-            <div className="bg-white rounded-2xl shadow-card overflow-hidden">
-              <div className="h-20 bg-gradient-to-br from-hepatitis to-red-400 flex items-center justify-center">
-                <Icon name="heart-check" size={40} color="white" />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-primary mb-4">KAPIME: Get Tested</h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 bg-cool-gray rounded-lg">
-                    <span className="text-gray-600">People Screened</span>
-                    <span className="font-bold text-primary">12,500</span>
-                  </div>
-                  <div className="flex justify-between items-center p-3 bg-cool-gray rounded-lg">
-                    <span className="text-gray-600">Vaccinated</span>
-                    <span className="font-bold text-secondary">8,300</span>
-                  </div>
-                  <div className="flex justify-between items-center p-3 bg-cool-gray rounded-lg">
-                    <span className="text-gray-600">Cases Caught Early</span>
-                    <span className="font-bold text-accent">340</span>
-                  </div>
-                </div>
-                <Link
-                  to="/campaigns/kapime"
-                  className="mt-6 block text-center bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition font-semibold"
-                >
-                  Learn More
-                </Link>
-              </div>
-            </div>
-
-            {/* Life Unlocked */}
-            <div className="bg-white rounded-2xl shadow-card overflow-hidden">
-              <div className="h-20 bg-gradient-to-br from-mental to-purple-400 flex items-center justify-center">
-                <Icon name="psychology" size={40} color="white" />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-primary mb-4">Life Unlocked: Youth Mental Health</h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 bg-cool-gray rounded-lg">
-                    <span className="text-gray-600">Youth Reached</span>
-                    <span className="font-bold text-primary">5,600</span>
-                  </div>
-                  <div className="flex justify-between items-center p-3 bg-cool-gray rounded-lg">
-                    <span className="text-gray-600">Youth Clubs</span>
-                    <span className="font-bold text-secondary">28</span>
-                  </div>
-                  <div className="flex justify-between items-center p-3 bg-cool-gray rounded-lg">
-                    <span className="text-gray-600">Counseling Sessions</span>
-                    <span className="font-bold text-accent">1,340</span>
-                  </div>
-                </div>
-                <Link
-                  to="/campaigns/life-unlocked"
-                  className="mt-6 block text-center bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition font-semibold"
-                >
-                  Learn More
-                </Link>
-              </div>
-            </div>
-
-            {/* Talk To Heal */}
-            <div className="bg-white rounded-2xl shadow-card overflow-hidden">
-              <div className="h-20 bg-gradient-to-br from-mental to-purple-400 flex items-center justify-center">
-                <Icon name="forum" size={40} color="white" />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-primary mb-4">Talk To Heal: Peer Support</h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 bg-cool-gray rounded-lg">
-                    <span className="text-gray-600">Support Groups</span>
-                    <span className="font-bold text-primary">35</span>
-                  </div>
-                  <div className="flex justify-between items-center p-3 bg-cool-gray rounded-lg">
-                    <span className="text-gray-600">Peer Supporters</span>
-                    <span className="font-bold text-secondary">89</span>
-                  </div>
-                  <div className="flex justify-between items-center p-3 bg-cool-gray rounded-lg">
-                    <span className="text-gray-600">People Served</span>
-                    <span className="font-bold text-accent">3,400</span>
-                  </div>
-                </div>
-                <Link
-                  to="/campaigns/talk-to-heal"
-                  className="mt-6 block text-center bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition font-semibold"
-                >
-                  Learn More
-                </Link>
-              </div>
-            </div>
+            {campaigns.campaigns.map(c => (
+              <CampaignImpactCard key={c.id} campaign={c} />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Government Partnership */}
+      {/* National Partnership */}
       <section className="py-20 bg-gradient-to-br from-primary-dark to-primary text-white">
         <div className="max-w-5xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -263,7 +214,7 @@ export const Impact = () => {
               <ul className="space-y-3">
                 {impactData.governmentPartnership.whatItMeans.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <Icon name="check_circle" size={20} color="white" className="mt-0.5" />
+                    <Icon name="check_circle" size={20} color="white" className="mt-0.5 flex-shrink-0" />
                     <span className="text-white/90">{item}</span>
                   </li>
                 ))}
@@ -293,7 +244,6 @@ export const Impact = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* WHO Documentary */}
             <div className="bg-cool-gray rounded-2xl p-8 text-center">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Icon name="film" size={32} category="primary" />
@@ -309,7 +259,6 @@ export const Impact = () => {
               </p>
             </div>
 
-            {/* WHA Board */}
             <div className="bg-cool-gray rounded-2xl p-8 text-center">
               <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Icon name="award" size={32} category="secondary" />
@@ -325,7 +274,6 @@ export const Impact = () => {
               </p>
             </div>
 
-            {/* WHA Membership */}
             <div className="bg-cool-gray rounded-2xl p-8 text-center">
               <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Icon name="groups" size={32} category="accent" />
@@ -344,12 +292,12 @@ export const Impact = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA */}
       <section className="py-20 bg-gradient-to-r from-secondary to-secondary-dark text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Be Part of Our Impact</h2>
           <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
-            Join thousands of Tanzanians who are working together to build a healthier future.
+            Join Tanzanians who are working together to build a healthier future.
           </p>
           <div className="flex justify-center gap-4 flex-wrap">
             <Link to="/make-a-difference" className="px-8 py-3 bg-white text-secondary font-bold rounded-lg hover:bg-cool-gray transition">
