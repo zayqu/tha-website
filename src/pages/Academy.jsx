@@ -119,7 +119,7 @@ export const Academy = () => {
   });
 
   return (
-    <div className="pt-16 md:pt-20">
+    <div className="pt-0 md:pt-20">
       <SEO
         title="THA Academy"
         description="Access Tanzania Health Alliance learning resources on hepatitis, HIV, mental health, policy, and public health training."

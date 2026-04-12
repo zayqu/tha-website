@@ -40,9 +40,9 @@ const ScrollToTop = () => {
   return null;
 };
 
-// Public layout – Header, Footer, mobile nav
+// Public layout – desktop: Header + Footer, mobile: bottom nav only
 const PublicLayout = () => (
-  <div className="flex flex-col min-h-screen pb-16 md:pb-0">
+  <div className="flex flex-col min-h-screen pb-14 md:pb-0">
     <Header />
     <main className="flex-grow"><Outlet /></main>
     <Footer />

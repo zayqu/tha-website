@@ -32,7 +32,7 @@ const CoreValueCard = ({ value, index }) => {
   return (
     <div
       ref={ref}
-      className={`bg-white/80 backdrop-blur-sm rounded-xl p-6 hover:bg-white hover:shadow-elevated transition-all duration-300 ${
+      className={`bg-white rounded-xl p-6 shadow-card hover:shadow-elevated transition-all duration-300 ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
       style={{ transitionDelay: `${index * 100}ms` }}
@@ -81,7 +81,7 @@ export const About = () => {
   ];
 
   return (
-    <div className="pt-16 bg-cool-gray">
+    <div className="pt-0 md:pt-16 bg-cool-gray">
       <SEO
         title="About"
         description="Learn about Tanzania Health Alliance, our founder story, mission, values, campaigns, leadership, and public health partnerships."
@@ -166,7 +166,7 @@ export const About = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-8">
             {/* Mission */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 md:p-12 hover:shadow-elevated transition-all duration-300">
+            <div className="bg-white rounded-2xl p-8 md:p-12 shadow-card hover:shadow-elevated transition-all duration-300">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center">
                   <Icon name="track_changes" size={22} category="primary" />
@@ -179,7 +179,7 @@ export const About = () => {
             </div>
 
             {/* Vision */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 md:p-12 hover:shadow-elevated transition-all duration-300">
+            <div className="bg-white rounded-2xl p-8 md:p-12 shadow-card hover:shadow-elevated transition-all duration-300">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center">
                   <Icon name="visibility" size={22} category="primary" />
@@ -222,26 +222,35 @@ export const About = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {campaigns.campaigns.map((c) => (
-              <Link
-                key={c.id}
-                to={`/campaigns/${c.id}`}
-                className="group relative rounded-2xl overflow-hidden min-h-[320px] flex flex-col justify-end"
-              >
-                <img src={c.image} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
-                <div className="relative z-10 p-6">
-                  <span className="text-xs bg-white/15 backdrop-blur-md text-white px-3 py-1 rounded-full border border-white/20 font-semibold">
-                    {c.tagline}
-                  </span>
-                  <h3 className="text-xl font-bold text-white mt-3 mb-1">{c.name}</h3>
-                  <p className="text-white/60 text-sm mb-3">{c.subtitle}</p>
-                  <span className="text-white/80 text-sm font-semibold group-hover:text-white transition flex items-center gap-1">
-                    Learn more <Icon name="arrow_forward" size={14} color="white" />
-                  </span>
-                </div>
-              </Link>
-            ))}
+            {campaigns.campaigns.map((c) => {
+              const icons = { kapime: 'health_and_safety', 'life-unlocked': 'psychology', 'talk-to-heal': 'forum' };
+              return (
+                <Link
+                  key={c.id}
+                  to={`/campaigns/${c.id}`}
+                  className="group bg-white rounded-2xl shadow-card hover:shadow-elevated transition-all duration-300 overflow-hidden flex flex-col"
+                >
+                  <div className="relative overflow-hidden h-44 sm:h-48">
+                    <img src={c.image} alt={c.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
+                    <div className="absolute top-3 left-3">
+                      <span className="bg-white/90 backdrop-blur-sm text-primary text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                        {c.tagline}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-5 flex-grow flex flex-col">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Icon name={icons[c.id] || 'campaign'} size={20} category="primary" />
+                      <h3 className="text-lg font-bold text-primary">{c.name}</h3>
+                    </div>
+                    <p className="text-gray-500 text-sm mb-3 line-clamp-2">{c.subtitle}</p>
+                    <span className="mt-auto text-secondary text-sm font-semibold flex items-center gap-1 group-hover:underline">
+                      Learn more <Icon name="arrow_forward" size={14} category="secondary" />
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

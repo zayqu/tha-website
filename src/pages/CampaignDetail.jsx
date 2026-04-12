@@ -21,7 +21,7 @@ export const CampaignDetail = () => {
   }
 
   return (
-    <div className="pt-16 bg-white">
+    <div className="pt-0 md:pt-16 bg-white">
       <SEO
         title={campaign.name}
         description={campaign.description}
@@ -63,7 +63,7 @@ export const CampaignDetail = () => {
             <h2 className="text-3xl font-bold text-primary mt-2">What We Did & What We Achieved</h2>
           </div>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-subtle">
+          <div className="bg-white rounded-2xl overflow-hidden shadow-card">
             <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-100">
 
               {/* Activities */}
@@ -133,7 +133,7 @@ export const CampaignDetail = () => {
           <h2 className="text-3xl font-bold text-primary mb-12">How We Work</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {campaign.howWorks.map((step, i) => (
-              <div key={i} className="flex gap-4 p-5 bg-gray-50/80 rounded-xl hover:bg-white hover:shadow-subtle transition-all duration-300">
+              <div key={i} className="flex gap-4 p-5 bg-white rounded-xl shadow-card hover:shadow-elevated transition-all duration-300">
                 <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0 text-sm font-bold text-primary/50 shadow-subtle">
                   {i + 1}
                 </span>
@@ -150,7 +150,7 @@ export const CampaignDetail = () => {
           <h2 className="text-3xl font-bold text-primary mb-8">Where We're Active</h2>
           <div className="grid sm:grid-cols-2 gap-3">
             {campaign.whereActive.map((location, i) => (
-              <div key={i} className="flex items-center gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-xl hover:shadow-subtle transition-all duration-300">
+              <div key={i} className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-card hover:shadow-elevated transition-all duration-300">
                 <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center">
                   <Icon name="location_on" size={16} category="primary" />
                 </div>
@@ -164,7 +164,7 @@ export const CampaignDetail = () => {
       {/* Testimonial */}
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl p-10">
+          <div className="bg-white rounded-2xl p-10 shadow-card">
             <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center mb-6">
               <Icon name="forum" size={20} category="primary" />
             </div>

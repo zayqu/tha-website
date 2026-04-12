@@ -96,6 +96,10 @@
     text-wrap: balance;
   }
 
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
   /* Custom scrollbar */
   .custom-scrollbar::-webkit-scrollbar {
     height: 4px;

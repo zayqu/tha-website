@@ -36,7 +36,7 @@ const defaultColors = {
 
 export const Projects = () => {
   return (
-    <div className="pt-16 bg-cool-gray">
+    <div className="pt-0 md:pt-16 bg-cool-gray">
       <SEO
         title="Programs"
         description="Explore Tanzania Health Alliance campaigns and activities including KAPIME, Life Unlocked, and Talk To Heal."

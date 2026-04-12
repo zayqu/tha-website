@@ -77,63 +77,60 @@ const Counter = ({ end, suffix = '+' }) => {
 };
 
 /* =========================
-   Campaign Card — Premium Glass Design
+   Campaign Card — Banner + White Body
 ========================= */
+const campaignIcons = { kapime: 'health_and_safety', 'life-unlocked': 'psychology', 'talk-to-heal': 'forum' };
+
 const CampaignCard = ({ campaign, index }) => {
   const [ref, show] = useReveal();
 
   return (
     <div
       ref={ref}
-      className={`group relative rounded-2xl overflow-hidden transition-all duration-700 ${
+      className={`group bg-white rounded-2xl shadow-card hover:shadow-elevated transition-all duration-700 overflow-hidden flex flex-col h-full ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
       style={{ transitionDelay: `${index * 150}ms` }}
     >
-      {/* Background Image */}
-      <div className="absolute inset-0">
+      {/* Banner Image */}
+      <div className="relative overflow-hidden h-48 sm:h-56">
         <img
           src={campaign.image}
-          alt=""
+          alt={campaign.name}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           loading="lazy"
           decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
+        <div className="absolute top-3 left-3">
+          <span className="bg-white/90 backdrop-blur-sm text-primary text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+            {campaign.tagline}
+          </span>
+        </div>
       </div>
 
-      {/* Glass Content */}
-      <div className="relative z-10 p-6 flex flex-col min-h-[420px]">
-        {/* Top Tag */}
-        <span className="self-start bg-white/15 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full border border-white/20">
-          {campaign.tagline}
-        </span>
-
-        {/* Spacer */}
-        <div className="flex-grow" />
-
-        {/* Bottom Content */}
-        <div>
-          <h3 className="font-bold text-2xl text-white mb-1 tracking-tight">{campaign.name}</h3>
-          <p className="text-white/70 text-sm mb-5">{campaign.subtitle}</p>
-
-          {/* Impact Pills */}
-          <div className="flex flex-wrap gap-2 mb-5">
-            {campaign.impact2025.slice(0, 2).map((imp, i) => (
-              <span key={i} className="text-xs bg-white/10 backdrop-blur-sm text-white/90 px-3 py-1.5 rounded-full border border-white/10">
-                {imp}
-              </span>
-            ))}
-          </div>
-
-          <Link
-            to={`/campaigns/${campaign.id}`}
-            className="flex items-center justify-center gap-2 bg-white/15 backdrop-blur-md text-white px-5 py-3 rounded-xl border border-white/20 hover:bg-white hover:text-primary transition-all duration-300 font-semibold text-sm"
-          >
-            Explore {campaign.name}
-            <Icon name="arrow_forward" size={16} />
-          </Link>
+      {/* Content */}
+      <div className="p-5 sm:p-6 flex flex-col flex-grow">
+        <div className="flex items-center gap-2 mb-3">
+          <Icon name={campaignIcons[campaign.id] || 'campaign'} size={22} category="primary" />
+          <h3 className="font-bold text-xl text-primary tracking-tight">{campaign.name}</h3>
         </div>
+        <p className="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">{campaign.subtitle}</p>
+
+        <div className="flex flex-wrap gap-1.5 mb-5">
+          {campaign.impact2025.slice(0, 2).map((imp, i) => (
+            <span key={i} className="text-xs bg-cool-gray text-gray-600 px-2.5 py-1 rounded-full">
+              {imp}
+            </span>
+          ))}
+        </div>
+
+        <Link
+          to={`/campaigns/${campaign.id}`}
+          className="mt-auto flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary-dark transition-all duration-300 font-semibold text-sm shadow-sm"
+        >
+          Explore Campaign
+          <Icon name="arrow_forward" size={16} color="white" />
+        </Link>
       </div>
     </div>
   );
@@ -148,7 +145,7 @@ const ObjectiveCard = ({ obj, index }) => {
   return (
     <div
       ref={ref}
-      className={`p-6 bg-white/80 backdrop-blur-sm rounded-xl hover:bg-white hover:shadow-elevated transition-all duration-300 ${
+      className={`p-6 bg-white rounded-xl shadow-card hover:shadow-elevated transition-all duration-300 ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
       style={{ transitionDelay: `${index * 100}ms` }}
@@ -176,7 +173,7 @@ const TimelineItem = ({ milestone, index }) => {
         <Icon name={milestone.icon} size={20} category="primary" />
       </div>
       <div
-        className={`flex-1 bg-white/80 backdrop-blur-sm rounded-xl p-6 hover:shadow-elevated transition-all duration-300 ${
+        className={`flex-1 bg-white rounded-xl p-6 shadow-card hover:shadow-elevated transition-all duration-300 ${
           show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
         style={{ transitionDelay: `${index * 100}ms` }}
@@ -204,7 +201,7 @@ export const Home = () => {
   }, []);
 
   return (
-    <div className="pt-16 bg-cool-gray">
+    <div className="pt-0 md:pt-16 bg-cool-gray">
       <SEO
         title="Tanzania Health Alliance | Together for a Healthier Tanzania"
         description="Tanzania Health Alliance addresses viral hepatitis, HIV, and mental health through awareness, advocacy, research, and partnerships across Tanzania."
@@ -367,12 +364,22 @@ export const Home = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-primary">Latest News</h2>
-            <Link to="/news" className="text-secondary font-semibold hover:underline">View All →</Link>
+            <Link to="/news" className="hidden sm:inline-flex items-center gap-1 text-secondary font-semibold hover:underline">
+              View All <Icon name="arrow_forward" size={16} />
+            </Link>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {latestNews.map((n) => (
               <NewsCard key={n.id} news={n} />
             ))}
+          </div>
+          <div className="mt-8 text-center sm:hidden">
+            <Link
+              to="/news"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition shadow-sm"
+            >
+              Read All News <Icon name="arrow_forward" size={16} color="white" />
+            </Link>
           </div>
         </div>
       </section>
