@@ -58,7 +58,7 @@ export const MakeADifference = () => {
       </section>
 
       {/* Tab Selector */}
-      <section className="bg-white shadow-md sticky top-16 md:top-20 z-30">
+      <section className="bg-white shadow-md sticky top-14 md:top-16 z-30">
         <div className="container-custom px-4">
           <div className="flex justify-center gap-2 py-4">
             {['volunteer', 'donate', 'partner'].map((tab) => (
@@ -91,7 +91,7 @@ export const MakeADifference = () => {
 
             <div className="grid md:grid-cols-3 gap-8 mb-12">
               {roles.map((role) => (
-                <div key={role.title} className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all card-hover">
+                <div key={role.title} className="bg-white p-6 md:p-8 rounded-2xl shadow-card hover:shadow-elevated transition-all">
                   <div className="w-16 h-16 bg-gradient-to-br from-secondary to-secondary-dark rounded-xl flex items-center justify-center mb-6">
                     <Icon name={role.icon} size={32} className="text-white" />
                   </div>
@@ -182,7 +182,7 @@ export const MakeADifference = () => {
               </div>
 
               {/* Payment Methods */}
-              <div className="bg-white p-8 rounded-2xl shadow-lg">
+              <div className="bg-white p-6 md:p-8 rounded-2xl shadow-card">
                 <h4 className="heading-sm mb-6">Bank Transfer</h4>
                 <div className="space-y-4 text-sm">
                   <div className="p-4 bg-neutral rounded-lg">
@@ -224,7 +224,7 @@ export const MakeADifference = () => {
               </p>
             </div>
 
-            <div className="max-w-3xl mx-auto bg-white p-8 md:p-12 rounded-2xl shadow-lg">
+            <div className="max-w-3xl mx-auto bg-white p-6 md:p-12 rounded-2xl shadow-card">
               <form className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="input-group">

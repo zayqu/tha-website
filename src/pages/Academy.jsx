@@ -158,7 +158,7 @@ export const Academy = () => {
         <div className="container-custom">
           <div className="grid md:grid-cols-3 gap-8">
             {topics.map((topic) => (
-              <div key={topic.title} className="bg-cool-gray rounded-2xl p-8 text-center hover:shadow-card transition card-hover">
+              <div key={topic.title} className="bg-white rounded-2xl p-6 md:p-8 text-center shadow-card hover:shadow-elevated transition-all">
                 <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-light rounded-xl flex items-center justify-center mx-auto mb-4">
                   <Icon name={topic.icon} size={32} color="white" />
                 </div>
@@ -171,7 +171,7 @@ export const Academy = () => {
       </section>
 
       {/* Filter Tabs */}
-      <section className="bg-white shadow-md sticky top-16 md:top-20 z-30">
+      <section className="bg-white shadow-md sticky top-14 md:top-16 z-30">
         <div className="container-custom px-4 overflow-x-auto custom-scrollbar">
           <div className="flex gap-2 py-4 min-w-max md:justify-center">
             {filters.map((filter) => (
@@ -199,7 +199,7 @@ export const Academy = () => {
               {filteredResources.map((resource) => (
                 <article
                   key={resource.id}
-                  className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 card-hover overflow-hidden"
+                  className="bg-white rounded-2xl shadow-card hover:shadow-elevated transition-all duration-300 overflow-hidden"
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
@@ -255,7 +255,7 @@ export const Academy = () => {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {courses.map((course) => (
-              <div key={course.title} className="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition card-hover">
+              <div key={course.title} className="bg-white rounded-2xl shadow-card p-6 md:p-8 hover:shadow-elevated transition-all">
                 <div className="w-14 h-14 bg-gradient-to-br from-secondary to-secondary-dark rounded-xl flex items-center justify-center mb-5">
                   <Icon name={course.icon} size={28} color="white" />
                 </div>
@@ -276,7 +276,7 @@ export const Academy = () => {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {testimonials.testimonials.map((t) => (
-              <div key={t.id} className="bg-cool-gray rounded-2xl p-6 hover:shadow-card transition flex flex-col">
+              <div key={t.id} className="bg-white rounded-2xl p-5 md:p-6 shadow-card hover:shadow-elevated transition-all flex flex-col">
                 <p className="body-md text-gray-600 italic mb-5 flex-grow">"{t.quote}"</p>
                 <div className="border-t border-cool-gray-dark pt-4">
                   <p className="font-bold text-primary text-sm">{t.author}</p>
@@ -292,7 +292,7 @@ export const Academy = () => {
       {/* Privacy Policy */}
       <section className="section-padding bg-neutral">
         <div className="container-custom">
-          <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-md p-8 md:p-12">
+          <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-card p-6 md:p-12">
             <h2 className="heading-md mb-6 text-primary">Privacy Policy</h2>
             <div className="space-y-4 body-md text-gray-600">
               <p>

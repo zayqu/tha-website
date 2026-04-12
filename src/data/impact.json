@@ -4,42 +4,42 @@
       "month": "January 2025",
       "milestone": "Initiative Founded",
       "description": "Tanzania Health Alliance officially launched to combat Hepatitis, HIV, and Mental Health challenges",
-      "icon": "rocket",
+      "icon": "rocket_launch",
       "color": "primary"
     },
     {
       "month": "Mid-2025",
       "milestone": "WHO Documentary Featured",
       "description": "THA's innovative approach to hepatitis response featured in World Health Organization documentary",
-      "icon": "film",
+      "icon": "movie",
       "color": "accent"
     },
     {
       "month": "September 2025",
       "milestone": "WHA Membership Recognized",
       "description": "Gained official membership with World Hepatitis Alliance, expanding global network",
-      "icon": "globe",
+      "icon": "public",
       "color": "secondary"
     },
     {
       "month": "November 2025",
       "milestone": "Shaibu Elected to WHA Board",
       "description": "Founder Shaibu Issa elected to World Hepatitis Alliance Board—representing Tanzania's voice globally",
-      "icon": "award",
+      "icon": "emoji_events",
       "color": "accent"
     },
     {
       "month": "January 2026",
       "milestone": "Donor Funding Secured",
       "description": "Major donor partnerships secured, enabling expansion of all three campaigns",
-      "icon": "briefcase",
+      "icon": "handshake",
       "color": "secondary"
     },
     {
       "month": "March 2026",
       "milestone": "National Health Partnership",
       "description": "Strategic partnership with Tanzania's Ministry of Health to scale health interventions nationally",
-      "icon": "building",
+      "icon": "account_balance",
       "color": "primary"
     }
   ],
@@ -56,7 +56,7 @@
         "peopleScreened": 12500,
         "peopleVaccinated": 8300,
         "positivesCaught": 340,
-        "icon": "heart-check",
+        "icon": "health_and_safety",
         "color": "hepatitis"
       },
       "lifeUnlocked": {
@@ -64,7 +64,7 @@
         "youthReached": 5600,
         "clubsEstablished": 28,
         "counselingSessionsProvided": 1340,
-        "icon": "brain",
+        "icon": "psychology",
         "color": "mental"
       },
       "talkToHeal": {
@@ -73,7 +73,7 @@
         "peerSupporters": 89,
         "peopleServed": 3400,
         "counselingHoursProvided": 2100,
-        "icon": "group",
+        "icon": "groups",
         "color": "mental"
       }
     },

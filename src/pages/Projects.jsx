@@ -3,35 +3,10 @@ import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
 import campaignsData from '../data/campaigns.json';
 
-const colorMap = {
-  hepatitis: {
-    border: 'border-hepatitis',
-    headerBg: 'from-hepatitis to-red-400',
-    iconBg: 'bg-red-50',
-    iconColor: '#EF4444',
-    badge: 'bg-red-100 text-red-700',
-    numBg: 'bg-red-50',
-    numText: 'text-red-600',
-  },
-  mental: {
-    border: 'border-mental',
-    headerBg: 'from-mental to-purple-400',
-    iconBg: 'bg-purple-50',
-    iconColor: '#8B5CF6',
-    badge: 'bg-purple-100 text-purple-700',
-    numBg: 'bg-purple-50',
-    numText: 'text-mental',
-  },
-};
-
-const defaultColors = {
-  border: 'border-primary',
-  headerBg: 'from-primary to-primary-dark',
-  iconBg: 'bg-blue-50',
-  iconColor: '#024d85',
-  badge: 'bg-blue-100 text-primary',
-  numBg: 'bg-blue-50',
-  numText: 'text-primary',
+const campaignIcons = {
+  kapime: 'health_and_safety',
+  'life-unlocked': 'psychology',
+  'talk-to-heal': 'forum',
 };
 
 export const Projects = () => {
@@ -44,109 +19,113 @@ export const Projects = () => {
       />
 
       {/* Hero */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-primary to-primary-dark text-white">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-accent font-semibold text-sm uppercase tracking-wider">2025 Annual Report</span>
-          <h1 className="text-4xl md:text-5xl font-bold mt-2 mb-4">Our Campaigns & Activities</h1>
-          <p className="text-xl text-white/90 max-w-3xl mx-auto">
+          <h1 className="text-3xl md:text-5xl font-bold mt-2 mb-4">Our Campaigns & Activities</h1>
+          <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
             Every THA activity maps to one of three strategic campaigns — each targeting a critical health challenge in Tanzania.
           </p>
         </div>
       </section>
 
-      {/* Campaign → Activities → Impact */}
-      <section className="py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          {campaignsData.campaigns.map((campaign) => {
-            const colors = colorMap[campaign.color] || defaultColors;
-            return (
-              <div key={campaign.id} className={`bg-white rounded-2xl shadow-card overflow-hidden border-t-4 ${colors.border}`}>
+      {/* Campaign Cards */}
+      <section className="py-12 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          {campaignsData.campaigns.map((campaign) => (
+            <div key={campaign.id} className="bg-white rounded-2xl shadow-card overflow-hidden">
 
-                {/* Campaign Header */}
-                <div className="p-8 md:p-10">
-                  <div className="flex flex-col md:flex-row md:items-start gap-6">
-                    <div className={`w-16 h-16 rounded-2xl ${colors.iconBg} flex items-center justify-center flex-shrink-0`}>
-                      <Icon name={campaign.icon} size={32} color={colors.iconColor} />
-                    </div>
-                    <div className="flex-1">
-                      <span className={`text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full ${colors.badge}`}>
-                        Campaign
-                      </span>
-                      <h2 className="text-2xl md:text-3xl font-bold text-primary mt-2">{campaign.name}</h2>
-                      <p className="text-gray-500 font-medium mb-3">{campaign.subtitle}</p>
-                      <p className="text-gray-600 max-w-2xl">{campaign.description}</p>
+              {/* Campaign Header — banner + info */}
+              <div className="md:flex">
+                {/* Banner Image */}
+                <div className="h-48 md:h-auto md:w-72 flex-shrink-0 relative overflow-hidden">
+                  <img
+                    src={campaign.image}
+                    alt={campaign.name}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+
+                {/* Info */}
+                <div className="p-6 md:p-8 flex-1">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Icon name={campaignIcons[campaign.id] || 'campaign'} size={24} category="primary" />
+                        <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Campaign</span>
+                      </div>
+                      <h2 className="text-2xl md:text-3xl font-bold text-primary">{campaign.name}</h2>
+                      <p className="text-gray-500 font-medium mt-1">{campaign.subtitle}</p>
+                      <p className="text-gray-600 mt-3 max-w-2xl text-sm md:text-base leading-relaxed">{campaign.description}</p>
                     </div>
                     <Link
                       to={`/campaigns/${campaign.id}`}
-                      className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-primary-dark transition font-semibold text-sm whitespace-nowrap self-start"
+                      className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary-dark transition font-semibold text-sm whitespace-nowrap shadow-sm"
                     >
-                      View Campaign <Icon name="arrow_forward" size={16} />
+                      View Campaign <Icon name="arrow_forward" size={16} color="white" />
                     </Link>
                   </div>
                 </div>
+              </div>
 
-                {/* Activities & Impact */}
-                <div className="grid md:grid-cols-2 border-t border-gray-100">
+              {/* Activities & Impact */}
+              <div className="grid md:grid-cols-2 border-t border-gray-100">
+                <div className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-gray-100">
+                  <h3 className="text-sm font-bold text-primary mb-4 flex items-center gap-2">
+                    <Icon name="track_changes" size={18} category="primary" />
+                    Activities
+                  </h3>
+                  <ul className="space-y-3">
+                    {campaign.activities2025.map((act, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <span className="w-6 h-6 rounded-full bg-cool-gray flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold text-primary/60">
+                          {i + 1}
+                        </span>
+                        <span className="text-gray-700 text-sm">{act}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-                  {/* Activities */}
-                  <div className="p-8 md:p-10 border-b md:border-b-0 md:border-r border-gray-100">
-                    <h3 className="text-base font-bold text-primary mb-5 flex items-center gap-2">
-                      <Icon name="track_changes" size={18} category="primary" />
-                      Activities
-                    </h3>
-                    <ul className="space-y-4">
-                      {campaign.activities2025.map((act, i) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <div className={`w-7 h-7 rounded-full ${colors.numBg} flex items-center justify-center flex-shrink-0 mt-0.5`}>
-                            <span className={`text-xs font-bold ${colors.numText}`}>{i + 1}</span>
-                          </div>
-                          <span className="text-gray-700">{act}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Impact */}
-                  <div className="p-8 md:p-10">
-                    <h3 className="text-base font-bold text-primary mb-5 flex items-center gap-2">
-                      <Icon name="check_circle" size={18} category="secondary" />
-                      Impact
-                    </h3>
-                    <ul className="space-y-4">
-                      {campaign.impact2025.map((imp, i) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <Icon name="check_circle" size={18} category="secondary" className="flex-shrink-0 mt-0.5" />
-                          <span className="text-gray-700 font-medium">{imp}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
+                <div className="p-6 md:p-8">
+                  <h3 className="text-sm font-bold text-primary mb-4 flex items-center gap-2">
+                    <Icon name="verified" size={18} category="secondary" />
+                    Impact
+                  </h3>
+                  <ul className="space-y-3">
+                    {campaign.impact2025.map((imp, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <Icon name="check_circle" size={18} category="secondary" className="flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 text-sm font-medium">{imp}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </section>
 
       {/* CTA */}
       <section className="py-16 bg-gradient-to-r from-secondary to-secondary-dark text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Be Part of the Change</h2>
-          <p className="text-white/90 text-lg mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">Be Part of the Change</h2>
+          <p className="text-white/90 text-base md:text-lg mb-8">
             Support our campaigns and help us reach more communities across Tanzania.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/make-a-difference" className="px-8 py-3 bg-white text-secondary font-bold rounded-lg hover:bg-cool-gray transition">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link to="/make-a-difference" className="px-8 py-3 bg-white text-secondary font-bold rounded-xl hover:bg-cool-gray transition">
               Get Involved
             </Link>
-            <Link to="/contact" className="px-8 py-3 border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:text-secondary transition">
+            <Link to="/contact" className="px-8 py-3 border-2 border-white text-white font-bold rounded-xl hover:bg-white hover:text-secondary transition">
               Partner With Us
             </Link>
           </div>
         </div>
       </section>
-
     </div>
   );
 };

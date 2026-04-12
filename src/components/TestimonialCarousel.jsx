@@ -87,7 +87,7 @@ export const TestimonialsCarousel = ({ testimonials }) => {
               .map((t) => (
                 <div
                   key={t.id}
-                  className="bg-white rounded-lg shadow-card p-6 hover:shadow-elevated transition-shadow flex flex-col"
+                  className="bg-white rounded-2xl shadow-card p-5 md:p-6 hover:shadow-elevated transition-all flex flex-col"
                 >
                   <p className="text-gray-600 italic mb-5 flex-grow">
                     &ldquo;{t.quote}&rdquo;
@@ -118,7 +118,7 @@ export const TestimonialsCarousel = ({ testimonials }) => {
           : testimonials.slice(0, visibleCount).map((t) => (
               <div
                 key={`wrap-${t.id}`}
-                className="bg-white rounded-lg shadow-card p-6 hover:shadow-elevated transition-shadow flex flex-col"
+                className="bg-white rounded-2xl shadow-card p-5 md:p-6 hover:shadow-elevated transition-all flex flex-col"
               >
                 <p className="text-gray-600 italic mb-5 flex-grow">
                   &ldquo;{t.quote}&rdquo;

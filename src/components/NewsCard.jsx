@@ -4,7 +4,7 @@ import { getNewsImageProps } from '../lib/imageUtils';
 
 export default function NewsCard({ news }) {
   return (
-    <article className="group bg-white rounded-xl shadow-card hover:shadow-elevated transition-all duration-300 overflow-hidden flex flex-col h-full">
+    <article className="group bg-white rounded-2xl shadow-card hover:shadow-elevated transition-all duration-300 overflow-hidden flex flex-col h-full">
       <div className="relative overflow-hidden aspect-video">
         <img
           src={news.image}

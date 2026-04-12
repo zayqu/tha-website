@@ -79,7 +79,7 @@ export const News = () => {
       </section>
 
       {/* Category Filter */}
-      <section className="bg-white shadow-md sticky top-16 md:top-20 z-30">
+      <section className="bg-white shadow-md sticky top-14 md:top-16 z-30">
         <div className="container-custom px-4 overflow-x-auto custom-scrollbar">
           <div className="flex gap-2 py-4 min-w-max md:justify-center">
             {categories.map((cat) => (
@@ -179,7 +179,7 @@ export const News = () => {
                 <Link
                   key={article.id}
                   to={`/news/${article.slug}`}
-                  className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col card-hover"
+                  className="group bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-elevated transition-all duration-300 flex flex-col"
                 >
                   {/* Image */}
                   <div className="img-zoom-container h-52 flex-shrink-0">
