@@ -3,7 +3,7 @@
     {
       "id": 1,
       "name": "World Health Organization",
-      "logo": "/images/partners/who-logo.svg",
+      "logo": "/images/partners/who-logo.png",
       "description": "Global health leader featuring THA in hepatitis response documentary",
       "relationship": "Documentary partnership and health collaboration",
       "website": "https://www.who.int/"
@@ -19,7 +19,7 @@
     {
       "id": 3,
       "name": "Global Liver Institute",
-      "logo": "/images/partners/global-liver-logo.svg",
+      "logo": "/images/partners/global-liver-logo.webp",
       "description": "International organization dedicated to liver health",
       "relationship": "Research and awareness collaboration",
       "website": "https://globalliver.org/"

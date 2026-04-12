@@ -29,7 +29,7 @@ async function seed() {
 
   const normalized = identifier.includes('@') ? identifier.toLowerCase() : identifier;
 
-  if (admins.exists(normalized)) {
+  if (await admins.exists(normalized)) {
     console.log(`Admin "${normalized}" already exists. Skipping.`);
     process.exit(0);
   }
@@ -37,7 +37,7 @@ async function seed() {
   const hash = await bcrypt.hash(password, 12);
   const id = uuidv4();
 
-  admins.create({ id, identifier: normalized, password: hash, name, role: 'superadmin' });
+  await admins.create({ id, identifier: normalized, password: hash, name, role: 'superadmin' });
 
   console.log('Superadmin created:');
   console.log(`  ID:    ${id}`);

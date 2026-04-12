@@ -96,12 +96,12 @@ export const About = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Image */}
-            <div className="h-80 md:h-96 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl flex items-center justify-center relative overflow-hidden">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-32 h-32 rounded-full bg-primary/20 flex items-center justify-center">
-                  <Icon name="person" size={64} category="primary" />
-                </div>
-              </div>
+            <div className="h-96 md:h-[28rem] rounded-2xl relative overflow-hidden">
+              <img
+                src="/images/team/shaibu-issa.png"
+                alt="Shaibu Issa — Founder & Executive Director"
+                className="absolute inset-0 w-full h-full object-cover object-top"
+              />
               <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-card">
                 <p className="font-bold text-primary">Shaibu Issa</p>
                 <p className="text-sm text-gray-600">Founder</p>
@@ -284,10 +284,12 @@ export const About = () => {
             {teamJson.team.map((member) => (
               <div key={member.id} className="bg-white rounded-2xl shadow-card overflow-hidden hover:shadow-elevated transition-all">
                 {/* Photo */}
-                <div className="h-56 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative">
-                  <div className="w-24 h-24 rounded-full bg-white/50 flex items-center justify-center">
-                    <Icon name="person" size={48} category="primary" />
-                  </div>
+                <div className="h-64 bg-[#e8e8e8] flex items-center justify-center relative overflow-hidden">
+                  <img
+                    src={member.photo}
+                    alt={member.name}
+                    className="absolute inset-0 w-full h-full object-cover object-top"
+                  />
                   {/* Social Links */}
                   <div className="absolute top-4 right-4 flex gap-2">
                     {member.linkedIn && (

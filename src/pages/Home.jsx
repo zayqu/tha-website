@@ -10,6 +10,7 @@ import { TestimonialsCarousel } from '../components/TestimonialCarousel';
 import { thaData } from '../data/thaData';
 import { newsArticles } from '../data/newsData';
 import NewsCard from '../components/NewsCard';
+import { fetchPublishedNews, normalizeArticle } from '../lib/api';
 
 /* =========================
    Typing Animation
@@ -191,6 +192,19 @@ const TimelineItem = ({ milestone, index }) => {
 };
 
 export const Home = () => {
+  const [latestNews, setLatestNews] = useState(newsArticles.map(normalizeArticle).slice(0, 3));
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchPublishedNews({ limit: 3 })
+      .then(articles => {
+        if (isMounted && articles.length > 0) setLatestNews(articles);
+      })
+      .catch(() => {});
+
+    return () => { isMounted = false; };
+  }, []);
+
   return (
     <div className="pt-16 bg-cool-gray">
 
@@ -348,7 +362,7 @@ export const Home = () => {
             <Link to="/news" className="text-secondary font-semibold hover:underline">View All →</Link>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {newsArticles.slice(0, 3).map((n) => (
+            {latestNews.map((n) => (
               <NewsCard key={n.id} news={n} />
             ))}
           </div>

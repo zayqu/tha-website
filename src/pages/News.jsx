@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { newsArticles } from '../data/newsData';
+import { fetchPublishedNews, normalizeArticle } from '../lib/api';
 
 // Map categories to brand colors
 const categoryColor = {
@@ -13,6 +14,30 @@ const categoryColor = {
 
 export const News = () => {
   const [activeCategory, setActiveCategory] = useState('all');
+  const fallbackNews = useMemo(() => newsArticles.map(normalizeArticle), []);
+  const [articles, setArticles] = useState(fallbackNews);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchPublishedNews({ limit: 100 })
+      .then(liveArticles => {
+        if (!isMounted) return;
+        setArticles(liveArticles.length > 0 ? liveArticles : fallbackNews);
+        setLoadError('');
+      })
+      .catch(() => {
+        if (!isMounted) return;
+        setArticles(fallbackNews);
+        setLoadError('Showing saved website news while live news is unavailable.');
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => { isMounted = false; };
+  }, [fallbackNews]);
 
   const categories = [
     { id: 'all',            label: 'All News' },
@@ -23,11 +48,13 @@ export const News = () => {
   ];
 
   const filteredNews = activeCategory === 'all'
-    ? newsArticles
-    : newsArticles.filter(a => a.category === activeCategory);
+    ? articles
+    : articles.filter(a => a.category === activeCategory);
 
-  const featuredArticle = newsArticles.find(a => a.isFeatured);
-  const regularArticles  = filteredNews.filter(a => !a.isFeatured);
+  const featuredArticle = articles.find(a => a.isFeatured);
+  const regularArticles  = activeCategory === 'all'
+    ? filteredNews.filter(a => !a.isFeatured)
+    : filteredNews;
 
   return (
     <div className="pt-16 md:pt-20">
@@ -127,6 +154,14 @@ export const News = () => {
       {/* News Grid */}
       <section className="section-padding">
         <div className="container-custom">
+          {loading && (
+            <div className="text-center text-neutral-dark/60 mb-8">Loading latest news...</div>
+          )}
+          {loadError && (
+            <div className="max-w-2xl mx-auto bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg px-4 py-3 text-sm mb-8">
+              {loadError}
+            </div>
+          )}
           {regularArticles.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {regularArticles.map((article) => (

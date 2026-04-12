@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import { apiUrl } from '../lib/api';
 
 const AuthContext = createContext(null);
 
@@ -17,7 +18,7 @@ export function AuthProvider({ children }) {
   // ── Refresh access token using the httpOnly cookie ──────────────────────────
   const refresh = useCallback(async () => {
     try {
-      const res = await fetch('/api/auth/refresh', {
+      const res = await fetch(apiUrl('/api/auth/refresh'), {
         method: 'POST',
         credentials: 'include',  // send the httpOnly rt cookie
       });
@@ -57,7 +58,7 @@ export function AuthProvider({ children }) {
 
   // ── Login ────────────────────────────────────────────────────────────────────
   const login = useCallback(async (identifier, password) => {
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch(apiUrl('/api/auth/login'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -88,7 +89,7 @@ export function AuthProvider({ children }) {
     clearTimeout(refreshTimerRef.current);
     if (accessToken) {
       try {
-        await fetch('/api/auth/logout', {
+        await fetch(apiUrl('/api/auth/logout'), {
           method: 'POST',
           headers: { Authorization: `Bearer ${accessToken}` },
           credentials: 'include',
@@ -109,7 +110,7 @@ export function AuthProvider({ children }) {
       if (!token) throw new Error('Not authenticated');
     }
 
-    const res = await fetch(url, {
+    const res = await fetch(apiUrl(url), {
       ...options,
       credentials: 'include',
       headers: {
@@ -125,7 +126,7 @@ export function AuthProvider({ children }) {
       if (body.code === 'TOKEN_EXPIRED') {
         token = await refresh();
         if (!token) throw new Error('Session expired. Please log in again.');
-        return fetch(url, {
+        return fetch(apiUrl(url), {
           ...options,
           credentials: 'include',
           headers: {

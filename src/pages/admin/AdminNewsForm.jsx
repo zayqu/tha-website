@@ -14,8 +14,10 @@ const EMPTY_FORM = {
   date: new Date().toISOString().split('T')[0],
   tags: '',
   is_featured: false,
-  published: false,
+  published: true,
 };
+
+const MAX_UPLOAD_BYTES = 1_500_000;
 
 export default function AdminNewsForm() {
   const { id } = useParams();          // present only when editing
@@ -27,6 +29,7 @@ export default function AdminNewsForm() {
   const [errors, setErrors]   = useState({});
   const [saving, setSaving]   = useState(false);
   const [loadError, setLoadError] = useState('');
+  const [imageMode, setImageMode] = useState('url');
 
   // ── Load existing article when editing ────────────────────────────────────
   useEffect(() => {
@@ -48,6 +51,7 @@ export default function AdminNewsForm() {
           is_featured: Boolean(article.is_featured),
           published:   Boolean(article.published),
         });
+        setImageMode(article.image?.startsWith('data:') ? 'upload' : 'url');
       })
       .catch(() => setLoadError('Failed to load article.'));
   }, [id, isEditing, authFetch]);
@@ -57,6 +61,37 @@ export default function AdminNewsForm() {
     const { name, value, type, checked } = e.target;
     setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+  }
+
+  function handleImageModeChange(mode) {
+    setImageMode(mode);
+    if (mode === 'url' && form.image?.startsWith('data:')) {
+      setForm(prev => ({ ...prev, image: '' }));
+    }
+    setErrors(prev => ({ ...prev, image: '' }));
+  }
+
+  function handleImageFileChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setErrors(prev => ({ ...prev, image: 'Please upload an image file.' }));
+      return;
+    }
+
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setErrors(prev => ({ ...prev, image: 'Image upload must be under 1.5 MB. Use an image URL for larger files.' }));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setForm(prev => ({ ...prev, image: reader.result }));
+      setErrors(prev => ({ ...prev, image: '' }));
+    };
+    reader.onerror = () => setErrors(prev => ({ ...prev, image: 'Could not read the image file.' }));
+    reader.readAsDataURL(file);
   }
 
   // ── Client-side validation ────────────────────────────────────────────────
@@ -171,13 +206,46 @@ export default function AdminNewsForm() {
             <p className="text-xs text-gray-400 mt-1">Separate paragraphs with a blank line (double Enter).</p>
           </Field>
 
-          {/* Image URL */}
-          <Field label="Image URL *" error={errors.image}>
-            <input
-              type="url" name="image" value={form.image} onChange={handleChange}
-              placeholder="https://example.com/image.jpg"
-              className={inputCls(errors.image)}
-            />
+          {/* Image */}
+          <Field label="Article Image *" error={errors.image}>
+            <div className="flex flex-wrap gap-2 mb-3">
+              <button
+                type="button"
+                onClick={() => handleImageModeChange('url')}
+                className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-colors ${
+                  imageMode === 'url' ? 'bg-primary text-white border-primary' : 'bg-white text-gray-600 border-gray-200'
+                }`}
+              >
+                Add Image URL
+              </button>
+              <button
+                type="button"
+                onClick={() => handleImageModeChange('upload')}
+                className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-colors ${
+                  imageMode === 'upload' ? 'bg-primary text-white border-primary' : 'bg-white text-gray-600 border-gray-200'
+                }`}
+              >
+                Upload Image
+              </button>
+            </div>
+
+            {imageMode === 'url' ? (
+              <input
+                type="url" name="image" value={form.image?.startsWith('data:') ? '' : form.image} onChange={handleChange}
+                placeholder="https://example.com/image.jpg"
+                className={inputCls(errors.image)}
+              />
+            ) : (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageFileChange}
+                className="block w-full text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-dark"
+              />
+            )}
+            <p className="text-xs text-gray-400 mt-1">
+              Upload small images under 1.5 MB, or paste a hosted image URL for larger photos.
+            </p>
             {form.image && (
               <div className="mt-2 rounded-lg overflow-hidden w-full h-40 bg-gray-100">
                 <img
@@ -188,6 +256,28 @@ export default function AdminNewsForm() {
               </div>
             )}
           </Field>
+
+          {/* News-format preview */}
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            {form.image && (
+              <div className="h-56 bg-gray-100">
+                <img src={form.image} alt="" className="w-full h-full object-cover" />
+              </div>
+            )}
+            <div className="p-5">
+              <div className="flex flex-wrap gap-2 mb-3">
+                <span className="px-3 py-1 bg-accent text-white text-xs font-bold rounded-full">
+                  {form.category}
+                </span>
+                {form.is_featured && (
+                  <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Featured</span>
+                )}
+              </div>
+              <h2 className="text-2xl font-bold text-primary mb-3">{form.title || 'Article title preview'}</h2>
+              <p className="text-gray-600 mb-4">{form.excerpt || 'The excerpt preview will appear here.'}</p>
+              <div className="text-sm text-gray-400">{form.author || 'Author'} · {form.date || 'Date'}</div>
+            </div>
+          </div>
 
           {/* Category + Author */}
           <div className="grid sm:grid-cols-2 gap-4">

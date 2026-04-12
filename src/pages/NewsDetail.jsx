@@ -1,13 +1,46 @@
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { newsArticles } from '../data/newsData';
+import { fetchNewsArticle, normalizeArticle } from '../lib/api';
 
 export default function NewsDetail() {
   const { slug } = useParams();
-  const news = newsArticles.find(item => item.slug === slug);
+  const fallbackArticle = useMemo(
+    () => newsArticles.map(normalizeArticle).find(item => item.slug === slug),
+    [slug]
+  );
+  const [news, setNews] = useState(fallbackArticle || null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchNewsArticle(slug)
+      .then(article => {
+        if (!isMounted) return;
+        setNews(article || fallbackArticle || null);
+      })
+      .catch(() => {
+        if (!isMounted) return;
+        setNews(fallbackArticle || null);
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => { isMounted = false; };
+  }, [fallbackArticle, slug]);
+
+  if (!loading && !news) {
+    return <Navigate to="/news" replace />;
+  }
 
   if (!news) {
-    return <Navigate to="/news" replace />;
+    return (
+      <div className="pt-16 min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+      </div>
+    );
   }
 
   const formattedDate = new Date(news.date).toLocaleDateString('en-US', {
@@ -61,6 +94,10 @@ export default function NewsDetail() {
               {news.author}
             </div>
           )}
+          <div className="flex items-center gap-2">
+            <Icon name="visibility" size={15} />
+            {news.views || 0} views
+          </div>
         </div>
 
         {/* Content */}

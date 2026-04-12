@@ -33,10 +33,10 @@ function issueAccessToken(admin) {
   );
 }
 
-function issueRefreshToken(adminId) {
+async function issueRefreshToken(adminId) {
   const raw = crypto.randomBytes(64).toString('hex');
   const expiresSec = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60; // 7 days
-  tokens.create({ id: uuidv4(), adminId, tokenHash: hashToken(raw), expiresAt: expiresSec });
+  await tokens.create({ id: uuidv4(), adminId, tokenHash: hashToken(raw), expiresAt: expiresSec });
   return { raw, expiresSec };
 }
 
@@ -44,7 +44,7 @@ function setRefreshCookie(res, raw, expiresSec) {
   res.cookie('rt', raw, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Strict',
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
     path: '/api/auth',
     expires: new Date(expiresSec * 1000),
   });
@@ -58,7 +58,8 @@ router.post(
     body('identifier').trim().notEmpty().withMessage('Email or phone is required').isLength({ max: 100 }),
     body('password').notEmpty().withMessage('Password is required').isLength({ max: 128 }),
   ],
-  async (req, res) => {
+  async (req, res, next) => {
+    try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
@@ -67,7 +68,7 @@ router.post(
       ? identifier.toLowerCase()
       : identifier.replace(/\s+/g, '');
 
-    const admin = admins.findByIdentifier(normalized);
+    const admin = await admins.findByIdentifier(normalized);
 
     // Always run bcrypt to prevent timing-based user enumeration
     const hash = admin
@@ -79,55 +80,70 @@ router.post(
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    admins.updateLastLogin(admin.id);
-    tokens.prune(); // clean up expired tokens periodically
+    await admins.updateLastLogin(admin.id);
+    await tokens.prune(); // clean up expired tokens periodically
 
     const accessToken = issueAccessToken(admin);
-    const { raw, expiresSec } = issueRefreshToken(admin.id);
+    const { raw, expiresSec } = await issueRefreshToken(admin.id);
     setRefreshCookie(res, raw, expiresSec);
 
     res.json({
       accessToken,
       admin: { id: admin.id, name: admin.name, identifier: admin.identifier, role: admin.role },
     });
+    } catch (err) {
+      next(err);
+    }
   }
 );
 
 // ── POST /api/auth/refresh ────────────────────────────────────────────────────
-router.post('/refresh', (req, res) => {
+router.post('/refresh', async (req, res, next) => {
+  try {
   const raw = req.cookies?.rt;
   if (!raw) return res.status(401).json({ error: 'No refresh token' });
 
-  const stored = tokens.findValid(hashToken(raw));
+  const stored = await tokens.findValid(hashToken(raw));
   if (!stored) {
     res.clearCookie('rt', { path: '/api/auth' });
     return res.status(401).json({ error: 'Invalid or expired refresh token' });
   }
 
   // Rotate: revoke old, issue new
-  tokens.revoke(stored.id);
+  await tokens.revoke(stored.id);
 
   const admin = { id: stored.admin_id, identifier: stored.identifier, role: stored.role };
   const accessToken = issueAccessToken(admin);
-  const { raw: newRaw, expiresSec } = issueRefreshToken(admin.id);
+  const { raw: newRaw, expiresSec } = await issueRefreshToken(admin.id);
   setRefreshCookie(res, newRaw, expiresSec);
 
   res.json({ accessToken });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // ── POST /api/auth/logout ─────────────────────────────────────────────────────
-router.post('/logout', requireAuth, (req, res) => {
+router.post('/logout', requireAuth, async (req, res, next) => {
+  try {
   const raw = req.cookies?.rt;
-  if (raw) tokens.revokeByHash(hashToken(raw));
+  if (raw) await tokens.revokeByHash(hashToken(raw));
   res.clearCookie('rt', { path: '/api/auth' });
   res.json({ message: 'Logged out' });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // ── GET /api/auth/me ──────────────────────────────────────────────────────────
-router.get('/me', requireAuth, (req, res) => {
-  const admin = admins.findById(req.admin.id);
+router.get('/me', requireAuth, async (req, res, next) => {
+  try {
+  const admin = await admins.findById(req.admin.id);
   if (!admin) return res.status(404).json({ error: 'Admin not found' });
   res.json({ admin: { id: admin.id, name: admin.name, identifier: admin.identifier, role: admin.role } });
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;

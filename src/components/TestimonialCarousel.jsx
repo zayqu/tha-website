@@ -91,10 +91,19 @@ export const TestimonialsCarousel = ({ testimonials }) => {
                   <p className="text-gray-600 italic mb-5 flex-grow">
                     &ldquo;{t.quote}&rdquo;
                   </p>
-                  <div className="border-t border-cool-gray-dark pt-4">
-                    <p className="font-bold text-primary text-sm">{t.author}</p>
-                    <p className="text-secondary text-xs mt-0.5">{t.title}</p>
-                    <p className="text-gray-500 text-xs">{t.organization}</p>
+                  <div className="border-t border-cool-gray-dark pt-4 flex items-center gap-3">
+                    {t.image ? (
+                      <img src={t.image} alt={t.author} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <span className="text-primary font-bold text-sm">{t.author?.charAt(0)}</span>
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-bold text-primary text-sm">{t.author}</p>
+                      <p className="text-secondary text-xs mt-0.5">{t.title}</p>
+                      <p className="text-gray-500 text-xs">{t.organization}</p>
+                    </div>
                   </div>
                 </div>
               ))
@@ -106,10 +115,19 @@ export const TestimonialsCarousel = ({ testimonials }) => {
                 <p className="text-gray-600 italic mb-5 flex-grow">
                   &ldquo;{t.quote}&rdquo;
                 </p>
-                <div className="border-t border-cool-gray-dark pt-4">
-                  <p className="font-bold text-primary text-sm">{t.author}</p>
-                  <p className="text-secondary text-xs mt-0.5">{t.title}</p>
-                  <p className="text-gray-500 text-xs">{t.organization}</p>
+                <div className="border-t border-cool-gray-dark pt-4 flex items-center gap-3">
+                  {t.image ? (
+                    <img src={t.image} alt={t.author} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <span className="text-primary font-bold text-sm">{t.author?.charAt(0)}</span>
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-bold text-primary text-sm">{t.author}</p>
+                    <p className="text-secondary text-xs mt-0.5">{t.title}</p>
+                    <p className="text-gray-500 text-xs">{t.organization}</p>
+                  </div>
                 </div>
               </div>
             ))}

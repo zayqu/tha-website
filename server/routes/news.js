@@ -27,7 +27,7 @@ const newsBodyValidators = [
   body('title').trim().notEmpty().isLength({ max: 200 }),
   body('excerpt').trim().notEmpty().isLength({ max: 500 }),
   body('content').trim().notEmpty().isLength({ max: 50000 }),
-  body('image').trim().notEmpty().isLength({ max: 500 }),
+  body('image').trim().notEmpty().isLength({ max: 2_000_000 }),
   body('category').trim().isIn(VALID_CATEGORIES)
     .withMessage(`Category must be one of: ${VALID_CATEGORIES.join(', ')}`),
   body('author').trim().notEmpty().isLength({ max: 100 }),
@@ -43,27 +43,40 @@ router.get('/', [
   query('category').optional().isIn(VALID_CATEGORIES),
   query('limit').optional().isInt({ min: 1, max: 100 }),
   query('offset').optional().isInt({ min: 0 }),
-], (req, res) => {
+], async (req, res, next) => {
+  try {
   if (!handleValidation(req, res)) return;
   const { category, limit = 50, offset = 0 } = req.query;
-  const articles = news.findPublished({ category, limit: Number(limit), offset: Number(offset) });
+  const articles = await news.findPublished({ category, limit: Number(limit), offset: Number(offset) });
   res.json({ articles });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // ── GET /api/news/admin  (protected – includes drafts) ────────────────────────
-router.get('/admin', requireAuth, (_req, res) => {
-  res.json({ articles: news.findAll() });
+router.get('/admin', requireAuth, async (_req, res, next) => {
+  try {
+    res.json({ articles: await news.findAll() });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // ── GET /api/news/:slug  (public) ─────────────────────────────────────────────
-router.get('/:slug', (req, res) => {
-  const article = news.findBySlug(req.params.slug);
+router.get('/:slug', async (req, res, next) => {
+  try {
+  const article = await news.findBySlug(req.params.slug, { incrementViews: true });
   if (!article) return res.status(404).json({ error: 'Article not found' });
   res.json({ article });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // ── POST /api/news  (protected) ───────────────────────────────────────────────
-router.post('/', requireAuth, newsBodyValidators, (req, res) => {
+router.post('/', requireAuth, newsBodyValidators, async (req, res, next) => {
+  try {
   if (!handleValidation(req, res)) return;
 
   const {
@@ -75,9 +88,9 @@ router.post('/', requireAuth, newsBodyValidators, (req, res) => {
   const baseSlug = slugify(title);
   let slug = baseSlug;
   let counter = 1;
-  while (news.slugExists(slug)) slug = `${baseSlug}-${counter++}`;
+  while (await news.slugExists(slug)) slug = `${baseSlug}-${counter++}`;
 
-  const article = news.create({
+  const article = await news.create({
     id: uuidv4(), slug, title, excerpt, content, image,
     category, author, date,
     tags: Array.isArray(tags) ? tags : [],
@@ -86,16 +99,20 @@ router.post('/', requireAuth, newsBodyValidators, (req, res) => {
   });
 
   res.status(201).json({ article });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // ── PUT /api/news/:id  (protected) ────────────────────────────────────────────
 router.put('/:id', requireAuth, [
   param('id').isUUID(),
   ...newsBodyValidators,
-], (req, res) => {
+], async (req, res, next) => {
+  try {
   if (!handleValidation(req, res)) return;
 
-  const existing = news.findById(req.params.id);
+  const existing = await news.findById(req.params.id);
   if (!existing) return res.status(404).json({ error: 'Article not found' });
 
   const {
@@ -109,10 +126,10 @@ router.put('/:id', requireAuth, [
     const baseSlug = slugify(title);
     slug = baseSlug;
     let counter = 1;
-    while (news.slugExists(slug, req.params.id)) slug = `${baseSlug}-${counter++}`;
+    while (await news.slugExists(slug, req.params.id)) slug = `${baseSlug}-${counter++}`;
   }
 
-  const updated = news.update(req.params.id, {
+  const updated = await news.update(req.params.id, {
     slug, title, excerpt, content, image, category, author, date,
     tags: Array.isArray(tags) ? tags : [],
     is_featured: Boolean(is_featured),
@@ -120,17 +137,24 @@ router.put('/:id', requireAuth, [
   });
 
   res.json({ article: updated });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // ── DELETE /api/news/:id  (protected) ─────────────────────────────────────────
 router.delete('/:id', requireAuth, [
   param('id').isUUID(),
-], (req, res) => {
+], async (req, res, next) => {
+  try {
   if (!handleValidation(req, res)) return;
-  const existing = news.findById(req.params.id);
+  const existing = await news.findById(req.params.id);
   if (!existing) return res.status(404).json({ error: 'Article not found' });
-  news.delete(req.params.id);
+  await news.delete(req.params.id);
   res.json({ message: 'Article deleted' });
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;

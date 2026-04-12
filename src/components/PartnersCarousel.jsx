@@ -23,9 +23,17 @@ export const PartnersCarousel = ({ partners }) => {
             rel="noopener noreferrer"
             className="flex-shrink-0 flex items-center justify-center h-24 w-48 bg-white rounded-lg shadow-subtle hover:shadow-card transition-shadow group cursor-pointer"
           >
-            <span className="font-bold text-center px-3 text-sm group-hover:text-secondary transition-colors">
-              {partner.name}
-            </span>
+            {partner.logo ? (
+              <img
+                src={partner.logo}
+                alt={partner.name}
+                className="max-h-16 max-w-[160px] object-contain px-3"
+              />
+            ) : (
+              <span className="font-bold text-center px-3 text-sm group-hover:text-secondary transition-colors">
+                {partner.name}
+              </span>
+            )}
           </a>
         ))}
       </div>

@@ -206,10 +206,24 @@ export default function AdminDashboard() {
 
                     <h3 className="font-semibold text-gray-800 text-sm line-clamp-1">{article.title}</h3>
                     <p className="text-xs text-gray-400 mt-0.5">{article.author} · {article.date}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{article.views || 0} views</p>
                   </div>
 
                   {/* Actions */}
                   <div className="flex items-center gap-2 flex-shrink-0">
+                    <Link
+                      to={`/news/${article.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded-lg text-gray-400 hover:text-secondary hover:bg-secondary/10 transition-colors"
+                      title="View"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </Link>
+
                     <button
                       onClick={() => handleTogglePublish(article)}
                       title={article.published ? 'Unpublish' : 'Publish'}
