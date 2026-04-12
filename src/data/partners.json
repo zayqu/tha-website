@@ -11,7 +11,7 @@
     {
       "id": 2,
       "name": "World Hepatitis Alliance",
-      "logo": "/images/partners/wha-logo.svg",
+      "logo": "/images/partners/wha-logo.png",
       "description": "Global network of 800+ organizations working on viral hepatitis",
       "relationship": "Official membership, Board representation",
       "website": "https://www.worldhepatitisalliance.org/"
@@ -26,8 +26,24 @@
     },
     {
       "id": 4,
+      "name": "The Task Force for Global Health",
+      "logo": "/images/partners/taskforce-logo.png",
+      "description": "Hosts the Coalition for Global Hepatitis Elimination (CGHE)",
+      "relationship": "HepB birth dose advocacy collaboration",
+      "website": "https://www.taskforce.org/"
+    },
+    {
+      "id": 5,
+      "name": "African Hepatitis B Advocacy Coalition",
+      "logo": "/images/partners/abachepb-logo.png",
+      "description": "Coalition advancing hepatitis B advocacy across Africa",
+      "relationship": "Regional advocacy partnership",
+      "website": "https://abachepb.org/"
+    },
+    {
+      "id": 6,
       "name": "Tanzania Ministry of Health",
-      "logo": "/images/partners/ministry-health-logo.svg",
+      "logo": "",
       "description": "Strategic partner for nationwide health initiatives",
       "relationship": "Strategic health partnership (March 2026)",
       "website": "https://www.health.go.tz/"

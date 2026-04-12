@@ -27,6 +27,10 @@ export const PartnersCarousel = ({ partners }) => {
               <img
                 src={partner.logo}
                 alt={partner.name}
+                width="160"
+                height="64"
+                loading="lazy"
+                decoding="async"
                 className="max-h-16 max-w-[160px] object-contain px-3"
               />
             ) : (

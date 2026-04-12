@@ -93,7 +93,15 @@ export const TestimonialsCarousel = ({ testimonials }) => {
                   </p>
                   <div className="border-t border-cool-gray-dark pt-4 flex items-center gap-3">
                     {t.image ? (
-                      <img src={t.image} alt={t.author} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+                      <img
+                        src={t.image}
+                        alt={t.author}
+                        width="40"
+                        height="40"
+                        loading="lazy"
+                        decoding="async"
+                        className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                      />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <span className="text-primary font-bold text-sm">{t.author?.charAt(0)}</span>
@@ -117,7 +125,15 @@ export const TestimonialsCarousel = ({ testimonials }) => {
                 </p>
                 <div className="border-t border-cool-gray-dark pt-4 flex items-center gap-3">
                   {t.image ? (
-                    <img src={t.image} alt={t.author} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+                    <img
+                      src={t.image}
+                      alt={t.author}
+                      width="40"
+                      height="40"
+                      loading="lazy"
+                      decoding="async"
+                      className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                    />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <span className="text-primary font-bold text-sm">{t.author?.charAt(0)}</span>
