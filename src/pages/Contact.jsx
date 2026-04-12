@@ -34,7 +34,7 @@ export const Contact = () => {
   };
 
   return (
-    <div className="pt-0 md:pt-16 bg-cool-gray">
+    <div className="pt-14 md:pt-16 bg-cool-gray">
       <SEO
         title="Contact"
         description="Contact Tanzania Health Alliance in Dar es Salaam for public health programs, partnerships, volunteering, and community health collaboration."

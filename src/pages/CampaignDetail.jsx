@@ -21,7 +21,7 @@ export const CampaignDetail = () => {
   }
 
   return (
-    <div className="pt-0 md:pt-16 bg-white">
+    <div className="pt-14 md:pt-16 bg-white">
       <SEO
         title={campaign.name}
         description={campaign.description}

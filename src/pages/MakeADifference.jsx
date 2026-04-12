@@ -38,7 +38,7 @@ export const MakeADifference = () => {
   };
 
   return (
-    <div className="pt-0 md:pt-20">
+    <div className="pt-14 md:pt-20">
       <SEO
         title="Make a Difference"
         description="Volunteer, donate, or partner with Tanzania Health Alliance to support community health programs across viral hepatitis, HIV, and mental health."

@@ -201,7 +201,7 @@ export const Home = () => {
   }, []);
 
   return (
-    <div className="pt-0 md:pt-16 bg-cool-gray">
+    <div className="pt-14 md:pt-16 bg-cool-gray">
       <SEO
         title="Tanzania Health Alliance | Together for a Healthier Tanzania"
         description="Tanzania Health Alliance addresses viral hepatitis, HIV, and mental health through awareness, advocacy, research, and partnerships across Tanzania."

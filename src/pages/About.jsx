@@ -81,7 +81,7 @@ export const About = () => {
   ];
 
   return (
-    <div className="pt-0 md:pt-16 bg-cool-gray">
+    <div className="pt-14 md:pt-16 bg-cool-gray">
       <SEO
         title="About"
         description="Learn about Tanzania Health Alliance, our founder story, mission, values, campaigns, leadership, and public health partnerships."

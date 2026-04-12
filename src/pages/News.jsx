@@ -59,7 +59,7 @@ export const News = () => {
     : filteredNews;
 
   return (
-    <div className="pt-0 md:pt-20">
+    <div className="pt-14 md:pt-20">
       <SEO
         title="News and Updates"
         description="Read Tanzania Health Alliance news, public health updates, campaign stories, and advocacy milestones across viral hepatitis, HIV, and mental health."

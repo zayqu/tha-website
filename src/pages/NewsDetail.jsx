@@ -39,7 +39,7 @@ export default function NewsDetail() {
 
   if (!news) {
     return (
-      <div className="pt-0 md:pt-16 min-h-screen bg-white flex items-center justify-center">
+      <div className="pt-14 md:pt-16 min-h-screen bg-white flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
       </div>
     );
@@ -52,7 +52,7 @@ export default function NewsDetail() {
   });
 
   return (
-    <div className="pt-0 md:pt-16 min-h-screen bg-white">
+    <div className="pt-14 md:pt-16 min-h-screen bg-white">
       <SEO
         title={news.title}
         description={news.excerpt}

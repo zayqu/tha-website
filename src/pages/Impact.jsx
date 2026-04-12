@@ -125,7 +125,7 @@ const CampaignImpactCard = ({ campaign }) => {
 
 export const Impact = () => {
   return (
-    <div className="pt-0 md:pt-16 bg-cool-gray">
+    <div className="pt-14 md:pt-16 bg-cool-gray">
       <SEO
         title="Impact"
         description="Explore Tanzania Health Alliance impact metrics, campaign results, partnerships, and milestones across Tanzania public health programs."
