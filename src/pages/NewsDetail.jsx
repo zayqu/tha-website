@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Icon } from '../components/Icon';
+import { SEO } from '../components/SEO';
 import { newsArticles } from '../data/newsData';
 import { fetchNewsArticle, normalizeArticle } from '../lib/api';
+import { getNewsImageProps } from '../lib/imageUtils';
 
 export default function NewsDetail() {
   const { slug } = useParams();
@@ -51,12 +53,22 @@ export default function NewsDetail() {
 
   return (
     <div className="pt-16 min-h-screen bg-white">
+      <SEO
+        title={news.title}
+        description={news.excerpt}
+        image={news.image}
+        type="article"
+        canonicalPath={`/news/${news.slug}`}
+      />
 
       {/* Hero Image */}
       <div className="w-full h-72 md:h-[480px] relative">
         <img
           src={news.image}
           alt={news.title}
+          width="1080"
+          height="720"
+          {...getNewsImageProps(news.image, { priority: true, hero: true })}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />

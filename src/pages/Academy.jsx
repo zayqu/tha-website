@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Icon } from '../components/Icon';
+import { SEO } from '../components/SEO';
 import testimonials from '../data/testimonials.json';
 
 export const Academy = () => {
@@ -119,6 +120,12 @@ export const Academy = () => {
 
   return (
     <div className="pt-16 md:pt-20">
+      <SEO
+        title="THA Academy"
+        description="Access Tanzania Health Alliance learning resources on hepatitis, HIV, mental health, policy, and public health training."
+        canonicalPath="/academy"
+      />
+
       {/* Hero */}
       <section className="section-padding bg-gradient-to-br from-primary to-primary-light text-white">
         <div className="container-custom">

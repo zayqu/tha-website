@@ -24,6 +24,9 @@ export default function AcademyCard({ resource }) {
             <img 
               src={resource.sourceFavicon} 
               alt="" 
+              width="40"
+              height="40"
+              decoding="async"
               className="w-10 h-10 rounded-lg object-cover"
               loading="lazy"
             />

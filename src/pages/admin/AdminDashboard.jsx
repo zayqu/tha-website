@@ -187,7 +187,7 @@ export default function AdminDashboard() {
                 <div className="flex items-start gap-4 p-4">
                   {/* Thumbnail */}
                   <div className="w-20 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
-                    <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+                    <img src={article.image} alt={article.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                   </div>
 
                   {/* Info */}

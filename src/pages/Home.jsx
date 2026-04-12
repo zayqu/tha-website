@@ -7,10 +7,12 @@ import testimonials from '../data/testimonials.json';
 import impactData from '../data/impact.json';
 import { PartnersCarousel } from '../components/PartnersCarousel';
 import { TestimonialsCarousel } from '../components/TestimonialCarousel';
+import { SEO, organizationSchema } from '../components/SEO';
 import { thaData } from '../data/thaData';
 import { newsArticles } from '../data/newsData';
 import NewsCard from '../components/NewsCard';
 import { fetchPublishedNews, normalizeArticle } from '../lib/api';
+import { getHeroImageProps } from '../lib/imageUtils';
 
 /* =========================
    Typing Animation
@@ -132,7 +134,7 @@ const CampaignCard = ({ campaign, index }) => {
           to={`/campaigns/${campaign.id}`}
           className="flex items-center justify-center gap-2 bg-primary text-white px-4 py-3 rounded-lg hover:bg-primary-dark transition font-semibold"
         >
-          Learn More <Icon name="arrow_forward" size={18} />
+          Learn About {campaign.name} <Icon name="arrow_forward" size={18} />
         </Link>
       </div>
     </div>
@@ -207,12 +209,22 @@ export const Home = () => {
 
   return (
     <div className="pt-16 bg-cool-gray">
+      <SEO
+        title="Tanzania Health Alliance | Together for a Healthier Tanzania"
+        description="Tanzania Health Alliance addresses viral hepatitis, HIV, and mental health through awareness, advocacy, research, and partnerships across Tanzania."
+        canonicalPath="/"
+        structuredData={organizationSchema}
+      />
 
       {/* HERO */}
       <section className="relative h-screen flex items-center justify-center text-center overflow-hidden">
         <img
           src="/images/hero-bg-lg.jpg"
-          loading="lazy"
+          alt=""
+          width="1920"
+          height="1080"
+          aria-hidden="true"
+          {...getHeroImageProps('/images/hero-bg-lg.jpg')}
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/90 to-primary/80" />
@@ -227,7 +239,7 @@ export const Home = () => {
           </p>
 
           <div className="flex gap-4 justify-center flex-wrap">
-            <Link to="/about" className="btn-primary">Learn More</Link>
+            <Link to="/about" className="btn-primary">Learn About THA</Link>
             <Link to="/contact" className="px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-primary transition">
               Contact Us
             </Link>

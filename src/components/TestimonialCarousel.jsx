@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Icon } from './Icon';
+import { getTestimonialImageProps } from '../lib/imageUtils';
 
 export const TestimonialsCarousel = ({ testimonials }) => {
   const [current, setCurrent] = useState(0);
@@ -98,8 +99,7 @@ export const TestimonialsCarousel = ({ testimonials }) => {
                         alt={t.author}
                         width="40"
                         height="40"
-                        loading="lazy"
-                        decoding="async"
+                        {...getTestimonialImageProps(t.image)}
                         className="w-10 h-10 rounded-full object-cover flex-shrink-0"
                       />
                     ) : (
@@ -130,8 +130,7 @@ export const TestimonialsCarousel = ({ testimonials }) => {
                       alt={t.author}
                       width="40"
                       height="40"
-                      loading="lazy"
-                      decoding="async"
+                      {...getTestimonialImageProps(t.image)}
                       className="w-10 h-10 rounded-full object-cover flex-shrink-0"
                     />
                   ) : (

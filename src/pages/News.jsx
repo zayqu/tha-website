@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
+import { SEO } from '../components/SEO';
 import { newsArticles } from '../data/newsData';
 import { fetchPublishedNews, normalizeArticle } from '../lib/api';
+import { getNewsImageProps } from '../lib/imageUtils';
 
 // Map categories to brand colors
 const categoryColor = {
@@ -58,6 +60,12 @@ export const News = () => {
 
   return (
     <div className="pt-16 md:pt-20">
+      <SEO
+        title="News and Updates"
+        description="Read Tanzania Health Alliance news, public health updates, campaign stories, and advocacy milestones across viral hepatitis, HIV, and mental health."
+        canonicalPath="/news"
+      />
+
       {/* Hero */}
       <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="container-custom">
@@ -107,7 +115,7 @@ export const News = () => {
                     alt={featuredArticle.title}
                     width="1080"
                     height="720"
-                    decoding="async"
+                    {...getNewsImageProps(featuredArticle.image, { priority: true })}
                     className="w-full h-full object-cover img-zoom"
                   />
                 </div>
@@ -180,8 +188,7 @@ export const News = () => {
                       alt={article.title}
                       width="1080"
                       height="720"
-                      loading="lazy"
-                      decoding="async"
+                      {...getNewsImageProps(article.image)}
                       className="w-full h-full object-cover img-zoom"
                     />
                     <div className="absolute top-3 left-3">

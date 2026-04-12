@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
+import { SEO } from '../components/SEO';
 import { thaData, sendEmail } from '../data/thaData';
 
 export const Contact = () => {
@@ -34,6 +35,12 @@ export const Contact = () => {
 
   return (
     <div className="pt-16 bg-cool-gray">
+      <SEO
+        title="Contact"
+        description="Contact Tanzania Health Alliance in Dar es Salaam for public health programs, partnerships, volunteering, and community health collaboration."
+        canonicalPath="/contact"
+      />
+
       {/* Hero */}
       <section className="py-12 md:py-20 bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

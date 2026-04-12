@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
+import { SEO } from '../components/SEO';
 import campaignsData from '../data/campaigns.json';
 
 const colorMap = {
@@ -36,6 +37,11 @@ const defaultColors = {
 export const Projects = () => {
   return (
     <div className="pt-16 bg-cool-gray">
+      <SEO
+        title="Programs"
+        description="Explore Tanzania Health Alliance campaigns and activities including KAPIME, Life Unlocked, and Talk To Heal."
+        canonicalPath="/projects"
+      />
 
       {/* Hero */}
       <section className="py-20 md:py-28 bg-gradient-to-br from-primary to-primary-dark text-white">

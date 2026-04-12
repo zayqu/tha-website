@@ -250,6 +250,8 @@ export default function AdminNewsForm() {
               <div className="mt-2 rounded-lg overflow-hidden w-full h-40 bg-gray-100">
                 <img
                   src={form.image} alt="Preview"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover"
                   onError={e => { e.target.style.display = 'none'; }}
                 />
@@ -261,7 +263,7 @@ export default function AdminNewsForm() {
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
             {form.image && (
               <div className="h-56 bg-gray-100">
-                <img src={form.image} alt="" className="w-full h-full object-cover" />
+                <img src={form.image} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
               </div>
             )}
             <div className="p-5">

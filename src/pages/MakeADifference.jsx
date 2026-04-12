@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Icon } from '../components/Icon';
+import { SEO } from '../components/SEO';
 import { thaData } from '../data/thaData';
 
 export const MakeADifference = () => {
@@ -38,6 +39,12 @@ export const MakeADifference = () => {
 
   return (
     <div className="pt-16 md:pt-20">
+      <SEO
+        title="Make a Difference"
+        description="Volunteer, donate, or partner with Tanzania Health Alliance to support community health programs across viral hepatitis, HIV, and mental health."
+        canonicalPath="/make-a-difference"
+      />
+
       {/* Hero */}
       <section className="section-padding bg-gradient-to-br from-primary to-primary-light text-white">
         <div className="container-custom">

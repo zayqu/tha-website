@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Icon } from './Icon';
+import { getNewsImageProps } from '../lib/imageUtils';
 
 export default function NewsCard({ news }) {
   return (
@@ -8,8 +9,10 @@ export default function NewsCard({ news }) {
         <img
           src={news.image}
           alt={news.title}
+          width="1080"
+          height="720"
+          {...getNewsImageProps(news.image)}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
         />
         <div className="absolute top-4 left-4">
           <span className="bg-accent text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide">

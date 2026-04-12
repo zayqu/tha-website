@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
+import { SEO } from '../components/SEO';
 import impactData from '../data/impact.json';
 import campaigns from '../data/campaigns.json';
 
@@ -125,6 +126,11 @@ const CampaignImpactCard = ({ campaign }) => {
 export const Impact = () => {
   return (
     <div className="pt-16 bg-cool-gray">
+      <SEO
+        title="Impact"
+        description="Explore Tanzania Health Alliance impact metrics, campaign results, partnerships, and milestones across Tanzania public health programs."
+        canonicalPath="/impact"
+      />
 
       {/* Hero */}
       <section className="py-20 md:py-28 bg-gradient-to-br from-primary to-primary-dark text-white">

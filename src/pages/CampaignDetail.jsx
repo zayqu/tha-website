@@ -1,5 +1,6 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
+import { SEO } from '../components/SEO';
 import campaigns from '../data/campaigns.json';
 
 const colorMap = {
@@ -54,6 +55,11 @@ export const CampaignDetail = () => {
 
   return (
     <div className="pt-16 bg-white">
+      <SEO
+        title={campaign.name}
+        description={campaign.description}
+        canonicalPath={`/campaigns/${campaign.id}`}
+      />
 
       {/* Hero */}
       <section className={`bg-gradient-to-br ${colors.gradient} text-white py-20 md:py-28`}>

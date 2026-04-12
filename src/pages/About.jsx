@@ -2,10 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { PartnersCarousel } from '../components/PartnersCarousel';
-import teamData from '../data/teamData.json';
+import { SEO } from '../components/SEO';
 import teamJson from '../data/team.json';
 import partners from '../data/partners.json';
 import { thaData } from '../data/thaData';
+import { getTeamImageProps } from '../lib/imageUtils';
 
 /* =========================
    Scroll Reveal Hook
@@ -78,6 +79,12 @@ export const About = () => {
 
   return (
     <div className="pt-16 bg-cool-gray">
+      <SEO
+        title="About"
+        description="Learn about Tanzania Health Alliance, our founder story, mission, values, campaigns, leadership, and public health partnerships."
+        canonicalPath="/about"
+        image="/images/team/shaibu-issa.jpg"
+      />
 
       {/* Hero Section */}
       <section className="py-20 md:py-28 bg-gradient-to-br from-primary to-primary-dark text-white">
@@ -99,10 +106,10 @@ export const About = () => {
             <div className="h-96 md:h-[28rem] rounded-2xl relative overflow-hidden">
               <img
                 src="/images/team/shaibu-issa.jpg"
-                alt="Shaibu Issa — Founder & Executive Director"
+                alt="Shaibu Issa, Founder and Executive Director"
                 width="800"
                 height="800"
-                decoding="async"
+                {...getTeamImageProps('/images/team/shaibu-issa.jpg', { priority: true })}
                 className="absolute inset-0 w-full h-full object-cover object-top"
               />
               <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-card">
@@ -293,8 +300,7 @@ export const About = () => {
                     alt={member.name}
                     width="800"
                     height="800"
-                    loading="lazy"
-                    decoding="async"
+                    {...getTeamImageProps(member.photo)}
                     className="absolute inset-0 w-full h-full object-cover object-top"
                   />
                   {/* Social Links */}

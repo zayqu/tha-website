@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getPartnerImageProps } from '../lib/imageUtils';
 
 export const PartnersCarousel = ({ partners }) => {
   const [isPaused, setIsPaused] = useState(false);
@@ -29,8 +30,7 @@ export const PartnersCarousel = ({ partners }) => {
                 alt={partner.name}
                 width="160"
                 height="64"
-                loading="lazy"
-                decoding="async"
+                {...getPartnerImageProps(partner.logo)}
                 className="max-h-16 max-w-[160px] object-contain px-3"
               />
             ) : (

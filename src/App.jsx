@@ -1,4 +1,4 @@
-import { HashRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -19,7 +19,19 @@ import AdminNewsForm from './pages/admin/AdminNewsForm';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+const HashRedirect = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (window.location.hash.startsWith('#/')) {
+      navigate(window.location.hash.slice(1), { replace: true });
+    }
+  }, [navigate]);
+
+  return null;
+};
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -43,6 +55,7 @@ function App() {
     <HelmetProvider>
       <AuthProvider>
         <Router>
+          <HashRedirect />
           <ScrollToTop />
           <Routes>
             {/* ── Admin routes (standalone, no Header/Footer) ── */}

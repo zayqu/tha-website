@@ -42,6 +42,9 @@ export const Header = () => {
             <img
               src="/logo/tha-logo.svg"
               alt="Tanzania Health Alliance"
+              width="120"
+              height="48"
+              decoding="async"
               className="h-12 w-auto"
             />
           </Link>
