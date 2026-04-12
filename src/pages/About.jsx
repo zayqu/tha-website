@@ -5,6 +5,7 @@ import { PartnersCarousel } from '../components/PartnersCarousel';
 import { SEO } from '../components/SEO';
 import teamJson from '../data/team.json';
 import partners from '../data/partners.json';
+import campaigns from '../data/campaigns.json';
 import { thaData } from '../data/thaData';
 import { getTeamImageProps } from '../lib/imageUtils';
 
@@ -31,14 +32,16 @@ const CoreValueCard = ({ value, index }) => {
   return (
     <div
       ref={ref}
-      className={`bg-cool-gray rounded-xl p-6 border-l-4 border-secondary hover:shadow-card transition-all ${
+      className={`bg-white/80 backdrop-blur-sm rounded-xl p-6 hover:bg-white hover:shadow-elevated transition-all duration-300 ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
       style={{ transitionDelay: `${index * 100}ms` }}
     >
-      <Icon name={value.icon} size={32} category="secondary" className="mb-4" />
+      <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center mb-4">
+        <Icon name={value.icon} size={20} category="primary" />
+      </div>
       <h3 className="text-lg font-bold text-primary mb-2">{value.value}</h3>
-      <p className="text-sm text-gray-600">{value.description}</p>
+      <p className="text-sm text-gray-500 leading-relaxed">{value.description}</p>
     </div>
   );
 };
@@ -52,7 +55,7 @@ export const About = () => {
     },
     {
       value: "Equity",
-      icon: "balance",
+      icon: "scale",
       description: "We ensure fair access to health resources and opportunities for all."
     },
     {
@@ -163,27 +166,27 @@ export const About = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-8">
             {/* Mission */}
-            <div className="bg-white rounded-2xl shadow-card p-8 md:p-12 border-t-4 border-primary">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 md:p-12 hover:shadow-elevated transition-all duration-300">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Icon name="track_changes" size={28} category="primary" />
+                <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center">
+                  <Icon name="track_changes" size={22} category="primary" />
                 </div>
                 <h3 className="text-2xl font-bold text-primary">Our Mission</h3>
               </div>
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-lg text-gray-500 leading-relaxed">
                 {thaData.mission}
               </p>
             </div>
 
             {/* Vision */}
-            <div className="bg-white rounded-2xl shadow-card p-8 md:p-12 border-t-4 border-secondary">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 md:p-12 hover:shadow-elevated transition-all duration-300">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center">
-                  <Icon name="visibility" size={28} category="secondary" />
+                <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center">
+                  <Icon name="visibility" size={22} category="primary" />
                 </div>
                 <h3 className="text-2xl font-bold text-primary">Our Vision</h3>
               </div>
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-lg text-gray-500 leading-relaxed">
                 {thaData.vision}
               </p>
             </div>
@@ -218,66 +221,27 @@ export const About = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* KAPIME */}
-            <div className="bg-white rounded-2xl shadow-card p-8 border-t-4 border-hepatitis">
-              <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mb-4">
-                <Icon name="favorite" size={28} color="#EF4444" />
-              </div>
-              <h3 className="text-xl font-bold text-primary mb-1">KAPIME</h3>
-              <p className="text-sm font-semibold text-gray-500 mb-3">Hepatitis Awareness & Prevention</p>
-              <p className="text-gray-600 text-sm mb-4">
-                Raising awareness about Hepatitis B through community outreach, school education, and public campaigns to eliminate viral hepatitis by 2030.
-              </p>
-              <ul className="space-y-2">
-                {["World Hepatitis Day campaign", "School & university hepatitis education", "Community health marathons"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                    <Icon name="check_circle" size={14} category="secondary" className="mt-0.5 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Life Unlocked */}
-            <div className="bg-white rounded-2xl shadow-card p-8 border-t-4 border-mental">
-              <div className="w-14 h-14 rounded-full bg-purple-50 flex items-center justify-center mb-4">
-                <Icon name="psychology" size={28} color="#8B5CF6" />
-              </div>
-              <h3 className="text-xl font-bold text-primary mb-1">Life Unlocked</h3>
-              <p className="text-sm font-semibold text-gray-500 mb-3">Mental Health for Youth</p>
-              <p className="text-gray-600 text-sm mb-4">
-                Supporting young Tanzanians through mental health awareness, resilience-building, and peer support during life transitions.
-              </p>
-              <ul className="space-y-2">
-                {["School & university mental health sessions", "Youth engagement programs", "Peer support communities"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                    <Icon name="check_circle" size={14} category="secondary" className="mt-0.5 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Talk To Heal */}
-            <div className="bg-white rounded-2xl shadow-card p-8 border-t-4 border-mental">
-              <div className="w-14 h-14 rounded-full bg-purple-50 flex items-center justify-center mb-4">
-                <Icon name="forum" size={28} color="#8B5CF6" />
-              </div>
-              <h3 className="text-xl font-bold text-primary mb-1">Talk To Heal</h3>
-              <p className="text-sm font-semibold text-gray-500 mb-3">Mental Health Conversations & Support</p>
-              <p className="text-gray-600 text-sm mb-4">
-                Creating safe spaces for mental health conversations through community programs, peer support, and stigma reduction.
-              </p>
-              <ul className="space-y-2">
-                {["Community engagement events", "Mental health awareness sessions", "Stigma-reduction programs"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                    <Icon name="check_circle" size={14} category="secondary" className="mt-0.5 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {campaigns.campaigns.map((c) => (
+              <Link
+                key={c.id}
+                to={`/campaigns/${c.id}`}
+                className="group relative rounded-2xl overflow-hidden min-h-[320px] flex flex-col justify-end"
+              >
+                <img src={c.image} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+                <div className="relative z-10 p-6">
+                  <span className="text-xs bg-white/15 backdrop-blur-md text-white px-3 py-1 rounded-full border border-white/20 font-semibold">
+                    {c.tagline}
+                  </span>
+                  <h3 className="text-xl font-bold text-white mt-3 mb-1">{c.name}</h3>
+                  <p className="text-white/60 text-sm mb-3">{c.subtitle}</p>
+                  <span className="text-white/80 text-sm font-semibold group-hover:text-white transition flex items-center gap-1">
+                    Learn more <Icon name="arrow_forward" size={14} color="white" />
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

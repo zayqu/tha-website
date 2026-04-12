@@ -54,7 +54,7 @@ export const Icon = ({ name, className = "", size = 24, color = "currentColor", 
     
     // Social & Web
     facebook: <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.7 10h-2.6v8.4h-3.5V12h-2.4v-3h2.4V7.7c0-2 .95-3.3 3.3-3.3h2.6v3h-1.9c-.6 0-.7.3-.7.9V9h2.4l-.4 3z" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,
-    instagram: <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2.5 7c.83 0 1.5.67 1.5 1.5S11.33 12 10.5 12 9 11.33 9 10.5 9.67 9 10.5 9zm5 0h-4v2h4V9zm2 8h-8v-2h8v2zm0-4h-4v2h4v-2zm0-4h-4v2h4v-2z" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,
+    instagram: <><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="5" fill="none" stroke={strokeColor} strokeWidth="1.5"/><circle cx="17.5" cy="6.5" r="1.5" fill={strokeColor}/></>,
     linkedin: <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,
     
     // Status & Feedback
@@ -66,6 +66,21 @@ export const Icon = ({ name, className = "", size = 24, color = "currentColor", 
     // Downloads
     download: <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,
     
+    // Awards & Recognition
+    film: <><rect x="2" y="2" width="20" height="20" rx="2" fill="none" stroke={strokeColor} strokeWidth="1.5"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5" fill="none" stroke={strokeColor} strokeWidth="1.5"/></>,
+    award: <><circle cx="12" cy="8" r="6" fill="none" stroke={strokeColor} strokeWidth="1.5"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></>,
+    star: <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,
+
+    // Values
+    shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,
+    scale: <path d="M12 3v18M3 7l9-4 9 4M3 7l3 6c0 1.66 1.34 3 3 3s3-1.34 3-3l-6-6m12 0l-3 6c0 1.66 1.34 3 3 3s3-1.34 3-3l-6-6" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,
+    lightbulb: <path d="M9 21h6M12 3a6 6 0 0 0-4 10.5V17h8v-3.5A6 6 0 0 0 12 3z" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,
+    zap: <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,
+
+    // Navigation
+    chevron_left: <path d="M15 18l-6-6 6-6" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,
+    chevron_right: <path d="M9 18l6-6-6-6" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,
+
     // Misc
     track_changes: <path d="M19.07 4.93l-1.41 1.41C19.1 7.79 20 9.79 20 12c0 4.42-3.58 8-8 8s-8-3.58-8-8c0-4.08 3.05-7.44 7-7.93v2.02C8.16 6.57 6 9.03 6 12c0 3.31 2.69 6 6 6s6-2.69 6-6c0-1.66-.67-3.16-1.76-4.24l-1.41 1.41C15.55 9.89 16 10.9 16 12c0 2.21-1.79 4-4 4s-4-1.79-4-4c0-1.86 1.28-3.41 3-3.86v2.14c-.6.35-1 .98-1 1.72 0 1.1.9 2 2 2s2-.9 2-2c0-.74-.4-1.38-1-1.72V2h-1C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10c0-2.76-1.12-5.26-2.93-7.07z" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,
     visibility: <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>,

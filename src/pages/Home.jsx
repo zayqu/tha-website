@@ -77,117 +77,113 @@ const Counter = ({ end, suffix = '+' }) => {
 };
 
 /* =========================
-   Campaign Card
+   Campaign Card — Premium Glass Design
 ========================= */
 const CampaignCard = ({ campaign, index }) => {
   const [ref, show] = useReveal();
-  const colorClasses = {
-    hepatitis: 'from-hepatitis to-red-400',
-    mental: 'from-mental to-purple-400',
-    default: 'from-primary to-secondary'
-  };
-  const bgClass = colorClasses[campaign.color] || colorClasses.default;
 
   return (
     <div
       ref={ref}
-      className={`group bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-elevated transition-all duration-500 ${
+      className={`group relative rounded-2xl overflow-hidden transition-all duration-700 ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
       style={{ transitionDelay: `${index * 150}ms` }}
     >
-      {/* Gradient Header */}
-      <div className={`h-40 bg-gradient-to-br ${bgClass} flex items-center justify-center relative`}>
-        <div className="absolute inset-0 bg-black/10" />
-        <Icon name={campaign.icon} size={48} color="white" />
-        <span className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
-          {campaign.tagline}
-        </span>
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <img
+          src={campaign.image}
+          alt=""
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          loading="lazy"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
       </div>
 
-      <div className="p-6">
-        <h3 className="font-bold text-xl text-primary mb-1">{campaign.name}</h3>
-        <p className="text-gray-500 text-sm mb-4">{campaign.subtitle}</p>
+      {/* Glass Content */}
+      <div className="relative z-10 p-6 flex flex-col min-h-[420px]">
+        {/* Top Tag */}
+        <span className="self-start bg-white/15 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full border border-white/20">
+          {campaign.tagline}
+        </span>
 
-        {/* Activities */}
-        <div className="mb-4">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Key Activities</p>
-          <ul className="space-y-1.5">
-            {campaign.activities2025.map((act, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                <Icon name="check_circle" size={14} category="secondary" className="mt-0.5 flex-shrink-0" />
-                {act}
-              </li>
+        {/* Spacer */}
+        <div className="flex-grow" />
+
+        {/* Bottom Content */}
+        <div>
+          <h3 className="font-bold text-2xl text-white mb-1 tracking-tight">{campaign.name}</h3>
+          <p className="text-white/70 text-sm mb-5">{campaign.subtitle}</p>
+
+          {/* Impact Pills */}
+          <div className="flex flex-wrap gap-2 mb-5">
+            {campaign.impact2025.slice(0, 2).map((imp, i) => (
+              <span key={i} className="text-xs bg-white/10 backdrop-blur-sm text-white/90 px-3 py-1.5 rounded-full border border-white/10">
+                {imp}
+              </span>
             ))}
-          </ul>
-        </div>
+          </div>
 
-        {/* Impact */}
-        <div className="bg-cool-gray rounded-lg p-3 mb-4">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">2025 Impact</p>
-          {campaign.impact2025.slice(0, 2).map((imp, i) => (
-            <p key={i} className="text-sm font-semibold text-primary leading-snug">{imp}</p>
-          ))}
+          <Link
+            to={`/campaigns/${campaign.id}`}
+            className="flex items-center justify-center gap-2 bg-white/15 backdrop-blur-md text-white px-5 py-3 rounded-xl border border-white/20 hover:bg-white hover:text-primary transition-all duration-300 font-semibold text-sm"
+          >
+            Explore {campaign.name}
+            <Icon name="arrow_forward" size={16} />
+          </Link>
         </div>
-
-        <Link
-          to={`/campaigns/${campaign.id}`}
-          className="flex items-center justify-center gap-2 bg-primary text-white px-4 py-3 rounded-lg hover:bg-primary-dark transition font-semibold"
-        >
-          Learn About {campaign.name} <Icon name="arrow_forward" size={18} />
-        </Link>
       </div>
     </div>
   );
 };
 
 /* =========================
-   Objective Card
+   Objective Card — Clean Minimal
 ========================= */
+const objectiveIcons = ['local_hospital', 'school', 'search', 'groups', 'favorite'];
 const ObjectiveCard = ({ obj, index }) => {
   const [ref, show] = useReveal();
   return (
     <div
       ref={ref}
-      className={`p-6 bg-white rounded-lg shadow-card border-l-4 border-secondary ${
+      className={`p-6 bg-white/80 backdrop-blur-sm rounded-xl hover:bg-white hover:shadow-elevated transition-all duration-300 ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
       style={{ transitionDelay: `${index * 100}ms` }}
     >
-      <Icon name="check_circle" size={24} category="secondary" className="mb-3" />
-      <p className="text-gray-700">{obj}</p>
+      <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center mb-4">
+        <Icon name={objectiveIcons[index] || 'check_circle'} size={20} category="primary" />
+      </div>
+      <p className="text-gray-700 leading-relaxed">{obj}</p>
     </div>
   );
 };
 
 /* =========================
-   Timeline Item
+   Timeline Item — Clean Design
 ========================= */
 const TimelineItem = ({ milestone, index }) => {
   const [ref, show] = useReveal();
-  const colorClasses = {
-    primary: 'bg-primary text-white',
-    secondary: 'bg-secondary text-white',
-    accent: 'bg-accent text-white'
-  };
 
   return (
     <div
       ref={ref}
       className={`flex gap-4 ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
     >
-      <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${colorClasses[milestone.color] || colorClasses.primary}`}>
-        <Icon name={milestone.icon} size={24} color="white" />
+      <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 bg-white shadow-subtle border border-gray-100">
+        <Icon name={milestone.icon} size={20} category="primary" />
       </div>
       <div
-        className={`flex-1 bg-white rounded-lg p-6 shadow-card ${
+        className={`flex-1 bg-white/80 backdrop-blur-sm rounded-xl p-6 hover:shadow-elevated transition-all duration-300 ${
           show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
         style={{ transitionDelay: `${index * 100}ms` }}
       >
-        <span className="text-sm font-semibold text-accent">{milestone.month}</span>
+        <span className="text-xs font-semibold text-primary/60 uppercase tracking-wider">{milestone.month}</span>
         <h4 className="font-bold text-lg text-primary mt-1">{milestone.milestone}</h4>
-        <p className="text-gray-600 text-sm mt-2">{milestone.description}</p>
+        <p className="text-gray-500 text-sm mt-2 leading-relaxed">{milestone.description}</p>
       </div>
     </div>
   );
