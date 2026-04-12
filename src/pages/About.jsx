@@ -98,8 +98,11 @@ export const About = () => {
             {/* Image */}
             <div className="h-96 md:h-[28rem] rounded-2xl relative overflow-hidden">
               <img
-                src="/images/team/shaibu-issa.png"
+                src="/images/team/shaibu-issa.jpg"
                 alt="Shaibu Issa — Founder & Executive Director"
+                width="800"
+                height="800"
+                decoding="async"
                 className="absolute inset-0 w-full h-full object-cover object-top"
               />
               <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-card">
@@ -288,6 +291,10 @@ export const About = () => {
                   <img
                     src={member.photo}
                     alt={member.name}
+                    width="800"
+                    height="800"
+                    loading="lazy"
+                    decoding="async"
                     className="absolute inset-0 w-full h-full object-cover object-top"
                   />
                   {/* Social Links */}

@@ -105,6 +105,9 @@ export const News = () => {
                   <img
                     src={featuredArticle.image}
                     alt={featuredArticle.title}
+                    width="1080"
+                    height="720"
+                    decoding="async"
                     className="w-full h-full object-cover img-zoom"
                   />
                 </div>
@@ -175,6 +178,10 @@ export const News = () => {
                     <img
                       src={article.image}
                       alt={article.title}
+                      width="1080"
+                      height="720"
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover img-zoom"
                     />
                     <div className="absolute top-3 left-3">
