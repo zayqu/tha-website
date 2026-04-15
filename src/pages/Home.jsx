@@ -169,17 +169,17 @@ const TimelineItem = ({ milestone, index }) => {
       ref={ref}
       className={`flex gap-4 ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
     >
-      <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 bg-white shadow-subtle border border-gray-100">
+      <div className="relative z-10 w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 bg-white shadow-card border-2 border-primary/10">
         <Icon name={milestone.icon} size={20} category="primary" />
       </div>
       <div
-        className={`flex-1 bg-white rounded-xl p-6 shadow-card hover:shadow-elevated transition-all duration-300 ${
+        className={`flex-1 bg-white rounded-xl p-5 md:p-6 shadow-card hover:shadow-elevated transition-all duration-300 ${
           show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
         style={{ transitionDelay: `${index * 100}ms` }}
       >
-        <span className="text-xs font-semibold text-primary/60 uppercase tracking-wider">{milestone.month}</span>
-        <h4 className="font-bold text-lg text-primary mt-1">{milestone.milestone}</h4>
+        <span className="text-xs font-semibold text-primary/50 uppercase tracking-wider">{milestone.month}</span>
+        <h4 className="font-bold text-base md:text-lg text-primary mt-1">{milestone.milestone}</h4>
         <p className="text-gray-500 text-sm mt-2 leading-relaxed">{milestone.description}</p>
       </div>
     </div>
@@ -210,7 +210,7 @@ export const Home = () => {
       />
 
       {/* HERO */}
-      <section className="relative h-screen flex items-center justify-center text-center overflow-hidden">
+      <section className="relative min-h-[calc(100dvh-3.5rem)] md:h-screen flex items-center justify-center text-center overflow-hidden">
         <img
           src="/images/hero-bg-lg.jpg"
           alt=""
@@ -297,8 +297,8 @@ export const Home = () => {
           </div>
 
           <div className="relative">
-            {/* Timeline Line */}
-            <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent" />
+            {/* Timeline Line — behind icons */}
+            <div className="absolute left-[21px] md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-secondary/20 to-accent/20 z-0" />
 
             <div className="space-y-8">
               {impactData.yearOneTimeline.map((milestone, i) => (

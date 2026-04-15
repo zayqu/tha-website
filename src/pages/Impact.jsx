@@ -45,7 +45,7 @@ const TimelineItem = ({ milestone, index }) => {
       ref={ref}
       className={`relative flex items-start gap-4 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
     >
-      <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 bg-white shadow-card border border-gray-100 z-10 ${
+      <div className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 bg-white shadow-card border-2 border-primary/10 z-10 ${
         show ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
       } transition-all duration-500`} style={{ transitionDelay: `${index * 150}ms` }}>
         <Icon name={milestone.icon} size={22} category="primary" />
@@ -81,7 +81,9 @@ const CampaignImpactCard = ({ campaign }) => (
       <ul className="space-y-2.5 mb-5">
         {campaign.impact2025.map((item, i) => (
           <li key={i} className="flex items-start gap-2.5 p-2.5 bg-cool-gray rounded-lg">
-            <Icon name="check_circle" size={16} category="secondary" className="mt-0.5 flex-shrink-0" />
+            <span className="w-5 h-5 rounded bg-secondary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Icon name="arrow_upward" size={12} category="secondary" />
+            </span>
             <span className="text-gray-700 text-sm font-medium">{item}</span>
           </li>
         ))}
@@ -149,7 +151,7 @@ export const Impact = () => {
             <p className="text-gray-500 mt-3 text-sm md:text-base">From founding to national health partnership in just 15 months</p>
           </div>
           <div className="relative">
-            <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent" />
+            <div className="absolute left-[21px] md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-secondary/20 to-accent/20 z-0" />
             <div className="space-y-6 md:space-y-8">
               {impactData.yearOneTimeline.map((milestone, i) => (
                 <TimelineItem key={i} milestone={milestone} index={i} />

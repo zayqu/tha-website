@@ -67,40 +67,40 @@ export const CampaignDetail = () => {
             <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-100">
 
               {/* Activities */}
-              <div className="p-8 md:p-10">
-                <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-2">
+              <div className="p-6 md:p-10">
+                <h3 className="text-base font-bold text-primary mb-5 flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center">
                     <Icon name="track_changes" size={18} category="primary" />
                   </div>
                   Activities
                 </h3>
-                <ul className="space-y-5">
+                <ul className="space-y-4">
                   {campaign.activities2025.map((act, i) => (
-                    <li key={i} className="flex items-start gap-4">
-                      <span className="w-7 h-7 rounded-full bg-gray-50 flex items-center justify-center flex-shrink-0 text-xs font-bold text-primary/60">
-                        {i + 1}
+                    <li key={i} className="flex items-start gap-3">
+                      <span className="w-6 h-6 rounded-lg bg-primary/5 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-bold text-primary">{String(i + 1).padStart(2, '0')}</span>
                       </span>
-                      <span className="text-gray-600 pt-0.5">{act}</span>
+                      <span className="text-gray-600 text-sm">{act}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
               {/* Impact */}
-              <div className="p-8 md:p-10">
-                <h3 className="text-lg font-bold text-primary mb-6 flex items-center gap-2">
+              <div className="p-6 md:p-10">
+                <h3 className="text-base font-bold text-primary mb-5 flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-secondary/5 flex items-center justify-center">
-                    <Icon name="visibility" size={18} category="secondary" />
+                    <Icon name="trending_up" size={18} category="secondary" />
                   </div>
                   Impact
                 </h3>
-                <ul className="space-y-5">
+                <ul className="space-y-4">
                   {campaign.impact2025.map((imp, i) => (
-                    <li key={i} className="flex items-start gap-4">
-                      <div className="w-5 h-5 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <div className="w-2 h-2 rounded-full bg-secondary" />
-                      </div>
-                      <span className="text-gray-700 font-medium">{imp}</span>
+                    <li key={i} className="flex items-start gap-3">
+                      <span className="w-6 h-6 rounded-lg bg-secondary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Icon name="arrow_upward" size={14} category="secondary" />
+                      </span>
+                      <span className="text-gray-700 text-sm font-medium">{imp}</span>
                     </li>
                   ))}
                 </ul>

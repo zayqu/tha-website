@@ -80,8 +80,8 @@ export const Projects = () => {
                   <ul className="space-y-3">
                     {campaign.activities2025.map((act, i) => (
                       <li key={i} className="flex items-start gap-3">
-                        <span className="w-6 h-6 rounded-full bg-cool-gray flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold text-primary/60">
-                          {i + 1}
+                        <span className="w-6 h-6 rounded-lg bg-primary/5 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="text-xs font-bold text-primary">{String(i + 1).padStart(2, '0')}</span>
                         </span>
                         <span className="text-gray-700 text-sm">{act}</span>
                       </li>
@@ -91,13 +91,15 @@ export const Projects = () => {
 
                 <div className="p-6 md:p-8">
                   <h3 className="text-sm font-bold text-primary mb-4 flex items-center gap-2">
-                    <Icon name="verified" size={18} category="secondary" />
+                    <Icon name="trending_up" size={18} category="secondary" />
                     Impact
                   </h3>
                   <ul className="space-y-3">
                     {campaign.impact2025.map((imp, i) => (
                       <li key={i} className="flex items-start gap-3">
-                        <Icon name="check_circle" size={18} category="secondary" className="flex-shrink-0 mt-0.5" />
+                        <span className="w-6 h-6 rounded-lg bg-secondary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Icon name="arrow_upward" size={14} category="secondary" />
+                        </span>
                         <span className="text-gray-700 text-sm font-medium">{imp}</span>
                       </li>
                     ))}

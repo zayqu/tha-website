@@ -13,7 +13,7 @@ export const MobileBottomNav = () => {
   const { pathname } = useLocation();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.06)] md:hidden safe-bottom">
+    <nav className="fixed inset-x-0 bottom-0 z-[60] bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.06)] md:hidden safe-bottom">
       <div className="flex justify-around items-center py-1.5 px-1">
         {tabs.map((tab) => {
           const isActive = pathname === tab.path || (tab.path !== '/' && pathname.startsWith(tab.path));

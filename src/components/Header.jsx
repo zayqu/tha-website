@@ -21,8 +21,8 @@ export const Header = () => {
 
   return (
     <>
-      {/* Mobile top bar — logo only */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm md:hidden">
+      {/* Mobile top bar — logo only, always visible */}
+      <header className="fixed top-0 left-0 right-0 z-[60] bg-white shadow-sm md:hidden">
         <div className="flex items-center justify-center h-14 px-4">
           <Link to="/" className="hover:opacity-80 transition">
             <img

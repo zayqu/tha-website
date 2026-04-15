@@ -12,19 +12,19 @@ export const MakeADifference = () => {
       title: 'Health Ambassador',
       time: '10-15 hours/week',
       description: 'Conduct community outreach for hepatitis testing, vaccination drives, and health education sessions.',
-      icon: 'local_hospital'
+      icon: 'health_and_safety'
     },
     {
       title: 'Youth Peer Supporter',
       time: '5-10 hours/week',
       description: 'Support young people through Life Unlocked programs, facilitating youth clubs and peer support groups.',
-      icon: 'psychology'
+      icon: 'diversity_3'
     },
     {
       title: 'Mental Health Advocate',
       time: 'Flexible',
       description: 'Lead stigma-reduction campaigns and facilitate Talk To Heal support groups in your community.',
-      icon: 'forum'
+      icon: 'volunteer_activism'
     },
   ];
 
@@ -61,17 +61,22 @@ export const MakeADifference = () => {
       <section className="bg-white shadow-md sticky top-14 md:top-16 z-30">
         <div className="container-custom px-4">
           <div className="flex justify-center gap-2 py-4">
-            {['volunteer', 'donate', 'partner'].map((tab) => (
+            {[
+              { id: 'volunteer', label: 'Volunteer', icon: 'volunteer_activism' },
+              { id: 'donate', label: 'Donate', icon: 'favorite' },
+              { id: 'partner', label: 'Partner', icon: 'handshake' },
+            ].map((tab) => (
               <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                  activeTab === tab
-                    ? 'bg-secondary text-white shadow-md'
-                    : 'bg-neutral text-primary hover:bg-gray-200'
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold transition-all text-sm ${
+                  activeTab === tab.id
+                    ? 'bg-secondary text-white shadow-sm'
+                    : 'bg-cool-gray text-primary hover:bg-gray-200'
                 }`}
               >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                <Icon name={tab.icon} size={18} color={activeTab === tab.id ? 'white' : '#024d85'} />
+                {tab.label}
               </button>
             ))}
           </div>
@@ -92,12 +97,15 @@ export const MakeADifference = () => {
             <div className="grid md:grid-cols-3 gap-8 mb-12">
               {roles.map((role) => (
                 <div key={role.title} className="bg-white p-6 md:p-8 rounded-2xl shadow-card hover:shadow-elevated transition-all">
-                  <div className="w-16 h-16 bg-gradient-to-br from-secondary to-secondary-dark rounded-xl flex items-center justify-center mb-6">
-                    <Icon name={role.icon} size={32} className="text-white" />
+                  <div className="w-14 h-14 bg-primary/5 rounded-xl flex items-center justify-center mb-5">
+                    <Icon name={role.icon} size={28} category="primary" />
                   </div>
-                  <div className="badge bg-accent/10 text-accent mb-4">{role.time}</div>
-                  <h3 className="heading-sm mb-3">{role.title}</h3>
-                  <p className="body-md text-neutral-dark/70">{role.description}</p>
+                  <div className="inline-flex items-center gap-1 bg-accent/10 text-accent text-xs font-semibold px-3 py-1 rounded-full mb-4">
+                    <Icon name="schedule" size={12} color="#ff9c1a" />
+                    {role.time}
+                  </div>
+                  <h3 className="text-lg font-bold text-primary mb-2">{role.title}</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">{role.description}</p>
                 </div>
               ))}
             </div>
