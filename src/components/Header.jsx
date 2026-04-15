@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Icon } from './Icon';
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,21 +22,28 @@ export const Header = () => {
 
   return (
     <>
-      {/* Mobile top bar — logo only, always visible */}
-      <header className="fixed top-0 left-0 right-0 z-[60] bg-white shadow-sm md:hidden">
-        <div className="flex items-center justify-center h-14 px-4">
-          <Link to="/" className="hover:opacity-80 transition">
+      {/* Mobile top bar — logo left, CTA right */}
+      <div className="fixed top-0 inset-x-0 z-[60] bg-white shadow-sm md:hidden" style={{ position: 'fixed' }}>
+        <div className="flex items-center justify-between h-14 px-4">
+          <Link to="/" className="hover:opacity-80 transition flex-shrink-0">
             <img
               src="/logo/tha-logo.svg"
               alt="Tanzania Health Alliance"
               width="120"
               height="48"
               decoding="async"
-              className="h-10 w-auto"
+              className="h-9 w-auto"
             />
           </Link>
+          <Link
+            to="/make-a-difference"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-secondary text-white text-xs font-semibold rounded-lg hover:bg-secondary-dark transition shadow-sm"
+          >
+            <Icon name="volunteer_activism" size={14} color="white" />
+            Join
+          </Link>
         </div>
-      </header>
+      </div>
 
       {/* Desktop header — logo + nav + CTA */}
       <header
@@ -72,8 +80,9 @@ export const Header = () => {
 
             <Link
               to="/make-a-difference"
-              className="px-4 py-2 bg-secondary text-white font-medium rounded-md hover:bg-secondary-dark transition shadow-subtle"
+              className="flex items-center gap-2 px-4 py-2 bg-secondary text-white font-medium rounded-md hover:bg-secondary-dark transition shadow-subtle"
             >
+              <Icon name="volunteer_activism" size={16} color="white" />
               Join the Alliance
             </Link>
           </div>
