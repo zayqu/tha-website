@@ -89,6 +89,11 @@ app.get('/api/health', (_req, res) => {
     status: 'ok',
     service: 'THA Content API',
     storage: process.env.DATABASE_URL ? 'postgresql' : 'ephemeral',
+    configured: {
+      database: Boolean(process.env.DATABASE_URL),
+      administrator: Boolean(process.env.ADMIN_IDENTIFIER && process.env.ADMIN_PASSWORD),
+      authentication: Boolean(process.env.JWT_ACCESS_SECRET && process.env.JWT_REFRESH_SECRET),
+    },
     time: new Date().toISOString(),
   });
 });
