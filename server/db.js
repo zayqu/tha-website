@@ -108,7 +108,7 @@ const tokens = {
     );
     if (!token) return null;
     const admin = admins.findById(token.admin_id);
-    if (!admin) return null;
+    if (!admin || (admin.status && admin.status !== 'approved')) return null;
     return { ...token, identifier: admin.identifier, role: admin.role };
   },
   revoke(id) {
@@ -358,6 +358,7 @@ const dbTokens = {
          FROM tokens t
          JOIN admins a ON a.id = t.admin_id
          WHERE t.token_hash = $1 AND t.revoked = false AND t.expires_at > $2
+           AND a.status = 'approved'
          LIMIT 1`,
         [tokenHash, now]
       );
