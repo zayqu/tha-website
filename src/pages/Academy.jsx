@@ -115,7 +115,7 @@ export const Academy = () => {
                       className="w-full btn-secondary inline-flex items-center justify-center gap-2"
                       aria-label={`Read ${resource.title} online at ${resource.source}`}
                     >
-                      Read online
+                      Read more
                       <Icon name="open_in_new" size={18} />
                     </a>
                   </div>
