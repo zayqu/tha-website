@@ -5,9 +5,9 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
 const rateLimit = require('express-rate-limit');
-const { body, validationResult } = require('express-validator');
+const { body, param, validationResult } = require('express-validator');
 const { admins, tokens } = require('../db');
-const { requireAuth } = require('../middleware/auth');
+const { requireAuth, requireSuperAdmin } = require('../middleware/auth');
 require('dotenv').config();
 
 // ── Rate limiter: 5 attempts per 15 min per IP ────────────────────────────────
@@ -50,6 +50,47 @@ function setRefreshCookie(res, raw, expiresSec) {
   });
 }
 
+
+// ── POST /api/auth/register ───────────────────────────────────────────────────
+// Creates a pending editor account. A super administrator must approve it.
+router.post(
+  '/register',
+  loginLimiter,
+  [
+    body('name').trim().notEmpty().withMessage('Name is required').isLength({ min: 2, max: 100 }),
+    body('email').trim().isEmail().withMessage('A valid email is required').normalizeEmail(),
+    body('password').isLength({ min: 12, max: 128 })
+      .withMessage('Password must be between 12 and 128 characters'),
+  ],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
+      const identifier = req.body.email.toLowerCase();
+      if (await admins.exists(identifier)) {
+        return res.status(409).json({ error: 'An account with this email already exists' });
+      }
+
+      await admins.create({
+        id: uuidv4(),
+        identifier,
+        password: await bcrypt.hash(req.body.password, 12),
+        name: req.body.name.trim(),
+        role: 'editor',
+        status: 'pending',
+      });
+
+      return res.status(201).json({
+        message: 'Registration received. An administrator must approve your account before you can sign in.',
+        status: 'pending',
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 // ── POST /api/auth/login ──────────────────────────────────────────────────────
 router.post(
   '/login',
@@ -78,6 +119,13 @@ router.post(
 
     if (!admin || !match) {
       return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    if (admin.status && admin.status !== 'approved') {
+      const message = admin.status === 'pending'
+        ? 'Your account is awaiting administrator approval.'
+        : 'Your account has not been approved.';
+      return res.status(403).json({ error: message, code: 'ACCOUNT_NOT_APPROVED' });
     }
 
     await admins.updateLastLogin(admin.id);
@@ -134,6 +182,36 @@ router.post('/logout', requireAuth, async (req, res, next) => {
     next(err);
   }
 });
+
+// ── Administrator approval workflow ──────────────────────────────────────────
+router.get('/accounts/pending', requireAuth, requireSuperAdmin, async (_req, res, next) => {
+  try {
+    res.json({ accounts: await admins.listPending() });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.patch(
+  '/accounts/:id/status',
+  requireAuth,
+  requireSuperAdmin,
+  [param('id').isUUID(), body('status').isIn(['approved', 'rejected'])],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+      if (req.admin.id === req.params.id) {
+        return res.status(400).json({ error: 'You cannot change your own approval status' });
+      }
+      const account = await admins.setStatus(req.params.id, req.body.status);
+      if (!account) return res.status(404).json({ error: 'Account not found' });
+      res.json({ account });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
 // ── GET /api/auth/me ──────────────────────────────────────────────────────────
 router.get('/me', requireAuth, async (req, res, next) => {
