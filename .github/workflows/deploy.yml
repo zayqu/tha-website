@@ -1,54 +1,61 @@
-name: Build and Deploy to cPanel
+name: Build and Content Automation
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '15 3 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  import-health-content:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 10
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Fetch news from Airtable
-      env:
-        AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
-        AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-      run: node scripts/fetchNews.js
-      
-    - name: Fetch academy data
-      run: |
-        node scripts/fetchAcademy.js || echo "Using cached data"
-      
-    - name: Build project
-      run: npm run build
-      
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: dist
-        path: dist/
-      
-    # NOTE: FTP deployment disabled until client approval
-    # - name: Deploy to cPanel
-    #   uses: SamKirkland/FTP-Deploy-Action@4.3.3
-    #   with:
-    #     server: ${{ secrets.FTP_SERVER }}
-    #     username: ${{ secrets.FTP_USERNAME }}
-    #     password: ${{ secrets.FTP_PASSWORD }}
-    #     local-dir: ./dist/
-    #     server-dir: /public_html/
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Import relevant health content as drafts
+        env:
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          CONTENT_QUEUE_TABLE: ${{ vars.CONTENT_QUEUE_TABLE || 'Content Queue' }}
+          HEALTH_SOURCE_FEEDS: ${{ secrets.HEALTH_SOURCE_FEEDS }}
+        run: node scripts/importHealthContent.js
+
+  build:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build website
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ github.sha }}
+          path: dist/
+          retention-days: 3

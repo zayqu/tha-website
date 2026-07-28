@@ -58,9 +58,9 @@ const admins = {
   findByIdentifier(identifier) {
     return getItems('admins').find(a => a.identifier === identifier) || null;
   },
-  create({ id, identifier, password, name, role = 'editor' }) {
+  create({ id, identifier, password, name, role = 'editor', status = 'approved' }) {
     const items = getItems('admins');
-    const record = { id, identifier, password, name, role,
+    const record = { id, identifier, password, name, role, status,
                      created_at: Math.floor(Date.now() / 1000), last_login: null };
     items.push(record);
     setItems('admins', items);
@@ -76,6 +76,17 @@ const admins = {
   },
   exists(identifier) {
     return getItems('admins').some(a => a.identifier === identifier);
+  },
+  listPending() {
+    return getItems('admins').filter(a => a.status === 'pending');
+  },
+  setStatus(id, status) {
+    const items = getItems('admins');
+    const idx = items.findIndex(a => a.id === id);
+    if (idx === -1) return null;
+    items[idx].status = status;
+    setItems('admins', items);
+    return items[idx];
   },
 };
 
@@ -97,7 +108,7 @@ const tokens = {
     );
     if (!token) return null;
     const admin = admins.findById(token.admin_id);
-    if (!admin) return null;
+    if (!admin || (admin.status && admin.status !== 'approved')) return null;
     return { ...token, identifier: admin.identifier, role: admin.role };
   },
   revoke(id) {
@@ -161,10 +172,12 @@ const news = {
   },
 };
 
-// ── Init (ensure data dir exists on startup) ──────────────────────────────────
-ensureDataDir();
-
+// ── Init ─────────────────────────────────────────────────────────────────────
+// Vercel functions have a read-only application filesystem. Only initialize the
+// JSON fallback locally when PostgreSQL has not been configured.
 const hasDatabaseUrl = Boolean(process.env.DATABASE_URL);
+if (!hasDatabaseUrl && !process.env.VERCEL) ensureDataDir();
+
 let pool = null;
 let schemaReady = null;
 
@@ -188,6 +201,7 @@ async function ensureSchema() {
         password TEXT NOT NULL,
         name TEXT NOT NULL,
         role TEXT NOT NULL DEFAULT 'editor',
+        status TEXT NOT NULL DEFAULT 'approved',
         created_at INTEGER NOT NULL,
         last_login INTEGER
       );
@@ -200,6 +214,8 @@ async function ensureSchema() {
         created_at INTEGER NOT NULL,
         revoked BOOLEAN NOT NULL DEFAULT false
       );
+
+      ALTER TABLE admins ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'approved';
 
       CREATE INDEX IF NOT EXISTS tokens_hash_idx ON tokens(token_hash);
 
@@ -257,19 +273,19 @@ const dbAdmins = {
     return admins.findByIdentifier(identifier);
   },
 
-  async create({ id, identifier, password, name, role = 'editor' }) {
+  async create({ id, identifier, password, name, role = 'editor', status = 'approved' }) {
     const now = Math.floor(Date.now() / 1000);
     if (pool) {
       await ensureSchema();
       const { rows } = await pool.query(
-        `INSERT INTO admins (id, identifier, password, name, role, created_at, last_login)
-         VALUES ($1, $2, $3, $4, $5, $6, NULL)
+        `INSERT INTO admins (id, identifier, password, name, role, status, created_at, last_login)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, NULL)
          RETURNING *`,
-        [id, identifier, password, name, role, now]
+        [id, identifier, password, name, role, status, now]
       );
       return rows[0];
     }
-    return admins.create({ id, identifier, password, name, role });
+    return admins.create({ id, identifier, password, name, role, status });
   },
 
   async updateLastLogin(id) {
@@ -288,6 +304,32 @@ const dbAdmins = {
       return rows.length > 0;
     }
     return admins.exists(identifier);
+  },
+
+  async listPending() {
+    if (pool) {
+      await ensureSchema();
+      const { rows } = await pool.query(
+        "SELECT id, identifier, name, role, status, created_at FROM admins WHERE status = 'pending' ORDER BY created_at ASC"
+      );
+      return rows;
+    }
+    return admins.listPending().map(({ password, ...account }) => account);
+  },
+
+  async setStatus(id, status) {
+    if (pool) {
+      await ensureSchema();
+      const { rows } = await pool.query(
+        'UPDATE admins SET status = $2 WHERE id = $1 RETURNING id, identifier, name, role, status, created_at',
+        [id, status]
+      );
+      return rows[0] || null;
+    }
+    const account = admins.setStatus(id, status);
+    if (!account) return null;
+    const { password, ...safeAccount } = account;
+    return safeAccount;
   },
 };
 
@@ -316,6 +358,7 @@ const dbTokens = {
          FROM tokens t
          JOIN admins a ON a.id = t.admin_id
          WHERE t.token_hash = $1 AND t.revoked = false AND t.expires_at > $2
+           AND a.status = 'approved'
          LIMIT 1`,
         [tokenHash, now]
       );

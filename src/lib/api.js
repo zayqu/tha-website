@@ -1,4 +1,16 @@
-export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+const PRODUCTION_API_URL = 'https://tha-webacdb-zayqus-projects.vercel.app';
+
+function defaultApiBaseUrl() {
+  if (typeof window === 'undefined') return '';
+  const host = window.location.hostname;
+  if (host === 'localhost' || host === '127.0.0.1') return '';
+  if (host.endsWith('.vercel.app') || host === 'tzhealthalliance.or.tz' || host === 'www.tzhealthalliance.or.tz') {
+    return PRODUCTION_API_URL;
+  }
+  return '';
+}
+
+export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || defaultApiBaseUrl()).replace(/\/$/, '');
 
 export function apiUrl(path) {
   if (/^https?:\/\//i.test(path)) return path;

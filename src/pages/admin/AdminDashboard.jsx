@@ -18,6 +18,8 @@ export default function AdminDashboard() {
   const [error, setError]       = useState('');
   const [deleting, setDeleting] = useState(null);
   const [filter, setFilter]     = useState('all'); // 'all' | 'published' | 'drafts'
+  const [pendingAccounts, setPendingAccounts] = useState([]);
+  const [reviewingAccount, setReviewingAccount] = useState(null);
 
   const fetchArticles = useCallback(async () => {
     try {
@@ -34,6 +36,37 @@ export default function AdminDashboard() {
   }, [authFetch]);
 
   useEffect(() => { fetchArticles(); }, [fetchArticles]);
+
+  const fetchPendingAccounts = useCallback(async () => {
+    if (admin?.role !== 'superadmin') return;
+    try {
+      const res = await authFetch('/api/auth/accounts/pending');
+      if (!res.ok) throw new Error('Failed to load account requests');
+      const data = await res.json();
+      setPendingAccounts(data.accounts || []);
+    } catch (err) {
+      setError(err.message);
+    }
+  }, [admin?.role, authFetch]);
+
+  useEffect(() => { fetchPendingAccounts(); }, [fetchPendingAccounts]);
+
+  async function reviewAccount(id, status) {
+    setReviewingAccount(id);
+    try {
+      const res = await authFetch(`/api/auth/accounts/${id}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Account review failed');
+      setPendingAccounts(accounts => accounts.filter(account => account.id !== id));
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setReviewingAccount(null);
+    }
+  }
 
   async function handleDelete(id, title) {
     if (!window.confirm(`Delete "${title}"?\n\nThis cannot be undone.`)) return;
@@ -114,6 +147,53 @@ export default function AdminDashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        {admin?.role === 'superadmin' && (
+          <section className="mb-8 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between mb-4">
+              <div>
+                <h2 className="font-bold text-gray-800">Account approval</h2>
+                <p className="text-sm text-gray-500">Review people requesting access to publish and manage news.</p>
+              </div>
+              <span className="mt-2 sm:mt-0 rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">
+                {pendingAccounts.length} pending
+              </span>
+            </div>
+
+            {pendingAccounts.length === 0 ? (
+              <p className="rounded-xl bg-gray-50 px-4 py-4 text-sm text-gray-500">No account requests are waiting for approval.</p>
+            ) : (
+              <div className="space-y-3">
+                {pendingAccounts.map(account => (
+                  <div key={account.id} className="flex flex-col gap-3 rounded-xl border border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="font-semibold text-gray-800">{account.name}</p>
+                      <p className="text-sm text-gray-500">{account.identifier}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        disabled={reviewingAccount === account.id}
+                        onClick={() => reviewAccount(account.id, 'rejected')}
+                        className="rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
+                      >
+                        Reject
+                      </button>
+                      <button
+                        type="button"
+                        disabled={reviewingAccount === account.id}
+                        onClick={() => reviewAccount(account.id, 'approved')}
+                        className="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary-dark disabled:opacity-50"
+                      >
+                        Approve
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-8">

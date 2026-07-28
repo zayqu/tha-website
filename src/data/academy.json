@@ -1,32 +1,75 @@
 [
   {
-    "title": "WHO Guidelines for the Care and Treatment of Persons Diagnosed with Chronic Hepatitis C Virus Infection",
-    "excerpt": "Updated recommendations for the treatment of hepatitis C virus (HCV) infection, including simplified treatment algorithms and expanded access to direct-acting antiviral regimens.",
-    "url": "https://www.who.int/publications/i/item/9789241550355",
-    "source": "WHO",
-    "sourceFavicon": "https://www.who.int/favicon.ico",
-    "category": "WHO Guidelines",
-    "date": "2024-03-01",
-    "tags": ["Hepatitis C", "Treatment", "Guidelines"]
+    "title": "Guidelines for the care and treatment of persons diagnosed with chronic hepatitis C virus infection",
+    "excerpt": "WHO recommendations for simplified testing, care and treatment of chronic hepatitis C.",
+    "url": "https://www.who.int/publications/i/item/9789241550345",
+    "source": "World Health Organization",
+    "category": "Guidance",
+    "date": "2018-07-01",
+    "topics": [
+      "Hepatitis"
+    ],
+    "status": "published"
   },
   {
-    "title": "Global HIV, Hepatitis and STIs Programmes 2024-2026 Strategy",
-    "excerpt": "Strategic framework for accelerating progress towards ending AIDS, viral hepatitis and sexually transmitted infections by 2030.",
-    "url": "https://www.who.int/publications/i/item/9789240084370",
-    "source": "WHO",
-    "sourceFavicon": "https://www.who.int/favicon.ico",
-    "category": "Policy Documents",
-    "date": "2024-02-15",
-    "tags": ["HIV", "Hepatitis", "Strategy", "Global Health"]
+    "title": "Consolidated guidelines on HIV prevention, testing, treatment, service delivery and monitoring",
+    "excerpt": "WHO's consolidated public health recommendations across the HIV prevention and care continuum.",
+    "url": "https://www.who.int/publications/i/item/9789240031593",
+    "source": "World Health Organization",
+    "category": "Guidance",
+    "date": "2021-07-16",
+    "topics": [
+      "HIV"
+    ],
+    "status": "published"
   },
   {
-    "title": "Mental Health Gap Action Programme (mhGAP) Intervention Guide",
-    "excerpt": "Evidence-based clinical protocols for the assessment and management of mental, neurological and substance use disorders in non-specialized health settings.",
-    "url": "https://www.who.int/publications/i/item/9789241548925",
-    "source": "WHO",
-    "sourceFavicon": "https://www.who.int/favicon.ico",
-    "category": "Training Materials",
-    "date": "2023-12-10",
-    "tags": ["Mental Health", "Training", "Primary Care"]
+    "title": "Global HIV, hepatitis and sexually transmitted infections programmes: strategies 2022–2030",
+    "excerpt": "Global strategies for accelerating progress toward ending AIDS and viral hepatitis as public health threats.",
+    "url": "https://www.who.int/publications/i/item/9789240053779",
+    "source": "World Health Organization",
+    "category": "Policy",
+    "date": "2022-07-18",
+    "topics": [
+      "HIV",
+      "Hepatitis"
+    ],
+    "status": "published"
+  },
+  {
+    "title": "mhGAP intervention guide for mental, neurological and substance use disorders",
+    "excerpt": "Evidence-based protocols for assessment and management in non-specialized health settings.",
+    "url": "https://www.who.int/publications/i/item/9789241549790",
+    "source": "World Health Organization",
+    "category": "Training",
+    "date": "2016-05-31",
+    "topics": [
+      "Mental Health"
+    ],
+    "status": "published"
+  },
+  {
+    "title": "Mental health at work",
+    "excerpt": "Practical evidence and recommendations for protecting and promoting mental health in the workplace.",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/mental-health-at-work",
+    "source": "World Health Organization",
+    "category": "Training",
+    "date": "2024-09-02",
+    "topics": [
+      "Mental Health"
+    ],
+    "status": "published"
+  },
+  {
+    "title": "Hepatitis B",
+    "excerpt": "An online overview of hepatitis B transmission, prevention, testing, treatment and WHO's global response.",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/hepatitis-b",
+    "source": "World Health Organization",
+    "category": "Training",
+    "date": "2024-04-09",
+    "topics": [
+      "Hepatitis"
+    ],
+    "status": "published"
   }
 ]
