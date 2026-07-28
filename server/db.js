@@ -194,7 +194,12 @@ if (hasDatabaseUrl) {
 async function ensureSchema() {
   if (!pool) return;
   if (!schemaReady) {
-    schemaReady = pool.query(`
+    schemaReady = (async () => {
+      const client = await pool.connect();
+      try {
+        // Serialize schema creation across concurrent Vercel cold starts.
+        await client.query('SELECT pg_advisory_lock($1)', [1414001]);
+        await client.query(``
       CREATE TABLE IF NOT EXISTS admins (
         id TEXT PRIMARY KEY,
         identifier TEXT UNIQUE NOT NULL,
@@ -238,7 +243,12 @@ async function ensureSchema() {
       );
 
       ALTER TABLE news ADD COLUMN IF NOT EXISTS views INTEGER NOT NULL DEFAULT 0;
-    `);
+`);
+      } finally {
+        await client.query('SELECT pg_advisory_unlock($1)', [1414001]).catch(() => {});
+        client.release();
+      }
+    })();
   }
   await schemaReady;
 }
@@ -280,10 +290,13 @@ const dbAdmins = {
       const { rows } = await pool.query(
         `INSERT INTO admins (id, identifier, password, name, role, status, created_at, last_login)
          VALUES ($1, $2, $3, $4, $5, $6, $7, NULL)
+         ON CONFLICT (identifier) DO NOTHING
          RETURNING *`,
         [id, identifier, password, name, role, status, now]
       );
-      return rows[0];
+      if (rows[0]) return rows[0];
+      const existing = await pool.query('SELECT * FROM admins WHERE identifier = $1 LIMIT 1', [identifier]);
+      return existing.rows[0] || null;
     }
     return admins.create({ id, identifier, password, name, role, status });
   },
