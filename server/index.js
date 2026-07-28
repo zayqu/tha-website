@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 3001;
 app.set('trust proxy', 1);
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000')
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000,https://tha-red.vercel.app,https://tzhealthalliance.or.tz,https://www.tzhealthalliance.or.tz')
   .split(',').map(origin => origin.trim()).filter(Boolean);
 
 app.use(cors({
