@@ -5,48 +5,43 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const bcrypt = require('bcryptjs');
+const { v4: uuidv4 } = require('uuid');
 
 const authRoutes = require('./routes/auth');
 const newsRoutes = require('./routes/news');
+const { admins } = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// ─── Trust proxy (needed behind Nginx/Vercel/Render) ─────────────────────────
 app.set('trust proxy', 1);
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 
-// ─── Security headers (Helmet) ────────────────────────────────────────────────
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: 'cross-origin' },
-}));
-
-// ─── CORS ─────────────────────────────────────────────────────────────────────
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000')
-  .split(',').map(o => o.trim());
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000')
+  .split(',').map(origin => origin.trim()).filter(Boolean);
 
 app.use(cors({
-  origin(origin, cb) {
-    // Allow requests with no origin (e.g., curl, Postman during dev) only in dev
-    if (!origin && process.env.NODE_ENV !== 'production') return cb(null, true);
-    if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
-    cb(new Error(`CORS: origin ${origin} not allowed`));
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);
+    const isConfigured = allowedOrigins.includes(origin);
+    const isThaPreview = /^https:\/\/tha(?:-[a-z0-9-]+)?\.vercel\.app$/i.test(origin);
+    if (isConfigured || isThaPreview) return callback(null, true);
+    return callback(new Error(`CORS: origin ${origin} not allowed`));
   },
-  credentials: true,          // allow cookies
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-// ─── Body parsing & cookies ───────────────────────────────────────────────────
 app.use(express.json({ limit: '3mb' }));
 app.use(express.urlencoded({ extended: false, limit: '3mb' }));
 app.use(cookieParser());
 
-// ─── HTTP request logging ─────────────────────────────────────────────────────
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 }
 
-// ─── Global rate limiter (1000 req / 15 min per IP) ──────────────────────────
 app.use(rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 1000,
@@ -55,34 +50,61 @@ app.use(rateLimit({
   message: { error: 'Too many requests. Please slow down.' },
 }));
 
-// ─── Routes ───────────────────────────────────────────────────────────────────
+let adminProvisioning;
+async function provisionInitialAdmin() {
+  if (adminProvisioning) return adminProvisioning;
+  adminProvisioning = (async () => {
+    const identifier = process.env.ADMIN_IDENTIFIER?.trim();
+    const password = process.env.ADMIN_PASSWORD;
+    if (!identifier || !password) return;
+    if (password.length < 12) throw new Error('ADMIN_PASSWORD must be at least 12 characters');
+    const normalized = identifier.includes('@') ? identifier.toLowerCase() : identifier;
+    if (await admins.exists(normalized)) return;
+    await admins.create({
+      id: uuidv4(),
+      identifier: normalized,
+      password: await bcrypt.hash(password, 12),
+      name: process.env.ADMIN_NAME || 'THA Administrator',
+      role: 'superadmin',
+    });
+    console.log('Initial THA administrator provisioned.');
+  })();
+  return adminProvisioning;
+}
+
+app.use(async (_req, _res, next) => {
+  try {
+    await provisionInitialAdmin();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/news', newsRoutes);
 
-// ─── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', time: new Date().toISOString() });
-});
-
-// ─── 404 handler ─────────────────────────────────────────────────────────────
-app.use((_req, res) => {
-  res.status(404).json({ error: 'Not found' });
-});
-
-// ─── Global error handler ─────────────────────────────────────────────────────
-// eslint-disable-next-line no-unused-vars
-app.use((err, _req, res, _next) => {
-  if (err.message && err.message.startsWith('CORS:')) {
-    return res.status(403).json({ error: err.message });
-  }
-  console.error(err);
-  res.status(500).json({
-    error: process.env.NODE_ENV === 'production' ? 'Internal server error' : err.message
+  res.json({
+    status: 'ok',
+    service: 'THA Content API',
+    storage: process.env.DATABASE_URL ? 'postgresql' : 'ephemeral',
+    time: new Date().toISOString(),
   });
 });
 
-// ─── Start ────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`THA Admin API running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
+
+app.use((err, _req, res, _next) => {
+  if (err.message?.startsWith('CORS:')) return res.status(403).json({ error: err.message });
+  console.error(err);
+  return res.status(500).json({
+    error: process.env.NODE_ENV === 'production' ? 'Internal server error' : err.message,
+  });
 });
+
+if (require.main === module) {
+  app.listen(PORT, () => console.log(`THA Content API running on port ${PORT}`));
+}
+
+module.exports = app;
