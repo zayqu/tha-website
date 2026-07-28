@@ -161,10 +161,12 @@ const news = {
   },
 };
 
-// ── Init (ensure data dir exists on startup) ──────────────────────────────────
-ensureDataDir();
-
+// ── Init ─────────────────────────────────────────────────────────────────────
+// Vercel functions have a read-only application filesystem. Only initialize the
+// JSON fallback locally when PostgreSQL has not been configured.
 const hasDatabaseUrl = Boolean(process.env.DATABASE_URL);
+if (!hasDatabaseUrl && !process.env.VERCEL) ensureDataDir();
+
 let pool = null;
 let schemaReady = null;
 
