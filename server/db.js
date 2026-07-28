@@ -199,7 +199,7 @@ async function ensureSchema() {
       try {
         // Serialize schema creation across concurrent Vercel cold starts.
         await client.query('SELECT pg_advisory_lock($1)', [1414001]);
-        await client.query(``
+        await client.query(`
       CREATE TABLE IF NOT EXISTS admins (
         id TEXT PRIMARY KEY,
         identifier TEXT UNIQUE NOT NULL,
