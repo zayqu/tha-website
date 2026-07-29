@@ -1,4 +1,4 @@
-const PRODUCTION_API_URL = 'https://tha-webacdb-zayqus-projects.vercel.app';
+const PRODUCTION_API_URL = 'https://tha-webacdb.vercel.app';
 
 function defaultApiBaseUrl() {
   if (typeof window === 'undefined') return '';
