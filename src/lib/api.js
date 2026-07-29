@@ -1,3 +1,4 @@
+// Use the public alias so browser requests are never gated by Vercel preview protection.
 const PRODUCTION_API_URL = 'https://tha-webacdb.vercel.app';
 
 function defaultApiBaseUrl() {
