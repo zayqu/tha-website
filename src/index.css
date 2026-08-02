@@ -5,7 +5,17 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-family: "Proxima Nova", "Avenir Next", Avenir, "Segoe UI", Arial, sans-serif;
   }
+
+  body,
+  button,
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+  }
+
   body {
     @apply font-sans text-near-black bg-white leading-tight antialiased;
   }
