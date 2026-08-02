@@ -8,28 +8,28 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#024d85',
+          DEFAULT: '#024D85',
           dark: '#023055',
           light: '#0369a1',
         },
         secondary: {
-          DEFAULT: '#26b805',
+          DEFAULT: '#26B805',
           dark: '#1e9619',
           light: '#4ade80',
         },
         accent: {
-          DEFAULT: '#ff9c1a',
+          DEFAULT: '#FF9C1A',
           dark: '#e68a15',
           light: '#ffb84d',
         },
         hepatitis: '#EF4444',
         mental: '#8B5CF6',
-        'near-black': '#1a1a1a',
+        'near-black': '#000000',
         'cool-gray': '#f3f4f6',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['"Proxima Nova"', '"Avenir Next"', 'Avenir', '"Segoe UI"', 'Arial', 'sans-serif'],
+        heading: ['"Proxima Nova"', '"Avenir Next"', 'Avenir', '"Segoe UI"', 'Arial', 'sans-serif'],
       },
       boxShadow: {
         'subtle': '0 2px 8px rgba(0, 0, 0, 0.08)',
