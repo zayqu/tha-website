@@ -58,9 +58,10 @@ const admins = {
   findByIdentifier(identifier) {
     return getItems('admins').find(a => a.identifier === identifier) || null;
   },
-  create({ id, identifier, password, name, role = 'editor', status = 'approved' }) {
+  create({ id, identifier, password, name, role = 'editor', status = 'approved', passwordResetVersion = null }) {
     const items = getItems('admins');
     const record = { id, identifier, password, name, role, status,
+                     password_reset_version: passwordResetVersion,
                      created_at: Math.floor(Date.now() / 1000), last_login: null };
     items.push(record);
     setItems('admins', items);
@@ -76,6 +77,20 @@ const admins = {
   },
   exists(identifier) {
     return getItems('admins').some(a => a.identifier === identifier);
+  },
+  resetPassword(identifier, password, passwordResetVersion) {
+    const items = getItems('admins');
+    const idx = items.findIndex(a => a.identifier === identifier);
+    if (idx === -1) return null;
+    items[idx].password = password;
+    items[idx].password_reset_version = passwordResetVersion;
+    setItems('admins', items);
+    const activeTokens = getItems('tokens');
+    activeTokens.forEach(token => {
+      if (token.admin_id === items[idx].id) token.revoked = true;
+    });
+    setItems('tokens', activeTokens);
+    return items[idx];
   },
   listPending() {
     return getItems('admins').filter(a => a.status === 'pending');
@@ -208,7 +223,8 @@ async function ensureSchema() {
         role TEXT NOT NULL DEFAULT 'editor',
         status TEXT NOT NULL DEFAULT 'approved',
         created_at INTEGER NOT NULL,
-        last_login INTEGER
+        last_login INTEGER,
+        password_reset_version TEXT
       );
 
       CREATE TABLE IF NOT EXISTS tokens (
@@ -221,6 +237,7 @@ async function ensureSchema() {
       );
 
       ALTER TABLE admins ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'approved';
+      ALTER TABLE admins ADD COLUMN IF NOT EXISTS password_reset_version TEXT;
 
       CREATE INDEX IF NOT EXISTS tokens_hash_idx ON tokens(token_hash);
 
@@ -283,22 +300,22 @@ const dbAdmins = {
     return admins.findByIdentifier(identifier);
   },
 
-  async create({ id, identifier, password, name, role = 'editor', status = 'approved' }) {
+  async create({ id, identifier, password, name, role = 'editor', status = 'approved', passwordResetVersion = null }) {
     const now = Math.floor(Date.now() / 1000);
     if (pool) {
       await ensureSchema();
       const { rows } = await pool.query(
-        `INSERT INTO admins (id, identifier, password, name, role, status, created_at, last_login)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, NULL)
+        `INSERT INTO admins (id, identifier, password, name, role, status, created_at, last_login, password_reset_version)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, NULL, $8)
          ON CONFLICT (identifier) DO NOTHING
          RETURNING *`,
-        [id, identifier, password, name, role, status, now]
+        [id, identifier, password, name, role, status, now, passwordResetVersion]
       );
       if (rows[0]) return rows[0];
       const existing = await pool.query('SELECT * FROM admins WHERE identifier = $1 LIMIT 1', [identifier]);
       return existing.rows[0] || null;
     }
-    return admins.create({ id, identifier, password, name, role, status });
+    return admins.create({ id, identifier, password, name, role, status, passwordResetVersion });
   },
 
   async updateLastLogin(id) {
@@ -317,6 +334,34 @@ const dbAdmins = {
       return rows.length > 0;
     }
     return admins.exists(identifier);
+  },
+
+  async resetPassword(identifier, password, passwordResetVersion) {
+    if (pool) {
+      await ensureSchema();
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+        const { rows } = await client.query(
+          `UPDATE admins
+           SET password = $2, password_reset_version = $3
+           WHERE identifier = $1
+           RETURNING *`,
+          [identifier, password, passwordResetVersion]
+        );
+        if (rows[0]) {
+          await client.query('UPDATE tokens SET revoked = true WHERE admin_id = $1', [rows[0].id]);
+        }
+        await client.query('COMMIT');
+        return rows[0] || null;
+      } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+      } finally {
+        client.release();
+      }
+    }
+    return admins.resetPassword(identifier, password, passwordResetVersion);
   },
 
   async listPending() {
