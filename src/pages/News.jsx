@@ -6,12 +6,12 @@ import { newsArticles } from '../data/newsData';
 import { fetchPublishedNews, normalizeArticle } from '../lib/api';
 import { getNewsImageProps } from '../lib/imageUtils';
 
-// Map categories to brand colors
+// Familiar categories keep their brand styling; new categories receive a neutral brand badge.
 const categoryColor = {
-  'Events':         'bg-primary/10 text-primary',
+  'Events': 'bg-primary/10 text-primary',
   'Press Releases': 'bg-secondary/10 text-secondary-dark',
-  'Success Stories':'bg-accent/10 text-accent-dark',
-  'Announcements':  'bg-primary/10 text-primary',
+  'Success Stories': 'bg-accent/10 text-accent-dark',
+  'Announcements': 'bg-primary/10 text-primary',
 };
 
 export const News = () => {
@@ -41,13 +41,14 @@ export const News = () => {
     return () => { isMounted = false; };
   }, [fallbackNews]);
 
-  const categories = [
-    { id: 'all',            label: 'All News' },
-    { id: 'Announcements',  label: 'Announcements' },
-    { id: 'Events',         label: 'Events' },
-    { id: 'Press Releases', label: 'Press Releases' },
-    { id: 'Success Stories',label: 'Success Stories' },
-  ];
+  const categories = useMemo(() => {
+    const liveCategories = [...new Set(articles.map(article => article.category).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b));
+    return [
+      { id: 'all', label: 'All News' },
+      ...liveCategories.map(category => ({ id: category, label: category })),
+    ];
+  }, [articles]);
 
   const filteredNews = activeCategory === 'all'
     ? articles
