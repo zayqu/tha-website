@@ -116,14 +116,25 @@ export default function AdminNewsForm() {
   const [imageInfo, setImageInfo] = useState(null);
   const [processingImage, setProcessingImage] = useState(false);
   const [assistant, setAssistant] = useState({ topic: '', purpose: 'announcement', facts: '' });
+  const [categoryOptions, setCategoryOptions] = useState(CATEGORY_SUGGESTIONS);
+  const [categoryMode, setCategoryMode] = useState('select');
 
-  // ── Load existing article when editing ────────────────────────────────────
+  // ── Load categories and the current article ───────────────────────────────
   useEffect(() => {
-    if (!isEditing) return;
-    authFetch(`/api/news/admin`)
+    authFetch('/api/news/admin')
       .then(r => r.json())
       .then(data => {
-        const article = data.articles?.find(a => a.id === id);
+        const articles = data.articles || [];
+        const existingCategories = articles
+          .map(article => article.category?.trim())
+          .filter(Boolean);
+        setCategoryOptions(
+          [...new Set([...CATEGORY_SUGGESTIONS, ...existingCategories])]
+            .sort((a, b) => a.localeCompare(b))
+        );
+
+        if (!isEditing) return;
+        const article = articles.find(item => item.id === id);
         if (!article) { setLoadError('Article not found.'); return; }
         setForm({
           title:       article.title,
@@ -139,7 +150,9 @@ export default function AdminNewsForm() {
         });
         setImageMode(article.image?.startsWith('data:') ? 'upload' : 'url');
       })
-      .catch(() => setLoadError('Failed to load article.'));
+      .catch(() => {
+        if (isEditing) setLoadError('Failed to load article.');
+      });
   }, [id, isEditing, authFetch]);
 
   // ── Field change handler ──────────────────────────────────────────────────
@@ -457,20 +470,84 @@ export default function AdminNewsForm() {
           {/* Category + Author */}
           <div className="grid sm:grid-cols-2 gap-4">
             <Field label="Category *" error={errors.category}>
-              <input
-                type="text"
-                name="category"
-                value={form.category}
-                onChange={handleChange}
-                list="news-category-suggestions"
-                maxLength={80}
-                placeholder="Choose or type a category"
-                className={inputCls(errors.category)}
-              />
-              <datalist id="news-category-suggestions">
-                {CATEGORY_SUGGESTIONS.map(category => <option key={category} value={category} />)}
-              </datalist>
-              <p className="text-xs text-gray-400 mt-1">Choose a suggestion or type a new category.</p>
+              <div className="rounded-xl border border-gray-200 bg-gray-50 p-3">
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  <p className="text-xs font-semibold text-gray-500">
+                    {categoryMode === 'select' ? 'Select an existing category' : 'Create or rename this category'}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setCategoryMode(mode => mode === 'select' ? 'custom' : 'select')}
+                    className="shrink-0 text-xs font-bold text-primary hover:text-secondary transition-colors"
+                  >
+                    {categoryMode === 'select' ? '+ Add new category' : 'Use existing'}
+                  </button>
+                </div>
+
+                {categoryMode === 'select' ? (
+                  <select
+                    name="category"
+                    value={categoryOptions.includes(form.category) ? form.category : ''}
+                    onChange={handleChange}
+                    className={inputCls(errors.category)}
+                  >
+                    <option value="" disabled>Choose a category</option>
+                    {categoryOptions.map(category => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      name="category"
+                      value={form.category}
+                      onChange={handleChange}
+                      maxLength={80}
+                      placeholder="Example: Maternal Health"
+                      className={inputCls(errors.category)}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const category = form.category.trim();
+                        if (!category) return;
+                        setCategoryOptions(options =>
+                          [...new Set([...options, category])].sort((a, b) => a.localeCompare(b))
+                        );
+                        setCategoryMode('select');
+                      }}
+                      className="px-4 py-2 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary-dark transition-colors"
+                    >
+                      Add
+                    </button>
+                  </div>
+                )}
+
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {categoryOptions.slice(0, 8).map(category => (
+                    <button
+                      type="button"
+                      key={category}
+                      onClick={() => {
+                        setForm(prev => ({ ...prev, category }));
+                        setCategoryMode('select');
+                        setErrors(prev => ({ ...prev, category: '' }));
+                      }}
+                      className={`px-2.5 py-1 rounded-full text-xs font-semibold border transition-colors ${
+                        form.category === category
+                          ? 'bg-primary text-white border-primary'
+                          : 'bg-white text-gray-600 border-gray-200 hover:border-primary hover:text-primary'
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 mt-1">
+                Categories already used in published and draft articles appear automatically. Add a new one while posting, or edit the selected name.
+              </p>
             </Field>
             <Field label="Author *" error={errors.author}>
               <input
