@@ -7,7 +7,7 @@ export const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -22,9 +22,9 @@ export const Header = () => {
 
   return (
     <>
-      {/* Mobile top bar — logo left, CTA right */}
-      <div className="fixed top-0 inset-x-0 z-[60] bg-white shadow-sm md:hidden" style={{ position: 'fixed' }}>
-        <div className="flex items-center justify-between h-14 px-4">
+      {/* Mobile top bar — stable viewport chrome */}
+      <div className="mobile-fixed-chrome fixed top-0 left-0 right-0 z-[60] h-14 bg-white shadow-sm md:hidden">
+        <div className="flex h-full items-center justify-between px-4">
           <Link to="/" className="hover:opacity-80 transition flex-shrink-0">
             <img
               src="/logo/tha-logo.svg"
