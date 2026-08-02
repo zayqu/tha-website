@@ -13,6 +13,7 @@ import { Projects } from './pages/Projects';
 import { Impact } from './pages/Impact';
 import { CampaignDetail } from './pages/CampaignDetail';
 import NewsDetail from './pages/NewsDetail';
+import LegalPolicy from './pages/LegalPolicy';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminNewsForm from './pages/admin/AdminNewsForm';
@@ -35,8 +36,14 @@ const HashRedirect = () => {
 
 // Scroll to top on route change
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if (hash) {
+      window.requestAnimationFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView());
+      return;
+    }
+    window.scrollTo(0, 0);
+  }, [pathname, hash]);
   return null;
 };
 
@@ -76,6 +83,9 @@ function App() {
               <Route path="/news/:slug" element={<NewsDetail />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/campaigns/:campaignId" element={<CampaignDetail />} />
+              <Route path="/privacy" element={<LegalPolicy type="privacy" />} />
+              <Route path="/cookies" element={<LegalPolicy type="cookies" />} />
+              <Route path="/terms" element={<LegalPolicy type="terms" />} />
             </Route>
           </Routes>
         </Router>
