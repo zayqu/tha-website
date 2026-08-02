@@ -354,7 +354,7 @@ export default function AdminDashboard() {
         {/* View live site link */}
         <div className="mt-8 text-center">
           <a
-            href="/#/news"
+            href="/news"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-primary transition-colors"

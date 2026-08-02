@@ -7,8 +7,6 @@ const { news } = require('../db');
 const { requireAuth } = require('../middleware/auth');
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-const VALID_CATEGORIES = ['Events', 'Press Releases', 'Success Stories', 'Announcements'];
-
 function slugify(text) {
   return text
     .toLowerCase()
@@ -29,8 +27,8 @@ const newsBodyValidators = [
   body('excerpt').trim().notEmpty().isLength({ max: 500 }),
   body('content').trim().notEmpty().isLength({ max: 50000 }),
   body('image').trim().notEmpty().isLength({ max: 2_000_000 }),
-  body('category').trim().isIn(VALID_CATEGORIES)
-    .withMessage(`Category must be one of: ${VALID_CATEGORIES.join(', ')}`),
+  body('category').trim().notEmpty().isLength({ max: 80 })
+    .withMessage('Category is required and must be 80 characters or fewer'),
   body('author').trim().notEmpty().isLength({ max: 100 }),
   body('date').trim().notEmpty().withMessage('Date is required'),
   body('tags').optional().isArray({ max: 10 }),
@@ -41,7 +39,7 @@ const newsBodyValidators = [
 
 // ── GET /api/news  (public) ───────────────────────────────────────────────────
 router.get('/', [
-  query('category').optional().isIn(VALID_CATEGORIES),
+  query('category').optional().trim().isLength({ min: 1, max: 80 }),
   query('limit').optional().isInt({ min: 1, max: 100 }),
   query('offset').optional().isInt({ min: 0 }),
 ], async (req, res, next) => {
@@ -155,7 +153,7 @@ router.post('/', requireAuth, newsBodyValidators, async (req, res, next) => {
 
   const {
     title, excerpt, content, image, category, author, date,
-    tags = [], is_featured = false, published = false,
+    tags = [], is_featured = false, published = true,
   } = req.body;
 
   // Build unique slug
