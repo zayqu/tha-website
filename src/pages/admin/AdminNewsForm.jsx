@@ -216,6 +216,7 @@ export default function AdminNewsForm() {
     if (!form.excerpt.trim()) e.excerpt = 'Excerpt is required.';
     if (!form.content.trim()) e.content = 'Content is required.';
     if (!form.image.trim())   e.image   = 'Image URL is required.';
+    if (!form.category.trim()) e.category = 'Category is required.';
     if (!form.author.trim())  e.author  = 'Author is required.';
     if (!form.date)           e.date    = 'Date is required.';
     if (form.excerpt.length > 500) e.excerpt = 'Excerpt must be ≤ 500 characters.';
@@ -285,7 +286,7 @@ export default function AdminNewsForm() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <form onSubmit={handleSubmit} noValidate className="space-y-6">
+        <form onSubmit={event => handleSubmit(event, true)} noValidate className="space-y-6">
 
           {/* Global error */}
           {errors._global && (
@@ -535,7 +536,6 @@ export default function AdminNewsForm() {
               <button
                 type="submit"
                 disabled={saving || processingImage}
-                onClick={() => setForm(prev => ({ ...prev, published: true }))}
                 className="inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-primary-dark transition-colors disabled:opacity-60"
               >
                 {saving ? (
