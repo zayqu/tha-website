@@ -59,7 +59,20 @@ async function provisionInitialAdmin() {
     if (!identifier || !password) return;
     if (password.length < 8) throw new Error('ADMIN_PASSWORD must be at least 8 characters');
     const normalized = identifier.includes('@') ? identifier.toLowerCase() : identifier;
-    if (await admins.exists(normalized)) return;
+    const passwordResetVersion = process.env.ADMIN_PASSWORD_RESET_VERSION?.trim() || null;
+    const existing = await admins.findByIdentifier(normalized);
+
+    if (existing) {
+      if (!passwordResetVersion || existing.password_reset_version === passwordResetVersion) return;
+      await admins.resetPassword(
+        normalized,
+        await bcrypt.hash(password, 12),
+        passwordResetVersion
+      );
+      console.log('THA administrator password reset applied and existing sessions revoked.');
+      return;
+    }
+
     await admins.create({
       id: uuidv4(),
       identifier: normalized,
@@ -67,6 +80,7 @@ async function provisionInitialAdmin() {
       name: process.env.ADMIN_NAME || 'THA Administrator',
       role: 'superadmin',
       status: 'approved',
+      passwordResetVersion,
     });
     console.log('Initial THA administrator provisioned.');
   })();
