@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 const { body, param, query, validationResult } = require('express-validator');
 const { news } = require('../db');
 const { requireAuth } = require('../middleware/auth');
@@ -58,6 +59,79 @@ router.get('/', [
 router.get('/admin', requireAuth, async (_req, res, next) => {
   try {
     res.json({ articles: await news.findAll() });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ── POST /api/news/import  (automation; drafts only) ──────────────────────────
+router.post('/import', async (req, res, next) => {
+  try {
+    const configuredSecret = process.env.CONTENT_IMPORT_SECRET;
+    const suppliedSecret = req.get('authorization')?.replace(/^Bearer\s+/i, '') || '';
+    if (!configuredSecret || !suppliedSecret) {
+      return res.status(401).json({ error: 'Import authorization required' });
+    }
+    const expected = Buffer.from(configuredSecret);
+    const supplied = Buffer.from(suppliedSecret);
+    if (expected.length !== supplied.length || !crypto.timingSafeEqual(expected, supplied)) {
+      return res.status(401).json({ error: 'Import authorization required' });
+    }
+
+    const items = Array.isArray(req.body?.items) ? req.body.items.slice(0, 25) : [];
+    if (!items.length) return res.status(400).json({ error: 'At least one item is required' });
+
+    const existing = await news.findAll();
+    const results = [];
+
+    for (const raw of items) {
+      const title = String(raw.title || '').trim().slice(0, 200);
+      const excerpt = String(raw.excerpt || '').trim().slice(0, 500);
+      const source = String(raw.source || 'Trusted health source').trim().slice(0, 100);
+      const sourceUrl = String(raw.url || '').trim();
+      const parsedDate = new Date(raw.date || Date.now());
+      const topics = Array.isArray(raw.topics)
+        ? raw.topics.map(topic => String(topic).trim().slice(0, 50)).filter(Boolean).slice(0, 10)
+        : [];
+
+      if (!title || !excerpt || !/^https:\/\//i.test(sourceUrl) || Number.isNaN(parsedDate.getTime())) {
+        results.push({ title: title || 'Untitled', status: 'invalid' });
+        continue;
+      }
+      if (existing.some(article => String(article.content || '').includes(sourceUrl))) {
+        results.push({ title, status: 'duplicate' });
+        continue;
+      }
+
+      const baseSlug = slugify(title) || `health-update-${Date.now()}`;
+      let slug = baseSlug;
+      let counter = 1;
+      while (await news.slugExists(slug)) slug = `${baseSlug}-${counter++}`;
+
+      const article = await news.create({
+        id: uuidv4(),
+        slug,
+        title,
+        excerpt,
+        content: `${excerpt}\n\nSource: ${source}\nRead the original update: ${sourceUrl}`,
+        image: 'https://tha-red.vercel.app/favicon.svg',
+        category: 'Announcements',
+        author: source,
+        date: parsedDate.toISOString().slice(0, 10),
+        tags: topics,
+        is_featured: false,
+        published: false,
+      });
+      existing.push(article);
+      results.push({ id: article.id, title, status: 'drafted' });
+    }
+
+    res.status(201).json({
+      imported: results.filter(item => item.status === 'drafted').length,
+      duplicates: results.filter(item => item.status === 'duplicate').length,
+      invalid: results.filter(item => item.status === 'invalid').length,
+      results,
+    });
   } catch (err) {
     next(err);
   }
