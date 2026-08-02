@@ -46,7 +46,6 @@
 }
 
 @layer components {
-  /* Layout */
   .section-padding {
     @apply py-20 px-4 sm:px-6 lg:px-8;
   }
@@ -54,7 +53,6 @@
     @apply max-w-7xl mx-auto;
   }
 
-  /* Typography */
   .heading-xl {
     @apply text-4xl md:text-5xl lg:text-6xl font-heading font-bold tracking-tighter leading-tight;
   }
@@ -77,7 +75,6 @@
     @apply text-sm leading-relaxed;
   }
 
-  /* Buttons */
   .btn-primary {
     @apply inline-flex items-center gap-2 px-6 py-3 bg-secondary text-white font-semibold rounded-lg hover:bg-secondary-dark transition-all shadow-subtle;
   }
@@ -85,7 +82,6 @@
     @apply inline-flex items-center gap-2 px-6 py-3 bg-white text-primary font-semibold rounded-lg border-2 border-primary hover:bg-primary hover:text-white transition-all;
   }
 
-  /* Badges */
   .badge {
     @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
   }
@@ -96,12 +92,10 @@
     @apply bg-secondary text-white;
   }
 
-  /* Cards */
   .card-hover {
     @apply hover:-translate-y-1 transition-transform duration-300;
   }
 
-  /* Image zoom */
   .img-zoom-container {
     @apply relative overflow-hidden;
   }
@@ -109,7 +103,6 @@
     @apply transition-transform duration-500 group-hover:scale-105;
   }
 
-  /* Input group (label above input) */
   .input-group {
     @apply flex flex-col-reverse gap-1;
   }
@@ -134,7 +127,23 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  /* Custom scrollbar */
+  .public-mobile-shell {
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .mobile-fixed-chrome {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+
+  @media (min-width: 768px) {
+    .public-mobile-shell {
+      padding-bottom: 0;
+    }
+  }
+
   .custom-scrollbar::-webkit-scrollbar {
     height: 4px;
   }
