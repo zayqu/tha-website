@@ -1,6 +1,5 @@
-const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
-const TABLE_NAME = process.env.CONTENT_QUEUE_TABLE || 'Content Queue';
+const CONTENT_API_URL = (process.env.CONTENT_API_URL || 'https://tha-webacdb.vercel.app').replace(/\/$/, '');
+const CONTENT_IMPORT_SECRET = process.env.CONTENT_IMPORT_SECRET;
 
 const DEFAULT_FEEDS = [
   {
@@ -49,79 +48,51 @@ function parseFeed(xml, source) {
       date: date ? new Date(date).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
       topics,
     };
-  }).filter(item => item.title && item.url && item.topics.length);
-}
-
-async function airtable(path = '', options = {}) {
-  const table = encodeURIComponent(TABLE_NAME);
-  const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}${path}`, {
-    ...options,
-    headers: {
-      Authorization: `Bearer ${AIRTABLE_API_KEY}`,
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
-  if (!response.ok) throw new Error(`Airtable request failed: ${response.status} ${await response.text()}`);
-  return response.json();
-}
-
-async function existingUrls() {
-  const urls = new Set();
-  let offset = '';
-  do {
-    const query = new URLSearchParams({ pageSize: '100', ...(offset ? { offset } : {}) });
-    const data = await airtable(`?${query}`);
-    data.records?.forEach(record => record.fields?.URL && urls.add(record.fields.URL));
-    offset = data.offset || '';
-  } while (offset);
-  return urls;
+  }).filter(item => item.title && item.excerpt && item.url && item.topics.length);
 }
 
 async function main() {
-  if (!AIRTABLE_BASE_ID || !AIRTABLE_API_KEY) {
-    throw new Error('AIRTABLE_BASE_ID and AIRTABLE_API_KEY are required');
-  }
+  if (!CONTENT_IMPORT_SECRET) throw new Error('CONTENT_IMPORT_SECRET is required');
 
   const configured = process.env.HEALTH_SOURCE_FEEDS
     ? JSON.parse(process.env.HEALTH_SOURCE_FEEDS)
     : [];
   const feeds = [...DEFAULT_FEEDS, ...configured];
-  const known = await existingUrls();
   const discoveries = [];
 
   for (const feed of feeds) {
-    const response = await fetch(feed.url, { headers: { 'User-Agent': 'Tanzania Health Alliance content monitor' } });
+    const response = await fetch(feed.url, {
+      headers: { 'User-Agent': 'Tanzania Health Alliance content monitor' },
+    });
     if (!response.ok) {
       console.warn(`Skipping ${feed.url}: HTTP ${response.status}`);
       continue;
     }
-    const items = parseFeed(await response.text(), feed.source);
-    for (const item of items) {
-      if (!known.has(item.url)) {
-        discoveries.push(item);
-        known.add(item.url);
-      }
-    }
+    discoveries.push(...parseFeed(await response.text(), feed.source));
   }
 
-  for (let i = 0; i < discoveries.length; i += 10) {
-    const batch = discoveries.slice(i, i + 10).map(item => ({
-      fields: {
-        Title: item.title,
-        Excerpt: item.excerpt,
-        URL: item.url,
-        Source: item.source,
-        'Publish Date': item.date,
-        Topics: item.topics.join(', '),
-        Type: 'External update',
-        Status: 'Draft',
+  const unique = [...new Map(discoveries.map(item => [item.url, item])).values()];
+  let imported = 0;
+  let duplicates = 0;
+  let invalid = 0;
+
+  for (let i = 0; i < unique.length; i += 25) {
+    const response = await fetch(`${CONTENT_API_URL}/api/news/import`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${CONTENT_IMPORT_SECRET}`,
+        'Content-Type': 'application/json',
       },
-    }));
-    await airtable('', { method: 'POST', body: JSON.stringify({ records: batch, typecast: true }) });
+      body: JSON.stringify({ items: unique.slice(i, i + 25) }),
+    });
+    if (!response.ok) throw new Error(`Content API import failed: HTTP ${response.status}`);
+    const result = await response.json();
+    imported += result.imported || 0;
+    duplicates += result.duplicates || 0;
+    invalid += result.invalid || 0;
   }
 
-  console.log(`Imported ${discoveries.length} relevant item(s) as drafts for editorial review.`);
+  console.log(`Draft import complete: ${imported} new, ${duplicates} duplicate, ${invalid} invalid.`);
 }
 
 main().catch(error => {
