@@ -10,6 +10,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const authRoutes = require('./routes/auth');
 const newsRoutes = require('./routes/news');
+const projectRoutes = require('./routes/projects');
 const { admins } = require('./db');
 
 const app = express();
@@ -98,6 +99,7 @@ app.use(async (_req, _res, next) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/news', newsRoutes);
+app.use('/api/projects', projectRoutes);
 
 app.get('/api/health', (_req, res) => {
   res.json({
