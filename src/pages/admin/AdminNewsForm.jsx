@@ -116,6 +116,7 @@ export default function AdminNewsForm() {
   const [imageInfo, setImageInfo] = useState(null);
   const [processingImage, setProcessingImage] = useState(false);
   const [assistant, setAssistant] = useState({ topic: '', purpose: 'announcement', facts: '' });
+  const [generatingDraft, setGeneratingDraft] = useState(false);
   const [categoryOptions, setCategoryOptions] = useState(CATEGORY_SUGGESTIONS);
   const [categoryMode, setCategoryMode] = useState('select');
 
@@ -190,36 +191,53 @@ export default function AdminNewsForm() {
     }
   }
 
-  function generateDraft() {
-    const topic = assistant.topic.trim();
-    if (!topic) {
-      setErrors(prev => ({ ...prev, assistant: 'Add a topic before creating a draft.' }));
+  async function generateDraft() {
+    const suppliedTopic = assistant.topic.trim();
+    const hasImage = Boolean(form.image);
+    if (!suppliedTopic && !hasImage) {
+      setErrors(prev => ({ ...prev, assistant: 'Add a topic or upload an image before generating the article.' }));
       return;
     }
-    const purpose = PURPOSES[assistant.purpose];
-    const facts = assistant.facts
-      .split('\n')
-      .map(item => item.replace(/^[-•]\s*/, '').trim())
-      .filter(Boolean);
-    const title = topic.length > 90 ? topic.slice(0, 87) + '…' : topic;
-    const opening = purpose.opening(topic);
-    const factParagraph = facts.length
-      ? `\n\nKey information\n${facts.map(item => `• ${item}`).join('\n')}`
-      : '';
-    const content = `${opening}${factParagraph}\n\nWhy this matters\nThis work supports healthier, informed and resilient communities. It reflects our commitment to practical action, trusted information and partnerships that improve health outcomes.\n\nWhat happens next\nTanzania Health Alliance will continue to share verified updates and opportunities for communities and partners to take part. For further information, contact our team through the website.`;
-    const excerpt = `${opening} Read the key information, why it matters and what happens next.`.slice(0, 500);
-    const topicTags = topic.split(/[^A-Za-z0-9]+/).filter(word => word.length > 4).slice(0, 4);
 
-    setForm(prev => ({
-      ...prev,
-      title: prev.title || title,
-      excerpt: prev.excerpt || excerpt,
-      content: prev.content || content,
-      category: prev.category === 'Events' ? purpose.category : prev.category,
-      tags: prev.tags || topicTags.join(', '),
-      author: prev.author || 'THA Communications',
-    }));
+    setGeneratingDraft(true);
     setErrors(prev => ({ ...prev, assistant: '' }));
+    try {
+      const purpose = PURPOSES[assistant.purpose];
+      const res = await authFetch('/api/news/generate', {
+        method: 'POST',
+        body: JSON.stringify({
+          topic: suppliedTopic || 'Create a factual THA news article based only on the supplied image',
+          purpose: purpose.label,
+          facts: assistant.facts,
+          image: form.image || null,
+          categories: categoryOptions,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.draft) {
+        throw new Error(data.error || 'Could not generate the article. Please try again.');
+      }
+
+      const draft = data.draft;
+      setForm(prev => ({
+        ...prev,
+        title: draft.title,
+        excerpt: draft.excerpt,
+        content: draft.content,
+        category: draft.category || prev.category,
+        tags: Array.isArray(draft.tags) ? draft.tags.join(', ') : prev.tags,
+        author: prev.author || 'THA Communications',
+      }));
+      if (draft.category) {
+        setCategoryOptions(options =>
+          [...new Set([...options, draft.category])].sort((a, b) => a.localeCompare(b))
+        );
+      }
+    } catch (err) {
+      setErrors(prev => ({ ...prev, assistant: err.message }));
+    } finally {
+      setGeneratingDraft(false);
+    }
   }
 
   // ── Client-side validation ────────────────────────────────────────────────
@@ -314,7 +332,7 @@ export default function AdminNewsForm() {
               <div>
                 <p className="text-xs font-bold uppercase tracking-widest text-white/70">Draft assistant</p>
                 <h2 className="text-xl font-bold mt-1">Turn a topic into a structured first draft</h2>
-                <p className="text-sm text-white/80 mt-1">Add the facts you know. The assistant creates an editable draft; review it before publishing.</p>
+                <p className="text-sm text-white/80 mt-1">Add a topic, an image, or both. The assistant creates a complete editable article; you review it before publishing.</p>
               </div>
               <span className="self-start px-3 py-1 rounded-full bg-white/15 text-xs font-semibold">No extra account required</span>
             </div>
@@ -351,10 +369,19 @@ export default function AdminNewsForm() {
             <button
               type="button"
               onClick={generateDraft}
-              className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white font-bold rounded-xl hover:brightness-95 transition"
+              disabled={generatingDraft}
+              className="mt-4 inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-accent text-white font-bold rounded-xl hover:brightness-95 transition disabled:opacity-60 disabled:cursor-wait"
             >
-              Create editable draft
+              {generatingDraft ? (
+                <>
+                  <span className="w-4 h-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+                  Generating full article…
+                </>
+              ) : 'Generate full article'}
             </button>
+            <p className="text-xs text-white/70 mt-3">
+              If an article image is already uploaded or linked below, the assistant will use it as visual context. Generated content is never published automatically.
+            </p>
           </section>
 
           {/* Title */}
