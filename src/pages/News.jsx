@@ -72,7 +72,7 @@ export const News = () => {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="heading-xl text-white mb-6">News &amp; Updates</h1>
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
-              Stay informed about our latest programs, events, and impact stories
+              See what is happening in our communities, learn from people creating change, and follow progress in HIV, hepatitis and mental health.
             </p>
           </div>
         </div>
@@ -150,7 +150,7 @@ export const News = () => {
                   </div>
 
                   <span className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl w-fit group-hover:bg-secondary transition-colors duration-300">
-                    Read Full Story
+                    Read more
                     <div className="w-6 h-6 bg-white/20 rounded-md flex items-center justify-center group-hover:translate-x-1 transition-transform">
                       <Icon name="arrow_forward" size={14} color="white" />
                     </div>
@@ -231,9 +231,9 @@ export const News = () => {
               <div className="w-24 h-24 bg-neutral rounded-full flex items-center justify-center mx-auto mb-6">
                 <Icon name="newspaper" size={48} className="text-primary/30" />
               </div>
-              <h3 className="heading-md mb-4">No news in this category</h3>
+              <h3 className="heading-md mb-4">We have no updates here yet</h3>
               <p className="body-md text-neutral-dark/70">
-                Check back soon for updates in {activeCategory}
+                {activeCategory === 'all' ? 'New stories and announcements will appear here as they are published.' : `New ${activeCategory.toLowerCase()} will appear here as they are published.`}
               </p>
             </div>
           )}

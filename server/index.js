@@ -57,7 +57,7 @@ async function provisionInitialAdmin() {
     const identifier = process.env.ADMIN_IDENTIFIER?.trim();
     const password = process.env.ADMIN_PASSWORD;
     if (!identifier || !password) return;
-    if (password.length < 12) throw new Error('ADMIN_PASSWORD must be at least 12 characters');
+    if (password.length < 8) throw new Error('ADMIN_PASSWORD must be at least 8 characters');
     const normalized = identifier.includes('@') ? identifier.toLowerCase() : identifier;
     if (await admins.exists(normalized)) return;
     await admins.create({

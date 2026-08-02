@@ -167,8 +167,8 @@ export const Contact = () => {
 
             {/* Contact Form */}
             <div className="bg-white rounded-xl shadow-card p-8 md:p-10 h-fit">
-              <h2 className="text-2xl font-heading font-bold text-primary mb-2">Send us your Feedback</h2>
-              <p className="text-gray-600 text-sm mb-8">Have a specific inquiry or comment? Fill out our contact form, and we'll get back to you as soon as possible.</p>
+              <h2 className="text-2xl font-heading font-bold text-primary mb-2">Talk to our team</h2>
+              <p className="text-gray-600 text-sm mb-8">Whether you need health-program information, want to partner with us, or have a community concern, send us a message. Our team will respond as soon as possible.</p>
 
               {submitted ? (
                 <div className="text-center py-10">
@@ -228,7 +228,7 @@ export const Contact = () => {
                       onChange={handleInputChange}
                       required
                       rows="5"
-                      placeholder="Tell us what's on your mind..."
+                      placeholder="How can we help?"
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-secondary focus:outline-none transition-colors resize-none"
                     />
                   </div>
