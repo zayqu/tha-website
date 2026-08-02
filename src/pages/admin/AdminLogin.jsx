@@ -139,10 +139,10 @@ export default function AdminLogin() {
                   onChange={event => update('password', event.target.value)}
                   autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                   required
-                  minLength={mode === 'register' ? 12 : undefined}
+                  minLength={mode === 'register' ? 8 : undefined}
                   maxLength={128}
                   className={`${inputClass} pr-12`}
-                  placeholder="At least 12 characters"
+                  placeholder="At least 8 characters"
                 />
                 <button
                   type="button"
