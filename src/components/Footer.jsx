@@ -68,9 +68,9 @@ export const Footer = () => {
                 Important Links
               </h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-sm text-white/75 hover:text-secondary transition">Privacy Policy</a></li>
-                <li><a href="#" className="text-sm text-white/75 hover:text-secondary transition">Cookies Policy</a></li>
-                <li><a href="#" className="text-sm text-white/75 hover:text-secondary transition">Terms &amp; Conditions</a></li>
+                <li><Link to="/privacy" className="text-sm text-white/75 hover:text-secondary transition">Privacy Policy</Link></li>
+                <li><Link to="/cookies" className="text-sm text-white/75 hover:text-secondary transition">Cookies Policy</Link></li>
+                <li><Link to="/terms" className="text-sm text-white/75 hover:text-secondary transition">Terms &amp; Conditions</Link></li>
               </ul>
 
               <h4 className="text-base font-bold font-heading tracking-tight mt-8 mb-4 text-white">
@@ -139,9 +139,9 @@ export const Footer = () => {
               Copyright &copy; 2025 - Tanzania Health Alliance
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
-              <a href="#" className="text-sm text-white/60 hover:text-secondary transition">Privacy Policy</a>
-              <a href="#" className="text-sm text-white/60 hover:text-secondary transition">Cookies Policy</a>
-              <a href="#" className="text-sm text-white/60 hover:text-secondary transition">Terms &amp; Conditions</a>
+              <Link to="/privacy" className="text-sm text-white/60 hover:text-secondary transition">Privacy Policy</Link>
+              <Link to="/cookies" className="text-sm text-white/60 hover:text-secondary transition">Cookies Policy</Link>
+              <Link to="/terms" className="text-sm text-white/60 hover:text-secondary transition">Terms &amp; Conditions</Link>
               <Link
                 to="/admin"
                 className="flex items-center gap-1.5 text-sm text-white/40 hover:text-secondary transition"
