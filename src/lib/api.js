@@ -1,13 +1,13 @@
-// Keep browser requests on the public alias so Vercel preview protection cannot gate the API.
-const PRODUCTION_API_URL = 'https://tha-webacdb.vercel.app';
+// Use the matching public API for each production host.
+const VERCEL_API_URL = 'https://tha-webacdb.vercel.app';
+const CPANEL_API_URL = 'https://api.tzhealthalliance.or.tz';
 
 function defaultApiBaseUrl() {
   if (typeof window === 'undefined') return '';
   const host = window.location.hostname;
   if (host === 'localhost' || host === '127.0.0.1') return '';
-  if (host.endsWith('.vercel.app') || host === 'tzhealthalliance.or.tz' || host === 'www.tzhealthalliance.or.tz') {
-    return PRODUCTION_API_URL;
-  }
+  if (host === 'tzhealthalliance.or.tz' || host === 'www.tzhealthalliance.or.tz') return CPANEL_API_URL;
+  if (host.endsWith('.vercel.app')) return VERCEL_API_URL;
   return '';
 }
 
