@@ -27,9 +27,8 @@ jobs:
 
       - name: Import relevant health content as drafts
         env:
-          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
-          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-          CONTENT_QUEUE_TABLE: ${{ vars.CONTENT_QUEUE_TABLE || 'Content Queue' }}
+          CONTENT_API_URL: ${{ vars.CONTENT_API_URL || 'https://tha-webacdb.vercel.app' }}
+          CONTENT_IMPORT_SECRET: ${{ secrets.CONTENT_IMPORT_SECRET }}
           HEALTH_SOURCE_FEEDS: ${{ secrets.HEALTH_SOURCE_FEEDS }}
         run: node scripts/importHealthContent.js
 
