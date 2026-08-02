@@ -26,7 +26,16 @@ export const News = () => {
     fetchPublishedNews({ limit: 100 })
       .then(liveArticles => {
         if (!isMounted) return;
-        setArticles(liveArticles.length > 0 ? liveArticles : fallbackNews);
+        // Keep the original website archive alongside API-managed articles.
+        // A matching live slug replaces its archived copy, preventing duplicates.
+        const mergedBySlug = new Map(
+          fallbackNews.map(article => [article.slug, article])
+        );
+        liveArticles.forEach(article => mergedBySlug.set(article.slug, article));
+        const mergedArticles = [...mergedBySlug.values()].sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+        setArticles(mergedArticles);
         setLoadError('');
       })
       .catch(() => {

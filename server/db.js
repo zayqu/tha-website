@@ -198,9 +198,16 @@ let schemaReady = null;
 
 if (hasDatabaseUrl) {
   const { Pool } = require('pg');
+
+  // Neon certificates support full verification. Normalize legacy sslmode values
+  // before pg parses the URL so production stays secure and warning-free.
+  const connectionString = process.env.DATABASE_URL.replace(
+    /([?&]sslmode=)(prefer|require|verify-ca)(?=&|$)/i,
+    '$1verify-full'
+  );
+
   pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
+    connectionString,
     connectionTimeoutMillis: 5000,
     query_timeout: 10000,
   });
