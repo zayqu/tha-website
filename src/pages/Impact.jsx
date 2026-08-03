@@ -110,7 +110,7 @@ export const Impact = () => {
       {/* Hero */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Annual Report 2025</span>
+          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Our Impact</span>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight mt-3 mb-5">Making an Impact</h1>
           <p className="text-base md:text-xl text-white/90 max-w-3xl mx-auto">
             From a single idea in January 2025 to national recognition — see how Tanzania Health Alliance is transforming health outcomes.

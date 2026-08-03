@@ -59,7 +59,7 @@ export const CampaignDetail = () => {
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="text-primary/50 font-semibold text-xs uppercase tracking-widest">Annual Report 2025</span>
+            <span className="text-primary/50 font-semibold text-xs uppercase tracking-widest">Campaign Progress</span>
             <h2 className="text-3xl font-bold text-primary mt-2">What We Did & What We Achieved</h2>
           </div>
 
