@@ -43,10 +43,10 @@
     {
       "id": 6,
       "name": "Tanzania Ministry of Health",
-      "logo": "/images/partners/moh-logo.png",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c2/Coat_of_arms_of_Tanzania.svg",
       "description": "Strategic partner for nationwide health initiatives",
       "relationship": "Strategic health partnership (March 2026)",
-      "website": "https://www.health.go.tz/"
+      "website": "https://www.moh.go.tz/"
     }
   ]
 }
