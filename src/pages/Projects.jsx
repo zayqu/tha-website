@@ -21,7 +21,7 @@ export const Projects = () => {
       {/* Hero */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider">2025 Annual Report</span>
+          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Our Campaigns</span>
           <h1 className="text-3xl md:text-5xl font-bold mt-2 mb-4">Our Campaigns & Activities</h1>
           <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
             Every THA activity maps to one of three strategic campaigns — each targeting a critical health challenge in Tanzania.
