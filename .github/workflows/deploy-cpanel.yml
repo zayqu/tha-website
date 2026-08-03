@@ -1,0 +1,145 @@
+name: cPanel Production Deployment
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: cpanel-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  build:
+    name: Build frontend and verify backend
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            server/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build production frontend
+        env:
+          VITE_API_BASE_URL: https://api.tzhealthalliance.or.tz
+        run: npm run build
+
+      - name: Install backend production dependencies
+        working-directory: server
+        run: npm ci --omit=dev
+
+      - name: Verify backend starts
+        run: node -e "const app = require('./server/index.js'); if (!app) process.exit(1);"
+
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tha-frontend-dist
+          path: dist
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    name: Deploy verified release to cPanel
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    env:
+      CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+      CPANEL_PORT: ${{ secrets.CPANEL_PORT }}
+      CPANEL_USER: ${{ secrets.CPANEL_USER }}
+      CPANEL_FRONTEND_PATH: ${{ secrets.CPANEL_FRONTEND_PATH }}
+      CPANEL_API_PATH: ${{ secrets.CPANEL_API_PATH }}
+      CPANEL_NODE_BIN: ${{ secrets.CPANEL_NODE_BIN }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download verified frontend
+        uses: actions/download-artifact@v4
+        with:
+          name: tha-frontend-dist
+          path: dist
+
+      - name: Validate deployment configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in CPANEL_HOST CPANEL_PORT CPANEL_USER CPANEL_FRONTEND_PATH CPANEL_API_PATH CPANEL_NODE_BIN; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error::Missing required secret: $name"
+              exit 1
+            fi
+          done
+          case "$CPANEL_FRONTEND_PATH" in
+            /home/*/public_html|/home/*/public_html/*) ;;
+            *) echo "::error::Frontend path must be inside /home/.../public_html"; exit 1 ;;
+          esac
+          case "$CPANEL_API_PATH" in
+            /home/*) ;;
+            *) echo "::error::API path must be inside /home"; exit 1 ;;
+          esac
+          case "$CPANEL_NODE_BIN" in
+            /home/*/bin) ;;
+            *) echo "::error::Node bin path must be an absolute /home/.../bin path"; exit 1 ;;
+          esac
+          if [ "$CPANEL_FRONTEND_PATH" = "$CPANEL_API_PATH" ]; then
+            echo "::error::Frontend and API deployment paths must be different"
+            exit 1
+          fi
+
+      - name: Configure SSH
+        shell: bash
+        env:
+          CPANEL_SSH_KEY: ${{ secrets.CPANEL_SSH_KEY }}
+          CPANEL_KNOWN_HOSTS: ${{ secrets.CPANEL_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$CPANEL_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$CPANEL_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy frontend and backend
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote="${CPANEL_USER}@${CPANEL_HOST}"
+          ssh_args=(-p "$CPANEL_PORT" -i ~/.ssh/id_ed25519 -o BatchMode=yes)
+
+          rsync -az --delete             -e "ssh -p $CPANEL_PORT -i ~/.ssh/id_ed25519 -o BatchMode=yes"             dist/ "${remote}:${CPANEL_FRONTEND_PATH}/"
+
+          rsync -az --delete             --exclude '.env'             --exclude 'data/'             --exclude 'node_modules/'             -e "ssh -p $CPANEL_PORT -i ~/.ssh/id_ed25519 -o BatchMode=yes"             server/ "${remote}:${CPANEL_API_PATH}/"
+
+          printf -v api_path_q '%q' "$CPANEL_API_PATH"
+          printf -v node_bin_q '%q' "$CPANEL_NODE_BIN"
+          ssh "${ssh_args[@]}" "$remote"             "cd $api_path_q && $node_bin_q/npm ci --omit=dev && mkdir -p tmp && touch tmp/restart.txt"
+
+      - name: Verify production
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --retry 6 --retry-delay 5 --retry-all-errors             https://api.tzhealthalliance.or.tz/api/health
+          curl --fail --silent --show-error --retry 6 --retry-delay 5 --retry-all-errors             https://tzhealthalliance.or.tz/ > /dev/null
