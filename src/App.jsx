@@ -34,7 +34,6 @@ const HashRedirect = () => {
   return null;
 };
 
-// Scroll to top on route change
 const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
   useEffect(() => {
@@ -47,9 +46,8 @@ const ScrollToTop = () => {
   return null;
 };
 
-// Public layout – desktop: Header + Footer, mobile: bottom nav only
 const PublicLayout = () => (
-  <div className="flex flex-col min-h-screen pb-14 md:pb-0">
+  <div className="public-mobile-shell flex min-h-screen flex-col">
     <Header />
     <main className="flex-grow"><Outlet /></main>
     <Footer />
@@ -65,13 +63,11 @@ function App() {
           <HashRedirect />
           <ScrollToTop />
           <Routes>
-            {/* ── Admin routes (standalone, no Header/Footer) ── */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
             <Route path="/admin/news/new" element={<ProtectedRoute><AdminNewsForm /></ProtectedRoute>} />
             <Route path="/admin/news/edit/:id" element={<ProtectedRoute><AdminNewsForm /></ProtectedRoute>} />
 
-            {/* ── Public routes wrapped in PublicLayout ── */}
             <Route element={<PublicLayout />}>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
