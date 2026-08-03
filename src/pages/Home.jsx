@@ -343,7 +343,7 @@ export const Home = () => {
       </section>
 
       {/* PARTNERS */}
-      <section className="py-20 bg-white">
+      <section id="partners" className="scroll-mt-16 py-20 bg-white">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-primary">Our Partners</h2>
           <p className="text-gray-600 mt-2">Working with global and local organizations</p>
