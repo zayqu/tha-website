@@ -11,7 +11,7 @@ import { SEO, organizationSchema } from '../components/SEO';
 import { thaData } from '../data/thaData';
 import { newsArticles } from '../data/newsData';
 import NewsCard from '../components/NewsCard';
-import { fetchPublishedNews, normalizeArticle } from '../lib/api';
+import { fetchPublishedNews, normalizeArticle, fetchImpactTotals } from '../lib/api';
 import { getHeroImageProps } from '../lib/imageUtils';
 
 /* =========================
@@ -188,6 +188,7 @@ const TimelineItem = ({ milestone, index }) => {
 
 export const Home = () => {
   const [latestNews, setLatestNews] = useState(newsArticles.map(normalizeArticle).slice(0, 3));
+  const [impactTotals, setImpactTotals] = useState(impactData.impactMetrics.total);
 
   useEffect(() => {
     let isMounted = true;
@@ -197,6 +198,19 @@ export const Home = () => {
       })
       .catch(() => {});
 
+    return () => { isMounted = false; };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    // Impact stats are driven by real project data (see /admin projects
+    // dashboard). Any metric an admin hasn't set yet keeps its static
+    // fallback so the page never shows a stat regressing to zero.
+    fetchImpactTotals().then(totals => {
+      if (isMounted && totals) {
+        setImpactTotals(prev => ({ ...prev, ...totals }));
+      }
+    });
     return () => { isMounted = false; };
   }, []);
 
@@ -250,19 +264,19 @@ export const Home = () => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <Counter end={1500} />
+              <Counter end={impactTotals.peopleReached} />
               <p className="text-white/80 mt-2">People Reached</p>
             </div>
             <div>
-              <Counter end={1000} />
+              <Counter end={impactTotals.studentsReached} />
               <p className="text-white/80 mt-2">Students Reached</p>
             </div>
             <div>
-              <Counter end={3} suffix="" />
+              <Counter end={impactTotals.institutionsEngaged} suffix="" />
               <p className="text-white/80 mt-2">Institutions Engaged</p>
             </div>
             <div>
-              <Counter end={2} suffix="" />
+              <Counter end={impactTotals.communityEvents} suffix="" />
               <p className="text-white/80 mt-2">Community Events</p>
             </div>
           </div>

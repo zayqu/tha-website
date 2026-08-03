@@ -1,13 +1,47 @@
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
 import campaigns from '../data/campaigns.json';
+import { fetchPublishedNews, normalizeArticle } from '../lib/api';
+
+// A news article counts as activity for a campaign if its category or tags
+// mention the campaign by name, tagline, or subtitle keyword. This is a
+// simple, real (not fabricated) link between published news and campaign
+// pages — no manual per-article tagging required.
+function matchesCampaign(article, campaign) {
+  const haystack = [article.category, ...(article.tags || [])]
+    .join(' ').toLowerCase();
+  const keywords = [campaign.name, campaign.tagline, campaign.subtitle]
+    .filter(Boolean)
+    .flatMap(text => text.split(/\s+/))
+    .map(w => w.toLowerCase())
+    .filter(w => w.length > 3); // skip short/common words
+  return keywords.some(word => haystack.includes(word));
+}
 
 export const CampaignDetail = () => {
   const { campaignId } = useParams();
   const navigate = useNavigate();
 
   const campaign = campaigns.campaigns.find(c => c.id === campaignId);
+  const [relatedNews, setRelatedNews] = useState([]);
+
+  useEffect(() => {
+    if (!campaign) return;
+    let isMounted = true;
+    fetchPublishedNews({ limit: 50 })
+      .then(articles => {
+        if (!isMounted) return;
+        const matches = articles
+          .map(normalizeArticle)
+          .filter(article => matchesCampaign(article, campaign))
+          .slice(0, 3);
+        setRelatedNews(matches);
+      })
+      .catch(() => {});
+    return () => { isMounted = false; };
+  }, [campaign]);
 
   if (!campaign) {
     return (
@@ -108,6 +142,33 @@ export const CampaignDetail = () => {
 
             </div>
           </div>
+
+          {/* Recent Activity — sourced live from published news, not hardcoded */}
+          {relatedNews.length > 0 && (
+            <div className="mt-10">
+              <h3 className="text-base font-bold text-primary mb-5 flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <Icon name="update" size={18} category="accent" />
+                </div>
+                Recent Activity
+              </h3>
+              <div className="grid md:grid-cols-3 gap-4">
+                {relatedNews.map(article => (
+                  <Link
+                    key={article.id}
+                    to={`/news/${article.slug}`}
+                    className="block bg-white rounded-xl shadow-card hover:shadow-elevated transition-all duration-300 overflow-hidden"
+                  >
+                    <img src={article.image} alt={article.title} loading="lazy" decoding="async" className="w-full h-32 object-cover" />
+                    <div className="p-4">
+                      <p className="text-xs text-gray-400 mb-1">{article.date}</p>
+                      <p className="text-sm font-semibold text-gray-800 line-clamp-2">{article.title}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

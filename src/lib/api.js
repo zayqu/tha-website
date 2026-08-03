@@ -47,3 +47,35 @@ export async function fetchNewsArticle(slug) {
   const data = await res.json();
   return data.article ? normalizeArticle(data.article) : null;
 }
+
+// Aggregated metric totals across all published projects/campaigns, computed
+// server-side from each project's `metrics` (see server/routes/projects.js).
+// Returns null on any failure so callers can fall back to static content
+// instead of showing a broken/zeroed stat.
+export async function fetchImpactTotals() {
+  try {
+    const res = await fetch(apiUrl('/api/projects/impact'));
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data && typeof data.totals === 'object' ? data.totals : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchProjects() {
+  const res = await fetch(apiUrl('/api/projects'));
+  if (!res.ok) throw new Error('Failed to load projects');
+  const data = await res.json();
+  return data.projects || [];
+}
+
+export async function fetchProject(slug) {
+  const res = await fetch(apiUrl(`/api/projects/${encodeURIComponent(slug)}`));
+  if (!res.ok) {
+    if (res.status === 404) return null;
+    throw new Error('Failed to load project');
+  }
+  const data = await res.json();
+  return data.project || null;
+}

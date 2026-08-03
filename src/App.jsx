@@ -17,6 +17,8 @@ import LegalPolicy from './pages/LegalPolicy';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminNewsForm from './pages/admin/AdminNewsForm';
+import AdminProjectsDashboard from './pages/admin/AdminProjectsDashboard';
+import AdminProjectForm from './pages/admin/AdminProjectForm';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useEffect } from 'react';
@@ -67,6 +69,9 @@ function App() {
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
             <Route path="/admin/news/new" element={<ProtectedRoute><AdminNewsForm /></ProtectedRoute>} />
             <Route path="/admin/news/edit/:id" element={<ProtectedRoute><AdminNewsForm /></ProtectedRoute>} />
+            <Route path="/admin/projects" element={<ProtectedRoute><AdminProjectsDashboard /></ProtectedRoute>} />
+            <Route path="/admin/projects/new" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
+            <Route path="/admin/projects/edit/:id" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
 
             <Route element={<PublicLayout />}>
               <Route path="/" element={<Home />} />
