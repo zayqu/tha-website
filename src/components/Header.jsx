@@ -14,7 +14,7 @@ export const Header = () => {
   const navLinks = [
     { label: 'Home', path: '/' },
     { label: 'About', path: '/about' },
-    { label: 'Programs', path: '/projects' },
+    { label: 'Campaigns', path: '/projects' },
     { label: 'Academy', path: '/academy' },
     { label: 'News', path: '/news' },
     { label: 'Contact', path: '/contact' },

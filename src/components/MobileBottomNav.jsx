@@ -4,7 +4,7 @@ import { Icon } from './Icon';
 const tabs = [
   { label: 'Home', path: '/', icon: 'home' },
   { label: 'About', path: '/about', icon: 'info' },
-  { label: 'Programs', path: '/projects', icon: 'campaign' },
+  { label: 'Campaigns', path: '/projects', icon: 'campaign' },
   { label: 'Academy', path: '/academy', icon: 'school' },
   { label: 'Contact', path: '/contact', icon: 'mail' },
 ];

@@ -33,7 +33,7 @@ export default function AdminProjectForm() {
         if (!isMounted) return;
         const project = (data.projects || []).find(p => p.id === id);
         if (!project) {
-          setErrors({ _global: 'Project not found.' });
+          setErrors({ _global: 'Campaign not found.' });
           return;
         }
         setForm({
@@ -135,7 +135,7 @@ export default function AdminProjectForm() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
             </svg>
           </Link>
-          <h1 className="font-bold text-gray-800">{isEditing ? 'Edit Project' : 'New Project'}</h1>
+          <h1 className="font-bold text-gray-800">{isEditing ? 'Edit Campaign' : 'New Campaign'}</h1>
         </div>
       </header>
 
@@ -148,7 +148,7 @@ export default function AdminProjectForm() {
             </div>
           )}
 
-          <Field label="Project / Campaign Name *" error={errors.name}>
+          <Field label="Campaign Name *" error={errors.name}>
             <input
               type="text" name="name" value={form.name} onChange={handleChange}
               placeholder="e.g. KAPIME: Get Tested"
@@ -184,7 +184,7 @@ export default function AdminProjectForm() {
             checked={form.published}
             onChange={handleChange}
             label="Published"
-            description="Visible on the public Projects and Impact pages."
+            description="Visible on the public Campaigns and Impact pages."
           />
 
           {/* Metrics — these are what power the site-wide impact counters */}
