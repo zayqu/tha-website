@@ -203,22 +203,30 @@ export default function AdminProjectForm() {
 
             {errors.metrics && <p className="text-red-500 text-xs mb-3">{errors.metrics}</p>}
 
+            {form.metrics.length > 0 && (
+              <div className="grid grid-cols-[1fr_112px_36px] gap-2 mb-1.5 px-0.5">
+                <span className="text-xs font-semibold text-gray-500">Metric name</span>
+                <span className="text-xs font-semibold text-gray-500">Value</span>
+                <span></span>
+              </div>
+            )}
+
             <div className="space-y-3">
               {form.metrics.map((metric, i) => (
-                <div key={i} className="flex gap-2 items-center">
+                <div key={i} className="grid grid-cols-[1fr_112px_36px] gap-2 items-center">
                   <input
                     type="text"
                     value={metric.key}
                     onChange={e => updateMetric(i, 'key', e.target.value)}
                     placeholder="metric name, e.g. peopleReached"
-                    className={`${inputCls()} flex-1`}
+                    className="w-full border rounded-xl px-4 py-2.5 text-gray-800 text-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
                   />
                   <input
                     type="number"
                     value={metric.value}
                     onChange={e => updateMetric(i, 'value', e.target.value)}
                     placeholder="0"
-                    className={`${inputCls()} w-32`}
+                    className="w-full border rounded-xl px-3 py-2.5 text-gray-800 text-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
                   />
                   <button
                     type="button"
