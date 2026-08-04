@@ -251,11 +251,6 @@ export const Home = () => {
               Contact Us
             </Link>
           </div>
-
-          {/* Year Founded */}
-          <div className="mt-12 text-white/70 text-sm">
-            Founded {thaData.foundedYear} · Representing Tanzania Globally
-          </div>
         </div>
       </section>
 
