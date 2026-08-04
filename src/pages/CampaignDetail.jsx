@@ -80,12 +80,10 @@ export const CampaignDetail = () => {
           >
             ← Back
           </button>
-          <span className="inline-block bg-white/15 backdrop-blur-md text-white text-xs font-semibold px-4 py-1.5 rounded-full border border-white/20 mb-4">
-            {campaign.tagline}
-          </span>
-          <h1 className="text-4xl md:text-5xl font-bold mt-2 mb-2 tracking-tight">{campaign.name}</h1>
-          <p className="text-xl text-white/80">{campaign.subtitle}</p>
-          <p className="text-base text-white/60 max-w-2xl mt-4 leading-relaxed">{campaign.description}</p>
+          <h1 className="text-4xl md:text-5xl font-bold mt-2 mb-4 tracking-tight">
+            {campaign.name} <span className="text-white/70 font-semibold">— {campaign.tagline}</span>
+          </h1>
+          <p className="text-lg text-white/80 max-w-2xl leading-relaxed">{campaign.description}</p>
         </div>
       </section>
 

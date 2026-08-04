@@ -65,21 +65,25 @@ export const Academy = () => {
       <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center">
-            <p className="uppercase tracking-[0.2em] text-sm font-semibold text-white/75 mb-4">THA Academy</p>
             <h1 className="heading-xl text-white mb-5">Public Health Knowledge Centre</h1>
-            <p className="text-lg md:text-xl text-white/85 max-w-3xl mx-auto mb-8">
+            <p className="text-lg md:text-xl text-white/85 max-w-3xl mx-auto">
               Find clear answers about HIV, viral hepatitis and mental health, then explore trusted guidance when you want to learn more.
             </p>
-            <div className="relative max-w-2xl mx-auto">
-              <Icon name="search" size={24} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/60" />
-              <input
-                type="search"
-                placeholder="Search by topic, title or institution"
-                value={searchQuery}
-                onChange={event => setSearchQuery(event.target.value)}
-                className="w-full pl-14 pr-4 py-4 rounded-xl text-primary focus:outline-none focus:ring-2 focus:ring-secondary text-lg"
-              />
-            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white border-b border-gray-100">
+        <div className="container-custom py-8">
+          <div className="relative max-w-2xl mx-auto">
+            <Icon name="search" size={24} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/60" />
+            <input
+              type="search"
+              placeholder="Search by topic, title or institution"
+              value={searchQuery}
+              onChange={event => setSearchQuery(event.target.value)}
+              className="w-full pl-14 pr-4 py-4 rounded-xl text-primary border border-gray-200 focus:outline-none focus:ring-2 focus:ring-secondary text-lg"
+            />
           </div>
         </div>
       </section>
