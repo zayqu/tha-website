@@ -62,7 +62,7 @@ export const Academy = () => {
         canonicalPath="/academy"
       />
 
-      <section className="section-padding bg-gradient-to-br from-primary to-primary-light text-white">
+      <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center">
             <p className="uppercase tracking-[0.2em] text-sm font-semibold text-white/75 mb-4">THA Academy</p>

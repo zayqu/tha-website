@@ -46,7 +46,7 @@ export const MakeADifference = () => {
       />
 
       {/* Hero */}
-      <section className="section-padding bg-gradient-to-br from-primary to-primary-light text-white">
+      <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="heading-xl text-white mb-6">Make a Difference</h1>
@@ -278,7 +278,7 @@ export const MakeADifference = () => {
       )}
 
       {/* Success Story */}
-      <section className="section-padding bg-gradient-to-br from-primary to-primary-light text-white">
+      <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
