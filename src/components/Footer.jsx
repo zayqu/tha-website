@@ -136,7 +136,7 @@ export const Footer = () => {
           {/* Bottom Bar */}
           <div className="border-t border-white/15 pt-8 pb-16 md:pb-0 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-white/60">
-              Copyright &copy; 2025 - Tanzania Health Alliance
+              Copyright &copy; {new Date().getFullYear()} - Tanzania Health Alliance
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
               <Link to="/privacy" className="text-sm text-white/60 hover:text-secondary transition">Privacy Policy</Link>
@@ -147,7 +147,7 @@ export const Footer = () => {
                 className="flex items-center gap-1.5 text-sm text-white/40 hover:text-secondary transition"
               >
                 <Icon name="edit_note" size={16} color="currentColor" />
-                Post
+                Staff Login
               </Link>
             </div>
           </div>
