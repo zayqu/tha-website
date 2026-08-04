@@ -92,7 +92,7 @@ export default function AdminProjectsDashboard() {
             </div>
             <div>
               <span className="font-bold text-gray-800">THA Admin</span>
-              <span className="hidden sm:inline text-gray-400 text-sm ml-2">/ Projects &amp; Campaigns</span>
+              <span className="hidden sm:inline text-gray-400 text-sm ml-2">/ Campaigns</span>
             </div>
           </div>
 
@@ -121,7 +121,7 @@ export default function AdminProjectsDashboard() {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-8">
           {[
-            { label: 'Total Projects', value: projects.length, icon: '📋', color: 'bg-blue-50 text-blue-700' },
+            { label: 'Total Campaigns', value: projects.length, icon: '📋', color: 'bg-blue-50 text-blue-700' },
             { label: 'Published',      value: publishedCount,   icon: '✅', color: 'bg-green-50 text-green-700' },
             { label: 'Drafts',         value: draftCount,       icon: '📝', color: 'bg-amber-50 text-amber-700' },
           ].map(stat => (
@@ -133,8 +133,8 @@ export default function AdminProjectsDashboard() {
         </div>
 
         <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-500">
-          These are the campaigns/programs shown on the public Projects and Impact pages. The numbers you set under
-          each project's <strong>metrics</strong> are summed automatically to power the site-wide impact counters.
+          These are the campaigns shown on the public Campaigns and Impact pages. The numbers you set under
+          each campaign's <strong>metrics</strong> are summed automatically to power the site-wide impact counters.
         </div>
 
         {/* Header row */}
@@ -160,7 +160,7 @@ export default function AdminProjectsDashboard() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
             </svg>
-            New Project
+            New Campaign
           </Link>
         </div>
 
@@ -172,7 +172,7 @@ export default function AdminProjectsDashboard() {
           </div>
         )}
 
-        {/* Project List */}
+        {/* Campaign List */}
         {loading ? (
           <div className="flex items-center justify-center py-24">
             <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
@@ -180,9 +180,9 @@ export default function AdminProjectsDashboard() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-24 bg-white rounded-2xl border border-gray-100">
             <div className="text-5xl mb-4">📭</div>
-            <p className="text-gray-500">No projects yet.</p>
+            <p className="text-gray-500">No campaigns yet.</p>
             <Link to="/admin/projects/new" className="mt-4 inline-block text-primary font-semibold hover:underline">
-              Create your first project →
+              Create your first campaign →
             </Link>
           </div>
         ) : (
@@ -283,7 +283,7 @@ export default function AdminProjectsDashboard() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
             </svg>
-            View live projects page
+            View live campaigns page
           </a>
         </div>
       </main>

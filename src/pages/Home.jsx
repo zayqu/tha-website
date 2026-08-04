@@ -254,7 +254,7 @@ export const Home = () => {
 
           {/* Year Founded */}
           <div className="mt-12 text-white/70 text-sm">
-            Founded {thaData.foundedYear} — Representing Tanzania Globally
+            Founded {thaData.foundedYear} · Representing Tanzania Globally
           </div>
         </div>
       </section>
@@ -283,7 +283,7 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* PROGRAMS */}
+      {/* CAMPAIGNS */}
       <section className="py-20 bg-cool-gray">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">

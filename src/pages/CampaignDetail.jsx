@@ -81,7 +81,7 @@ export const CampaignDetail = () => {
             ← Back
           </button>
           <h1 className="text-4xl md:text-5xl font-bold mt-2 mb-4 tracking-tight">
-            {campaign.name} <span className="text-white/70 font-semibold">— {campaign.tagline}</span>
+            {campaign.name}<span className="text-white/70 font-semibold">: {campaign.tagline}</span>
           </h1>
           <p className="text-lg text-white/80 max-w-2xl leading-relaxed">{campaign.description}</p>
         </div>

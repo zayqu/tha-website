@@ -103,7 +103,7 @@ export const Impact = () => {
     <div className="pt-14 md:pt-16 bg-cool-gray">
       <SEO
         title="Impact"
-        description="Explore Tanzania Health Alliance impact metrics, campaign results, partnerships, and milestones across Tanzania public health programs."
+        description="Explore Tanzania Health Alliance impact metrics, campaign results, partnerships, and milestones across Tanzania public health campaigns."
         canonicalPath="/impact"
       />
 
@@ -112,7 +112,7 @@ export const Impact = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-5">Making an Impact</h1>
           <p className="text-base md:text-xl text-white/90 max-w-3xl mx-auto">
-            From a single idea in January 2025 to national recognition — see how Tanzania Health Alliance is transforming health outcomes.
+            From a single idea in January 2025 to national recognition. See how Tanzania Health Alliance is transforming health outcomes.
           </p>
         </div>
       </section>

@@ -129,7 +129,7 @@ export const About = () => {
               </h2>
 
               <div className="text-xl italic text-gray-700 border-l-4 border-accent pl-6 mb-6 leading-relaxed">
-                "In 2021, I lost my brother to a preventable liver disease. That loss became my calling—to ensure that no other family experiences the heartbreak we did."
+                "In 2021, I lost my brother to a preventable liver disease. That loss became my calling: to ensure that no other family experiences the heartbreak we did."
               </div>
               <p className="text-gray-600 mb-4 text-lg">
                 <strong>— Shaibu Issa, {thaData.founder.title}</strong>
@@ -217,7 +217,7 @@ export const About = () => {
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">How We Work</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2">Our Campaign Approach</h2>
             <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
-              THA delivers impact through three structured campaigns. Every activity, outreach, and program maps to one of these campaigns — ensuring focused, measurable results.
+              THA delivers impact through three structured campaigns. Every activity and outreach maps to one of these campaigns, ensuring focused, measurable results.
             </p>
           </div>
 

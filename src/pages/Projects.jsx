@@ -13,7 +13,7 @@ export const Projects = () => {
   return (
     <div className="pt-14 md:pt-16 bg-cool-gray">
       <SEO
-        title="Programs"
+        title="Campaigns"
         description="Explore Tanzania Health Alliance campaigns and activities including KAPIME, Life Unlocked, and Talk To Heal."
         canonicalPath="/projects"
       />
@@ -23,7 +23,7 @@ export const Projects = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-4">Our Campaigns & Activities</h1>
           <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
-            Every THA activity maps to one of three strategic campaigns — each targeting a critical health challenge in Tanzania.
+            Every THA activity maps to one of three strategic campaigns, each targeting a critical health challenge in Tanzania.
           </p>
         </div>
       </section>

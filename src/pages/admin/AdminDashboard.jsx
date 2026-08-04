@@ -131,7 +131,7 @@ export default function AdminDashboard() {
 
           <div className="flex items-center gap-3">
             <Link to="/admin/projects" className="hidden sm:inline text-sm text-gray-500 hover:text-primary transition-colors">
-              Projects
+              Campaigns
             </Link>
             <span className="hidden sm:block text-sm text-gray-500">
               {admin?.name || admin?.identifier}

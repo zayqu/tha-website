@@ -9,7 +9,7 @@ export const thaData = {
   founder: {
     name: "Shaibu Issa",
     title: "Founder & Executive Director",
-    story: "The organization was inspired by the personal experience of its founder, Shaibu Issa, who lost his brother to liver cancer in 2021 — a preventable condition with early detection and vaccination. This experience led to the creation of THA to increase awareness, promote prevention, improve access to healthcare, and address stigma related to diseases such as hepatitis."
+    story: "The organization was inspired by the personal experience of its founder, Shaibu Issa, who lost his brother to liver cancer in 2021, a preventable condition with early detection and vaccination. This experience led to the creation of THA to increase awareness, promote prevention, improve access to healthcare, and address stigma related to diseases such as hepatitis."
   },
   team: [
     { name: "Shaibu Issa", title: "Founder and Executive Director" },
