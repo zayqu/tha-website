@@ -207,7 +207,7 @@ router.post('/', requireAuth, validators, async (req, res, next) => {
   }
 });
 
-router.put('/:id', requireAuth, [param('id').isUUID(), ...validators], async (req, res, next) => {
+router.put('/:id', requireAuth, [param('id').trim().isLength({ min: 1, max: 100 }).withMessage('Invalid project id'), ...validators], async (req, res, next) => {
   try {
     if (validationError(req, res)) return;
     if (!pool) return res.status(503).json({ error: 'Project editing requires PostgreSQL' });
@@ -229,7 +229,7 @@ router.put('/:id', requireAuth, [param('id').isUUID(), ...validators], async (re
   }
 });
 
-router.delete('/:id', requireAuth, [param('id').isUUID()], async (req, res, next) => {
+router.delete('/:id', requireAuth, [param('id').trim().isLength({ min: 1, max: 100 }).withMessage('Invalid project id')], async (req, res, next) => {
   try {
     if (validationError(req, res)) return;
     if (!pool) return res.status(503).json({ error: 'Project editing requires PostgreSQL' });

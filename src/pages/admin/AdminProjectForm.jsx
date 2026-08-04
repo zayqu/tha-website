@@ -4,6 +4,18 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const STATUSES = ['active', 'planned', 'completed', 'archived'];
 
+// Plain-English options for the metrics that actually power the site-wide
+// counters (see server/routes/projects.js /impact). Picking from this list
+// instead of typing a key by hand is what prevents typos like
+// 'individualsEngaged' silently not counting toward 'People Reached'.
+const KNOWN_METRICS = [
+  { key: 'peopleReached', label: 'People Reached' },
+  { key: 'studentsReached', label: 'Students Reached' },
+  { key: 'institutionsEngaged', label: 'Institutions Engaged' },
+  { key: 'communityEvents', label: 'Community Events' },
+];
+const CUSTOM_OPTION = '__custom__';
+
 const EMPTY_FORM = {
   name: '',
   category: 'Community Health',
@@ -63,7 +75,7 @@ export default function AdminProjectForm() {
   }
 
   function addMetric() {
-    setForm(prev => ({ ...prev, metrics: [...prev.metrics, { key: '', value: '0' }] }));
+    setForm(prev => ({ ...prev, metrics: [...prev.metrics, { key: 'peopleReached', value: '0' }] }));
   }
 
   function removeMetric(index) {
@@ -75,7 +87,7 @@ export default function AdminProjectForm() {
     if (form.name.trim().length < 3) next.name = 'Name must be at least 3 characters.';
     for (const m of form.metrics) {
       if (m.key.trim() && !Number.isFinite(Number(m.value))) {
-        next.metrics = 'Metric values must be numbers.';
+        next.metrics = 'Please enter a number for each result.';
       }
     }
     setErrors(next);
@@ -190,14 +202,11 @@ export default function AdminProjectForm() {
           {/* Metrics — these are what power the site-wide impact counters */}
           <div className="rounded-2xl border border-gray-200 bg-white p-5">
             <div className="mb-4">
-              <h2 className="font-semibold text-gray-800">Impact metrics</h2>
+              <h2 className="font-semibold text-gray-800">Impact numbers</h2>
               <p className="text-sm text-gray-500 mt-1">
-                Numbers here are summed across every published project to drive the homepage and Impact-page counters
-                (e.g. <code className="text-xs bg-gray-100 px-1 py-0.5 rounded">peopleReached</code>,{' '}
-                <code className="text-xs bg-gray-100 px-1 py-0.5 rounded">studentsReached</code>,{' '}
-                <code className="text-xs bg-gray-100 px-1 py-0.5 rounded">institutionsEngaged</code>,{' '}
-                <code className="text-xs bg-gray-100 px-1 py-0.5 rounded">communityEvents</code>). Use the same metric
-                name across projects so totals add up correctly.
+                Add the results this campaign achieved. Pick from the list where it fits, or choose{' '}
+                "Something else…" for anything not listed. These numbers are added up across all campaigns to
+                show the totals on the homepage and Impact page.
               </p>
             </div>
 
@@ -205,41 +214,59 @@ export default function AdminProjectForm() {
 
             {form.metrics.length > 0 && (
               <div className="grid grid-cols-[1fr_112px_36px] gap-2 mb-1.5 px-0.5">
-                <span className="text-xs font-semibold text-gray-500">Metric name</span>
-                <span className="text-xs font-semibold text-gray-500">Value</span>
+                <span className="text-xs font-semibold text-gray-500">What are you counting?</span>
+                <span className="text-xs font-semibold text-gray-500">How many</span>
                 <span></span>
               </div>
             )}
 
             <div className="space-y-3">
-              {form.metrics.map((metric, i) => (
-                <div key={i} className="grid grid-cols-[1fr_112px_36px] gap-2 items-center">
-                  <input
-                    type="text"
-                    value={metric.key}
-                    onChange={e => updateMetric(i, 'key', e.target.value)}
-                    placeholder="metric name, e.g. peopleReached"
-                    className="w-full border rounded-xl px-4 py-2.5 text-gray-800 text-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
-                  />
-                  <input
-                    type="number"
-                    value={metric.value}
-                    onChange={e => updateMetric(i, 'value', e.target.value)}
-                    placeholder="0"
-                    className="w-full border rounded-xl px-3 py-2.5 text-gray-800 text-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeMetric(i)}
-                    className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors flex-shrink-0"
-                    title="Remove metric"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                  </button>
-                </div>
-              ))}
+              {form.metrics.map((metric, i) => {
+                const isKnown = KNOWN_METRICS.some(m => m.key === metric.key);
+                const selectValue = isKnown ? metric.key : CUSTOM_OPTION;
+                return (
+                  <div key={i}>
+                    <div className="grid grid-cols-[1fr_112px_36px] gap-2 items-center">
+                      <select
+                        value={selectValue}
+                        onChange={e => updateMetric(i, 'key', e.target.value === CUSTOM_OPTION ? '' : e.target.value)}
+                        className="w-full border rounded-xl px-4 py-2.5 text-gray-800 text-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition bg-white"
+                      >
+                        {KNOWN_METRICS.map(m => (
+                          <option key={m.key} value={m.key}>{m.label}</option>
+                        ))}
+                        <option value={CUSTOM_OPTION}>Something else…</option>
+                      </select>
+                      <input
+                        type="number"
+                        value={metric.value}
+                        onChange={e => updateMetric(i, 'value', e.target.value)}
+                        placeholder="0"
+                        className="w-full border rounded-xl px-3 py-2.5 text-gray-800 text-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeMetric(i)}
+                        className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors flex-shrink-0"
+                        title="Remove metric"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                      </button>
+                    </div>
+                    {!isKnown && (
+                      <input
+                        type="text"
+                        value={metric.key}
+                        onChange={e => updateMetric(i, 'key', e.target.value)}
+                        placeholder="Name this, e.g. Outreach Sessions"
+                        className="mt-1.5 w-full border rounded-xl px-4 py-2 text-gray-800 text-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                      />
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             <button
@@ -250,7 +277,7 @@ export default function AdminProjectForm() {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/>
               </svg>
-              Add metric
+              Add a result
             </button>
           </div>
 
