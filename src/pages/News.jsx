@@ -56,8 +56,11 @@ export const News = () => {
     : articles.filter(a => a.category === activeCategory);
 
   const featuredArticle = articles.find(a => a.isFeatured);
-  const regularArticles  = activeCategory === 'all'
-    ? filteredNews.filter(a => !a.isFeatured)
+  // Only the article actually used in the hero should be removed from the
+  // grid. Editors may mark more than one article as featured over time, and
+  // older featured stories must remain visible in the published list.
+  const regularArticles = activeCategory === 'all' && featuredArticle
+    ? filteredNews.filter(article => article.id !== featuredArticle.id)
     : filteredNews;
 
   return (
