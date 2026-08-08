@@ -204,7 +204,7 @@ export default function AdminProjectForm() {
             {errors.metrics && <p className="text-red-500 text-xs mb-3">{errors.metrics}</p>}
 
             {form.metrics.length > 0 && (
-              <div className="grid grid-cols-[1fr_112px_36px] gap-2 mb-1.5 px-0.5">
+              <div className="mb-1.5 grid grid-cols-[minmax(0,1fr)_5rem_2.25rem] gap-2 px-0.5 sm:grid-cols-[minmax(0,1fr)_7rem_2.25rem]">
                 <span className="text-xs font-semibold text-gray-500">What are you counting?</span>
                 <span className="text-xs font-semibold text-gray-500">How many</span>
                 <span></span>
@@ -217,7 +217,7 @@ export default function AdminProjectForm() {
                 const selectValue = isKnown ? metric.key : CUSTOM_OPTION;
                 return (
                   <div key={i}>
-                    <div className="grid grid-cols-[1fr_112px_36px] gap-2 items-center">
+                    <div className="grid grid-cols-[minmax(0,1fr)_5rem_2.25rem] items-center gap-2 sm:grid-cols-[minmax(0,1fr)_7rem_2.25rem]">
                       <select
                         value={selectValue}
                         onChange={e => updateMetric(i, 'key', e.target.value === CUSTOM_OPTION ? '' : e.target.value)}
