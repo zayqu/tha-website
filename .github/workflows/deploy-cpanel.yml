@@ -122,6 +122,32 @@ jobs:
           printf '%s\n' "$CPANEL_KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
+      - name: Back up the current website
+        id: backup
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote="${CPANEL_USER}@${CPANEL_HOST}"
+          ssh_args=(-p "$CPANEL_PORT" -i ~/.ssh/id_ed25519 -o BatchMode=yes)
+          timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
+          backup_archive="${CPANEL_FRONTEND_PATH}.wordpress-backup-${timestamp}.tar.gz"
+          frontend_parent="$(dirname "$CPANEL_FRONTEND_PATH")"
+          frontend_name="$(basename "$CPANEL_FRONTEND_PATH")"
+
+          printf -v frontend_path_q '%q' "$CPANEL_FRONTEND_PATH"
+          printf -v frontend_parent_q '%q' "$frontend_parent"
+          printf -v frontend_name_q '%q' "$frontend_name"
+          printf -v backup_archive_q '%q' "$backup_archive"
+
+          if ssh "${ssh_args[@]}" "$remote" "test -d $frontend_path_q"; then
+            ssh "${ssh_args[@]}" "$remote" \
+              "tar -czf $backup_archive_q -C $frontend_parent_q $frontend_name_q"
+            echo "created=true" >> "$GITHUB_OUTPUT"
+            echo "archive=$backup_archive" >> "$GITHUB_OUTPUT"
+          else
+            echo "created=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Deploy frontend and backend
         shell: bash
         run: |
@@ -143,3 +169,24 @@ jobs:
           set -euo pipefail
           curl --fail --silent --show-error --retry 6 --retry-delay 5 --retry-all-errors             https://api.tzhealthalliance.or.tz/api/health
           curl --fail --silent --show-error --retry 6 --retry-delay 5 --retry-all-errors             https://tzhealthalliance.or.tz/ > /dev/null
+
+      - name: Restore WordPress after a failed release
+        if: failure() && steps.backup.outputs.created == 'true'
+        shell: bash
+        env:
+          BACKUP_ARCHIVE: ${{ steps.backup.outputs.archive }}
+        run: |
+          set -euo pipefail
+          remote="${CPANEL_USER}@${CPANEL_HOST}"
+          ssh_args=(-p "$CPANEL_PORT" -i ~/.ssh/id_ed25519 -o BatchMode=yes)
+          timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
+          failed_release="${CPANEL_FRONTEND_PATH}.failed-${timestamp}"
+          frontend_parent="$(dirname "$CPANEL_FRONTEND_PATH")"
+
+          printf -v frontend_path_q '%q' "$CPANEL_FRONTEND_PATH"
+          printf -v frontend_parent_q '%q' "$frontend_parent"
+          printf -v failed_release_q '%q' "$failed_release"
+          printf -v backup_archive_q '%q' "$BACKUP_ARCHIVE"
+
+          ssh "${ssh_args[@]}" "$remote" \
+            "test -f $backup_archive_q && mv $frontend_path_q $failed_release_q && tar -xzf $backup_archive_q -C $frontend_parent_q"
