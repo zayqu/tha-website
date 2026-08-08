@@ -121,7 +121,7 @@ export const Academy = () => {
 
       <section className="bg-white border-b sticky top-14 md:top-16 z-30">
         <div className="container-custom px-4 py-4 space-y-3">
-          <div className="flex gap-2 overflow-x-auto custom-scrollbar">
+          <div className="flex flex-wrap gap-2">
             {TOPICS.map(item => (
               <button key={item} onClick={() => setTopic(item)}
                 className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap ${topic === item ? 'bg-primary text-white' : 'bg-neutral text-primary hover:bg-gray-200'}`}>
@@ -129,7 +129,7 @@ export const Academy = () => {
               </button>
             ))}
           </div>
-          <div className="flex gap-2 overflow-x-auto custom-scrollbar">
+          <div className="flex flex-wrap gap-2">
             {CATEGORIES.map(item => (
               <button key={item} onClick={() => setCategory(item)}
                 className={`px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap ${category === item ? 'bg-secondary text-white' : 'border border-gray-200 text-gray-600 hover:border-secondary'}`}>
