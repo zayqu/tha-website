@@ -1,12 +1,13 @@
-// Use the matching public API for each production host.
+// Keep every Vercel-hosted frontend on the healthy public Vercel API.
+// The cPanel build explicitly supplies VITE_API_BASE_URL, so it can switch
+// to the cPanel API only after that service is deployed and verified.
 const VERCEL_API_URL = 'https://tha-webacdb.vercel.app';
-const CPANEL_API_URL = 'https://api.tzhealthalliance.or.tz';
 
 function defaultApiBaseUrl() {
   if (typeof window === 'undefined') return '';
   const host = window.location.hostname;
   if (host === 'localhost' || host === '127.0.0.1') return '';
-  if (host === 'tzhealthalliance.or.tz' || host === 'www.tzhealthalliance.or.tz') return CPANEL_API_URL;
+  if (host === 'tzhealthalliance.or.tz' || host === 'www.tzhealthalliance.or.tz') return VERCEL_API_URL;
   if (host.endsWith('.vercel.app')) return VERCEL_API_URL;
   return '';
 }
