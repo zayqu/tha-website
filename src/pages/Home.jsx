@@ -9,9 +9,8 @@ import { PartnersCarousel } from '../components/PartnersCarousel';
 import { TestimonialsCarousel } from '../components/TestimonialCarousel';
 import { SEO, organizationSchema } from '../components/SEO';
 import { thaData } from '../data/thaData';
-import { newsArticles } from '../data/newsData';
 import NewsCard from '../components/NewsCard';
-import { fetchPublishedNews, normalizeArticle, fetchImpactTotals } from '../lib/api';
+import { fetchPublishedNews, fetchImpactTotals } from '../lib/api';
 import { getHeroImageProps } from '../lib/imageUtils';
 
 /* =========================
@@ -187,16 +186,22 @@ const TimelineItem = ({ milestone, index }) => {
 };
 
 export const Home = () => {
-  const [latestNews, setLatestNews] = useState(newsArticles.map(normalizeArticle).slice(0, 3));
+  const [latestNews, setLatestNews] = useState([]);
+  const [latestNewsLoading, setLatestNewsLoading] = useState(true);
   const [impactTotals, setImpactTotals] = useState(impactData.impactMetrics.total);
 
   useEffect(() => {
     let isMounted = true;
     fetchPublishedNews({ limit: 3 })
       .then(articles => {
-        if (isMounted && articles.length > 0) setLatestNews(articles);
+        if (isMounted) setLatestNews(articles);
       })
-      .catch(() => {});
+      .catch(() => {
+        if (isMounted) setLatestNews([]);
+      })
+      .finally(() => {
+        if (isMounted) setLatestNewsLoading(false);
+      });
 
     return () => { isMounted = false; };
   }, []);
@@ -377,11 +382,22 @@ export const Home = () => {
               View All <Icon name="arrow_forward" size={16} />
             </Link>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {latestNews.map((n) => (
-              <NewsCard key={n.id} news={n} />
-            ))}
-          </div>
+          {latestNewsLoading ? (
+            <p className="text-center text-gray-500 py-8">Loading latest news...</p>
+          ) : latestNews.length > 0 ? (
+            <div className="grid md:grid-cols-3 gap-6">
+              {latestNews.map((n) => (
+                <NewsCard key={n.id} news={n} />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-xl bg-cool-gray px-6 py-8 text-center">
+              <p className="text-gray-600 mb-4">Latest news is temporarily unavailable.</p>
+              <Link to="/news" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+                Open News <Icon name="arrow_forward" size={16} />
+              </Link>
+            </div>
+          )}
           <div className="mt-8 text-center sm:hidden">
             <Link
               to="/news"

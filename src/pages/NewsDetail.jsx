@@ -1,40 +1,69 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
-import { newsArticles } from '../data/newsData';
-import { fetchNewsArticle, normalizeArticle } from '../lib/api';
+import { fetchNewsArticle } from '../lib/api';
 import { getNewsImageProps } from '../lib/imageUtils';
 
 export default function NewsDetail() {
   const { slug } = useParams();
-  const fallbackArticle = useMemo(
-    () => newsArticles.map(normalizeArticle).find(item => item.slug === slug),
-    [slug]
-  );
-  const [news, setNews] = useState(fallbackArticle || null);
+  const [news, setNews] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [loadError, setLoadError] = useState('');
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
+    setLoading(true);
+    setNotFound(false);
+    setLoadError('');
+    setNews(null);
     fetchNewsArticle(slug)
       .then(article => {
         if (!isMounted) return;
-        setNews(article || fallbackArticle || null);
+        if (!article) {
+          setNotFound(true);
+          return;
+        }
+        setNews(article);
       })
       .catch(() => {
         if (!isMounted) return;
-        setNews(fallbackArticle || null);
+        setLoadError("We couldn't load this article. Please try again.");
       })
       .finally(() => {
         if (isMounted) setLoading(false);
       });
 
     return () => { isMounted = false; };
-  }, [fallbackArticle, slug]);
+  }, [reloadKey, slug]);
 
-  if (!loading && !news) {
+  if (!loading && notFound) {
     return <Navigate to="/news" replace />;
+  }
+
+  if (!loading && loadError) {
+    return (
+      <div className="pt-14 md:pt-16 min-h-screen bg-white flex items-center justify-center px-4">
+        <div className="max-w-lg text-center bg-red-50 border border-red-200 rounded-2xl p-8">
+          <h1 className="heading-md mb-3">Article temporarily unavailable</h1>
+          <p className="text-gray-600 mb-6">{loadError}</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => setReloadKey(key => key + 1)}
+              className="px-5 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition"
+            >
+              Try again
+            </button>
+            <Link to="/news" className="px-5 py-2.5 border border-primary text-primary font-semibold rounded-lg hover:bg-primary/5 transition">
+              Back to News
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!news) {

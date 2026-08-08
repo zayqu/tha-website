@@ -2,8 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
-import { newsArticles } from '../data/newsData';
-import { fetchPublishedNews, normalizeArticle } from '../lib/api';
+import { fetchPublishedNews } from '../lib/api';
 import { getNewsImageProps } from '../lib/imageUtils';
 
 // Familiar categories keep their brand styling; new categories receive a neutral brand badge.
@@ -16,39 +15,32 @@ const categoryColor = {
 
 export const News = () => {
   const [activeCategory, setActiveCategory] = useState('all');
-  const fallbackNews = useMemo(() => newsArticles.map(normalizeArticle), []);
-  const [articles, setArticles] = useState(fallbackNews);
+  const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
+    setLoading(true);
+    setLoadError('');
     fetchPublishedNews({ limit: 100 })
       .then(liveArticles => {
         if (!isMounted) return;
-        // Keep the original website archive alongside API-managed articles.
-        // A matching live slug replaces its archived copy, preventing duplicates.
-        const mergedBySlug = new Map(
-          fallbackNews.map(article => [article.slug, article])
-        );
-        liveArticles.forEach(article => mergedBySlug.set(article.slug, article));
-        const mergedArticles = [...mergedBySlug.values()].sort(
-          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-        );
-        setArticles(mergedArticles);
+        setArticles(liveArticles);
         setLoadError('');
       })
       .catch(() => {
         if (!isMounted) return;
-        setArticles(fallbackNews);
-        setLoadError('Showing saved website news while live news is unavailable.');
+        setArticles([]);
+        setLoadError("We couldn't load the latest news. Please try again.");
       })
       .finally(() => {
         if (isMounted) setLoading(false);
       });
 
     return () => { isMounted = false; };
-  }, [fallbackNews]);
+  }, [reloadKey]);
 
   const categories = useMemo(() => {
     const liveCategories = [...new Set(articles.map(article => article.category).filter(Boolean))]
@@ -179,11 +171,18 @@ export const News = () => {
             <div className="text-center text-neutral-dark/60 mb-8">Loading latest news...</div>
           )}
           {loadError && (
-            <div className="max-w-2xl mx-auto bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg px-4 py-3 text-sm mb-8">
-              {loadError}
+            <div className="max-w-2xl mx-auto bg-red-50 border border-red-200 text-red-800 rounded-xl px-5 py-4 text-sm mb-8 flex flex-wrap items-center justify-between gap-3">
+              <span>{loadError}</span>
+              <button
+                type="button"
+                onClick={() => setReloadKey(key => key + 1)}
+                className="px-4 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition"
+              >
+                Try again
+              </button>
             </div>
           )}
-          {regularArticles.length > 0 ? (
+          {!loading && regularArticles.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {regularArticles.map((article) => (
                 <Link
@@ -236,7 +235,7 @@ export const News = () => {
                 </Link>
               ))}
             </div>
-          ) : (
+          ) : !loading && !loadError ? (
             <div className="text-center py-16">
               <div className="w-24 h-24 bg-neutral rounded-full flex items-center justify-center mx-auto mb-6">
                 <Icon name="newspaper" size={48} className="text-primary/30" />
@@ -246,7 +245,7 @@ export const News = () => {
                 {activeCategory === 'all' ? 'New stories and announcements will appear here as they are published.' : `New ${activeCategory.toLowerCase()} will appear here as they are published.`}
               </p>
             </div>
-          )}
+          ) : null}
         </div>
       </section>
     </div>

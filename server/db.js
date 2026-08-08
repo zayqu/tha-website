@@ -12,6 +12,7 @@
 const fs   = require('fs');
 const path = require('path');
 require('dotenv').config();
+const legacyNews = require('./legacy-news.json');
 
 const DATA_DIR = path.join(__dirname, 'data');
 
@@ -220,7 +221,13 @@ async function ensureSchema() {
       const client = await pool.connect();
       try {
         // Serialize schema creation across concurrent Vercel cold starts.
-        await client.query('SELECT pg_advisory_lock($1)', [1414001]);
+        await client.query({
+          text: 'SELECT pg_advisory_lock($1)',
+          values: [1414001],
+          // A second cold start may briefly wait while the first one applies
+          // schema migrations. Give that lock more time than normal queries.
+          query_timeout: 30000,
+        });
         await client.query(`
       CREATE TABLE IF NOT EXISTS admins (
         id TEXT PRIMARY KEY,
@@ -267,14 +274,65 @@ async function ensureSchema() {
       );
 
       ALTER TABLE news ADD COLUMN IF NOT EXISTS views INTEGER NOT NULL DEFAULT 0;
+
+      CREATE TABLE IF NOT EXISTS content_migrations (
+        id TEXT PRIMARY KEY,
+        applied_at INTEGER NOT NULL
+      );
 `);
+
+        // Move the original website archive into the same managed store used
+        // by Admin. The migration marker makes this a true one-time import:
+        // articles deleted later by an editor will not be silently restored.
+        const migrationId = '2026-08-08-import-legacy-news';
+        const migration = await client.query(
+          'SELECT 1 FROM content_migrations WHERE id = $1 LIMIT 1',
+          [migrationId]
+        );
+        if (!migration.rows.length) {
+          await client.query('BEGIN');
+          try {
+            for (const article of legacyNews) {
+              const timestamp = Math.floor(new Date(article.date).getTime() / 1000);
+              await client.query(
+                `INSERT INTO news
+                 (id, slug, title, excerpt, content, image, category, author, date,
+                  tags, is_featured, published, views, created_at, updated_at)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb,
+                         $11, true, $12, $13, $13)
+                 ON CONFLICT DO NOTHING`,
+                [
+                  article.id, article.slug, article.title, article.excerpt,
+                  article.content, article.image, article.category, article.author,
+                  article.date, JSON.stringify(article.tags || []),
+                  Boolean(article.is_featured), Number(article.views || 0), timestamp,
+                ]
+              );
+            }
+            await client.query(
+              'INSERT INTO content_migrations (id, applied_at) VALUES ($1, $2)',
+              [migrationId, Math.floor(Date.now() / 1000)]
+            );
+            await client.query('COMMIT');
+          } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+          }
+        }
       } finally {
         await client.query('SELECT pg_advisory_unlock($1)', [1414001]).catch(() => {});
         client.release();
       }
     })();
   }
-  await schemaReady;
+  try {
+    await schemaReady;
+  } catch (error) {
+    // Do not keep a rejected initialization promise for the life of a warm
+    // function. The next request can recover from transient Neon contention.
+    schemaReady = null;
+    throw error;
+  }
 }
 
 function normalizeNews(row) {
