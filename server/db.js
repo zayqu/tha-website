@@ -15,6 +15,7 @@ require('dotenv').config();
 const legacyNews = require('./legacy-news.json');
 
 const DATA_DIR = path.join(__dirname, 'data');
+const LEGACY_NEWS_MIGRATION_ID = '2026-08-08-import-legacy-news';
 
 // ── File helpers ──────────────────────────────────────────────────────────────
 function ensureDataDir() {
@@ -214,12 +215,38 @@ if (hasDatabaseUrl) {
   });
 }
 
+async function schemaIsCurrent(client) {
+  const { rows: [state] } = await client.query(`
+    SELECT
+      to_regclass('public.admins') IS NOT NULL AS admins_ready,
+      to_regclass('public.tokens') IS NOT NULL AS tokens_ready,
+      to_regclass('public.news') IS NOT NULL AS news_ready,
+      to_regclass('public.content_migrations') IS NOT NULL AS migrations_ready
+  `);
+
+  if (!state?.admins_ready || !state?.tokens_ready || !state?.news_ready || !state?.migrations_ready) {
+    return false;
+  }
+
+  const migration = await client.query(
+    'SELECT 1 FROM content_migrations WHERE id = $1 LIMIT 1',
+    [LEGACY_NEWS_MIGRATION_ID]
+  );
+  return migration.rows.length > 0;
+}
+
 async function ensureSchema() {
   if (!pool) return;
   if (!schemaReady) {
     schemaReady = (async () => {
       const client = await pool.connect();
+      let lockAcquired = false;
       try {
+        // Once the schema and content migration are present, normal cold
+        // starts must not enter the global migration lock. This keeps regular
+        // requests fast even when many serverless instances start together.
+        if (await schemaIsCurrent(client)) return;
+
         // Serialize schema creation across concurrent Vercel cold starts.
         await client.query({
           text: 'SELECT pg_advisory_lock($1)',
@@ -228,6 +255,7 @@ async function ensureSchema() {
           // schema migrations. Give that lock more time than normal queries.
           query_timeout: 30000,
         });
+        lockAcquired = true;
         await client.query(`
       CREATE TABLE IF NOT EXISTS admins (
         id TEXT PRIMARY KEY,
@@ -284,10 +312,9 @@ async function ensureSchema() {
         // Move the original website archive into the same managed store used
         // by Admin. The migration marker makes this a true one-time import:
         // articles deleted later by an editor will not be silently restored.
-        const migrationId = '2026-08-08-import-legacy-news';
         const migration = await client.query(
           'SELECT 1 FROM content_migrations WHERE id = $1 LIMIT 1',
-          [migrationId]
+          [LEGACY_NEWS_MIGRATION_ID]
         );
         if (!migration.rows.length) {
           await client.query('BEGIN');
@@ -311,7 +338,7 @@ async function ensureSchema() {
             }
             await client.query(
               'INSERT INTO content_migrations (id, applied_at) VALUES ($1, $2)',
-              [migrationId, Math.floor(Date.now() / 1000)]
+              [LEGACY_NEWS_MIGRATION_ID, Math.floor(Date.now() / 1000)]
             );
             await client.query('COMMIT');
           } catch (error) {
@@ -320,7 +347,9 @@ async function ensureSchema() {
           }
         }
       } finally {
-        await client.query('SELECT pg_advisory_unlock($1)', [1414001]).catch(() => {});
+        if (lockAcquired) {
+          await client.query('SELECT pg_advisory_unlock($1)', [1414001]).catch(() => {});
+        }
         client.release();
       }
     })();
