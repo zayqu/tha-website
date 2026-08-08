@@ -161,7 +161,7 @@ export default function AdminDashboard() {
         )}
 
         {/* Stats */}
-        <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+        <div className="grid grid-cols-3 gap-4 mb-8">
           {[
             { label: 'Total Articles', value: articles.length, icon: '📰', color: 'bg-blue-50 text-blue-700' },
             { label: 'Published',      value: publishedCount,  icon: '✅', color: 'bg-green-50 text-green-700' },
@@ -229,7 +229,7 @@ export default function AdminDashboard() {
                 key={article.id}
                 className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-start">
+                <div className="flex items-start gap-4 p-4">
                   {/* Thumbnail */}
                   <div className="w-20 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
                     <img src={article.image} alt={article.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
@@ -255,7 +255,7 @@ export default function AdminDashboard() {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex flex-wrap items-center gap-2 sm:flex-shrink-0">
+                  <div className="flex items-center gap-2 flex-shrink-0">
                     <Link
                       to={`/news/${article.slug}`}
                       target="_blank"
