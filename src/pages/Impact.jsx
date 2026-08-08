@@ -81,14 +81,19 @@ export const Impact = () => {
 
   React.useEffect(() => {
     let isMounted = true;
-    Promise.all([fetchImpactTotals(), fetchProjects(), fetchJourney()])
-      .then(([liveTotals, projects, milestones]) => {
+    Promise.allSettled([fetchImpactTotals(), fetchProjects(), fetchJourney()])
+      .then(([totalsResult, projectsResult, journeyResult]) => {
         if (!isMounted) return;
-        if (liveTotals) setTotals(previous => ({ ...previous, ...liveTotals }));
-        if (projects.length) setCampaigns(projects);
-        if (milestones.length) setJourney(milestones);
-      })
-      .catch(() => {});
+        if (totalsResult.status === 'fulfilled' && totalsResult.value) {
+          setTotals(previous => ({ ...previous, ...totalsResult.value }));
+        }
+        if (projectsResult.status === 'fulfilled' && projectsResult.value.length) {
+          setCampaigns(projectsResult.value);
+        }
+        if (journeyResult.status === 'fulfilled' && journeyResult.value.length) {
+          setJourney(journeyResult.value);
+        }
+      });
     return () => { isMounted = false; };
   }, []);
 

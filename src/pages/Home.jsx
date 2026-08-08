@@ -183,13 +183,16 @@ export const Home = () => {
 
   useEffect(() => {
     let isMounted = true;
-    Promise.all([fetchProjects(), fetchJourney()])
-      .then(([projects, milestones]) => {
+    Promise.allSettled([fetchProjects(), fetchJourney()])
+      .then(([projectsResult, journeyResult]) => {
         if (!isMounted) return;
-        if (projects.length) setCampaigns(projects);
-        if (milestones.length) setJourney(milestones);
-      })
-      .catch(() => {});
+        if (projectsResult.status === 'fulfilled' && projectsResult.value.length) {
+          setCampaigns(projectsResult.value);
+        }
+        if (journeyResult.status === 'fulfilled' && journeyResult.value.length) {
+          setJourney(journeyResult.value);
+        }
+      });
     return () => { isMounted = false; };
   }, []);
 
