@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
 import campaigns from '../data/campaigns.json';
-import { fetchPublishedNews, normalizeArticle } from '../lib/api';
+import { fetchPublishedNews, fetchProject, normalizeArticle } from '../lib/api';
 
 // A news article counts as activity for a campaign if its category or tags
 // mention the campaign by name, tagline, or subtitle keyword. This is a
@@ -24,8 +24,23 @@ export const CampaignDetail = () => {
   const { campaignId } = useParams();
   const navigate = useNavigate();
 
-  const campaign = campaigns.campaigns.find(c => c.id === campaignId);
+  const [campaign, setCampaign] = useState(() => campaigns.campaigns.find(c => c.id === campaignId) || null);
+  const [loading, setLoading] = useState(!campaign);
   const [relatedNews, setRelatedNews] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    fetchProject(campaignId)
+      .then(project => {
+        if (isMounted) setCampaign(project);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+    return () => { isMounted = false; };
+  }, [campaignId]);
 
   useEffect(() => {
     if (!campaign) return;
@@ -43,6 +58,14 @@ export const CampaignDetail = () => {
     return () => { isMounted = false; };
   }, [campaign]);
 
+  if (loading && !campaign) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center pt-24">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
   if (!campaign) {
     return (
       <div className="pt-24 pb-16 text-center">
@@ -59,7 +82,7 @@ export const CampaignDetail = () => {
       <SEO
         title={campaign.name}
         description={campaign.description}
-        canonicalPath={`/campaigns/${campaign.id}`}
+        canonicalPath={`/campaigns/${campaign.slug || campaign.id}`}
       />
 
       {/* Hero with Banner Image */}
@@ -81,7 +104,7 @@ export const CampaignDetail = () => {
             ← Back
           </button>
           <h1 className="text-4xl md:text-5xl font-bold mt-2 mb-4 tracking-tight">
-            {campaign.name}<span className="text-white/70 font-semibold">: {campaign.tagline}</span>
+            {campaign.name}{campaign.tagline ? <span className="text-white/70 font-semibold">: {campaign.tagline}</span> : null}
           </h1>
           <p className="text-lg text-white/80 max-w-2xl leading-relaxed">{campaign.description}</p>
         </div>
@@ -107,14 +130,14 @@ export const CampaignDetail = () => {
                   Activities
                 </h3>
                 <ul className="space-y-4">
-                  {campaign.activities2025.map((act, i) => (
+                  {(campaign.activities2025 || []).length ? campaign.activities2025.map((act, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <span className="w-6 h-6 rounded-lg bg-primary/5 flex items-center justify-center flex-shrink-0 mt-0.5">
                         <span className="text-xs font-bold text-primary">{String(i + 1).padStart(2, '0')}</span>
                       </span>
                       <span className="text-gray-600 text-sm">{act}</span>
                     </li>
-                  ))}
+                  )) : <li className="text-sm text-gray-500">Activities will be added as this campaign progresses.</li>}
                 </ul>
               </div>
 
@@ -127,14 +150,14 @@ export const CampaignDetail = () => {
                   Impact
                 </h3>
                 <ul className="space-y-4">
-                  {campaign.impact2025.map((imp, i) => (
+                  {(campaign.impact2025 || []).length ? campaign.impact2025.map((imp, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <span className="w-6 h-6 rounded-lg bg-secondary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                         <Icon name="arrow_upward" size={14} category="secondary" />
                       </span>
                       <span className="text-gray-700 text-sm font-medium">{imp}</span>
                     </li>
-                  ))}
+                  )) : <li className="text-sm text-gray-500">Impact results will appear here when recorded.</li>}
                 </ul>
               </div>
 
@@ -170,24 +193,25 @@ export const CampaignDetail = () => {
         </div>
       </section>
 
-      {/* What Is */}
-      <section className="py-16 md:py-24 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-primary mb-6">What is {campaign.name}?</h2>
-          <p className="text-lg text-gray-500 leading-relaxed">{campaign.whatIs}</p>
-        </div>
-      </section>
+      {campaign.whatIs ? (
+        <section className="py-16 md:py-24 bg-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-primary mb-6">What is {campaign.name}?</h2>
+            <p className="text-lg text-gray-500 leading-relaxed">{campaign.whatIs}</p>
+          </div>
+        </section>
+      ) : null}
 
       {/* Why It Matters */}
-      <section className="py-16 md:py-24 bg-gray-50">
+      {campaign.whyMatters ? <section className="py-16 md:py-24 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-primary mb-6">Why It Matters</h2>
           <p className="text-lg text-gray-500 leading-relaxed">{campaign.whyMatters}</p>
         </div>
-      </section>
+      </section> : null}
 
       {/* How It Works */}
-      <section className="py-16 md:py-24 bg-white">
+      {(campaign.howWorks || []).length ? <section className="py-16 md:py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-primary mb-12">How We Work</h2>
           <div className="grid md:grid-cols-2 gap-4">
@@ -201,10 +225,10 @@ export const CampaignDetail = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> : null}
 
       {/* Where Active */}
-      <section className="py-16 md:py-24 bg-gray-50">
+      {(campaign.whereActive || []).length ? <section className="py-16 md:py-24 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-primary mb-8">Where We're Active</h2>
           <div className="grid sm:grid-cols-2 gap-3">
@@ -218,10 +242,10 @@ export const CampaignDetail = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> : null}
 
       {/* Testimonial */}
-      <section className="py-16 md:py-24 bg-white">
+      {campaign.testimonial?.quote ? <section className="py-16 md:py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl p-10 shadow-card">
             <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center mb-6">
@@ -236,7 +260,7 @@ export const CampaignDetail = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> : null}
 
       {/* CTA */}
       <section className="relative py-20 md:py-28 overflow-hidden">
@@ -249,7 +273,7 @@ export const CampaignDetail = () => {
         />
         <div className="absolute inset-0 bg-black/75 backdrop-blur-sm" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{campaign.ctaText}</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{campaign.ctaText || `Support ${campaign.name}`}</h2>
           <p className="text-lg text-white/60 mb-8">
             Join us in making a difference. Learn more about how you can get involved.
           </p>

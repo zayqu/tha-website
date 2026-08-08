@@ -142,13 +142,15 @@ export const Footer = () => {
               <Link to="/privacy" className="text-sm text-white/60 hover:text-secondary transition">Privacy Policy</Link>
               <Link to="/cookies" className="text-sm text-white/60 hover:text-secondary transition">Cookies Policy</Link>
               <Link to="/terms" className="text-sm text-white/60 hover:text-secondary transition">Terms &amp; Conditions</Link>
-              <Link
-                to="/admin"
+              <a
+                href="/admin"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-1.5 text-sm text-white/40 hover:text-secondary transition"
               >
                 <Icon name="edit_note" size={16} color="currentColor" />
                 Staff Login
-              </Link>
+              </a>
             </div>
           </div>
         </div>

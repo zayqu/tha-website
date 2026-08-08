@@ -5,9 +5,10 @@ import { PartnersCarousel } from '../components/PartnersCarousel';
 import { SEO } from '../components/SEO';
 import teamJson from '../data/team.json';
 import partners from '../data/partners.json';
-import campaigns from '../data/campaigns.json';
+import campaignsData from '../data/campaigns.json';
 import { thaData } from '../data/thaData';
 import { getTeamImageProps } from '../lib/imageUtils';
+import { fetchProjects } from '../lib/api';
 
 /* =========================
    Scroll Reveal Hook
@@ -47,6 +48,18 @@ const CoreValueCard = ({ value, index }) => {
 };
 
 export const About = () => {
+  const [campaigns, setCampaigns] = React.useState(campaignsData.campaigns);
+
+  React.useEffect(() => {
+    let isMounted = true;
+    fetchProjects()
+      .then(projects => {
+        if (isMounted && projects.length) setCampaigns(projects);
+      })
+      .catch(() => {});
+    return () => { isMounted = false; };
+  }, []);
+
   const coreValues = [
     {
       value: "Integrity",
@@ -217,17 +230,17 @@ export const About = () => {
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">How We Work</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2">Our Campaign Approach</h2>
             <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
-              THA delivers impact through three structured campaigns. Every activity and outreach maps to one of these campaigns, ensuring focused, measurable results.
+              THA delivers impact through structured campaigns. Every activity and outreach maps to a campaign, ensuring focused, measurable results.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {campaigns.campaigns.map((c) => {
+            {campaigns.map((c) => {
               const icons = { kapime: 'health_and_safety', 'life-unlocked': 'psychology', 'talk-to-heal': 'forum' };
               return (
                 <Link
                   key={c.id}
-                  to={`/campaigns/${c.id}`}
+                  to={`/campaigns/${c.slug || c.id}`}
                   className="group bg-white rounded-2xl shadow-card hover:shadow-elevated transition-all duration-300 overflow-hidden flex flex-col"
                 >
                   <div className="relative overflow-hidden h-44 sm:h-48">

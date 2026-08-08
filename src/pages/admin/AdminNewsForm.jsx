@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { AdminHeader } from '../../components/admin/AdminHeader';
 
 const CATEGORY_SUGGESTIONS = [
   'Announcements', 'Events', 'Press Releases', 'Success Stories',
@@ -304,17 +305,7 @@ export default function AdminNewsForm() {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center gap-4">
-          <Link to="/admin" className="text-gray-400 hover:text-gray-600 transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
-            </svg>
-          </Link>
-          <h1 className="font-bold text-gray-800">{isEditing ? 'Edit Article' : 'New Article'}</h1>
-        </div>
-      </header>
+      <AdminHeader section={isEditing ? 'Edit Article' : 'New Article'} backTo="/admin" />
 
       <main className="max-w-4xl mx-auto px-4 py-8">
         <form onSubmit={event => handleSubmit(event, true)} noValidate className="space-y-6">
