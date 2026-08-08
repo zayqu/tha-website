@@ -50,9 +50,9 @@ const ScrollToTop = () => {
 };
 
 const PublicLayout = () => (
-  <div className="public-mobile-shell flex min-h-screen flex-col">
+  <div className="public-mobile-shell flex min-h-screen min-w-0 max-w-full flex-col overflow-x-clip">
     <Header />
-    <main className="flex-grow"><Outlet /></main>
+    <main className="min-w-0 flex-grow"><Outlet /></main>
     <Footer />
     <MobileBottomNav />
   </div>

@@ -81,7 +81,7 @@ export default function AdminProjectsDashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           {[
             { label: 'Total Campaigns', value: projects.length, icon: '📋', color: 'bg-blue-50 text-blue-700' },
             { label: 'Published',      value: publishedCount,   icon: '✅', color: 'bg-green-50 text-green-700' },
@@ -154,7 +154,7 @@ export default function AdminProjectsDashboard() {
                 key={project.id}
                 className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="flex items-start gap-4 p-4">
+                <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-start">
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
                       <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${STATUS_COLORS[project.status] || 'bg-gray-100 text-gray-600'}`}>
@@ -174,7 +174,7 @@ export default function AdminProjectsDashboard() {
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="flex flex-wrap items-center gap-2 sm:flex-shrink-0">
                     <Link
                       to={`/campaigns/${project.slug}`}
                       target="_blank"
