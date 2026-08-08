@@ -64,11 +64,45 @@ export async function fetchImpactTotals() {
   }
 }
 
+function metricLabel(key) {
+  return String(key || '')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/[_-]+/g, ' ')
+    .replace(/\b\w/g, letter => letter.toUpperCase());
+}
+
+export function normalizeProject(project) {
+  const metrics = project?.metrics && typeof project.metrics === 'object' ? project.metrics : {};
+  const metricHighlights = Object.entries(metrics).map(([key, value]) =>
+    `${Number(value).toLocaleString()} ${metricLabel(key)}`
+  );
+  const description = project?.description || project?.subtitle || 'Learn more about this Tanzania Health Alliance campaign.';
+
+  return {
+    ...project,
+    id: project?.id || project?.slug,
+    slug: project?.slug || project?.id,
+    name: project?.name || 'THA Campaign',
+    category: project?.category || 'Community Health',
+    tagline: project?.tagline || project?.category || 'THA Campaign',
+    subtitle: project?.subtitle || project?.category || description,
+    description,
+    image: project?.image || '/images/hero-bg-lg.jpg',
+    icon: project?.icon || 'campaign',
+    activities2025: Array.isArray(project?.activities2025) ? project.activities2025 : [],
+    impact2025: Array.isArray(project?.impact2025) && project.impact2025.length
+      ? project.impact2025 : metricHighlights,
+    howWorks: Array.isArray(project?.howWorks) ? project.howWorks : [],
+    whereActive: Array.isArray(project?.whereActive) ? project.whereActive : [],
+    metrics,
+  };
+}
+
 export async function fetchProjects() {
   const res = await fetch(apiUrl('/api/projects'));
   if (!res.ok) throw new Error('Failed to load projects');
   const data = await res.json();
-  return data.projects || [];
+  return (data.projects || []).map(normalizeProject);
 }
 
 export async function fetchProject(slug) {
@@ -78,5 +112,12 @@ export async function fetchProject(slug) {
     throw new Error('Failed to load project');
   }
   const data = await res.json();
-  return data.project || null;
+  return data.project ? normalizeProject(data.project) : null;
+}
+
+export async function fetchJourney() {
+  const res = await fetch(apiUrl('/api/journey'));
+  if (!res.ok) throw new Error('Failed to load journey');
+  const data = await res.json();
+  return data.milestones || [];
 }

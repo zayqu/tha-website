@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
-import campaigns from '../data/campaigns.json';
+import campaignsData from '../data/campaigns.json';
 import partners from '../data/partners.json';
 import testimonials from '../data/testimonials.json';
 import impactData from '../data/impact.json';
@@ -10,8 +10,9 @@ import { TestimonialsCarousel } from '../components/TestimonialCarousel';
 import { SEO, organizationSchema } from '../components/SEO';
 import { thaData } from '../data/thaData';
 import NewsCard from '../components/NewsCard';
-import { fetchPublishedNews, fetchImpactTotals } from '../lib/api';
+import { fetchPublishedNews, fetchImpactTotals, fetchProjects, fetchJourney } from '../lib/api';
 import { getHeroImageProps } from '../lib/imageUtils';
+import { JourneyTimeline } from '../components/JourneyTimeline';
 
 /* =========================
    Typing Animation
@@ -116,7 +117,7 @@ const CampaignCard = ({ campaign, index }) => {
         <p className="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">{campaign.subtitle}</p>
 
         <div className="flex flex-wrap gap-1.5 mb-5">
-          {campaign.impact2025.slice(0, 2).map((imp, i) => (
+          {(campaign.impact2025 || []).slice(0, 2).map((imp, i) => (
             <span key={i} className="text-xs bg-cool-gray text-gray-600 px-2.5 py-1 rounded-full">
               {imp}
             </span>
@@ -124,7 +125,7 @@ const CampaignCard = ({ campaign, index }) => {
         </div>
 
         <Link
-          to={`/campaigns/${campaign.id}`}
+          to={`/campaigns/${campaign.slug || campaign.id}`}
           className="mt-auto flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary-dark transition-all duration-300 font-semibold text-sm shadow-sm"
         >
           Explore Campaign
@@ -157,38 +158,12 @@ const ObjectiveCard = ({ obj, index }) => {
   );
 };
 
-/* =========================
-   Timeline Item — Clean Design
-========================= */
-const TimelineItem = ({ milestone, index }) => {
-  const [ref, show] = useReveal();
-
-  return (
-    <div
-      ref={ref}
-      className={`flex gap-4 ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
-    >
-      <div className="relative z-10 w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 bg-white shadow-card border-2 border-primary/10">
-        <Icon name={milestone.icon} size={20} category="primary" />
-      </div>
-      <div
-        className={`flex-1 bg-white rounded-xl p-5 md:p-6 shadow-card hover:shadow-elevated transition-all duration-300 ${
-          show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
-        style={{ transitionDelay: `${index * 100}ms` }}
-      >
-        <span className="text-xs font-semibold text-primary/50 uppercase tracking-wider">{milestone.month}</span>
-        <h4 className="font-bold text-base md:text-lg text-primary mt-1">{milestone.milestone}</h4>
-        <p className="text-gray-500 text-sm mt-2 leading-relaxed">{milestone.description}</p>
-      </div>
-    </div>
-  );
-};
-
 export const Home = () => {
   const [latestNews, setLatestNews] = useState([]);
   const [latestNewsLoading, setLatestNewsLoading] = useState(true);
   const [impactTotals, setImpactTotals] = useState(impactData.impactMetrics.total);
+  const [campaigns, setCampaigns] = useState(campaignsData.campaigns);
+  const [journey, setJourney] = useState(impactData.yearOneTimeline);
 
   useEffect(() => {
     let isMounted = true;
@@ -203,6 +178,21 @@ export const Home = () => {
         if (isMounted) setLatestNewsLoading(false);
       });
 
+    return () => { isMounted = false; };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    Promise.allSettled([fetchProjects(), fetchJourney()])
+      .then(([projectsResult, journeyResult]) => {
+        if (!isMounted) return;
+        if (projectsResult.status === 'fulfilled' && projectsResult.value.length) {
+          setCampaigns(projectsResult.value);
+        }
+        if (journeyResult.status === 'fulfilled' && journeyResult.value.length) {
+          setJourney(journeyResult.value);
+        }
+      });
     return () => { isMounted = false; };
   }, []);
 
@@ -290,13 +280,13 @@ export const Home = () => {
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">What We Do</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2 mb-4">Our Campaigns & Impact</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Three strategic campaigns addressing Tanzania's most pressing health challenges, each grounded in real community action.
+              THA campaigns addressing Tanzania's most pressing health challenges, each grounded in real community action.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {campaigns.campaigns.map((c, i) => (
-              <CampaignCard key={c.id} campaign={c} index={i} />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {campaigns.map((campaign, index) => (
+              <CampaignCard key={campaign.id} campaign={campaign} index={index} />
             ))}
           </div>
         </div>
@@ -304,22 +294,12 @@ export const Home = () => {
 
       {/* YEAR ONE TIMELINE */}
       <section className="py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="text-center mb-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Our Journey</h2>
             <p className="text-gray-600">From a single idea to national impact in just over a year</p>
           </div>
-
-          <div className="relative">
-            {/* Timeline Line — behind icons */}
-            <div className="absolute left-[21px] md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-secondary/20 to-accent/20 z-0" />
-
-            <div className="space-y-8">
-              {impactData.yearOneTimeline.map((milestone, i) => (
-                <TimelineItem key={i} milestone={milestone} index={i} />
-              ))}
-            </div>
-          </div>
+          <JourneyTimeline milestones={journey} />
         </div>
       </section>
 

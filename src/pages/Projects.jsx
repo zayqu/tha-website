@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
 import campaignsData from '../data/campaigns.json';
+import { fetchProjects } from '../lib/api';
 
 const campaignIcons = {
   kapime: 'health_and_safety',
@@ -10,6 +12,25 @@ const campaignIcons = {
 };
 
 export const Projects = () => {
+  const [campaigns, setCampaigns] = useState(campaignsData.campaigns);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchProjects()
+      .then(projects => {
+        if (isMounted && projects.length) setCampaigns(projects);
+      })
+      .catch(() => {
+        if (isMounted) setError('The latest campaign updates could not be loaded. Please try again shortly.');
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+    return () => { isMounted = false; };
+  }, []);
+
   return (
     <div className="pt-14 md:pt-16 bg-cool-gray">
       <SEO
@@ -23,7 +44,7 @@ export const Projects = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-4">Our Campaigns & Activities</h1>
           <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
-            Every THA activity maps to one of three strategic campaigns, each targeting a critical health challenge in Tanzania.
+            Explore every published THA campaign and the results being achieved with communities across Tanzania.
           </p>
         </div>
       </section>
@@ -31,7 +52,9 @@ export const Projects = () => {
       {/* Campaign Cards */}
       <section className="py-12 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          {campaignsData.campaigns.map((campaign) => (
+          {loading && <p className="text-center text-sm text-gray-500">Loading the latest campaigns…</p>}
+          {error && <p role="status" className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm text-amber-700">{error}</p>}
+          {campaigns.map((campaign) => (
             <div key={campaign.id} className="bg-white rounded-2xl shadow-card overflow-hidden">
 
               {/* Campaign Header — banner + info */}
@@ -60,7 +83,7 @@ export const Projects = () => {
                       <p className="text-gray-600 mt-3 max-w-2xl text-sm md:text-base leading-relaxed">{campaign.description}</p>
                     </div>
                     <Link
-                      to={`/campaigns/${campaign.id}`}
+                      to={`/campaigns/${campaign.slug || campaign.id}`}
                       className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary-dark transition font-semibold text-sm whitespace-nowrap shadow-sm"
                     >
                       View Campaign <Icon name="arrow_forward" size={16} color="white" />
@@ -77,14 +100,14 @@ export const Projects = () => {
                     Activities
                   </h3>
                   <ul className="space-y-3">
-                    {campaign.activities2025.map((act, i) => (
+                    {(campaign.activities2025 || []).length ? campaign.activities2025.map((act, i) => (
                       <li key={i} className="flex items-start gap-3">
                         <span className="w-6 h-6 rounded-lg bg-primary/5 flex items-center justify-center flex-shrink-0 mt-0.5">
                           <span className="text-xs font-bold text-primary">{String(i + 1).padStart(2, '0')}</span>
                         </span>
                         <span className="text-gray-700 text-sm">{act}</span>
                       </li>
-                    ))}
+                    )) : <li className="text-sm text-gray-500">Campaign activities will be added as they are completed.</li>}
                   </ul>
                 </div>
 
@@ -94,14 +117,14 @@ export const Projects = () => {
                     Impact
                   </h3>
                   <ul className="space-y-3">
-                    {campaign.impact2025.map((imp, i) => (
+                    {(campaign.impact2025 || []).length ? campaign.impact2025.map((imp, i) => (
                       <li key={i} className="flex items-start gap-3">
                         <span className="w-6 h-6 rounded-lg bg-secondary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                           <Icon name="arrow_upward" size={14} category="secondary" />
                         </span>
                         <span className="text-gray-700 text-sm font-medium">{imp}</span>
                       </li>
-                    ))}
+                    )) : <li className="text-sm text-gray-500">Impact results will appear here when recorded.</li>}
                   </ul>
                 </div>
               </div>

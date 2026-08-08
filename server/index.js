@@ -11,6 +11,7 @@ const { v4: uuidv4 } = require('uuid');
 const authRoutes = require('./routes/auth');
 const newsRoutes = require('./routes/news');
 const projectRoutes = require('./routes/projects');
+const journeyRoutes = require('./routes/journey');
 const { admins } = require('./db');
 
 const app = express();
@@ -85,21 +86,34 @@ async function provisionInitialAdmin() {
     });
     console.log('Initial THA administrator provisioned.');
   })();
-  return adminProvisioning;
+  try {
+    return await adminProvisioning;
+  } catch (error) {
+    // Neon can occasionally time out while a serverless instance is warming.
+    // Do not retain a rejected promise: the next request should be able to
+    // retry administrator provisioning without requiring a redeployment.
+    adminProvisioning = null;
+    throw error;
+  }
 }
 
 app.use(async (_req, _res, next) => {
   try {
     await provisionInitialAdmin();
-    next();
   } catch (error) {
-    next(error);
+    // Provisioning is idempotent and is not required to serve public content.
+    // A temporary database delay must not take News, Campaigns, Journey, or
+    // the health endpoint offline. Authentication still performs its own
+    // database checks and provisioning will retry on the next request.
+    console.warn('Administrator provisioning temporarily unavailable; retrying on the next request.', error.message);
   }
+  next();
 });
 
 app.use('/api/auth', authRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/journey', journeyRoutes);
 
 app.get('/api/health', (_req, res) => {
   res.json({

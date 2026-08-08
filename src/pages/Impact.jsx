@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
 import impactData from '../data/impact.json';
-import campaigns from '../data/campaigns.json';
+import campaignsData from '../data/campaigns.json';
+import { fetchImpactTotals, fetchJourney, fetchProjects } from '../lib/api';
+import { JourneyTimeline } from '../components/JourneyTimeline';
 
 const useReveal = () => {
   const ref = React.useRef(null);
@@ -38,32 +40,6 @@ const Counter = ({ end, suffix = '+' }) => {
   );
 };
 
-const TimelineItem = ({ milestone, index }) => {
-  const [ref, show] = useReveal();
-  return (
-    <div
-      ref={ref}
-      className={`relative flex items-start gap-4 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
-    >
-      <div className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 bg-white shadow-card border-2 border-primary/10 z-10 ${
-        show ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-      } transition-all duration-500`} style={{ transitionDelay: `${index * 150}ms` }}>
-        <Icon name={milestone.icon} size={22} category="primary" />
-      </div>
-      <div
-        className={`flex-1 ml-4 md:ml-0 bg-white rounded-xl p-5 md:p-6 shadow-card hover:shadow-elevated transition-all duration-500 ${
-          show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
-        style={{ transitionDelay: `${index * 100 + 200}ms` }}
-      >
-        <span className="text-xs font-semibold text-primary/50 uppercase tracking-wider">{milestone.month}</span>
-        <h4 className="font-bold text-lg text-primary mt-1">{milestone.milestone}</h4>
-        <p className="text-gray-500 text-sm mt-2 leading-relaxed">{milestone.description}</p>
-      </div>
-    </div>
-  );
-};
-
 const campaignIcons = { kapime: 'health_and_safety', 'life-unlocked': 'psychology', 'talk-to-heal': 'forum' };
 
 const CampaignImpactCard = ({ campaign }) => (
@@ -79,7 +55,7 @@ const CampaignImpactCard = ({ campaign }) => (
     </div>
     <div className="p-5">
       <ul className="space-y-2.5 mb-5">
-        {campaign.impact2025.map((item, i) => (
+        {(campaign.impact2025 || []).map((item, i) => (
           <li key={i} className="flex items-start gap-2.5 p-2.5 bg-cool-gray rounded-lg">
             <span className="w-5 h-5 rounded bg-secondary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
               <Icon name="arrow_upward" size={12} category="secondary" />
@@ -89,7 +65,7 @@ const CampaignImpactCard = ({ campaign }) => (
         ))}
       </ul>
       <Link
-        to={`/campaigns/${campaign.id}`}
+        to={`/campaigns/${campaign.slug || campaign.id}`}
         className="flex items-center justify-center gap-2 bg-primary text-white py-2.5 rounded-xl hover:bg-primary-dark transition font-semibold text-sm shadow-sm"
       >
         Learn More <Icon name="arrow_forward" size={16} color="white" />
@@ -99,6 +75,28 @@ const CampaignImpactCard = ({ campaign }) => (
 );
 
 export const Impact = () => {
+  const [totals, setTotals] = React.useState(impactData.impactMetrics.total);
+  const [campaigns, setCampaigns] = React.useState(campaignsData.campaigns);
+  const [journey, setJourney] = React.useState(impactData.yearOneTimeline);
+
+  React.useEffect(() => {
+    let isMounted = true;
+    Promise.allSettled([fetchImpactTotals(), fetchProjects(), fetchJourney()])
+      .then(([totalsResult, projectsResult, journeyResult]) => {
+        if (!isMounted) return;
+        if (totalsResult.status === 'fulfilled' && totalsResult.value) {
+          setTotals(previous => ({ ...previous, ...totalsResult.value }));
+        }
+        if (projectsResult.status === 'fulfilled' && projectsResult.value.length) {
+          setCampaigns(projectsResult.value);
+        }
+        if (journeyResult.status === 'fulfilled' && journeyResult.value.length) {
+          setJourney(journeyResult.value);
+        }
+      });
+    return () => { isMounted = false; };
+  }, []);
+
   return (
     <div className="pt-14 md:pt-16 bg-cool-gray">
       <SEO
@@ -122,19 +120,19 @@ export const Impact = () => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
             <div>
-              <Counter end={1500} />
+              <Counter end={totals.peopleReached || 0} />
               <p className="text-white/80 mt-2 text-sm md:text-base font-medium">People Reached</p>
             </div>
             <div>
-              <Counter end={1000} />
+              <Counter end={totals.studentsReached || 0} />
               <p className="text-white/80 mt-2 text-sm md:text-base font-medium">Students Reached</p>
             </div>
             <div>
-              <Counter end={3} suffix="" />
+              <Counter end={totals.institutionsEngaged || 0} suffix="" />
               <p className="text-white/80 mt-2 text-sm md:text-base font-medium">Institutions</p>
             </div>
             <div>
-              <Counter end={2} suffix="" />
+              <Counter end={totals.communityEvents || 0} suffix="" />
               <p className="text-white/80 mt-2 text-sm md:text-base font-medium">Community Events</p>
             </div>
           </div>
@@ -143,20 +141,13 @@ export const Impact = () => {
 
       {/* Year One Timeline */}
       <section className="py-16 md:py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12 md:mb-16">
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">Our Journey</span>
             <h2 className="text-2xl md:text-4xl font-bold text-primary mt-2">Year One Timeline</h2>
             <p className="text-gray-500 mt-3 text-sm md:text-base">From founding to national health partnership in just 15 months</p>
           </div>
-          <div className="relative">
-            <div className="absolute left-[21px] md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-secondary/20 to-accent/20 z-0" />
-            <div className="space-y-6 md:space-y-8">
-              {impactData.yearOneTimeline.map((milestone, i) => (
-                <TimelineItem key={i} milestone={milestone} index={i} />
-              ))}
-            </div>
-          </div>
+          <JourneyTimeline milestones={journey} />
         </div>
       </section>
 
@@ -168,7 +159,7 @@ export const Impact = () => {
             <h2 className="text-2xl md:text-4xl font-bold text-primary mt-2">Impact by Campaign</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {campaigns.campaigns.map(c => (
+            {campaigns.map(c => (
               <CampaignImpactCard key={c.id} campaign={c} />
             ))}
           </div>

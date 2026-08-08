@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { AdminHeader } from '../../components/admin/AdminHeader';
 
 const CATEGORY_COLORS = {
   'Events':          'bg-blue-100 text-blue-700',
@@ -10,8 +11,7 @@ const CATEGORY_COLORS = {
 };
 
 export default function AdminDashboard() {
-  const { admin, logout, authFetch } = useAuth();
-  const navigate = useNavigate();
+  const { admin, authFetch } = useAuth();
 
   const [articles, setArticles] = useState([]);
   const [loading, setLoading]   = useState(true);
@@ -97,11 +97,6 @@ export default function AdminDashboard() {
     }
   }
 
-  async function handleLogout() {
-    await logout();
-    navigate('/admin/login', { replace: true });
-  }
-
   const filtered = articles.filter(a => {
     if (filter === 'published') return a.published;
     if (filter === 'drafts') return !a.published;
@@ -114,40 +109,7 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* Top Nav */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <svg viewBox="0 0 32 32" className="w-5 h-5 text-white fill-current">
-                <path d="M16 3C9.37 3 4 8.37 4 15c0 4.49 2.36 8.43 5.89 10.67L16 29l6.11-3.33C25.64 23.43 28 19.49 28 15c0-6.63-5.37-12-12-12zm-1.5 17.5V15H11l5-8v5.5h3.5l-5 8z" />
-              </svg>
-            </div>
-            <div>
-              <span className="font-bold text-gray-800">THA Admin</span>
-              <span className="hidden sm:inline text-gray-400 text-sm ml-2">/ News Dashboard</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Link to="/admin/projects" className="hidden sm:inline text-sm text-gray-500 hover:text-primary transition-colors">
-              Campaigns
-            </Link>
-            <span className="hidden sm:block text-sm text-gray-500">
-              {admin?.name || admin?.identifier}
-            </span>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-red-600 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-              </svg>
-              Sign Out
-            </button>
-          </div>
-        </div>
-      </header>
+      <AdminHeader section="News Dashboard" />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
