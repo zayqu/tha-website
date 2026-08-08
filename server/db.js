@@ -221,7 +221,13 @@ async function ensureSchema() {
       const client = await pool.connect();
       try {
         // Serialize schema creation across concurrent Vercel cold starts.
-        await client.query('SELECT pg_advisory_lock($1)', [1414001]);
+        await client.query({
+          text: 'SELECT pg_advisory_lock($1)',
+          values: [1414001],
+          // A second cold start may briefly wait while the first one applies
+          // schema migrations. Give that lock more time than normal queries.
+          query_timeout: 30000,
+        });
         await client.query(`
       CREATE TABLE IF NOT EXISTS admins (
         id TEXT PRIMARY KEY,
@@ -319,7 +325,14 @@ async function ensureSchema() {
       }
     })();
   }
-  await schemaReady;
+  try {
+    await schemaReady;
+  } catch (error) {
+    // Do not keep a rejected initialization promise for the life of a warm
+    // function. The next request can recover from transient Neon contention.
+    schemaReady = null;
+    throw error;
+  }
 }
 
 function normalizeNews(row) {
