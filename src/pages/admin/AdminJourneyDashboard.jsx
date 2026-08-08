@@ -170,7 +170,7 @@ export default function AdminJourneyDashboard() {
               <textarea name="description" value={form.description} onChange={updateField} required minLength={3} maxLength={1200} rows={4} placeholder="Explain what happened and why it matters." className={`${inputClass} mt-1.5 resize-y`} />
             </label>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-2 gap-4">
               <label className="block text-sm font-semibold text-gray-700">
                 Icon
                 <select name="icon" value={form.icon} onChange={updateField} className={`${inputClass} mt-1.5`}>

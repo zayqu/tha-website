@@ -85,8 +85,8 @@ export const News = () => {
 
       {/* Category Filter */}
       <section className="bg-white shadow-md sticky top-14 md:top-16 z-30">
-        <div className="container-custom px-4">
-          <div className="flex flex-wrap justify-center gap-2 py-4">
+        <div className="container-custom px-4 overflow-x-auto custom-scrollbar">
+          <div className="flex gap-2 py-4 min-w-max md:justify-center">
             {categories.map((cat) => (
               <button
                 key={cat.id}
