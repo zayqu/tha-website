@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tha-red.vercel.app/sitemap.xml
+Sitemap: https://tzhealthalliance.or.tz/sitemap.xml

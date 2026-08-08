@@ -112,7 +112,7 @@ router.post('/import', async (req, res, next) => {
         title,
         excerpt,
         content: `${excerpt}\n\nSource: ${source}\nRead the original update: ${sourceUrl}`,
-        image: 'https://tha-red.vercel.app/favicon.svg',
+        image: 'https://tzhealthalliance.or.tz/favicon.svg',
         category: 'Announcements',
         author: source,
         date: parsedDate.toISOString().slice(0, 10),
