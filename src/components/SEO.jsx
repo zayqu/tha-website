@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 
 const SITE_NAME = 'Tanzania Health Alliance';
-const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://tha-red.vercel.app').replace(/\/$/, '');
+const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://tzhealthalliance.or.tz').replace(/\/$/, '');
 const DEFAULT_TITLE = 'Tanzania Health Alliance | Together for a Healthier Tanzania';
 const DEFAULT_DESCRIPTION = 'Tanzania Health Alliance advances public health in Tanzania through viral hepatitis, HIV, and mental health advocacy, education, research, and partnerships.';
 const DEFAULT_IMAGE = '/images/og-image.jpg';
