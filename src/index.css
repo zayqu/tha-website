@@ -133,13 +133,14 @@
 
   .mobile-fixed-chrome {
     position: fixed !important;
-    inset-inline: 0;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
     z-index: 60;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    transform: translateZ(0);
-    will-change: transform;
-    isolation: isolate;
+    overflow-x: clip;
+    touch-action: pan-y;
   }
 
   .mobile-top-chrome {
@@ -149,6 +150,25 @@
   .mobile-bottom-chrome {
     bottom: 0 !important;
     min-height: 4rem;
+  }
+
+  @media (max-width: 767px) {
+    html,
+    body,
+    #root {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: clip;
+      overscroll-behavior-x: none;
+    }
+
+    .public-mobile-shell {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      overflow-x: clip;
+      overscroll-behavior-x: none;
+    }
   }
 
   @media (min-width: 768px) {
