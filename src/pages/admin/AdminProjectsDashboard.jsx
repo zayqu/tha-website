@@ -80,20 +80,6 @@ export default function AdminProjectsDashboard() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          {[
-            { label: 'Total Campaigns', value: projects.length, icon: '📋', color: 'bg-blue-50 text-blue-700' },
-            { label: 'Published',      value: publishedCount,   icon: '✅', color: 'bg-green-50 text-green-700' },
-            { label: 'Drafts',         value: draftCount,       icon: '📝', color: 'bg-amber-50 text-amber-700' },
-          ].map(stat => (
-            <div key={stat.label} className={`rounded-xl p-4 ${stat.color}`}>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <div className="text-sm font-medium opacity-80">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-
         <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-500">
           These are the campaigns shown on the public Campaigns and Impact pages. The numbers you set under
           each campaign's <strong>metrics</strong> are summed automatically to power the site-wide impact counters.
@@ -101,16 +87,23 @@ export default function AdminProjectsDashboard() {
 
         {/* Header row */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div className="flex gap-2">
-            {['all', 'published', 'drafts'].map(f => (
+          <div className="flex gap-2" role="group" aria-label="Filter campaigns">
+            {[
+              { id: 'all', label: 'All', count: projects.length },
+              { id: 'published', label: 'Published', count: publishedCount },
+              { id: 'drafts', label: 'Drafts', count: draftCount },
+            ].map(item => (
               <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium capitalize transition-colors ${
-                  filter === f ? 'bg-primary text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                key={item.id}
+                type="button"
+                onClick={() => setFilter(item.id)}
+                aria-pressed={filter === item.id}
+                className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  filter === item.id ? 'bg-primary text-white' : 'border border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
                 }`}
               >
-                {f}
+                {item.label}
+                <span className={`rounded-full px-1.5 py-0.5 text-[11px] leading-none ${filter === item.id ? 'bg-white/20' : 'bg-gray-100'}`}>{item.count}</span>
               </button>
             ))}
           </div>

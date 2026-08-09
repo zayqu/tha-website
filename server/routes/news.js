@@ -6,6 +6,10 @@ const { body, param, query, validationResult } = require('express-validator');
 const { news } = require('../db');
 const { requireAuth } = require('../middleware/auth');
 
+// Keep repeat visits fast while limiting how long a newly published article
+// can take to appear in the public listing.
+const PUBLIC_NEWS_CACHE = 'public, max-age=0, s-maxage=15, stale-while-revalidate=300';
+
 // ── Constants ─────────────────────────────────────────────────────────────────
 function slugify(text) {
   return text
@@ -47,6 +51,7 @@ router.get('/', [
   if (!handleValidation(req, res)) return;
   const { category, limit = 50, offset = 0 } = req.query;
   const articles = await news.findPublished({ category, limit: Number(limit), offset: Number(offset) });
+  res.set('Cache-Control', PUBLIC_NEWS_CACHE);
   res.json({ articles });
   } catch (err) {
     next(err);
