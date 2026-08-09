@@ -6,6 +6,8 @@ const { body, param, query, validationResult } = require('express-validator');
 const { news } = require('../db');
 const { requireAuth } = require('../middleware/auth');
 
+// Keep repeat visits fast while limiting how long a newly published article
+// can take to appear in the public listing.
 const PUBLIC_NEWS_CACHE = 'public, max-age=0, s-maxage=15, stale-while-revalidate=300';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
