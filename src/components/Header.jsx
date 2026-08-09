@@ -23,7 +23,7 @@ export const Header = () => {
   return (
     <>
       {/* Mobile top bar — stable viewport chrome */}
-      <div className="mobile-fixed-chrome fixed top-0 left-0 right-0 z-[60] h-14 bg-white shadow-sm md:hidden">
+      <div className="mobile-fixed-chrome mobile-top-chrome h-14 w-full bg-white shadow-sm md:hidden" data-mobile-chrome="header">
         <div className="flex h-full items-center justify-between px-4">
           <Link to="/" className="hover:opacity-80 transition flex-shrink-0">
             <img

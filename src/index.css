@@ -132,15 +132,32 @@
   }
 
   .mobile-fixed-chrome {
+    position: fixed !important;
+    inset-inline: 0;
+    z-index: 60;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    transform: translate3d(0, 0, 0);
+    transform: translateZ(0);
     will-change: transform;
+    isolation: isolate;
+  }
+
+  .mobile-top-chrome {
+    top: 0 !important;
+  }
+
+  .mobile-bottom-chrome {
+    bottom: 0 !important;
+    min-height: 4rem;
   }
 
   @media (min-width: 768px) {
     .public-mobile-shell {
       padding-bottom: 0;
+    }
+
+    .mobile-fixed-chrome {
+      display: none !important;
     }
   }
 

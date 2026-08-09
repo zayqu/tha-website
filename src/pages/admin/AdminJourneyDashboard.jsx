@@ -25,9 +25,9 @@ const ICONS = [
 ];
 
 const COLOR_OPTIONS = [
-  ['primary', 'THA blue'],
-  ['secondary', 'THA green'],
-  ['accent', 'THA orange'],
+  ['primary', 'Blue'],
+  ['secondary', 'Green'],
+  ['accent', 'Orange'],
 ];
 
 export default function AdminJourneyDashboard() {
@@ -141,8 +141,7 @@ export default function AdminJourneyDashboard() {
 
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-7">
-          <p className="text-sm font-bold uppercase tracking-wider text-accent">Website content</p>
-          <h1 className="mt-1 text-3xl font-bold text-primary">Manage Our Journey</h1>
+          <h1 className="text-3xl font-bold text-primary">Our Journey</h1>
           <p className="mt-2 max-w-3xl text-gray-600">Add, edit, publish, order, or remove milestones. Published changes appear in the horizontal Journey on Home and Impact.</p>
         </div>
 
