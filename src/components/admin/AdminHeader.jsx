@@ -25,12 +25,8 @@ export function AdminHeader({ section, backTo }) {
               <span className="material-symbols-outlined">arrow_back</span>
             </Link>
           ) : null}
-          <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3" title="Open public THA website in a new tab">
+          <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center" title={`Open public website from ${section} administration in a new tab`}>
             <img src="/logo/tha-logo.svg" alt="Tanzania Health Alliance" width="112" height="45" className="h-10 w-auto" />
-            <div className="hidden sm:block">
-              <p className="font-bold leading-none text-primary">THA Admin</p>
-              <p className="mt-1 text-xs text-gray-500">{section}</p>
-            </div>
           </a>
         </div>
 
