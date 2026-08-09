@@ -97,20 +97,21 @@ async function provisionInitialAdmin() {
   }
 }
 
-app.use(async (_req, _res, next) => {
+async function ensureInitialAdmin(_req, _res, next) {
   try {
     await provisionInitialAdmin();
   } catch (error) {
-    // Provisioning is idempotent and is not required to serve public content.
-    // A temporary database delay must not take News, Campaigns, Journey, or
-    // the health endpoint offline. Authentication still performs its own
-    // database checks and provisioning will retry on the next request.
+    // Provisioning is idempotent. Authentication can retry after a temporary
+    // database delay without delaying unrelated public content requests.
     console.warn('Administrator provisioning temporarily unavailable; retrying on the next request.', error.message);
   }
   next();
-});
+}
 
-app.use('/api/auth', authRoutes);
+// Administrator provisioning is only relevant to authentication. Keeping it
+// off the public request path prevents a cold database connection from
+// delaying News, Campaigns, Journey, or the health endpoint.
+app.use('/api/auth', ensureInitialAdmin, authRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/journey', journeyRoutes);
