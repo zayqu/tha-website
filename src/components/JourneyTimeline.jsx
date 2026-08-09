@@ -27,8 +27,10 @@ export function JourneyTimeline({ milestones }) {
     const items = Array.from(viewport.querySelectorAll('[data-journey-item]'));
     const maxScrollLeft = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
     const scrollLeft = viewport.scrollLeft;
+    const viewportCenter = scrollLeft + (viewport.clientWidth / 2);
     const nearestIndex = items.reduce((nearest, item, index) => (
-      Math.abs(item.offsetLeft - scrollLeft) < Math.abs(items[nearest]?.offsetLeft - scrollLeft)
+      Math.abs((item.offsetLeft + (item.clientWidth / 2)) - viewportCenter)
+        < Math.abs((items[nearest]?.offsetLeft + (items[nearest]?.clientWidth / 2)) - viewportCenter)
         ? index
         : nearest
     ), 0);
@@ -68,8 +70,9 @@ export function JourneyTimeline({ milestones }) {
     const target = items[targetIndex];
 
     if (target) {
+      const centeredOffset = target.offsetLeft - ((viewport.clientWidth - target.clientWidth) / 2);
       viewport.scrollTo({
-        left: target.offsetLeft,
+        left: centeredOffset,
         behavior: 'smooth',
       });
     }
@@ -87,11 +90,8 @@ export function JourneyTimeline({ milestones }) {
     <section className="min-w-0 max-w-full" aria-label="THA journey timeline">
       <div className="mb-6 flex items-center justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <div className="mb-2 flex items-center justify-between gap-3 text-xs font-bold uppercase tracking-[0.16em] text-primary">
+          <div className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-primary">
             <span>Explore our journey</span>
-            <span className="shrink-0" aria-live="polite">
-              {activeIndex + 1} / {milestones.length}
-            </span>
           </div>
           <div className="h-1.5 overflow-hidden rounded-full bg-primary/10" aria-hidden="true">
             <div
@@ -125,17 +125,17 @@ export function JourneyTimeline({ milestones }) {
 
       <div
         ref={viewportRef}
-        className="max-w-full overflow-x-auto scroll-smooth pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="max-w-full snap-x snap-mandatory touch-pan-x overflow-x-auto overscroll-x-contain scroll-smooth pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         tabIndex="0"
         role="region"
         aria-label="Journey milestones carousel"
       >
-        <ol className="relative flex min-w-full snap-x snap-mandatory gap-5 px-1">
+        <ol className="relative flex min-w-full gap-5 px-4 sm:px-1">
           {milestones.map((item, index) => (
             <li
               key={item.id || `${item.month}-${index}`}
               data-journey-item
-              className="relative min-w-0 shrink-0 basis-[88%] snap-start pt-1 sm:basis-[calc(50%-0.625rem)] xl:basis-[calc(33.333%-0.875rem)]"
+              className="relative min-w-0 shrink-0 basis-full snap-center pt-1 sm:basis-[calc(50%-0.625rem)] xl:basis-[calc(33.333%-0.875rem)]"
             >
               {index < milestones.length - 1 ? (
                 <div
@@ -153,13 +153,10 @@ export function JourneyTimeline({ milestones }) {
                   className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${CARD_ACCENTS[item.color] || CARD_ACCENTS.primary}`}
                   aria-hidden="true"
                 />
-                <div className="mb-5 flex items-center justify-between gap-3">
+                <div className="mb-5">
                   <p className="text-xs font-bold uppercase tracking-[0.14em] text-accent">
                     {item.month}
                   </p>
-                  <span className="rounded-full bg-primary/5 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-wider text-primary">
-                    Milestone {index + 1}
-                  </span>
                 </div>
                 <h3 className="break-words text-xl font-bold leading-tight text-primary">
                   {item.milestone}
