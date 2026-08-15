@@ -356,7 +356,26 @@ export default function AdminNewsForm() {
               placeholder={"Date and location\nWho participated\nResult or next step"}
               className="w-full rounded-xl px-4 py-2.5 text-gray-900 border-0 focus:ring-2 focus:ring-accent"
             />
-            {errors.assistant && <p className="text-yellow-200 text-xs mt-2">{errors.assistant}</p>}
+            {errors.assistant && (
+              <div
+                role="alert"
+                aria-live="assertive"
+                className="mt-4 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3.5 text-red-950 shadow-sm"
+              >
+                <span
+                  aria-hidden="true"
+                  className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-100 text-sm font-black text-red-700"
+                >
+                  !
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-bold leading-5">Draft assistant needs attention</p>
+                  <p className="mt-0.5 text-sm leading-5 text-red-800 break-words">
+                    {errors.assistant}
+                  </p>
+                </div>
+              </div>
+            )}
             <button
               type="button"
               onClick={generateDraft}
