@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const { body, param, query, validationResult } = require('express-validator');
 const { news } = require('../db');
 const { requireAuth } = require('../middleware/auth');
+const { contentImportSecret } = require('../runtime-secrets');
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 function slugify(text) {
@@ -69,7 +70,7 @@ router.get('/admin', requireAuth, async (_req, res, next) => {
 // ── POST /api/news/import  (automation; drafts only) ──────────────────────────
 router.post('/import', async (req, res, next) => {
   try {
-    const configuredSecret = process.env.CONTENT_IMPORT_SECRET;
+    const configuredSecret = process.env.CONTENT_IMPORT_SECRET || contentImportSecret;
     const suppliedSecret = req.get('authorization')?.replace(/^Bearer\s+/i, '') || '';
     if (!configuredSecret || !suppliedSecret) {
       return res.status(401).json({ error: 'Import authorization required' });
