@@ -80,6 +80,9 @@ const admins = {
   exists(identifier) {
     return getItems('admins').some(a => a.identifier === identifier);
   },
+  hasAny() {
+    return getItems('admins').length > 0;
+  },
   resetPassword(identifier, password, passwordResetVersion) {
     const items = getItems('admins');
     const idx = items.findIndex(a => a.identifier === identifier);
@@ -435,6 +438,15 @@ const dbAdmins = {
       return rows.length > 0;
     }
     return admins.exists(identifier);
+  },
+
+  async hasAny() {
+    if (pool) {
+      await ensureSchema();
+      const { rows } = await pool.query('SELECT 1 FROM admins LIMIT 1');
+      return rows.length > 0;
+    }
+    return admins.hasAny();
   },
 
   async resetPassword(identifier, password, passwordResetVersion) {

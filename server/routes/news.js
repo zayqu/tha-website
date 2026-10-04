@@ -5,6 +5,9 @@ const crypto = require('crypto');
 const { body, param, query, validationResult } = require('express-validator');
 const { news } = require('../db');
 const { requireAuth } = require('../middleware/auth');
+const { generateCloudflareDraft } = require('../cloudflare-ai');
+const { persistArticleImages } = require('../media-storage');
+const { contentImportSecret } = require('../runtime-secrets');
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 function slugify(text) {
@@ -69,7 +72,7 @@ router.get('/admin', requireAuth, async (_req, res, next) => {
 // ── POST /api/news/import  (automation; drafts only) ──────────────────────────
 router.post('/import', async (req, res, next) => {
   try {
-    const configuredSecret = process.env.CONTENT_IMPORT_SECRET;
+    const configuredSecret = process.env.CONTENT_IMPORT_SECRET || contentImportSecret;
     const suppliedSecret = req.get('authorization')?.replace(/^Bearer\s+/i, '') || '';
     if (!configuredSecret || !suppliedSecret) {
       return res.status(401).json({ error: 'Import authorization required' });
@@ -152,123 +155,19 @@ router.post('/generate', requireAuth, [
 ], async (req, res, next) => {
   try {
     if (!handleValidation(req, res)) return;
-    if (!process.env.OPENAI_API_KEY) {
-      return res.status(503).json({ error: 'AI drafting is not configured.' });
-    }
 
-    const {
-      topic,
-      purpose = 'News update',
-      facts = '',
-      image = '',
-      images = [],
-      categories = [],
-    } = req.body;
-
-    const instructions = [
-      'You are the editorial assistant for Tanzania Health Alliance (THA).',
-      'Create a professional, human, factual public-health news draft for the THA website.',
-      'Never invent names, dates, locations, statistics, quotes, partnerships, outcomes, or medical claims.',
-      'Use only the supplied topic, facts, and visible image evidence. If information is missing, write neutrally without guessing.',
-      'Use clear English for a general Tanzanian audience, short paragraphs, respectful language, and an institutional but warm tone.',
-      'The content must be 5 to 8 useful paragraphs and must not contain Markdown headings, hashtags, or promotional exaggeration.',
-      'Choose an existing category when suitable; otherwise suggest one concise professional category.',
-      'When photos are supplied, decide which photo is strongest as the banner and where the remaining photos naturally support the article.',
-      'Write concise, descriptive alt text for each used photo. Do not invent identities, locations, actions, or details that are not visible or supplied.',
-      'Use each supplied image at most once. The banner image must have role banner; other used images must have role inline.',
-      'Inline images should normally appear after paragraph 2 and paragraph 4, adjusted only when the article structure makes another placement more natural.',
-      'Return only the requested structured data.',
-    ].join(' ');
-
-    const requestContent = [{
-      type: 'input_text',
-      text: [
-        `Topic: ${topic}`,
-        `Story type: ${purpose}`,
-        `Verified facts supplied by editor:\n${facts || 'No additional facts supplied.'}`,
-        `Available categories: ${categories.length ? categories.join(', ') : 'None supplied'}`,
-      ].join('\n\n'),
-    }];
+    const { topic, purpose = 'News update', facts = '', image = '', images = [], categories = [] } = req.body;
+    const draft = await generateCloudflareDraft({ topic, purpose, facts, categories });
 
     const visualInputs = images.length ? images : (image ? [image] : []);
-    visualInputs.slice(0, 3).forEach((imageUrl, index) => {
-      if (/^data:image\/(jpeg|png|webp);base64,/i.test(imageUrl) || /^https:\/\//i.test(imageUrl)) {
-        requestContent.push({ type: 'input_text', text: `Image ${index}: consider this photo when planning article image placement.` });
-        requestContent.push({ type: 'input_image', image_url: imageUrl, detail: 'low' });
-      }
-    });
-
-    const response = await fetch('https://api.openai.com/v1/responses', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: process.env.OPENAI_NEWS_MODEL || 'gpt-5.6-terra',
-        instructions,
-        input: [{ role: 'user', content: requestContent }],
-        reasoning: { effort: 'low' },
-        text: {
-          format: {
-            type: 'json_schema',
-            name: 'tha_news_draft',
-            strict: true,
-            schema: {
-              type: 'object',
-              additionalProperties: false,
-              properties: {
-                title: { type: 'string', minLength: 10, maxLength: 200 },
-                excerpt: { type: 'string', minLength: 30, maxLength: 500 },
-                content: { type: 'string', minLength: 200, maxLength: 12000 },
-                category: { type: 'string', minLength: 2, maxLength: 80 },
-                tags: {
-                  type: 'array',
-                  minItems: 2,
-                  maxItems: 8,
-                  items: { type: 'string', minLength: 2, maxLength: 50 },
-                },
-                image_plan: {
-                  type: 'array',
-                  maxItems: 3,
-                  items: {
-                    type: 'object',
-                    additionalProperties: false,
-                    properties: {
-                      image_index: { type: 'integer', minimum: 0, maximum: 2 },
-                      role: { type: 'string', enum: ['banner', 'inline'] },
-                      after_paragraph: { type: 'integer', minimum: 0, maximum: 8 },
-                      alt: { type: 'string', minLength: 3, maxLength: 180 }
-                    },
-                    required: ['image_index', 'role', 'after_paragraph', 'alt']
-                  }
-                },
-              },
-              required: ['title', 'excerpt', 'content', 'category', 'tags', 'image_plan'],
-            },
-          },
-        },
-      }),
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      console.error('OpenAI news drafting failed:', data.error?.code || response.status);
-      return res.status(502).json({ error: 'The drafting assistant is temporarily unavailable. Please try again.' });
-    }
-
-    const outputText = data.output_text
-      || data.output?.flatMap(item => item.content || []).find(item => item.type === 'output_text')?.text;
-    if (!outputText) {
-      return res.status(502).json({ error: 'The drafting assistant returned an empty response.' });
-    }
-
-    let draft;
-    try {
-      draft = JSON.parse(outputText);
-    } catch (_error) {
-      return res.status(502).json({ error: 'The drafting assistant returned an invalid draft.' });
-    }
+    const imagePlan = visualInputs.slice(0, 3).map((_imageUrl, index) => ({
+      image_index: index,
+      role: index === 0 ? 'banner' : 'inline',
+      after_paragraph: index === 0 ? 0 : index === 1 ? 2 : 4,
+      alt: index === 0
+        ? `Main image for ${String(topic).trim().slice(0, 120)}`
+        : `Supporting image for ${String(topic).trim().slice(0, 120)}`,
+    }));
 
     res.json({
       draft: {
@@ -279,17 +178,19 @@ router.post('/generate', requireAuth, [
         tags: Array.isArray(draft.tags)
           ? draft.tags.map(tag => String(tag).trim()).filter(Boolean).slice(0, 8)
           : [],
-        image_plan: Array.isArray(draft.image_plan)
-          ? draft.image_plan.map(item => ({
-              image_index: Number(item.image_index),
-              role: item.role === 'banner' ? 'banner' : 'inline',
-              after_paragraph: Number(item.after_paragraph || 0),
-              alt: String(item.alt || '').trim().slice(0, 180),
-            })).filter(item => Number.isInteger(item.image_index) && item.image_index >= 0 && item.image_index <= 2)
-          : [],
+        image_plan: imagePlan,
       },
     });
   } catch (err) {
+    if (err.code === 'AI_NOT_CONFIGURED') {
+      return res.status(503).json({ error: 'AI drafting is not configured. Continue manually.', code: err.code });
+    }
+    if (err.code === 'AI_FREE_LIMIT_REACHED') {
+      return res.status(503).json({ error: 'The free AI allowance is temporarily exhausted. Continue manually or try again later.', code: err.code });
+    }
+    if (err.code === 'AI_TEMPORARILY_UNAVAILABLE' || err.code === 'AI_INVALID_RESPONSE') {
+      return res.status(502).json({ error: 'The drafting assistant is temporarily unavailable. Continue manually.', code: err.code });
+    }
     next(err);
   }
 });
@@ -321,14 +222,14 @@ router.post('/', requireAuth, newsBodyValidators, async (req, res, next) => {
   let counter = 1;
   while (await news.slugExists(slug)) slug = `${baseSlug}-${counter++}`;
 
-  const article = await news.create({
+  const article = await news.create(persistArticleImages({
     id: uuidv4(), slug, title, excerpt, content, image,
     category, author, date,
     tags: Array.isArray(tags) ? tags : [],
     inline_images: Array.isArray(inline_images) ? inline_images : [],
     is_featured: Boolean(is_featured),
     published: Boolean(published),
-  });
+  }));
 
   res.status(201).json({ article });
   } catch (err) {
@@ -361,13 +262,13 @@ router.put('/:id', requireAuth, [
     while (await news.slugExists(slug, req.params.id)) slug = `${baseSlug}-${counter++}`;
   }
 
-  const updated = await news.update(req.params.id, {
+  const updated = await news.update(req.params.id, persistArticleImages({
     slug, title, excerpt, content, image, category, author, date,
     tags: Array.isArray(tags) ? tags : [],
     inline_images: Array.isArray(inline_images) ? inline_images : [],
     is_featured: Boolean(is_featured),
     published: Boolean(published),
-  });
+  }));
 
   res.json({ article: updated });
   } catch (err) {

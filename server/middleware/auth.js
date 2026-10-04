@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const { jwtAccessSecret } = require('../runtime-secrets');
 
 /**
  * Verifies the Bearer access token in the Authorization header.
@@ -13,7 +14,7 @@ function requireAuth(req, res, next) {
 
   const token = authHeader.slice(7);
   try {
-    const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    const payload = jwt.verify(token, jwtAccessSecret);
     req.admin = { id: payload.sub, identifier: payload.identifier, role: payload.role };
     next();
   } catch (err) {

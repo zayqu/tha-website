@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const { body, param, validationResult } = require('express-validator');
 const { v4: uuidv4 } = require('uuid');
 const { requireAuth } = require('../middleware/auth');
@@ -16,6 +18,26 @@ if (hasDatabase) {
     '$1verify-full'
   );
   pool = new Pool({ connectionString, connectionTimeoutMillis: 5000, query_timeout: 10000 });
+}
+
+const PROJECTS_FILE = path.join(__dirname, '../data/projects.json');
+
+function readLocalProjects() {
+  try {
+    if (!fs.existsSync(PROJECTS_FILE)) return null;
+    const parsed = JSON.parse(fs.readFileSync(PROJECTS_FILE, 'utf8'));
+    return Array.isArray(parsed.items) ? parsed.items : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalProjects(items) {
+  const dir = path.dirname(PROJECTS_FILE);
+  fs.mkdirSync(dir, { recursive: true });
+  const tmp = `${PROJECTS_FILE}.tmp`;
+  fs.writeFileSync(tmp, JSON.stringify({ items }, null, 2));
+  fs.renameSync(tmp, PROJECTS_FILE);
 }
 
 const memoryProjects = (legacyCampaigns.campaigns || []).map(project => ({
@@ -85,7 +107,11 @@ async function ensureSchema() {
 }
 
 async function allProjects({ includeDrafts = false } = {}) {
-  if (!pool) return memoryProjects.filter(project => includeDrafts || project.published);
+  if (!pool) {
+    const stored = readLocalProjects();
+    const source = stored === null ? memoryProjects : stored;
+    return source.filter(project => includeDrafts || project.published);
+  }
   await ensureSchema();
   const { rows } = await pool.query(
     includeDrafts
@@ -97,7 +123,9 @@ async function allProjects({ includeDrafts = false } = {}) {
 
 async function findProject(identifier, includeDrafts = false) {
   if (!pool) {
-    return memoryProjects.find(project =>
+    const stored = readLocalProjects();
+    const source = stored === null ? memoryProjects : stored;
+    return source.find(project =>
       (project.id === identifier || project.slug === identifier) &&
       (includeDrafts || project.published)
     ) || null;
@@ -188,7 +216,20 @@ router.get('/:slug', async (req, res, next) => {
 router.post('/', requireAuth, validators, async (req, res, next) => {
   try {
     if (validationError(req, res)) return;
-    if (!pool) return res.status(503).json({ error: 'Project editing requires PostgreSQL' });
+    if (!pool) {
+      const project = cleanPayload(req.body);
+      const now = Math.floor(Date.now() / 1000);
+      const id = uuidv4();
+      const stored = readLocalProjects();
+      const items = stored === null ? [...memoryProjects] : stored;
+      if (items.some(item => item.slug === project.slug)) {
+        return res.status(409).json({ error: 'A project with this name or URL already exists' });
+      }
+      const record = { ...project, id, created_at: now, updated_at: now };
+      items.push(record);
+      writeLocalProjects(items);
+      return res.status(201).json({ project: record });
+    }
     await ensureSchema();
     const project = cleanPayload(req.body);
     const now = Math.floor(Date.now() / 1000);
@@ -210,7 +251,19 @@ router.post('/', requireAuth, validators, async (req, res, next) => {
 router.put('/:id', requireAuth, [param('id').trim().isLength({ min: 1, max: 100 }).withMessage('Invalid project id'), ...validators], async (req, res, next) => {
   try {
     if (validationError(req, res)) return;
-    if (!pool) return res.status(503).json({ error: 'Project editing requires PostgreSQL' });
+    if (!pool) {
+      const stored = readLocalProjects();
+      const items = stored === null ? [...memoryProjects] : stored;
+      const index = items.findIndex(item => item.id === req.params.id || item.slug === req.params.id);
+      if (index === -1) return res.status(404).json({ error: 'Project not found' });
+      const project = cleanPayload(req.body, items[index]);
+      if (items.some((item, i) => i !== index && item.slug === project.slug)) {
+        return res.status(409).json({ error: 'A project with this name or URL already exists' });
+      }
+      items[index] = { ...items[index], ...project, id: items[index].id, updated_at: Math.floor(Date.now() / 1000) };
+      writeLocalProjects(items);
+      return res.json({ project: items[index] });
+    }
     const existing = await findProject(req.params.id, true);
     if (!existing) return res.status(404).json({ error: 'Project not found' });
     const project = cleanPayload(req.body, existing);
@@ -232,7 +285,14 @@ router.put('/:id', requireAuth, [param('id').trim().isLength({ min: 1, max: 100 
 router.delete('/:id', requireAuth, [param('id').trim().isLength({ min: 1, max: 100 }).withMessage('Invalid project id')], async (req, res, next) => {
   try {
     if (validationError(req, res)) return;
-    if (!pool) return res.status(503).json({ error: 'Project editing requires PostgreSQL' });
+    if (!pool) {
+      const stored = readLocalProjects();
+      const items = stored === null ? [...memoryProjects] : stored;
+      const next = items.filter(item => item.id !== req.params.id && item.slug !== req.params.id);
+      if (next.length === items.length) return res.status(404).json({ error: 'Project not found' });
+      writeLocalProjects(next);
+      return res.json({ message: 'Project deleted' });
+    }
     await ensureSchema();
     const { rowCount } = await pool.query('DELETE FROM projects WHERE id = $1', [req.params.id]);
     if (!rowCount) return res.status(404).json({ error: 'Project not found' });

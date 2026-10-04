@@ -15,10 +15,25 @@ export default function AdminLogin() {
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [bootstrapAvailable, setBootstrapAvailable] = useState(false);
 
   useEffect(() => {
     if (admin) navigate(from, { replace: true });
   }, [admin, from, navigate]);
+
+  useEffect(() => {
+    let active = true;
+    fetch(apiUrl('/api/auth/bootstrap-status'))
+      .then(response => response.ok ? response.json() : { available: false })
+      .then(data => {
+        if (!active) return;
+        const available = Boolean(data.available);
+        setBootstrapAvailable(available);
+        if (available) setMode('register');
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, []);
 
   function update(field, value) {
     setForm(current => ({ ...current, [field]: value }));
@@ -72,7 +87,7 @@ export default function AdminLogin() {
           <div className="grid grid-cols-2 bg-gray-100 rounded-xl p-1 mb-6" aria-label="Account access options">
             {[
               ['login', 'Sign in'],
-              ['register', 'Request access'],
+              ['register', bootstrapAvailable ? 'Set up admin' : 'Request access'],
             ].map(([value, label]) => (
               <button
                 key={value}
@@ -88,12 +103,16 @@ export default function AdminLogin() {
           </div>
 
           <h2 className="text-xl font-bold text-gray-800 mb-1">
-            {mode === 'login' ? 'Sign in to your account' : 'Request an editor account'}
+            {mode === 'login'
+              ? 'Sign in to your account'
+              : bootstrapAvailable ? 'Set up the first administrator' : 'Request an editor account'}
           </h2>
           <p className="text-sm text-gray-500 mb-6">
             {mode === 'login'
               ? 'Only approved accounts can access the dashboard.'
-              : 'Your account will remain pending until an administrator approves it.'}
+              : bootstrapAvailable
+                ? 'Create the first secure administrator account for this website.'
+                : 'Your account will remain pending until an administrator approves it.'}
           </p>
 
           {notice && <div className="mb-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">{notice}</div>}
@@ -160,13 +179,17 @@ export default function AdminLogin() {
               disabled={loading}
               className="w-full rounded-xl bg-primary py-3 font-semibold text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Submit for approval'}
+              {loading
+                ? 'Please wait…'
+                : mode === 'login'
+                  ? 'Sign in'
+                  : bootstrapAvailable ? 'Create administrator' : 'Submit for approval'}
             </button>
           </form>
         </div>
 
         <p className="text-center text-white/60 text-xs mt-6">
-          Accounts are reviewed before access is granted.
+          {bootstrapAvailable ? 'First administrator setup is available once.' : 'Accounts are reviewed before access is granted.'}
         </p>
       </div>
     </div>

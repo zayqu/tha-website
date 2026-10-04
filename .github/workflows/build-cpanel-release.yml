@@ -1,0 +1,81 @@
+name: Build cPanel Release
+
+on:
+  push:
+    branches: [main, migration/cpanel-node22]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tha-cpanel-release
+  cancel-in-progress: true
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend for same-origin API
+        env:
+          VITE_API_BASE_URL: ''
+        run: npm run build
+
+      - name: Verify backend installs and loads
+        run: |
+          npm ci --omit=dev --prefix server
+          node -e "const app=require('./server/index.js'); if (!app) process.exit(1)"
+
+      - name: Prepare release tree
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/tha-cpanel-release
+          mkdir -p /tmp/tha-cpanel-release
+          cp -R dist /tmp/tha-cpanel-release/dist
+          cp -R server /tmp/tha-cpanel-release/server
+          # Persistent cPanel data must never be baked into a release.
+          rm -rf /tmp/tha-cpanel-release/server/data
+          mkdir -p /tmp/tha-cpanel-release/server/data
+          touch /tmp/tha-cpanel-release/server/data/.keep
+          mkdir -p /tmp/tha-cpanel-release/src
+          cp -R src/data /tmp/tha-cpanel-release/src/data
+          mkdir -p /tmp/tha-cpanel-release/scripts
+          cp scripts/importHealthContent.js /tmp/tha-cpanel-release/scripts/importHealthContent.js
+          rm -rf /tmp/tha-cpanel-release/server/node_modules
+          printf '%s\n' "$GITHUB_SHA" > /tmp/tha-cpanel-release/REVISION
+
+      - name: Verify packaged release
+        run: |
+          set -euo pipefail
+          npm ci --omit=dev --prefix /tmp/tha-cpanel-release/server
+          node -e "const app=require('/tmp/tha-cpanel-release/server/index.js'); if (!app) process.exit(1)"
+          rm -rf /tmp/tha-cpanel-release/server/node_modules
+
+      - name: Publish cpanel-release branch
+        env:
+          RELEASE_DIR: /tmp/tha-cpanel-release
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan cpanel-release
+          git rm -rf . >/dev/null 2>&1 || true
+          cp -R "$RELEASE_DIR"/. .
+          git add -A
+          git commit -m "Build cPanel release for $GITHUB_SHA"
+          git push --force origin HEAD:cpanel-release

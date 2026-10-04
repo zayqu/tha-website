@@ -1,5 +1,10 @@
 const CONTENT_API_URL = (process.env.CONTENT_API_URL || 'https://tha-webacdb.vercel.app').replace(/\/$/, '');
-const CONTENT_IMPORT_SECRET = process.env.CONTENT_IMPORT_SECRET;
+let CONTENT_IMPORT_SECRET = process.env.CONTENT_IMPORT_SECRET;
+if (!CONTENT_IMPORT_SECRET) {
+  try {
+    CONTENT_IMPORT_SECRET = require('../server/runtime-secrets').contentImportSecret;
+  } catch {}
+}
 
 const DEFAULT_FEEDS = [
   {

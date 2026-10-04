@@ -9,6 +9,7 @@ const { body, param, validationResult } = require('express-validator');
 const { admins, tokens } = require('../db');
 const { requireAuth, requireSuperAdmin } = require('../middleware/auth');
 require('dotenv').config();
+const { jwtAccessSecret } = require('../runtime-secrets');
 
 // ── Rate limiter: 5 attempts per 15 min per IP ────────────────────────────────
 const loginLimiter = rateLimit({
@@ -28,7 +29,7 @@ function hashToken(raw) {
 function issueAccessToken(admin) {
   return jwt.sign(
     { sub: admin.id, identifier: admin.identifier, role: admin.role },
-    process.env.JWT_ACCESS_SECRET,
+    jwtAccessSecret,
     { expiresIn: process.env.JWT_ACCESS_EXPIRES || '15m' }
   );
 }
@@ -51,6 +52,17 @@ function setRefreshCookie(res, raw, expiresSec) {
 }
 
 
+// ── GET /api/auth/bootstrap-status ────────────────────────────────────────────
+router.get('/bootstrap-status', async (_req, res, next) => {
+  try {
+    const enabled = process.env.ALLOW_FIRST_ADMIN_BOOTSTRAP === 'true';
+    const hasAdmin = await admins.hasAny();
+    res.json({ available: enabled && !hasAdmin });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ── POST /api/auth/register ───────────────────────────────────────────────────
 // Creates a pending editor account. A super administrator must approve it.
 router.post(
@@ -72,18 +84,24 @@ router.post(
         return res.status(409).json({ error: 'An account with this email already exists' });
       }
 
+      const bootstrapEnabled = process.env.ALLOW_FIRST_ADMIN_BOOTSTRAP === 'true';
+      const isFirstAdmin = bootstrapEnabled && !(await admins.hasAny());
+
       await admins.create({
         id: uuidv4(),
         identifier,
         password: await bcrypt.hash(req.body.password, 12),
         name: req.body.name.trim(),
-        role: 'editor',
-        status: 'pending',
+        role: isFirstAdmin ? 'superadmin' : 'editor',
+        status: isFirstAdmin ? 'approved' : 'pending',
       });
 
       return res.status(201).json({
-        message: 'Registration received. An administrator must approve your account before you can sign in.',
-        status: 'pending',
+        message: isFirstAdmin
+          ? 'Administrator account created. You can sign in now.'
+          : 'Registration received. An administrator must approve your account before you can sign in.',
+        status: isFirstAdmin ? 'approved' : 'pending',
+        role: isFirstAdmin ? 'superadmin' : 'editor',
       });
     } catch (err) {
       next(err);
