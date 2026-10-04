@@ -5,7 +5,7 @@ A modern, responsive website built with React, Vite, and TailwindCSS.
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ and npm
+- Node.js 24.x and npm
 
 ### Installation
 
