@@ -129,14 +129,23 @@ function renderHtml(templatePath, { article, articles }) {
   return html.replace('<div id="root"></div>', `<div id="root">${newsListFallback(articles || [])}</div>`);
 }
 
-function renderSitemap(articles = []) {
+function renderSitemap(articles = [], projects = []) {
   const staticUrls = [
     '/', '/about', '/impact', '/projects', '/academy', '/news', '/contact',
-    '/make-a-difference', '/campaigns/kapime', '/campaigns/life-unlocked', '/campaigns/talk-to-heal',
+    '/make-a-difference', '/privacy', '/cookies', '/terms',
+    '/campaigns/kapime', '/campaigns/life-unlocked', '/campaigns/talk-to-heal',
   ];
 
   const rows = [
     ...staticUrls.map(url => ({ loc: SITE_URL + url })),
+    ...projects
+      .filter(project => project?.slug || project?.id)
+      .map(project => ({
+        loc: `${SITE_URL}/campaigns/${encodeURIComponent(project.slug || project.id)}`,
+        lastmod: project.updated_at
+          ? new Date(Number(project.updated_at) * 1000).toISOString().slice(0, 10)
+          : undefined,
+      })),
     ...articles.map(article => ({
       loc: `${SITE_URL}/news/${encodeURIComponent(article.slug)}`,
       lastmod: article.updated_at
