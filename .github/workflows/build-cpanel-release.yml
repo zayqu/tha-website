@@ -44,8 +44,17 @@ jobs:
           mkdir -p /tmp/tha-cpanel-release
           cp -R dist /tmp/tha-cpanel-release/dist
           cp -R server /tmp/tha-cpanel-release/server
+          mkdir -p /tmp/tha-cpanel-release/src
+          cp -R src/data /tmp/tha-cpanel-release/src/data
           rm -rf /tmp/tha-cpanel-release/server/node_modules
           printf '%s\n' "$GITHUB_SHA" > /tmp/tha-cpanel-release/REVISION
+
+      - name: Verify packaged release
+        run: |
+          set -euo pipefail
+          npm ci --omit=dev --prefix /tmp/tha-cpanel-release/server
+          node -e "const app=require('/tmp/tha-cpanel-release/server/index.js'); if (!app) process.exit(1)"
+          rm -rf /tmp/tha-cpanel-release/server/node_modules
 
       - name: Publish cpanel-release branch
         env:
