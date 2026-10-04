@@ -8,11 +8,23 @@ const DEFAULT_FEEDS = [
   },
 ];
 
-const KEYWORDS = {
-  HIV: ['hiv', 'aids', 'antiretroviral'],
-  Hepatitis: ['hepatitis', 'liver disease', 'hbv', 'hcv'],
-  'Mental Health': ['mental health', 'depression', 'anxiety', 'suicide', 'psychosocial'],
+const TOPIC_RULES = {
+  HIV: {
+    strong: ['hiv', 'aids', 'antiretroviral', 'art treatment', 'viral load'],
+    supporting: ['people living with hiv', 'hiv prevention', 'hiv testing', 'pre-exposure prophylaxis', 'prep'],
+  },
+  Hepatitis: {
+    strong: ['hepatitis', 'hepatitis b', 'hepatitis c', 'hbv', 'hcv'],
+    supporting: ['liver disease', 'liver cancer', 'birth dose', 'viral hepatitis', 'hepatitis vaccination'],
+  },
+  'Mental Health': {
+    strong: ['mental health', 'mental illness', 'psychosocial'],
+    supporting: ['depression', 'anxiety', 'suicide', 'suicidal', 'wellbeing', 'well-being'],
+  },
 };
+
+const MAX_ITEMS_PER_FEED = 12;
+const MAX_ITEM_AGE_DAYS = 120;
 
 function decodeXml(value = '') {
   return value
@@ -28,27 +40,102 @@ function tag(block, name) {
   return decodeXml(match?.[1] || '');
 }
 
+function normalizeText(value = '') {
+  return value.toLowerCase().replace(/[^a-z0-9\s-]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function hasPhrase(text, phrase) {
+  const normalizedPhrase = normalizeText(phrase);
+  if (!normalizedPhrase) return false;
+  return ` ${text} `.includes(` ${normalizedPhrase} `);
+}
+
+function classifyRelevance(title, excerpt) {
+  const titleText = normalizeText(title);
+  const excerptText = normalizeText(excerpt);
+  const combined = `${titleText} ${excerptText}`;
+
+  const matches = [];
+  for (const [topic, rules] of Object.entries(TOPIC_RULES)) {
+    const strongTitle = rules.strong.filter(term => hasPhrase(titleText, term));
+    const strongBody = rules.strong.filter(term => hasPhrase(excerptText, term));
+    const supportingTitle = rules.supporting.filter(term => hasPhrase(titleText, term));
+    const supportingBody = rules.supporting.filter(term => hasPhrase(excerptText, term));
+
+    const uniqueHits = new Set([
+      ...strongTitle,
+      ...strongBody,
+      ...supportingTitle,
+      ...supportingBody,
+    ]);
+
+    // A story is relevant only when the THA topic is central, not incidental:
+    // 1) a strong topic phrase is in the title, OR
+    // 2) a strong phrase is in the body plus another distinct supporting signal, OR
+    // 3) two distinct strong phrases appear across title/body.
+    const relevant =
+      strongTitle.length > 0 ||
+      (strongBody.length > 0 && uniqueHits.size >= 2) ||
+      new Set([...strongTitle, ...strongBody]).size >= 2;
+
+    if (relevant) matches.push(topic);
+  }
+
+  return matches;
+}
+
+function safeDate(rawDate) {
+  if (!rawDate) return null;
+  const parsed = new Date(rawDate);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed;
+}
+
+function isRecentEnough(date) {
+  if (!date) return true;
+  const ageMs = Date.now() - date.getTime();
+  if (ageMs < -2 * 24 * 60 * 60 * 1000) return false;
+  return ageMs <= MAX_ITEM_AGE_DAYS * 24 * 60 * 60 * 1000;
+}
+
 function parseFeed(xml, source) {
   const blocks = xml.match(/<item[\s\S]*?<\/item>|<entry[\s\S]*?<\/entry>/gi) || [];
-  return blocks.map(block => {
+  const accepted = [];
+  const rejected = [];
+
+  for (const block of blocks) {
     const linkText = tag(block, 'link');
     const href = block.match(/<link[^>]+href=["']([^"']+)/i)?.[1];
     const title = tag(block, 'title');
     const excerpt = tag(block, 'description') || tag(block, 'summary') || tag(block, 'content');
-    const date = tag(block, 'pubDate') || tag(block, 'published') || tag(block, 'updated');
-    const text = `${title} ${excerpt}`.toLowerCase();
-    const topics = Object.entries(KEYWORDS)
-      .filter(([, words]) => words.some(word => text.includes(word)))
-      .map(([topic]) => topic);
-    return {
+    const rawDate = tag(block, 'pubDate') || tag(block, 'published') || tag(block, 'updated');
+    const parsedDate = safeDate(rawDate);
+    const url = href || linkText;
+    const topics = classifyRelevance(title, excerpt);
+
+    let reason = '';
+    if (!title || !excerpt) reason = 'missing title or excerpt';
+    else if (!/^https:\/\//i.test(url || '')) reason = 'invalid URL';
+    else if (!isRecentEnough(parsedDate)) reason = 'outside recency window';
+    else if (!topics.length) reason = 'topic not central enough';
+
+    if (reason) {
+      rejected.push({ title: title || 'Untitled', reason });
+      continue;
+    }
+
+    accepted.push({
       title,
       excerpt: excerpt.slice(0, 500),
-      url: href || linkText,
+      url,
       source,
-      date: date ? new Date(date).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+      date: (parsedDate || new Date()).toISOString().slice(0, 10),
       topics,
-    };
-  }).filter(item => item.title && item.excerpt && item.url && item.topics.length);
+    });
+  }
+
+  accepted.sort((a, b) => new Date(b.date) - new Date(a.date));
+  return { accepted: accepted.slice(0, MAX_ITEMS_PER_FEED), rejected };
 }
 
 async function main() {
@@ -59,8 +146,14 @@ async function main() {
     : [];
   const feeds = [...DEFAULT_FEEDS, ...configured];
   const discoveries = [];
+  let rejectedCount = 0;
 
   for (const feed of feeds) {
+    if (!feed?.url || !feed?.source || !/^https:\/\//i.test(feed.url)) {
+      console.warn('Skipping invalid feed configuration.');
+      continue;
+    }
+
     const response = await fetch(feed.url, {
       headers: { 'User-Agent': 'Tanzania Health Alliance content monitor' },
     });
@@ -68,7 +161,14 @@ async function main() {
       console.warn(`Skipping ${feed.url}: HTTP ${response.status}`);
       continue;
     }
-    discoveries.push(...parseFeed(await response.text(), feed.source));
+
+    const { accepted, rejected } = parseFeed(await response.text(), feed.source);
+    discoveries.push(...accepted);
+    rejectedCount += rejected.length;
+
+    console.log(
+      `${feed.source}: ${accepted.length} relevant item(s), ${rejected.length} rejected as unrelated/invalid.`
+    );
   }
 
   const unique = [...new Map(discoveries.map(item => [item.url, item])).values()];
@@ -92,7 +192,9 @@ async function main() {
     invalid += result.invalid || 0;
   }
 
-  console.log(`Draft import complete: ${imported} new, ${duplicates} duplicate, ${invalid} invalid.`);
+  console.log(
+    `Draft import complete: ${imported} new, ${duplicates} duplicate, ${invalid} invalid, ${rejectedCount} rejected before import.`
+  );
 }
 
 main().catch(error => {
