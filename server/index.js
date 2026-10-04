@@ -44,6 +44,11 @@ app.use(express.json({ limit: '3mb' }));
 app.use(express.urlencoded({ extended: false, limit: '3mb' }));
 app.use(cookieParser());
 
+app.use('/admin', (_req, res, next) => {
+  res.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+  next();
+});
+
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 }
