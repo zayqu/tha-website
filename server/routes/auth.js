@@ -9,6 +9,7 @@ const { body, param, validationResult } = require('express-validator');
 const { admins, tokens } = require('../db');
 const { requireAuth, requireSuperAdmin } = require('../middleware/auth');
 require('dotenv').config();
+const { jwtAccessSecret } = require('../runtime-secrets');
 
 // ── Rate limiter: 5 attempts per 15 min per IP ────────────────────────────────
 const loginLimiter = rateLimit({
@@ -28,7 +29,7 @@ function hashToken(raw) {
 function issueAccessToken(admin) {
   return jwt.sign(
     { sub: admin.id, identifier: admin.identifier, role: admin.role },
-    process.env.JWT_ACCESS_SECRET,
+    jwtAccessSecret,
     { expiresIn: process.env.JWT_ACCESS_EXPIRES || '15m' }
   );
 }
