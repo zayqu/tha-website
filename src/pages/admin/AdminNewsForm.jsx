@@ -113,13 +113,11 @@ export default function AdminNewsForm() {
   const [errors, setErrors]   = useState({});
   const [saving, setSaving]   = useState(false);
   const [loadError, setLoadError] = useState('');
-  const [imageMode, setImageMode] = useState('upload');
   const [imageInfo, setImageInfo] = useState(null);
   const [processingImage, setProcessingImage] = useState(false);
   const [assistant, setAssistant] = useState({ topic: '', purpose: 'announcement', facts: '' });
   const [generatingDraft, setGeneratingDraft] = useState(false);
   const [categoryOptions, setCategoryOptions] = useState(CATEGORY_SUGGESTIONS);
-  const [categoryMode, setCategoryMode] = useState('select');
 
   // ── Load categories and the current article ───────────────────────────────
   useEffect(() => {
@@ -150,7 +148,6 @@ export default function AdminNewsForm() {
           is_featured: Boolean(article.is_featured),
           published:   Boolean(article.published),
         });
-        setImageMode(article.image?.startsWith('data:') ? 'upload' : 'url');
       })
       .catch(() => {
         if (isEditing) setLoadError('Failed to load article.');
@@ -162,14 +159,6 @@ export default function AdminNewsForm() {
     const { name, value, type, checked } = e.target;
     setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
-  }
-
-  function handleImageModeChange(mode) {
-    setImageMode(mode);
-    if (mode === 'url' && form.image?.startsWith('data:')) {
-      setForm(prev => ({ ...prev, image: '' }));
-    }
-    setErrors(prev => ({ ...prev, image: '' }));
   }
 
   async function handleImageFileChange(e) {
