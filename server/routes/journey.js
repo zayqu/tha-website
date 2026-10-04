@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const { body, param, validationResult } = require('express-validator');
 const { v4: uuidv4 } = require('uuid');
 const { requireAuth } = require('../middleware/auth');
@@ -16,6 +18,26 @@ if (hasDatabase) {
     '$1verify-full'
   );
   pool = new Pool({ connectionString, connectionTimeoutMillis: 5000, query_timeout: 10000 });
+}
+
+const JOURNEY_FILE = path.join(__dirname, '../data/journey.json');
+
+function readLocalMilestones() {
+  try {
+    if (!fs.existsSync(JOURNEY_FILE)) return null;
+    const parsed = JSON.parse(fs.readFileSync(JOURNEY_FILE, 'utf8'));
+    return Array.isArray(parsed.items) ? parsed.items : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalMilestones(items) {
+  const dir = path.dirname(JOURNEY_FILE);
+  fs.mkdirSync(dir, { recursive: true });
+  const tmp = `${JOURNEY_FILE}.tmp`;
+  fs.writeFileSync(tmp, JSON.stringify({ items }, null, 2));
+  fs.renameSync(tmp, JOURNEY_FILE);
 }
 
 const memoryMilestones = (impactData.yearOneTimeline || []).map((item, index) => ({
@@ -86,7 +108,12 @@ async function ensureSchema() {
 }
 
 async function allMilestones({ includeDrafts = false } = {}) {
-  if (!pool) return memoryMilestones.filter(item => includeDrafts || item.published);
+  if (!pool) {
+    const stored = readLocalMilestones();
+    const source = stored === null ? memoryMilestones : stored;
+    return source.filter(item => includeDrafts || item.published)
+      .sort((a, b) => Number(a.sortOrder || 0) - Number(b.sortOrder || 0));
+  }
   await ensureSchema();
   const { rows } = await pool.query(
     includeDrafts
@@ -140,7 +167,16 @@ router.get('/', async (_req, res, next) => {
 router.post('/', requireAuth, validators, async (req, res, next) => {
   try {
     if (validationError(req, res)) return;
-    if (!pool) return res.status(503).json({ error: 'Journey editing requires PostgreSQL' });
+    if (!pool) {
+      const item = cleanPayload(req.body);
+      const now = Math.floor(Date.now() / 1000);
+      const stored = readLocalMilestones();
+      const items = stored === null ? [...memoryMilestones] : stored;
+      const record = { ...item, id: uuidv4(), created_at: now, updated_at: now };
+      items.push(record);
+      writeLocalMilestones(items);
+      return res.status(201).json({ milestone: record });
+    }
     await ensureSchema();
     const item = cleanPayload(req.body);
     const now = Math.floor(Date.now() / 1000);
@@ -162,7 +198,16 @@ router.put('/:id', requireAuth, [
 ], async (req, res, next) => {
   try {
     if (validationError(req, res)) return;
-    if (!pool) return res.status(503).json({ error: 'Journey editing requires PostgreSQL' });
+    if (!pool) {
+      const stored = readLocalMilestones();
+      const items = stored === null ? [...memoryMilestones] : stored;
+      const index = items.findIndex(item => item.id === req.params.id);
+      if (index === -1) return res.status(404).json({ error: 'Milestone not found' });
+      const item = cleanPayload(req.body, items[index]);
+      items[index] = { ...items[index], ...item, id: items[index].id, updated_at: Math.floor(Date.now() / 1000) };
+      writeLocalMilestones(items);
+      return res.json({ milestone: items[index] });
+    }
     await ensureSchema();
     const { rows: existingRows } = await pool.query('SELECT * FROM journey_milestones WHERE id = $1', [req.params.id]);
     if (!existingRows[0]) return res.status(404).json({ error: 'Milestone not found' });
@@ -183,7 +228,14 @@ router.delete('/:id', requireAuth, [
 ], async (req, res, next) => {
   try {
     if (validationError(req, res)) return;
-    if (!pool) return res.status(503).json({ error: 'Journey editing requires PostgreSQL' });
+    if (!pool) {
+      const stored = readLocalMilestones();
+      const items = stored === null ? [...memoryMilestones] : stored;
+      const next = items.filter(item => item.id !== req.params.id);
+      if (next.length === items.length) return res.status(404).json({ error: 'Milestone not found' });
+      writeLocalMilestones(next);
+      return res.json({ message: 'Milestone deleted' });
+    }
     await ensureSchema();
     const { rowCount } = await pool.query('DELETE FROM journey_milestones WHERE id = $1', [req.params.id]);
     if (!rowCount) return res.status(404).json({ error: 'Milestone not found' });
