@@ -54,6 +54,7 @@ router.get('/', [
   if (!handleValidation(req, res)) return;
   const { category, limit = 50, offset = 0 } = req.query;
   const articles = await news.findPublished({ category, limit: Number(limit), offset: Number(offset) });
+  res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
   res.json({ articles });
   } catch (err) {
     next(err);
