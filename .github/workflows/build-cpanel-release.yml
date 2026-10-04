@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: tha-cpanel-release
+  cancel-in-progress: true
+
 jobs:
   build-release:
     runs-on: ubuntu-latest
@@ -46,6 +50,8 @@ jobs:
           cp -R server /tmp/tha-cpanel-release/server
           mkdir -p /tmp/tha-cpanel-release/src
           cp -R src/data /tmp/tha-cpanel-release/src/data
+          mkdir -p /tmp/tha-cpanel-release/scripts
+          cp scripts/importHealthContent.js /tmp/tha-cpanel-release/scripts/importHealthContent.js
           rm -rf /tmp/tha-cpanel-release/server/node_modules
           printf '%s\n' "$GITHUB_SHA" > /tmp/tha-cpanel-release/REVISION
 
