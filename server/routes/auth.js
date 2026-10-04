@@ -52,6 +52,17 @@ function setRefreshCookie(res, raw, expiresSec) {
 }
 
 
+// ── GET /api/auth/bootstrap-status ────────────────────────────────────────────
+router.get('/bootstrap-status', async (_req, res, next) => {
+  try {
+    const enabled = process.env.ALLOW_FIRST_ADMIN_BOOTSTRAP === 'true';
+    const hasAdmin = await admins.hasAny();
+    res.json({ available: enabled && !hasAdmin });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ── POST /api/auth/register ───────────────────────────────────────────────────
 // Creates a pending editor account. A super administrator must approve it.
 router.post(
