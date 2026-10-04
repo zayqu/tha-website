@@ -6,6 +6,7 @@ const { body, param, query, validationResult } = require('express-validator');
 const { news } = require('../db');
 const { requireAuth } = require('../middleware/auth');
 const { generateCloudflareDraft } = require('../cloudflare-ai');
+const { persistArticleImages } = require('../media-storage');
 const { contentImportSecret } = require('../runtime-secrets');
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -221,14 +222,14 @@ router.post('/', requireAuth, newsBodyValidators, async (req, res, next) => {
   let counter = 1;
   while (await news.slugExists(slug)) slug = `${baseSlug}-${counter++}`;
 
-  const article = await news.create({
+  const article = await news.create(persistArticleImages({
     id: uuidv4(), slug, title, excerpt, content, image,
     category, author, date,
     tags: Array.isArray(tags) ? tags : [],
     inline_images: Array.isArray(inline_images) ? inline_images : [],
     is_featured: Boolean(is_featured),
     published: Boolean(published),
-  });
+  }));
 
   res.status(201).json({ article });
   } catch (err) {
@@ -261,13 +262,13 @@ router.put('/:id', requireAuth, [
     while (await news.slugExists(slug, req.params.id)) slug = `${baseSlug}-${counter++}`;
   }
 
-  const updated = await news.update(req.params.id, {
+  const updated = await news.update(req.params.id, persistArticleImages({
     slug, title, excerpt, content, image, category, author, date,
     tags: Array.isArray(tags) ? tags : [],
     inline_images: Array.isArray(inline_images) ? inline_images : [],
     is_featured: Boolean(is_featured),
     published: Boolean(published),
-  });
+  }));
 
   res.json({ article: updated });
   } catch (err) {
