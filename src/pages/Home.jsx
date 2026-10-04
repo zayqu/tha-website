@@ -167,9 +167,11 @@ export const Home = () => {
 
   useEffect(() => {
     let isMounted = true;
-    fetchPublishedNews({ limit: 3 })
+    // Load the same collection used by News so navigation can reuse the
+    // in-memory request/cache, then keep only the three homepage cards.
+    fetchPublishedNews({ limit: 100 })
       .then(articles => {
-        if (isMounted) setLatestNews(articles);
+        if (isMounted) setLatestNews(articles.slice(0, 3));
       })
       .catch(() => {
         if (isMounted) setLatestNews([]);

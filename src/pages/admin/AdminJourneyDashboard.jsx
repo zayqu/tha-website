@@ -141,8 +141,8 @@ export default function AdminJourneyDashboard() {
 
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-7">
-          <h1 className="text-3xl font-bold text-primary">Our Journey</h1>
-          <p className="mt-2 max-w-3xl text-gray-600">Add, edit, publish, order, or remove milestones. Published changes appear in the horizontal Journey on Home and Impact.</p>
+          <h1 className="text-3xl font-bold text-primary">Milestones</h1>
+          <p className="mt-2 max-w-3xl text-gray-600">Add, edit, publish, order, or remove timeline entries. Published changes appear on Home and Impact.</p>
         </div>
 
         {error ? <div role="alert" className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
@@ -196,13 +196,13 @@ export default function AdminJourneyDashboard() {
             </label>
 
             <button type="submit" disabled={saving} className="w-full rounded-xl bg-secondary px-5 py-3 font-bold text-white transition hover:bg-secondary-dark disabled:opacity-60">
-              {saving ? 'Saving…' : editingId ? 'Update milestone' : 'Add to Journey'}
+              {saving ? 'Saving…' : editingId ? 'Update milestone' : 'Add milestone'}
             </button>
           </form>
 
           <section>
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-primary">Journey milestones</h2>
+              <h2 className="text-xl font-bold text-primary">Timeline entries</h2>
               <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">{milestones.length} total</span>
             </div>
 

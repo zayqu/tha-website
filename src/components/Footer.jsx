@@ -80,7 +80,7 @@ export const Footer = () => {
                 <li><Link to="/" className="text-sm text-white/75 hover:text-secondary transition">Introduction</Link></li>
                 <li><Link to="/#partners" className="text-sm text-white/75 hover:text-secondary transition">Our Partners</Link></li>
                 <li><Link to="/about" className="text-sm text-white/75 hover:text-secondary transition">About Us</Link></li>
-                <li><Link to="/news" className="text-sm text-white/75 hover:text-secondary transition">Our Journeys</Link></li>
+                <li><Link to="/impact#journey" className="text-sm text-white/75 hover:text-secondary transition">Our Journey</Link></li>
               </ul>
             </div>
 
@@ -116,7 +116,6 @@ export const Footer = () => {
                 <div className="flex items-center gap-3">
                   <Icon name="phone" size={18} color="white" className="flex-shrink-0 opacity-75" />
                   <div>
-                    <p className="text-sm text-white/75">+255 659-114-754</p>
                     <p className="text-sm text-white/75">+255 659-114-754</p>
                   </div>
                 </div>

@@ -30,13 +30,37 @@ export function normalizeArticle(article) {
   };
 }
 
+const NEWS_CACHE_TTL_MS = 15_000;
+const publishedNewsRequests = new Map();
+
 export async function fetchPublishedNews(params = {}) {
   const search = new URLSearchParams(params);
   const query = search.toString();
-  const res = await fetch(apiUrl(`/api/news${query ? `?${query}` : ''}`));
-  if (!res.ok) throw new Error('Failed to load news');
-  const data = await res.json();
-  return (data.articles || []).map(normalizeArticle);
+  const url = apiUrl(`/api/news${query ? `?${query}` : ''}`);
+  const cached = publishedNewsRequests.get(url);
+
+  if (cached?.articles && Date.now() - cached.storedAt < NEWS_CACHE_TTL_MS) {
+    return cached.articles;
+  }
+  if (cached?.request) return cached.request;
+
+  const request = fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error('Failed to load news');
+      return res.json();
+    })
+    .then(data => {
+      const articles = (data.articles || []).map(normalizeArticle);
+      publishedNewsRequests.set(url, { articles, storedAt: Date.now() });
+      return articles;
+    })
+    .catch(error => {
+      publishedNewsRequests.delete(url);
+      throw error;
+    });
+
+  publishedNewsRequests.set(url, { request });
+  return request;
 }
 
 export async function fetchNewsArticle(slug) {
