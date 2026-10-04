@@ -337,11 +337,45 @@ function renderPublicPage(templatePath, pathname, { project } = {}) {
 
   if (!definition) return null;
   const canonical = SITE_URL + (pathname === '/' ? '/' : pathname);
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: definition.heading || definition.title,
+      description: definition.description,
+      url: canonical,
+      isPartOf: {
+        '@type': 'WebSite',
+        name: SITE_NAME,
+        url: SITE_URL + '/',
+      },
+      about: {
+        '@type': 'NGO',
+        name: SITE_NAME,
+        url: SITE_URL + '/',
+      },
+    },
+    ...(pathname === '/' ? [{
+      '@context': 'https://schema.org',
+      '@type': 'NGO',
+      name: SITE_NAME,
+      url: SITE_URL + '/',
+      logo: SITE_URL + '/logo/tha-logo.svg',
+      description: definition.description,
+      areaServed: 'Tanzania',
+      sameAs: [
+        'https://instagram.com/tanzania_healthalliance',
+        'https://www.linkedin.com/company/tanzania-health-alliance',
+        'https://www.facebook.com/tanzaniahealthalliance',
+      ],
+    }] : []),
+  ];
   html = replaceMeta(html, {
     title: definition.title,
     description: definition.description,
     canonical,
     image: SITE_URL + '/images/og-image.jpg',
+    structuredData,
   });
   return html.replace('<div id="root"></div>', `<div id="root">${fallback || genericFallback(definition)}</div>`);
 }
