@@ -96,7 +96,7 @@ const EMPTY_FORM = {
   content: '',
   image: '',
   category: 'Events',
-  author: '',
+  author: 'THA Communications',
   date: new Date().toISOString().split('T')[0],
   tags: '',
   is_featured: false,
@@ -113,7 +113,7 @@ export default function AdminNewsForm() {
   const [errors, setErrors]   = useState({});
   const [saving, setSaving]   = useState(false);
   const [loadError, setLoadError] = useState('');
-  const [imageMode, setImageMode] = useState('url');
+  const [imageMode, setImageMode] = useState('upload');
   const [imageInfo, setImageInfo] = useState(null);
   const [processingImage, setProcessingImage] = useState(false);
   const [assistant, setAssistant] = useState({ topic: '', purpose: 'announcement', facts: '' });
@@ -317,192 +317,149 @@ export default function AdminNewsForm() {
             </div>
           )}
 
-          {/* Guided drafting assistant */}
-          <section className="bg-gradient-to-br from-primary to-primary-dark text-white rounded-2xl p-5 md:p-6 shadow-lg">
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-5">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-white/70">Draft assistant</p>
-                <h2 className="text-xl font-bold mt-1">Turn a topic into a structured first draft</h2>
-                <p className="text-sm text-white/80 mt-1">Add a topic, an image, or both. The assistant creates a complete editable article; you review it before publishing.</p>
-              </div>
-              <span className="self-start px-3 py-1 rounded-full bg-white/15 text-xs font-semibold">No extra account required</span>
+          {/* Simple posting flow */}
+          <section className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="px-5 py-5 md:px-6 border-b border-gray-100">
+              <p className="text-xs font-bold uppercase tracking-widest text-primary/70">Step 1</p>
+              <h2 className="text-xl font-bold text-primary mt-1">Tell us what happened</h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Write a short note in your own words. The assistant will prepare the headline, summary, article, category and tags for you.
+              </p>
             </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold mb-1.5">Topic</label>
+
+            <div className="p-5 md:p-6 space-y-5">
+              <div className="grid md:grid-cols-[1fr_220px] gap-4">
+                <Field label="Story details" error={errors.assistant}>
+                  <textarea
+                    value={assistant.topic}
+                    onChange={e => {
+                      setAssistant(prev => ({ ...prev, topic: e.target.value }));
+                      if (errors.assistant) setErrors(prev => ({ ...prev, assistant: '' }));
+                    }}
+                    rows={5}
+                    placeholder={"Example: On 3 October, THA held a hepatitis awareness session in Dodoma with health workers and students. About 80 people attended and the session focused on testing and vaccination."}
+                    className={inputCls(errors.assistant)}
+                  />
+                </Field>
+
+                <Field label="Type of post">
+                  <select
+                    value={assistant.purpose}
+                    onChange={e => setAssistant(prev => ({ ...prev, purpose: e.target.value }))}
+                    className={inputCls()}
+                  >
+                    {Object.entries(PURPOSES).map(([value, item]) => (
+                      <option key={value} value={value}>{item.label}</option>
+                    ))}
+                  </select>
+                </Field>
+              </div>
+
+              <Field label="Main image *" error={errors.image}>
                 <input
-                  value={assistant.topic}
-                  onChange={e => setAssistant(prev => ({ ...prev, topic: e.target.value }))}
-                  placeholder="Example: World Hepatitis Day outreach in Dodoma"
-                  className="w-full rounded-xl px-4 py-2.5 text-gray-900 border-0 focus:ring-2 focus:ring-accent"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleImageFileChange}
+                  disabled={processingImage}
+                  className="block w-full text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2.5 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-dark disabled:opacity-60"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-1.5">Type of story</label>
-                <select
-                  value={assistant.purpose}
-                  onChange={e => setAssistant(prev => ({ ...prev, purpose: e.target.value }))}
-                  className="w-full rounded-xl px-4 py-2.5 text-gray-900 border-0 focus:ring-2 focus:ring-accent"
-                >
-                  {Object.entries(PURPOSES).map(([value, item]) => <option key={value} value={value}>{item.label}</option>)}
-                </select>
-              </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  {processingImage ? 'Preparing image…' : 'Upload JPG, PNG or WebP. Large images are resized and compressed automatically.'}
+                </p>
+                {imageInfo && (
+                  <div className="mt-2 inline-flex flex-wrap gap-x-3 gap-y-1 rounded-lg bg-green-50 px-3 py-2 text-xs font-semibold text-green-700">
+                    <span>{formatBytes(imageInfo.original)} → {formatBytes(imageInfo.compressed)}</span>
+                    <span>{imageInfo.dimensions}</span>
+                  </div>
+                )}
+                {form.image && (
+                  <div className="mt-3 rounded-xl overflow-hidden w-full h-48 bg-gray-100">
+                    <img
+                      src={form.image}
+                      alt="Article preview"
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                      onError={e => { e.target.style.display = 'none'; }}
+                    />
+                  </div>
+                )}
+              </Field>
+
+              <button
+                type="button"
+                onClick={generateDraft}
+                disabled={generatingDraft || processingImage}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary-dark transition disabled:opacity-60 disabled:cursor-wait"
+              >
+                {generatingDraft ? (
+                  <>
+                    <span className="w-4 h-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+                    Preparing article…
+                  </>
+                ) : (form.title || form.content ? 'Regenerate article' : 'Prepare article')}
+              </button>
             </div>
-            <label className="block text-sm font-semibold mt-4 mb-1.5">Key facts (one per line)</label>
-            <textarea
-              value={assistant.facts}
-              onChange={e => setAssistant(prev => ({ ...prev, facts: e.target.value }))}
-              rows={3}
-              placeholder={"Date and location\nWho participated\nResult or next step"}
-              className="w-full rounded-xl px-4 py-2.5 text-gray-900 border-0 focus:ring-2 focus:ring-accent"
-            />
-            {errors.assistant && <p className="text-yellow-200 text-xs mt-2">{errors.assistant}</p>}
-            <button
-              type="button"
-              onClick={generateDraft}
-              disabled={generatingDraft}
-              className="mt-4 inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-accent text-white font-bold rounded-xl hover:brightness-95 transition disabled:opacity-60 disabled:cursor-wait"
-            >
-              {generatingDraft ? (
-                <>
-                  <span className="w-4 h-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-                  Generating full article…
-                </>
-              ) : 'Generate full article'}
-            </button>
-            <p className="text-xs text-white/70 mt-3">
-              If an article image is already uploaded or linked below, the assistant will use it as visual context. Generated content is never published automatically.
-            </p>
           </section>
 
-          {/* Title */}
-          <Field label="Title *" error={errors.title}>
-            <input
-              type="text" name="title" value={form.title} onChange={handleChange}
-              placeholder="Article title"
-              className={inputCls(errors.title)}
-            />
-          </Field>
-
-          {/* Excerpt */}
-          <Field label={`Excerpt * (${form.excerpt.length}/500)`} error={errors.excerpt}>
-            <textarea
-              name="excerpt" value={form.excerpt} onChange={handleChange} rows={3}
-              placeholder="A short summary that appears in the news list…"
-              className={inputCls(errors.excerpt)}
-            />
-          </Field>
-
-          {/* Content */}
-          <Field label="Full Article Content *" error={errors.content}>
-            <textarea
-              name="content" value={form.content} onChange={handleChange} rows={14}
-              placeholder="Write the full article. Separate paragraphs with a blank line."
-              className={`font-mono text-sm ${inputCls(errors.content)}`}
-            />
-            <p className="text-xs text-gray-400 mt-1">Separate paragraphs with a blank line (double Enter).</p>
-          </Field>
-
-          {/* Image */}
-          <Field label="Article Image *" error={errors.image}>
-            <div className="flex flex-wrap gap-2 mb-3">
-              <button
-                type="button"
-                onClick={() => handleImageModeChange('url')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-colors ${
-                  imageMode === 'url' ? 'bg-primary text-white border-primary' : 'bg-white text-gray-600 border-gray-200'
-                }`}
-              >
-                Add Image URL
-              </button>
-              <button
-                type="button"
-                onClick={() => handleImageModeChange('upload')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-colors ${
-                  imageMode === 'upload' ? 'bg-primary text-white border-primary' : 'bg-white text-gray-600 border-gray-200'
-                }`}
-              >
-                Upload Image
-              </button>
+          <section className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="px-5 py-5 md:px-6 border-b border-gray-100">
+              <p className="text-xs font-bold uppercase tracking-widest text-primary/70">Step 2</p>
+              <h2 className="text-xl font-bold text-primary mt-1">Review the article</h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Check the wording before publishing. You can edit anything the assistant prepared.
+              </p>
             </div>
 
-            {imageMode === 'url' ? (
-              <input
-                type="url" name="image" value={form.image?.startsWith('data:') ? '' : form.image} onChange={handleChange}
-                placeholder="https://example.com/image.jpg"
-                className={inputCls(errors.image)}
-              />
-            ) : (
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                onChange={handleImageFileChange}
-                disabled={processingImage}
-                className="block w-full text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-dark disabled:opacity-60"
-              />
-            )}
-            <p className="text-xs text-gray-500 mt-2">
-              {processingImage ? 'Optimizing image…' : 'JPG, PNG and WebP up to 15 MB. Large images are resized to 1600 px and compressed automatically.'}
-            </p>
-            {imageInfo && (
-              <div className="mt-2 inline-flex flex-wrap gap-x-3 gap-y-1 rounded-lg bg-green-50 px-3 py-2 text-xs font-semibold text-green-700">
-                <span>{formatBytes(imageInfo.original)} → {formatBytes(imageInfo.compressed)}</span>
-                <span>{imageInfo.dimensions}</span>
-              </div>
-            )}
-            {form.image && (
-              <div className="mt-2 rounded-lg overflow-hidden w-full h-40 bg-gray-100">
-                <img
-                  src={form.image} alt="Preview"
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover"
-                  onError={e => { e.target.style.display = 'none'; }}
+            <div className="p-5 md:p-6 space-y-5">
+              <Field label="Headline *" error={errors.title}>
+                <input
+                  type="text"
+                  name="title"
+                  value={form.title}
+                  onChange={handleChange}
+                  placeholder="Article headline"
+                  className={inputCls(errors.title)}
                 />
-              </div>
-            )}
-          </Field>
+              </Field>
 
-          {/* News-format preview */}
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            {form.image && (
-              <div className="h-56 bg-gray-100">
-                <img src={form.image} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
-              </div>
-            )}
-            <div className="p-5">
-              <div className="flex flex-wrap gap-2 mb-3">
-                <span className="px-3 py-1 bg-accent text-white text-xs font-bold rounded-full">
-                  {form.category}
-                </span>
-                {form.is_featured && (
-                  <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">Featured</span>
-                )}
-              </div>
-              <h2 className="text-2xl font-bold text-primary mb-3">{form.title || 'Article title preview'}</h2>
-              <p className="text-gray-600 mb-4">{form.excerpt || 'The excerpt preview will appear here.'}</p>
-              <div className="text-sm text-gray-400">{form.author || 'Author'} · {form.date || 'Date'}</div>
+              <Field label="Short summary *" error={errors.excerpt}>
+                <textarea
+                  name="excerpt"
+                  value={form.excerpt}
+                  onChange={handleChange}
+                  rows={3}
+                  placeholder="Short summary for the news page"
+                  className={inputCls(errors.excerpt)}
+                />
+                <p className="text-xs text-gray-400 mt-1">{form.excerpt.length}/500 characters</p>
+              </Field>
+
+              <Field label="Article *" error={errors.content}>
+                <textarea
+                  name="content"
+                  value={form.content}
+                  onChange={handleChange}
+                  rows={12}
+                  placeholder="The full article will appear here."
+                  className={inputCls(errors.content)}
+                />
+              </Field>
             </div>
-          </div>
+          </section>
 
-          {/* Category + Author */}
-          <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Category *" error={errors.category}>
-              <div className="rounded-xl border border-gray-200 bg-gray-50 p-3">
-                <div className="flex items-center justify-between gap-3 mb-3">
-                  <p className="text-xs font-semibold text-gray-500">
-                    {categoryMode === 'select' ? 'Select an existing category' : 'Create or rename this category'}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => setCategoryMode(mode => mode === 'select' ? 'custom' : 'select')}
-                    className="shrink-0 text-xs font-bold text-primary hover:text-secondary transition-colors"
-                  >
-                    {categoryMode === 'select' ? '+ Add new category' : 'Use existing'}
-                  </button>
-                </div>
+          <details className="bg-white rounded-2xl border border-gray-200 shadow-sm group">
+            <summary className="cursor-pointer list-none px-5 py-4 md:px-6 flex items-center justify-between gap-4">
+              <div>
+                <div className="font-bold text-gray-800">More settings</div>
+                <div className="text-xs text-gray-500 mt-0.5">Category, author, date, tags, image URL and featured status</div>
+              </div>
+              <span className="text-primary text-xl leading-none group-open:rotate-45 transition-transform">+</span>
+            </summary>
 
-                {categoryMode === 'select' ? (
+            <div className="px-5 pb-5 md:px-6 md:pb-6 border-t border-gray-100 pt-5 space-y-5">
+              <div className="grid sm:grid-cols-2 gap-4">
+                <Field label="Category *" error={errors.category}>
                   <select
                     name="category"
                     value={categoryOptions.includes(form.category) ? form.category : ''}
@@ -514,102 +471,62 @@ export default function AdminNewsForm() {
                       <option key={category} value={category}>{category}</option>
                     ))}
                   </select>
-                ) : (
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      name="category"
-                      value={form.category}
-                      onChange={handleChange}
-                      maxLength={80}
-                      placeholder="Example: Maternal Health"
-                      className={inputCls(errors.category)}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const category = form.category.trim();
-                        if (!category) return;
-                        setCategoryOptions(options =>
-                          [...new Set([...options, category])].sort((a, b) => a.localeCompare(b))
-                        );
-                        setCategoryMode('select');
-                      }}
-                      className="px-4 py-2 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary-dark transition-colors"
-                    >
-                      Add
-                    </button>
-                  </div>
-                )}
+                </Field>
 
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {categoryOptions.slice(0, 8).map(category => (
-                    <button
-                      type="button"
-                      key={category}
-                      onClick={() => {
-                        setForm(prev => ({ ...prev, category }));
-                        setCategoryMode('select');
-                        setErrors(prev => ({ ...prev, category: '' }));
-                      }}
-                      className={`px-2.5 py-1 rounded-full text-xs font-semibold border transition-colors ${
-                        form.category === category
-                          ? 'bg-primary text-white border-primary'
-                          : 'bg-white text-gray-600 border-gray-200 hover:border-primary hover:text-primary'
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
+                <Field label="Author *" error={errors.author}>
+                  <input
+                    type="text"
+                    name="author"
+                    value={form.author}
+                    onChange={handleChange}
+                    className={inputCls(errors.author)}
+                  />
+                </Field>
               </div>
-              <p className="text-xs text-gray-400 mt-1">
-                Categories already used in published and draft articles appear automatically. Add a new one while posting, or edit the selected name.
-              </p>
-            </Field>
-            <Field label="Author *" error={errors.author}>
-              <input
-                type="text" name="author" value={form.author} onChange={handleChange}
-                placeholder="THA Communications"
-                className={inputCls(errors.author)}
-              />
-            </Field>
-          </div>
 
-          {/* Date + Tags */}
-          <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Date *" error={errors.date}>
-              <input
-                type="date" name="date" value={form.date} onChange={handleChange}
-                className={inputCls(errors.date)}
-              />
-            </Field>
-            <Field label="Tags (comma-separated)" error={errors.tags}>
-              <input
-                type="text" name="tags" value={form.tags} onChange={handleChange}
-                placeholder="Hepatitis, Vaccination, Youth"
-                className={inputCls(errors.tags)}
-              />
-            </Field>
-          </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <Field label="Date *" error={errors.date}>
+                  <input
+                    type="date"
+                    name="date"
+                    value={form.date}
+                    onChange={handleChange}
+                    className={inputCls(errors.date)}
+                  />
+                </Field>
 
-          {/* Toggles */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5 flex flex-col sm:flex-row gap-5">
-            <Toggle
-              name="is_featured"
-              checked={form.is_featured}
-              onChange={handleChange}
-              label="Featured Article"
-              description="Show prominently at the top of the news page"
-            />
-            <Toggle
-              name="published"
-              checked={form.published}
-              onChange={handleChange}
-              label="Published"
-              description="Visible to website visitors immediately"
-            />
-          </div>
+                <Field label="Tags">
+                  <input
+                    type="text"
+                    name="tags"
+                    value={form.tags}
+                    onChange={handleChange}
+                    placeholder="Hepatitis, Vaccination, Youth"
+                    className={inputCls(errors.tags)}
+                  />
+                </Field>
+              </div>
+
+              <Field label="Use an image URL instead">
+                <input
+                  type="url"
+                  name="image"
+                  value={form.image?.startsWith('data:') ? '' : form.image}
+                  onChange={handleChange}
+                  placeholder="https://example.com/image.jpg"
+                  className={inputCls(errors.image)}
+                />
+              </Field>
+
+              <Toggle
+                name="is_featured"
+                checked={form.is_featured}
+                onChange={handleChange}
+                label="Featured article"
+                description="Show this article prominently on the News page"
+              />
+            </div>
+          </details>
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2">
