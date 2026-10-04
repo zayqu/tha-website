@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const helmet = require('helmet');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -126,6 +127,21 @@ app.get('/api/health', (_req, res) => {
       authentication: Boolean(process.env.JWT_ACCESS_SECRET && process.env.JWT_REFRESH_SECRET),
     },
     time: new Date().toISOString(),
+  });
+});
+
+// cPanel/Passenger deployment: serve the built React application and API
+// from one Node process. API routes stay above the SPA fallback.
+const frontendDist = path.resolve(__dirname, '../dist');
+app.use(express.static(frontendDist, {
+  maxAge: process.env.NODE_ENV === 'production' ? '1y' : 0,
+  immutable: process.env.NODE_ENV === 'production',
+  index: false,
+}));
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/')) return next();
+  return res.sendFile(path.join(frontendDist, 'index.html'), err => {
+    if (err) next(err);
   });
 });
 
