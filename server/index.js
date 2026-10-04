@@ -14,6 +14,7 @@ const newsRoutes = require('./routes/news');
 const projectRoutes = require('./routes/projects');
 const journeyRoutes = require('./routes/journey');
 const { admins } = require('./db');
+const { MEDIA_DIR } = require('./media-storage');
 const { jwtAccessSecret, jwtRefreshSecret } = require('./runtime-secrets');
 
 const app = express();
@@ -116,6 +117,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/journey', journeyRoutes);
+app.use('/api/media/news', express.static(MEDIA_DIR, { maxAge: '30d', immutable: true }));
 
 app.get('/api/health', (_req, res) => {
   res.json({
