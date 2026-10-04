@@ -364,6 +364,7 @@ router.put('/:id', requireAuth, [
   const updated = await news.update(req.params.id, {
     slug, title, excerpt, content, image, category, author, date,
     tags: Array.isArray(tags) ? tags : [],
+    inline_images: Array.isArray(inline_images) ? inline_images : [],
     is_featured: Boolean(is_featured),
     published: Boolean(published),
   });
