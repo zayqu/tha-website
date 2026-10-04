@@ -72,18 +72,24 @@ router.post(
         return res.status(409).json({ error: 'An account with this email already exists' });
       }
 
+      const bootstrapEnabled = process.env.ALLOW_FIRST_ADMIN_BOOTSTRAP === 'true';
+      const isFirstAdmin = bootstrapEnabled && !(await admins.hasAny());
+
       await admins.create({
         id: uuidv4(),
         identifier,
         password: await bcrypt.hash(req.body.password, 12),
         name: req.body.name.trim(),
-        role: 'editor',
-        status: 'pending',
+        role: isFirstAdmin ? 'superadmin' : 'editor',
+        status: isFirstAdmin ? 'approved' : 'pending',
       });
 
       return res.status(201).json({
-        message: 'Registration received. An administrator must approve your account before you can sign in.',
-        status: 'pending',
+        message: isFirstAdmin
+          ? 'Administrator account created. You can sign in now.'
+          : 'Registration received. An administrator must approve your account before you can sign in.',
+        status: isFirstAdmin ? 'approved' : 'pending',
+        role: isFirstAdmin ? 'superadmin' : 'editor',
       });
     } catch (err) {
       next(err);
