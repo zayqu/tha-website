@@ -13,9 +13,10 @@ const authRoutes = require('./routes/auth');
 const newsRoutes = require('./routes/news');
 const projectRoutes = require('./routes/projects');
 const journeyRoutes = require('./routes/journey');
-const { admins } = require('./db');
+const { admins, news } = require('./db');
 const { MEDIA_DIR } = require('./media-storage');
 const { jwtAccessSecret, jwtRefreshSecret } = require('./runtime-secrets');
+const { renderHtml, renderSitemap } = require('./seo-render');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -136,6 +137,40 @@ app.get('/api/health', (_req, res) => {
 // cPanel/Passenger deployment: serve the built React application and API
 // from one Node process. API routes stay above the SPA fallback.
 const frontendDist = path.resolve(__dirname, '../dist');
+const frontendIndex = path.join(frontendDist, 'index.html');
+
+// SEO-critical public routes are rendered with meaningful HTML before React
+// starts. This keeps News fully crawlable even when a bot does not execute JS.
+app.get('/sitemap.xml', async (_req, res, next) => {
+  try {
+    const articles = await news.findPublished({ limit: 100, offset: 0 });
+    res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=3600');
+    res.type('application/xml').send(renderSitemap(articles));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/news', async (_req, res, next) => {
+  try {
+    const articles = await news.findPublished({ limit: 100, offset: 0 });
+    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    res.type('html').send(renderHtml(frontendIndex, { articles }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/news/:slug', async (req, res, next) => {
+  try {
+    const article = await news.findBySlug(req.params.slug);
+    if (!article) return res.status(404).type('html').send('Article not found');
+    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    res.type('html').send(renderHtml(frontendIndex, { article }));
+  } catch (error) {
+    next(error);
+  }
+});
 app.use(express.static(frontendDist, {
   maxAge: process.env.NODE_ENV === 'production' ? '1y' : 0,
   immutable: process.env.NODE_ENV === 'production',
@@ -143,7 +178,7 @@ app.use(express.static(frontendDist, {
 }));
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) return next();
-  return res.sendFile(path.join(frontendDist, 'index.html'), err => {
+  return res.sendFile(frontendIndex, err => {
     if (err) next(err);
   });
 });
