@@ -13,27 +13,49 @@ const categoryColor = {
   'Announcements': 'bg-primary/10 text-primary',
 };
 
+const THA_NEWS_CACHE_KEY = 'tha:published-news:v1';
+
+function readCachedNews() {
+  if (typeof window === 'undefined') return [];
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(THA_NEWS_CACHE_KEY) || 'null');
+    return Array.isArray(parsed?.articles) ? parsed.articles : [];
+  } catch {
+    return [];
+  }
+}
+
 export const News = () => {
+  const initialArticles = readCachedNews();
   const [activeCategory, setActiveCategory] = useState('all');
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [articles, setArticles] = useState(initialArticles);
+  const [loading, setLoading] = useState(initialArticles.length === 0);
   const [loadError, setLoadError] = useState('');
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
-    setLoading(true);
+    const hasCachedArticles = articles.length > 0;
+    if (!hasCachedArticles) setLoading(true);
     setLoadError('');
     fetchPublishedNews({ limit: 100 })
       .then(liveArticles => {
         if (!isMounted) return;
         setArticles(liveArticles);
+        try {
+          window.localStorage.setItem(
+            THA_NEWS_CACHE_KEY,
+            JSON.stringify({ articles: liveArticles, updatedAt: Date.now() })
+          );
+        } catch {}
         setLoadError('');
       })
       .catch(() => {
         if (!isMounted) return;
-        setArticles([]);
-        setLoadError("We couldn't load the latest news. Please try again.");
+        if (!hasCachedArticles) {
+          setArticles([]);
+          setLoadError("We couldn't load the latest news. Please try again.");
+        }
       })
       .finally(() => {
         if (isMounted) setLoading(false);
