@@ -14,6 +14,7 @@ const newsRoutes = require('./routes/news');
 const projectRoutes = require('./routes/projects');
 const journeyRoutes = require('./routes/journey');
 const { admins } = require('./db');
+const { jwtAccessSecret, jwtRefreshSecret } = require('./runtime-secrets');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -120,11 +121,11 @@ app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
     service: 'THA Content API',
-    storage: process.env.DATABASE_URL ? 'postgresql' : 'ephemeral',
+    storage: process.env.DATABASE_URL ? 'postgresql' : 'local-json',
     configured: {
       database: Boolean(process.env.DATABASE_URL),
       administrator: Boolean(process.env.ADMIN_IDENTIFIER && process.env.ADMIN_PASSWORD),
-      authentication: Boolean(process.env.JWT_ACCESS_SECRET && process.env.JWT_REFRESH_SECRET),
+      authentication: Boolean(jwtAccessSecret && jwtRefreshSecret),
     },
     time: new Date().toISOString(),
   });
