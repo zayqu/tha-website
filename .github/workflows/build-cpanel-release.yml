@@ -2,7 +2,7 @@ name: Build cPanel Release
 
 on:
   push:
-    branches: [migration/cpanel-node22]
+    branches: [main, migration/cpanel-node22]
   workflow_dispatch:
 
 permissions:
@@ -48,6 +48,10 @@ jobs:
           mkdir -p /tmp/tha-cpanel-release
           cp -R dist /tmp/tha-cpanel-release/dist
           cp -R server /tmp/tha-cpanel-release/server
+          # Persistent cPanel data must never be baked into a release.
+          rm -rf /tmp/tha-cpanel-release/server/data
+          mkdir -p /tmp/tha-cpanel-release/server/data
+          touch /tmp/tha-cpanel-release/server/data/.keep
           mkdir -p /tmp/tha-cpanel-release/src
           cp -R src/data /tmp/tha-cpanel-release/src/data
           mkdir -p /tmp/tha-cpanel-release/scripts
