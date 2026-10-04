@@ -33,6 +33,10 @@ const newsBodyValidators = [
   body('date').trim().notEmpty().withMessage('Date is required'),
   body('tags').optional().isArray({ max: 10 }),
   body('tags.*').optional().isString().isLength({ max: 50 }).trim(),
+  body('inline_images').optional().isArray({ max: 2 }),
+  body('inline_images.*.src').optional().isString().isLength({ max: 700000 }),
+  body('inline_images.*.alt').optional().isString().isLength({ max: 180 }).trim(),
+  body('inline_images.*.after_paragraph').optional().isInt({ min: 1, max: 20 }),
   body('is_featured').optional().isBoolean(),
   body('published').optional().isBoolean(),
 ];
@@ -141,6 +145,8 @@ router.post('/generate', requireAuth, [
   body('purpose').optional().trim().isLength({ max: 100 }),
   body('facts').optional().trim().isLength({ max: 5000 }),
   body('image').optional({ nullable: true }).isString().isLength({ max: 2_000_000 }),
+  body('images').optional().isArray({ max: 3 }),
+  body('images.*').optional().isString().isLength({ max: 700000 }),
   body('categories').optional().isArray({ max: 100 }),
   body('categories.*').optional().isString().isLength({ max: 80 }).trim(),
 ], async (req, res, next) => {
@@ -155,6 +161,7 @@ router.post('/generate', requireAuth, [
       purpose = 'News update',
       facts = '',
       image = '',
+      images = [],
       categories = [],
     } = req.body;
 
@@ -166,6 +173,10 @@ router.post('/generate', requireAuth, [
       'Use clear English for a general Tanzanian audience, short paragraphs, respectful language, and an institutional but warm tone.',
       'The content must be 5 to 8 useful paragraphs and must not contain Markdown headings, hashtags, or promotional exaggeration.',
       'Choose an existing category when suitable; otherwise suggest one concise professional category.',
+      'When photos are supplied, decide which photo is strongest as the banner and where the remaining photos naturally support the article.',
+      'Write concise, descriptive alt text for each used photo. Do not invent identities, locations, actions, or details that are not visible or supplied.',
+      'Use each supplied image at most once. The banner image must have role banner; other used images must have role inline.',
+      'Inline images should normally appear after paragraph 2 and paragraph 4, adjusted only when the article structure makes another placement more natural.',
       'Return only the requested structured data.',
     ].join(' ');
 
@@ -179,9 +190,13 @@ router.post('/generate', requireAuth, [
       ].join('\n\n'),
     }];
 
-    if (image && (/^data:image\/(jpeg|png|webp);base64,/i.test(image) || /^https:\/\//i.test(image))) {
-      requestContent.push({ type: 'input_image', image_url: image, detail: 'low' });
-    }
+    const visualInputs = images.length ? images : (image ? [image] : []);
+    visualInputs.slice(0, 3).forEach((imageUrl, index) => {
+      if (/^data:image\/(jpeg|png|webp);base64,/i.test(imageUrl) || /^https:\/\//i.test(imageUrl)) {
+        requestContent.push({ type: 'input_text', text: `Image ${index}: consider this photo when planning article image placement.` });
+        requestContent.push({ type: 'input_image', image_url: imageUrl, detail: 'low' });
+      }
+    });
 
     const response = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
@@ -213,8 +228,23 @@ router.post('/generate', requireAuth, [
                   maxItems: 8,
                   items: { type: 'string', minLength: 2, maxLength: 50 },
                 },
+                image_plan: {
+                  type: 'array',
+                  maxItems: 3,
+                  items: {
+                    type: 'object',
+                    additionalProperties: false,
+                    properties: {
+                      image_index: { type: 'integer', minimum: 0, maximum: 2 },
+                      role: { type: 'string', enum: ['banner', 'inline'] },
+                      after_paragraph: { type: 'integer', minimum: 0, maximum: 8 },
+                      alt: { type: 'string', minLength: 3, maxLength: 180 }
+                    },
+                    required: ['image_index', 'role', 'after_paragraph', 'alt']
+                  }
+                },
               },
-              required: ['title', 'excerpt', 'content', 'category', 'tags'],
+              required: ['title', 'excerpt', 'content', 'category', 'tags', 'image_plan'],
             },
           },
         },
@@ -249,6 +279,14 @@ router.post('/generate', requireAuth, [
         tags: Array.isArray(draft.tags)
           ? draft.tags.map(tag => String(tag).trim()).filter(Boolean).slice(0, 8)
           : [],
+        image_plan: Array.isArray(draft.image_plan)
+          ? draft.image_plan.map(item => ({
+              image_index: Number(item.image_index),
+              role: item.role === 'banner' ? 'banner' : 'inline',
+              after_paragraph: Number(item.after_paragraph || 0),
+              alt: String(item.alt || '').trim().slice(0, 180),
+            })).filter(item => Number.isInteger(item.image_index) && item.image_index >= 0 && item.image_index <= 2)
+          : [],
       },
     });
   } catch (err) {
@@ -274,7 +312,7 @@ router.post('/', requireAuth, newsBodyValidators, async (req, res, next) => {
 
   const {
     title, excerpt, content, image, category, author, date,
-    tags = [], is_featured = false, published = true,
+    tags = [], inline_images = [], is_featured = false, published = true,
   } = req.body;
 
   // Build unique slug
@@ -287,6 +325,7 @@ router.post('/', requireAuth, newsBodyValidators, async (req, res, next) => {
     id: uuidv4(), slug, title, excerpt, content, image,
     category, author, date,
     tags: Array.isArray(tags) ? tags : [],
+    inline_images: Array.isArray(inline_images) ? inline_images : [],
     is_featured: Boolean(is_featured),
     published: Boolean(published),
   });
@@ -310,7 +349,7 @@ router.put('/:id', requireAuth, [
 
   const {
     title, excerpt, content, image, category, author, date,
-    tags = [], is_featured = false, published = false,
+    tags = [], inline_images = [], is_featured = false, published = false,
   } = req.body;
 
   // Regenerate slug only if title changed
@@ -325,6 +364,7 @@ router.put('/:id', requireAuth, [
   const updated = await news.update(req.params.id, {
     slug, title, excerpt, content, image, category, author, date,
     tags: Array.isArray(tags) ? tags : [],
+    inline_images: Array.isArray(inline_images) ? inline_images : [],
     is_featured: Boolean(is_featured),
     published: Boolean(published),
   });

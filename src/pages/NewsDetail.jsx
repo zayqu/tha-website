@@ -143,9 +143,36 @@ export default function NewsDetail() {
 
         {/* Content */}
         <div className="text-gray-700 leading-relaxed text-lg space-y-6">
-          {news.content.split('\n\n').map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
+          {news.content.split('\n\n').map((paragraph, i) => {
+            const paragraphNumber = i + 1;
+            const inlineImages = (news.inline_images || []).filter(
+              image => Number(image.after_paragraph) === paragraphNumber
+            );
+
+            return (
+              <div key={i} className="space-y-6">
+                <p>{paragraph}</p>
+                {inlineImages.map((image, imageIndex) => (
+                  <figure key={imageIndex} className="my-8">
+                    <img
+                      src={image.src}
+                      alt={image.alt || news.title}
+                      loading="lazy"
+                      decoding="async"
+                      width="1200"
+                      height="800"
+                      className="w-full max-h-[620px] object-cover rounded-2xl"
+                    />
+                    {image.alt && (
+                      <figcaption className="mt-2 text-sm text-gray-500">
+                        {image.alt}
+                      </figcaption>
+                    )}
+                  </figure>
+                ))}
+              </div>
+            );
+          })}
         </div>
 
         {/* Tags */}

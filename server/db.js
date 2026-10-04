@@ -221,10 +221,14 @@ async function schemaIsCurrent(client) {
       to_regclass('public.admins') IS NOT NULL AS admins_ready,
       to_regclass('public.tokens') IS NOT NULL AS tokens_ready,
       to_regclass('public.news') IS NOT NULL AS news_ready,
-      to_regclass('public.content_migrations') IS NOT NULL AS migrations_ready
+      to_regclass('public.content_migrations') IS NOT NULL AS migrations_ready,
+      EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_schema = 'public' AND table_name = 'news' AND column_name = 'inline_images'
+      ) AS inline_images_ready
   `);
 
-  if (!state?.admins_ready || !state?.tokens_ready || !state?.news_ready || !state?.migrations_ready) {
+  if (!state?.admins_ready || !state?.tokens_ready || !state?.news_ready || !state?.migrations_ready || !state?.inline_images_ready) {
     return false;
   }
 
@@ -294,6 +298,7 @@ async function ensureSchema() {
         author TEXT NOT NULL,
         date TEXT NOT NULL,
         tags JSONB NOT NULL DEFAULT '[]'::jsonb,
+        inline_images JSONB NOT NULL DEFAULT '[]'::jsonb,
         is_featured BOOLEAN NOT NULL DEFAULT false,
         published BOOLEAN NOT NULL DEFAULT false,
         views INTEGER NOT NULL DEFAULT 0,
@@ -302,6 +307,7 @@ async function ensureSchema() {
       );
 
       ALTER TABLE news ADD COLUMN IF NOT EXISTS views INTEGER NOT NULL DEFAULT 0;
+      ALTER TABLE news ADD COLUMN IF NOT EXISTS inline_images JSONB NOT NULL DEFAULT '[]'::jsonb;
 
       CREATE TABLE IF NOT EXISTS content_migrations (
         id TEXT PRIMARY KEY,
@@ -369,6 +375,7 @@ function normalizeNews(row) {
   return {
     ...row,
     tags: Array.isArray(row.tags) ? row.tags : [],
+    inline_images: Array.isArray(row.inline_images) ? row.inline_images : [],
     is_featured: Boolean(row.is_featured),
     published: Boolean(row.published),
     views: Number(row.views || 0),
@@ -631,13 +638,13 @@ const dbNews = {
       await ensureSchema();
       const { rows } = await pool.query(
         `INSERT INTO news
-         (id, slug, title, excerpt, content, image, category, author, date, tags, is_featured, published, views, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb, $11, $12, $13, $14, $15)
+         (id, slug, title, excerpt, content, image, category, author, date, tags, inline_images, is_featured, published, views, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb, $11::jsonb, $12, $13, $14, $15, $16)
          RETURNING *`,
         [
           record.id, record.slug, record.title, record.excerpt, record.content, record.image,
           record.category, record.author, record.date, JSON.stringify(record.tags || []),
-          record.is_featured, record.published, record.views, record.created_at, record.updated_at,
+          JSON.stringify(record.inline_images || []), record.is_featured, record.published, record.views, record.created_at, record.updated_at,
         ]
       );
       return normalizeNews(rows[0]);
@@ -653,13 +660,13 @@ const dbNews = {
         `UPDATE news SET
            slug = $2, title = $3, excerpt = $4, content = $5, image = $6,
            category = $7, author = $8, date = $9, tags = $10::jsonb,
-           is_featured = $11, published = $12, updated_at = $13
+           inline_images = $11::jsonb, is_featured = $12, published = $13, updated_at = $14
          WHERE id = $1
          RETURNING *`,
         [
           id, fields.slug, fields.title, fields.excerpt, fields.content, fields.image,
           fields.category, fields.author, fields.date, JSON.stringify(fields.tags || []),
-          fields.is_featured, fields.published, now,
+          JSON.stringify(fields.inline_images || []), fields.is_featured, fields.published, now,
         ]
       );
       return normalizeNews(rows[0]);
