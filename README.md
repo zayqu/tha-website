@@ -59,6 +59,8 @@ tha-website/
 
 ### Vercel (Recommended)
 
+Pull-request preview deployments are disabled to conserve the Hobby-plan build quota. PRs are verified by GitHub Actions; Vercel production deployments remain available from the production branch.
+
 1. Push your code to GitHub
 2. Import project in Vercel
 3. Vercel will auto-detect the configuration
