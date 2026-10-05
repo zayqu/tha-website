@@ -8,6 +8,7 @@ const { requireAuth } = require('../middleware/auth');
 const { generateCloudflareDraft } = require('../cloudflare-ai');
 const { persistArticleImages } = require('../media-storage');
 const { contentImportSecret } = require('../runtime-secrets');
+const { notifyIndexNow } = require('../indexnow');
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 function slugify(text) {
@@ -232,6 +233,10 @@ router.post('/', requireAuth, newsBodyValidators, async (req, res, next) => {
     published: Boolean(published),
   }));
 
+  if (article.published) {
+    notifyIndexNow([`/news/${article.slug}`, '/news']);
+  }
+
   res.status(201).json({ article });
   } catch (err) {
     next(err);
@@ -271,6 +276,13 @@ router.put('/:id', requireAuth, [
     published: Boolean(published),
   }));
 
+  const changedUrls = ['/news'];
+  if (updated?.published) changedUrls.push(`/news/${updated.slug}`);
+  if (existing.published && (!updated?.published || existing.slug !== updated.slug)) {
+    changedUrls.push(`/news/${existing.slug}`);
+  }
+  notifyIndexNow(changedUrls);
+
   res.json({ article: updated });
   } catch (err) {
     next(err);
@@ -286,6 +298,9 @@ router.delete('/:id', requireAuth, [
   const existing = await news.findById(req.params.id);
   if (!existing) return res.status(404).json({ error: 'Article not found' });
   await news.delete(req.params.id);
+  if (existing.published) {
+    notifyIndexNow([`/news/${existing.slug}`, '/news']);
+  }
   res.json({ message: 'Article deleted' });
   } catch (err) {
     next(err);
