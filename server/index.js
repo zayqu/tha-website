@@ -13,7 +13,7 @@ const authRoutes = require('./routes/auth');
 const newsRoutes = require('./routes/news');
 const projectRoutes = require('./routes/projects');
 const journeyRoutes = require('./routes/journey');
-const { admins, news, projects } = require('./db');
+const { admins, news } = require('./db');
 const { MEDIA_DIR } = require('./media-storage');
 const { jwtAccessSecret, jwtRefreshSecret } = require('./runtime-secrets');
 const { renderHtml, renderSitemap, renderPublicPage, renderLlmsTxt } = require('./seo-render');
@@ -149,7 +149,7 @@ const frontendIndex = path.join(frontendDist, 'index.html');
 app.get('/sitemap.xml', async (_req, res, next) => {
   try {
     const articles = await news.findPublished({ limit: 100, offset: 0 });
-    const liveProjects = await projects.findAll();
+    const liveProjects = await projectRoutes.allProjects();
     res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=3600');
     res.type('application/xml').send(renderSitemap(articles, liveProjects));
   } catch (error) {
@@ -160,7 +160,7 @@ app.get('/sitemap.xml', async (_req, res, next) => {
 app.get('/llms.txt', async (_req, res, next) => {
   try {
     const articles = await news.findPublished({ limit: 100, offset: 0 });
-    const liveProjects = await projects.findAll();
+    const liveProjects = await projectRoutes.allProjects();
     res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=3600');
     res.type('text/plain').send(renderLlmsTxt({ articles, projects: liveProjects }));
   } catch (error) {
@@ -192,7 +192,7 @@ app.get('/campaigns/:campaignId', async (req, res, next) => {
       res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
       return res.type('html').send(staticHtml);
     }
-    const project = await projects.findBySlug(req.params.campaignId);
+    const project = await projectRoutes.findProject(req.params.campaignId);
     if (!project) return next();
     const html = renderPublicPage(frontendIndex, req.path, { project });
     res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
