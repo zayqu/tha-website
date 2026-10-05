@@ -74,6 +74,15 @@ export const Footer = () => {
               </ul>
 
               <h4 className="text-base font-bold font-heading tracking-tight mt-8 mb-4 text-white">
+                Health Topics
+              </h4>
+              <ul className="space-y-2">
+                <li><Link to="/health/hepatitis" className="text-sm text-white/75 hover:text-secondary transition">Viral Hepatitis</Link></li>
+                <li><Link to="/health/hiv" className="text-sm text-white/75 hover:text-secondary transition">HIV</Link></li>
+                <li><Link to="/health/mental-health" className="text-sm text-white/75 hover:text-secondary transition">Mental Health</Link></li>
+              </ul>
+
+              <h4 className="text-base font-bold font-heading tracking-tight mt-8 mb-4 text-white">
                 Useful Links
               </h4>
               <ul className="space-y-2">
