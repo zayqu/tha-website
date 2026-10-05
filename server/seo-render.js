@@ -132,6 +132,7 @@ function renderHtml(templatePath, { article, articles }) {
 function renderSitemap(articles = [], projects = []) {
   const staticUrls = [
     '/', '/about', '/impact', '/projects', '/academy', '/news', '/contact',
+    '/health/hepatitis', '/health/hiv', '/health/mental-health',
     '/make-a-difference', '/privacy', '/cookies', '/terms',
     '/campaigns/kapime', '/campaigns/life-unlocked', '/campaigns/talk-to-heal',
   ];
@@ -213,6 +214,36 @@ const PAGE_DEFINITIONS = {
       'The THA Academy brings together trusted guidance, policy and training resources on viral hepatitis, HIV and mental health from established health authorities including the World Health Organization.'
     ],
     links: ['/news', '/projects', '/about']
+  },
+  '/health/hepatitis': {
+    title: 'Viral Hepatitis in Tanzania | Tanzania Health Alliance',
+    description: 'Tanzania Health Alliance works on viral hepatitis awareness, hepatitis B prevention, testing education, vaccination advocacy and access to care in Tanzania.',
+    heading: 'Viral Hepatitis in Tanzania',
+    paragraphs: [
+      'Tanzania Health Alliance works to improve awareness, prevention, early testing, vaccination advocacy and access to care for viral hepatitis, with particular attention to hepatitis B.',
+      'Related topics include hepatitis Tanzania, hepatitis B Tanzania, hepatitis testing, hepatitis vaccination, liver health, viral hepatitis awareness and the KAPIME campaign.'
+    ],
+    links: ['/campaigns/kapime', '/news', '/academy', '/contact']
+  },
+  '/health/hiv': {
+    title: 'HIV Awareness in Tanzania | Tanzania Health Alliance',
+    description: 'Tanzania Health Alliance supports HIV awareness, stigma reduction, testing education, treatment access and community health engagement in Tanzania.',
+    heading: 'HIV Awareness and Community Health in Tanzania',
+    paragraphs: [
+      'Tanzania Health Alliance supports HIV awareness, stigma reduction, testing education, treatment access and community-led health engagement in Tanzania.',
+      'Related topics include HIV Tanzania, HIV testing Tanzania, HIV awareness, stigma reduction, treatment access and community public health.'
+    ],
+    links: ['/projects', '/news', '/academy', '/contact']
+  },
+  '/health/mental-health': {
+    title: 'Mental Health in Tanzania | Tanzania Health Alliance',
+    description: 'Tanzania Health Alliance supports mental health awareness, youth resilience, stigma reduction, peer support and community wellbeing in Tanzania.',
+    heading: 'Mental Health Awareness in Tanzania',
+    paragraphs: [
+      'Tanzania Health Alliance supports mental health awareness, stigma reduction, youth resilience, peer support and healthier community conversations in Tanzania.',
+      'Related topics include mental health Tanzania, youth mental health, mental health awareness, mental wellbeing, Life Unlocked and Talk To Heal.'
+    ],
+    links: ['/campaigns/life-unlocked', '/campaigns/talk-to-heal', '/news', '/academy']
   },
   '/make-a-difference': {
     title: 'Make a Difference | Tanzania Health Alliance',
@@ -352,17 +383,39 @@ function renderPublicPage(templatePath, pathname, { project } = {}) {
       about: {
         '@type': 'NGO',
         name: SITE_NAME,
+        alternateName: ['THA', 'THA Tanzania', 'Tanzania Health Alliance (THA)'],
         url: SITE_URL + '/',
+        knowsAbout: ['Viral Hepatitis', 'Hepatitis B', 'HIV', 'Mental Health', 'Public Health'],
       },
     },
     ...(pathname === '/' ? [{
       '@context': 'https://schema.org',
       '@type': 'NGO',
       name: SITE_NAME,
+      alternateName: ['THA', 'THA Tanzania', 'Tanzania Health Alliance (THA)'],
       url: SITE_URL + '/',
       logo: SITE_URL + '/logo/tha-logo.svg',
       description: definition.description,
-      areaServed: 'Tanzania',
+      areaServed: {
+        '@type': 'Country',
+        name: 'Tanzania',
+      },
+      knowsAbout: [
+        'Viral Hepatitis',
+        'Hepatitis B',
+        'HIV',
+        'Mental Health',
+        'Public Health',
+        'Health Advocacy',
+        'Community Health',
+        'Health Education',
+        'Health Research',
+      ],
+      founder: {
+        '@type': 'Person',
+        name: 'Shaibu Issa',
+        jobTitle: 'Founder and Executive Director',
+      },
       sameAs: [
         'https://instagram.com/tanzania_healthalliance',
         'https://www.linkedin.com/company/tanzania-health-alliance',
@@ -397,6 +450,11 @@ function renderLlmsTxt({ articles = [], projects = [] } = {}) {
     '- https://tzhealthalliance.or.tz/academy',
     '- https://tzhealthalliance.or.tz/news',
     '- https://tzhealthalliance.or.tz/contact',
+    '',
+    '## Health focus areas',
+    '- https://tzhealthalliance.or.tz/health/hepatitis — viral hepatitis and hepatitis B awareness, testing, prevention and vaccination advocacy',
+    '- https://tzhealthalliance.or.tz/health/hiv — HIV awareness, stigma reduction, testing education and access to care',
+    '- https://tzhealthalliance.or.tz/health/mental-health — mental health awareness, youth resilience, peer support and stigma reduction',
     '',
     '## Campaigns',
     '- https://tzhealthalliance.or.tz/campaigns/kapime — hepatitis awareness and prevention',
