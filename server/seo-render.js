@@ -3,6 +3,7 @@ const path = require('path');
 
 const SITE_URL = 'https://tzhealthalliance.or.tz';
 const SITE_NAME = 'Tanzania Health Alliance';
+// Full-site semantic SEO release: entity, topic, search and AI discovery coverage.
 
 function escapeHtml(value = '') {
   return String(value)
