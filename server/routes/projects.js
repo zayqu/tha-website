@@ -300,4 +300,7 @@ router.delete('/:id', requireAuth, [param('id').trim().isLength({ min: 1, max: 1
   } catch (error) { next(error); }
 });
 
+router.allProjects = allProjects;
+router.findProject = findProject;
+
 module.exports = router;
