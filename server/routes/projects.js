@@ -5,6 +5,7 @@ const { body, param, validationResult } = require('express-validator');
 const { v4: uuidv4 } = require('uuid');
 const { requireAuth } = require('../middleware/auth');
 const legacyCampaigns = require('../../src/data/campaigns.json');
+const { notifyIndexNow } = require('../indexnow');
 
 const router = express.Router();
 const hasDatabase = Boolean(process.env.DATABASE_URL);
@@ -228,6 +229,7 @@ router.post('/', requireAuth, validators, async (req, res, next) => {
       const record = { ...project, id, created_at: now, updated_at: now };
       items.push(record);
       writeLocalProjects(items);
+      if (record.published) notifyIndexNow([`/campaigns/${record.slug}`, '/projects']);
       return res.status(201).json({ project: record });
     }
     await ensureSchema();
@@ -241,7 +243,9 @@ router.post('/', requireAuth, validators, async (req, res, next) => {
        VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb,$9,$9) RETURNING *`,
       [id, slug, name, category, published, status, JSON.stringify(metrics), JSON.stringify(data), now]
     );
-    res.status(201).json({ project: normalize(rows[0]) });
+    const created = normalize(rows[0]);
+    if (created?.published) notifyIndexNow([`/campaigns/${created.slug}`, '/projects']);
+    res.status(201).json({ project: created });
   } catch (error) {
     if (error.code === '23505') return res.status(409).json({ error: 'A project with this name or URL already exists' });
     next(error);
@@ -260,8 +264,15 @@ router.put('/:id', requireAuth, [param('id').trim().isLength({ min: 1, max: 100 
       if (items.some((item, i) => i !== index && item.slug === project.slug)) {
         return res.status(409).json({ error: 'A project with this name or URL already exists' });
       }
+      const previous = items[index];
       items[index] = { ...items[index], ...project, id: items[index].id, updated_at: Math.floor(Date.now() / 1000) };
       writeLocalProjects(items);
+      const changedUrls = ['/projects'];
+      if (items[index].published) changedUrls.push(`/campaigns/${items[index].slug}`);
+      if (previous.published && (!items[index].published || previous.slug !== items[index].slug)) {
+        changedUrls.push(`/campaigns/${previous.slug}`);
+      }
+      notifyIndexNow(changedUrls);
       return res.json({ project: items[index] });
     }
     const existing = await findProject(req.params.id, true);
@@ -275,7 +286,14 @@ router.put('/:id', requireAuth, [param('id').trim().isLength({ min: 1, max: 100 
       [req.params.id, slug, name, category, published, status,
         JSON.stringify(metrics), JSON.stringify(data), now]
     );
-    res.json({ project: normalize(rows[0]) });
+    const updated = normalize(rows[0]);
+    const changedUrls = ['/projects'];
+    if (updated?.published) changedUrls.push(`/campaigns/${updated.slug}`);
+    if (existing.published && (!updated?.published || existing.slug !== updated.slug)) {
+      changedUrls.push(`/campaigns/${existing.slug}`);
+    }
+    notifyIndexNow(changedUrls);
+    res.json({ project: updated });
   } catch (error) {
     if (error.code === '23505') return res.status(409).json({ error: 'A project with this name or URL already exists' });
     next(error);
@@ -290,12 +308,16 @@ router.delete('/:id', requireAuth, [param('id').trim().isLength({ min: 1, max: 1
       const items = stored === null ? [...memoryProjects] : stored;
       const next = items.filter(item => item.id !== req.params.id && item.slug !== req.params.id);
       if (next.length === items.length) return res.status(404).json({ error: 'Project not found' });
+      const existing = items.find(item => item.id === req.params.id || item.slug === req.params.id);
       writeLocalProjects(next);
+      if (existing?.published) notifyIndexNow([`/campaigns/${existing.slug}`, '/projects']);
       return res.json({ message: 'Project deleted' });
     }
     await ensureSchema();
+    const existing = await findProject(req.params.id, true);
     const { rowCount } = await pool.query('DELETE FROM projects WHERE id = $1', [req.params.id]);
     if (!rowCount) return res.status(404).json({ error: 'Project not found' });
+    if (existing?.published) notifyIndexNow([`/campaigns/${existing.slug}`, '/projects']);
     res.json({ message: 'Project deleted' });
   } catch (error) { next(error); }
 });
