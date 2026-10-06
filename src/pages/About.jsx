@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { PartnersCarousel } from '../components/PartnersCarousel';
 import { SEO } from '../components/SEO';
-import teamJson from '../data/team.json';
-import partners from '../data/partners.json';
 import campaignsData from '../data/campaigns.json';
 import { thaData } from '../data/thaData';
 import { getTeamImageProps } from '../lib/imageUtils';
@@ -52,6 +50,8 @@ export const About = () => {
   const site = useSiteContent();
   const org = site.organization || {};
   const about = site.about || {};
+  const team = (site.team || []).filter(member => member.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0));
+  const partners = { partners: (site.partners || []).filter(partner => partner.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0)) };
   const [campaigns, setCampaigns] = React.useState(campaignsData.campaigns);
 
   React.useEffect(() => {
@@ -298,7 +298,7 @@ export const About = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamJson.team.map((member) => (
+            {team.map((member) => (
               <div key={member.id} className="bg-white rounded-2xl shadow-card overflow-hidden hover:shadow-elevated transition-all">
                 {/* Photo */}
                 <div className="h-64 bg-[#e8e8e8] flex items-center justify-center relative overflow-hidden">
@@ -344,7 +344,7 @@ export const About = () => {
                     </div>
                   )}
 
-                  <p className="text-sm text-gray-600 line-clamp-3">{member.bioShort}</p>
+                  <p className="text-sm text-gray-600 line-clamp-3">{member.bio || member.bioShort}</p>
                 </div>
               </div>
             ))}
