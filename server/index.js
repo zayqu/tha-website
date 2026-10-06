@@ -164,7 +164,7 @@ app.get('/llms.txt', async (_req, res, next) => {
     const articles = await news.findPublished({ limit: 100, offset: 0 });
     const liveProjects = await projectRoutes.allProjects();
     res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=3600');
-    res.type('text/plain').send(renderLlmsTxt({ articles, projects: liveProjects }));
+    res.type('text/plain').send(renderLlmsTxt({ articles, projects: liveProjects, siteContent: siteContentRoutes.readContent() }));
   } catch (error) {
     next(error);
   }
@@ -179,7 +179,7 @@ const crawlablePages = new Set([
 
 app.get([...crawlablePages], async (req, res, next) => {
   try {
-    const html = renderPublicPage(frontendIndex, req.path);
+    const html = renderPublicPage(frontendIndex, req.path, { siteContent: siteContentRoutes.readContent() });
     if (!html) return next();
     res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     res.type('html').send(html);
@@ -190,14 +190,14 @@ app.get([...crawlablePages], async (req, res, next) => {
 
 app.get('/campaigns/:campaignId', async (req, res, next) => {
   try {
-    const staticHtml = renderPublicPage(frontendIndex, req.path);
+    const staticHtml = renderPublicPage(frontendIndex, req.path, { siteContent: siteContentRoutes.readContent() });
     if (staticHtml) {
       res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
       return res.type('html').send(staticHtml);
     }
     const project = await projectRoutes.findProject(req.params.campaignId);
     if (!project) return next();
-    const html = renderPublicPage(frontendIndex, req.path, { project });
+    const html = renderPublicPage(frontendIndex, req.path, { project, siteContent: siteContentRoutes.readContent() });
     res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     return res.type('html').send(html);
   } catch (error) {
