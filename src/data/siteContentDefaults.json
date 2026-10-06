@@ -191,5 +191,113 @@
       "published": true,
       "sortOrder": 120
     }
-  ]
+  ],
+  "team": [
+    {
+      "id": "shaibu-issa",
+      "name": "Shaibu Issa",
+      "title": "Founder & Executive Director",
+      "photo": "/images/team/shaibu-issa.jpg",
+      "bio": "Shaibu founded Tanzania Health Alliance after personal experience with hepatitis B and the loss of his brother to liver cancer. His work focuses on hepatitis advocacy, community awareness and strengthening access to prevention and care.",
+      "credentials": [
+        "World Hepatitis Alliance AFRO Board Member",
+        "2025 UHC Day Champion",
+        "2025 Hepatitis Elimination Champion"
+      ],
+      "linkedIn": "https://www.linkedin.com/in/shaibu-issa-89b6391b8/",
+      "instagram": "https://www.instagram.com/shaibu_issa0/",
+      "published": true,
+      "sortOrder": 10
+    },
+    {
+      "id": "shuwena-ali",
+      "name": "Shuwena H. Ali",
+      "title": "Associate Director & Administrative Manager",
+      "photo": "/images/team/associate-director.jpg",
+      "bio": "Shuwena supports THA operations, administration and program coordination, helping turn plans into organized activities and partner engagement.",
+      "credentials": [
+        "Program coordination",
+        "Administration",
+        "Community health support"
+      ],
+      "linkedIn": "https://www.linkedin.com/in/shuwena-h-ali-8a575929b/",
+      "instagram": "https://www.instagram.com/shuwena_h.ali/",
+      "published": true,
+      "sortOrder": 20
+    },
+    {
+      "id": "enock-sichone",
+      "name": "Enock Sichone",
+      "title": "General Secretary",
+      "photo": "/images/team/general-secretary.jpg",
+      "bio": "Enock supports governance, administration and organizational coordination within Tanzania Health Alliance.",
+      "credentials": [
+        "Governance",
+        "Administration",
+        "Community engagement"
+      ],
+      "linkedIn": "https://www.linkedin.com/in/enock-sichone-6028442b5/",
+      "instagram": "https://www.instagram.com/enock_sichone2/",
+      "published": true,
+      "sortOrder": 30
+    }
+  ],
+  "partners": [
+    {
+      "id": "wha",
+      "name": "World Hepatitis Alliance",
+      "logo": "/images/partners/wha-logo.png",
+      "description": "Global hepatitis network in which THA is represented through AFRO board leadership.",
+      "relationship": "Membership and regional representation",
+      "website": "https://www.worldhepatitisalliance.org/",
+      "published": true,
+      "sortOrder": 10
+    },
+    {
+      "id": "taskforce-cghe",
+      "name": "The Task Force for Global Health / CGHE",
+      "logo": "/images/partners/taskforce-logo.png",
+      "description": "Collaboration around hepatitis B birth-dose advocacy and hepatitis elimination.",
+      "relationship": "Hepatitis B advocacy collaboration",
+      "website": "https://www.taskforce.org/",
+      "published": true,
+      "sortOrder": 20
+    },
+    {
+      "id": "aba",
+      "name": "African Hepatitis B Advocacy Coalition",
+      "logo": "/images/partners/abachepb-logo.png",
+      "description": "Regional hepatitis B advocacy coalition that lists THA as a 2026 KAPIME campaign awardee.",
+      "relationship": "Regional advocacy and funding",
+      "website": "https://abachepb.org/",
+      "published": true,
+      "sortOrder": 30
+    },
+    {
+      "id": "unicef-tanzania",
+      "name": "UNICEF Tanzania",
+      "logo": "",
+      "description": "THA documented a strategic meeting with UNICEF Tanzania on hepatitis B birth-dose vaccination and maternal-newborn health systems.",
+      "relationship": "Strategic technical engagement",
+      "website": "https://www.unicef.org/tanzania/",
+      "published": true,
+      "sortOrder": 40
+    },
+    {
+      "id": "actionaid-tanzania",
+      "name": "ActionAid Tanzania",
+      "logo": "",
+      "description": "THA documented youth mental-health work delivered in partnership with ActionAid Tanzania.",
+      "relationship": "Youth mental health collaboration",
+      "website": "https://tanzania.actionaid.org/",
+      "published": true,
+      "sortOrder": 50
+    }
+  ],
+  "impact": {
+    "heroTitle": "Impact built through documented work",
+    "heroText": "We track our work through dated activities, campaign records, partner engagement and project-level results rather than broad claims.",
+    "metricsIntro": "Where numerical results are shown, they should come from the corresponding project record in Admin.",
+    "evidenceIntro": "Our public record includes community outreach, youth mental-health sessions, hepatitis advocacy, institutional meetings and regional recognition."
+  }
 }
