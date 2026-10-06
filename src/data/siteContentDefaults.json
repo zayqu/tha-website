@@ -1,0 +1,195 @@
+{
+  "organization": {
+    "name": "Tanzania Health Alliance",
+    "shortName": "THA",
+    "registrationNumber": "00NGO/R/8379",
+    "foundedYear": 2025,
+    "mission": "To advance public health through advocacy, capacity building, research, and partnerships, contributing to sustainable and resilient healthcare in Tanzania.",
+    "vision": "To achieve a healthier Tanzania where every individual has access to equitable and quality healthcare.",
+    "motto": "Together for a Healthier Tanzania",
+    "founderName": "Shaibu Issa",
+    "founderTitle": "Founder & Executive Director"
+  },
+  "contact": {
+    "address": "Adda Estate, House No. 03, Kinondoni",
+    "poBox": "P.O. Box 31902",
+    "city": "Dar es Salaam",
+    "country": "Tanzania",
+    "phone": "+255 659 114 754",
+    "secondaryPhone": "",
+    "email": "info@tzhealthalliance.or.tz",
+    "facebook": "https://www.facebook.com/tanzaniahealthalliance",
+    "instagram": "https://instagram.com/tanzania_healthalliance",
+    "linkedin": "https://www.linkedin.com/company/tanzania-health-alliance"
+  },
+  "home": {
+    "heroTitle": "Together for a Healthier Tanzania",
+    "heroDescription": "We address critical public health challenges including Viral Hepatitis, HIV, and Mental Health through awareness, advocacy, and improved access to care across Tanzania.",
+    "journeyIntro": "A growing public record of community work, advocacy and institutional engagement.",
+    "programsIntro": "Three focused programs built around practical public-health needs: hepatitis prevention, youth mental health and community support.",
+    "engagementTitle": "Turning advocacy into conversations that can move policy",
+    "engagementIntro": "THA’s public record includes engagement with national institutions and health partners on hepatitis prevention, birth-dose vaccination and community health.",
+    "ctaText": "If you want to fund, partner, volunteer or bring a health concern to us, start with a conversation."
+  },
+  "about": {
+    "heroText": "Tanzania Health Alliance (THA) is a registered NGO (No. 00NGO/R/8379) based in Dar es Salaam. We work with communities, health institutions and partners on Viral Hepatitis, HIV and Mental Health.",
+    "founderHeading": "Why THA Exists",
+    "founderStory": "The organization was inspired by the personal experience of its founder, Shaibu Issa, who lost his brother to liver cancer in 2021, a preventable condition with early detection and vaccination. This experience led to the creation of THA to increase awareness, promote prevention, improve access to healthcare, and address stigma related to diseases such as hepatitis.",
+    "campaignsIntro": "Our work is organized through focused campaigns so that activities, partners and results can be traced back to a clear public-health purpose.",
+    "partnersIntro": "Working with organizations that strengthen our reach, technical work and accountability.",
+    "closingText": "If our work aligns with your institution, community or funding priorities, we would be glad to start with a practical conversation about where collaboration can make the most difference."
+  },
+  "funding": {
+    "heroText": "Work with us where your time, funding or institutional support can meet a clear public-health need.",
+    "donationIntro": "We welcome support for clearly defined activities, with an agreed purpose, budget and reporting approach.",
+    "institutionalText": "For institutional or project funding, THA can agree the activity, target group, budget, timeline and reporting requirements before implementation begins.",
+    "partnerIntro": "If our work aligns with your organization, tell us what you are trying to achieve and where collaboration may make sense."
+  },
+  "documents": [
+    {
+      "id": "registration",
+      "category": "Legal & Registration",
+      "title": "NGO Registration",
+      "meta": "Registration No. 00NGO/R/8379",
+      "description": "Tanzania Health Alliance (THA) is registered as a non-governmental organization in Tanzania and is based in Dar es Salaam.",
+      "status": "Verified in THA records",
+      "action": "Request certificate copy",
+      "url": "mailto:info@tzhealthalliance.or.tz?subject=Request%20for%20THA%20registration%20certificate",
+      "external": true,
+      "published": true,
+      "sortOrder": 10
+    },
+    {
+      "id": "privacy",
+      "category": "Legal & Registration",
+      "title": "Privacy Policy",
+      "meta": "Website policy",
+      "description": "How THA handles information submitted through this website.",
+      "action": "View policy",
+      "url": "/privacy",
+      "external": false,
+      "published": true,
+      "sortOrder": 20
+    },
+    {
+      "id": "cookies",
+      "category": "Legal & Registration",
+      "title": "Cookie Policy",
+      "meta": "Website policy",
+      "description": "Information about cookies and related technologies used on the THA website.",
+      "action": "View policy",
+      "url": "/cookies",
+      "external": false,
+      "published": true,
+      "sortOrder": 30
+    },
+    {
+      "id": "terms",
+      "category": "Legal & Registration",
+      "title": "Terms of Use",
+      "meta": "Website policy",
+      "description": "Terms governing use of the THA website and its public information.",
+      "action": "View terms",
+      "url": "/terms",
+      "external": false,
+      "published": true,
+      "sortOrder": 40
+    },
+    {
+      "id": "wha-board",
+      "category": "External Verification",
+      "title": "World Hepatitis Alliance — AFRO Board",
+      "meta": "Independent verification",
+      "description": "World Hepatitis Alliance identifies Shaibu Issa, Founder and Director of THA, as its AFRO Board Member.",
+      "action": "Verify externally",
+      "url": "https://www.worldhepatitisalliance.org/our-team-2025/",
+      "external": true,
+      "published": true,
+      "sortOrder": 50
+    },
+    {
+      "id": "aasld",
+      "category": "External Verification",
+      "title": "AASLD — Patient Advocate Profile",
+      "meta": "Independent verification",
+      "description": "AASLD identifies Shaibu Issa as Founder and Director of Tanzania Health Alliance and a WHA African Region Board Member.",
+      "action": "Verify externally",
+      "url": "https://www.aasld.org/tlm-26/shaibu-issa",
+      "external": true,
+      "published": true,
+      "sortOrder": 60
+    },
+    {
+      "id": "uhc-2025",
+      "category": "External Verification",
+      "title": "2025 UHC Day Champion",
+      "meta": "Independent recognition",
+      "description": "Universal Health Coverage Day recognizes Shaibu Issa as Founder and Director of THA and highlights THA’s hepatitis advocacy.",
+      "action": "View recognition",
+      "url": "https://www.universalhealthcoverageday.org/uhc-champions/2025-uhc-champion-shaibu-issa/",
+      "external": true,
+      "published": true,
+      "sortOrder": 70
+    },
+    {
+      "id": "aba-2026",
+      "category": "External Verification",
+      "title": "2026 Hepatitis B Advocacy Awardee",
+      "meta": "Independent funding record",
+      "description": "The African Hepatitis B Advocacy Coalition lists Tanzania Health Alliance as a 2026 awardee for the KAPIME campaign.",
+      "action": "View awardee record",
+      "url": "https://abachepb.org/funding/current-awardees-2026/",
+      "external": true,
+      "published": true,
+      "sortOrder": 80
+    },
+    {
+      "id": "parliamentary-committee",
+      "category": "Public Activity & Evidence",
+      "title": "Parliamentary Committee Engagement",
+      "meta": "6 May 2026",
+      "description": "THA engaged the Parliamentary Committee on Health and Wellbeing on hepatitis B birth-dose vaccination.",
+      "action": "Read record",
+      "url": "/news/tha-engages-parliamentary-committee-on-hepatitis-b-birth-dose-vaccination",
+      "external": false,
+      "published": true,
+      "sortOrder": 90
+    },
+    {
+      "id": "parliament-recognition",
+      "category": "Public Activity & Evidence",
+      "title": "Recognition in Parliament",
+      "meta": "2026",
+      "description": "THA recorded recognition in the Parliament of Tanzania for its contribution to the fight against viral hepatitis.",
+      "action": "Read record",
+      "url": "/news/tha-recognized-in-parliament-for-contribution-to-the-fight-against-viral-hepatitis",
+      "external": false,
+      "published": true,
+      "sortOrder": 100
+    },
+    {
+      "id": "unicef-meeting",
+      "category": "Public Activity & Evidence",
+      "title": "THA–UNICEF Strategic Meeting",
+      "meta": "18 February 2026",
+      "description": "A strategic discussion focused on hepatitis B birth-dose vaccination and maternal-newborn health systems.",
+      "action": "Read record",
+      "url": "/news/tha-unicef-strategic-meeting-on-hepatitis-b-birth-dose-vaccination",
+      "external": false,
+      "published": true,
+      "sortOrder": 110
+    },
+    {
+      "id": "actionaid-youth",
+      "category": "Public Activity & Evidence",
+      "title": "Youth Mental Health with ActionAid Tanzania",
+      "meta": "7 February 2026",
+      "description": "THA documented a youth mental-health session delivered in partnership with ActionAid Tanzania.",
+      "action": "Read record",
+      "url": "/news/tanzania-health-alliance-hosts-youth-mental-health-session-in-partnership-with-actionaid-tanzania",
+      "external": false,
+      "published": true,
+      "sortOrder": 120
+    }
+  ]
+}
