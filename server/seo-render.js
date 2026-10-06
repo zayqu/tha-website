@@ -132,7 +132,7 @@ function renderHtml(templatePath, { article, articles }) {
 
 function renderSitemap(articles = [], projects = []) {
   const staticUrls = [
-    '/', '/about', '/impact', '/projects', '/academy', '/news', '/contact',
+    '/', '/about', '/impact', '/projects', '/academy', '/news', '/contact', '/documents',
     '/health/hepatitis', '/health/hiv', '/health/mental-health',
     '/make-a-difference', '/privacy', '/cookies', '/terms',
     '/campaigns/kapime', '/campaigns/life-unlocked', '/campaigns/talk-to-heal',
@@ -245,6 +245,16 @@ const PAGE_DEFINITIONS = {
       'Related topics include mental health Tanzania, youth mental health, mental health awareness, mental wellbeing, Life Unlocked and Talk To Heal.'
     ],
     links: ['/campaigns/life-unlocked', '/campaigns/talk-to-heal', '/news', '/academy']
+  },
+  '/documents': {
+    title: 'Documents & Accountability | Tanzania Health Alliance',
+    description: 'Access Tanzania Health Alliance registration information, policies, public activity records and independent verification links.',
+    heading: 'Documents & Accountability',
+    paragraphs: [
+      'Tanzania Health Alliance (THA) is a registered NGO, No. 00NGO/R/8379, based in Dar es Salaam, Tanzania.',
+      'This page brings together THA registration information, website policies, dated activity records and independent references for partners, funders and communities.'
+    ],
+    links: ['/about', '/impact', '/projects', '/news', '/contact']
   },
   '/make-a-difference': {
     title: 'Make a Difference | Tanzania Health Alliance',
@@ -451,6 +461,7 @@ function renderLlmsTxt({ articles = [], projects = [] } = {}) {
     '- https://tzhealthalliance.or.tz/academy',
     '- https://tzhealthalliance.or.tz/news',
     '- https://tzhealthalliance.or.tz/contact',
+    '- https://tzhealthalliance.or.tz/documents — registration, accountability, policies and independent verification',
     '',
     '## Health focus areas',
     '- https://tzhealthalliance.or.tz/health/hepatitis — viral hepatitis and hepatitis B awareness, testing, prevention and vaccination advocacy',
