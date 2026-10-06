@@ -227,12 +227,12 @@ export const Home = () => {
       {/* HERO */}
       <section className="relative min-h-[calc(100dvh-3.5rem)] md:h-screen flex items-center justify-center text-center overflow-hidden">
         <img
-          src="/images/hero-bg-lg.jpg"
+          src={home.heroImage || "/images/hero-bg-lg.jpg"}
           alt=""
           width="1920"
           height="1080"
           aria-hidden="true"
-          {...getHeroImageProps('/images/hero-bg-lg.jpg')}
+          {...getHeroImageProps(home.heroImage || '/images/hero-bg-lg.jpg')}
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/90 to-primary/80" />
