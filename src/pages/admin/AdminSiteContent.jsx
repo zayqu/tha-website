@@ -6,6 +6,7 @@ const TABS = [
   ['organization', 'Organization'],
   ['contact', 'Contact'],
   ['home', 'Home'],
+  ['projectsPage', 'Campaigns Page'],
   ['about', 'About'],
   ['funding', 'Funding'],
   ['impact', 'Impact'],
@@ -16,6 +17,7 @@ const TABS = [
   ['policies', 'Policies'],
   ['team', 'Team'],
   ['partners', 'Partners'],
+  ['documentsPage', 'Documents Page'],
   ['documents', 'Documents'],
 ];
 
@@ -42,6 +44,10 @@ const SIMPLE_FIELDS = {
     ['facebook', 'Facebook URL'],
     ['instagram', 'Instagram URL'],
     ['linkedin', 'LinkedIn URL'],
+    ['pageIntro', 'Contact page introduction', 'textarea'],
+    ['formIntro', 'Contact form introduction', 'textarea'],
+    ['volunteerCtaTitle', 'Volunteer CTA title'],
+    ['volunteerCtaText', 'Volunteer CTA text', 'textarea'],
   ],
   home: [
     ['heroTitle', 'Hero title'],
@@ -51,6 +57,12 @@ const SIMPLE_FIELDS = {
     ['engagementTitle', 'Institutional engagement title'],
     ['engagementIntro', 'Institutional engagement introduction', 'textarea'],
     ['ctaText', 'Closing call to action', 'textarea'],
+  ],
+  projectsPage: [
+    ['heroTitle', 'Campaigns page title'],
+    ['heroText', 'Campaigns page introduction', 'textarea'],
+    ['ctaTitle', 'Campaigns closing title'],
+    ['ctaText', 'Campaigns closing text', 'textarea'],
   ],
   about: [
     ['heroText', 'About hero text', 'textarea'],
@@ -65,6 +77,12 @@ const SIMPLE_FIELDS = {
     ['donationIntro', 'Funding introduction', 'textarea'],
     ['institutionalText', 'Institutional funding text', 'textarea'],
     ['partnerIntro', 'Partnership introduction', 'textarea'],
+  ],
+  documentsPage: [
+    ['eyebrow', 'Documents eyebrow'],
+    ['title', 'Documents page title'],
+    ['intro', 'Documents page introduction', 'textarea'],
+    ['requestText', 'Due-diligence request text', 'textarea'],
   ],
   impact: [
     ['heroTitle', 'Impact page title'],
