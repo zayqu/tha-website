@@ -563,6 +563,18 @@ export default function AdminSiteContent() {
                 <div className="md:col-span-2"><Field label="Page introduction" type="textarea" value={content?.academy?.heroText} onChange={v=>setSectionValue('academy','heroText',v)}/></div>
                 <div className="md:col-span-2"><Field label="Help guidance (one paragraph per line)" type="textarea" value={(content?.academy?.helpText||[]).join('\n')} onChange={v=>setSectionValue('academy','helpText',v.split('\n').map(x=>x.trim()).filter(Boolean))}/></div>
               </div>
+              <AdminAiAssist
+                section="Academy introduction"
+                current={{ heroTitle: content?.academy?.heroTitle || '', helpTitle: content?.academy?.helpTitle || '', heroText: content?.academy?.heroText || '' }}
+                fields={[
+                  { key: 'heroTitle', label: 'Page title', type: 'text' },
+                  { key: 'helpTitle', label: 'Help section title', type: 'text' },
+                  { key: 'heroText', label: 'Page introduction', type: 'textarea' },
+                ]}
+                onApply={suggestions=>applySimpleAi('academy',suggestions)}
+                defaultInstruction="Keep health wording clear and cautious. Do not invent medical claims."
+                className="mt-5"
+              />
             </Card>
             <div className="space-y-4">
               <AddRow title="Health guides" button="+ Add guide" onClick={()=>addNestedList('academy','guides',emptyGuide())}/>
@@ -578,6 +590,19 @@ export default function AdminSiteContent() {
                     <Field label="Sort order" type="number" value={g.sortOrder} onChange={v=>updateNestedList('academy','guides',g.id,'sortOrder',v)}/>
                     <Toggle label="Published" checked={g.published} onChange={v=>updateNestedList('academy','guides',g.id,'published',v)}/>
                   </div>
+                  <AdminAiAssist
+                    section="Academy health guide"
+                    current={{ topic: g.topic, title: g.title, summary: g.summary, action: g.action }}
+                    fields={[
+                      { key: 'topic', label: 'Topic', type: 'text' },
+                      { key: 'title', label: 'Title', type: 'text' },
+                      { key: 'summary', label: 'Summary', type: 'textarea' },
+                      { key: 'action', label: 'Button label', type: 'text' },
+                    ]}
+                    onApply={suggestions=>applyNestedListAi('academy','guides',g.id,suggestions,['topic','title','summary','action'])}
+                    defaultInstruction="Use plain public-health language. Do not diagnose or add unsupported medical claims."
+                    className="mt-5"
+                  />
                 </Card>
               ))}
             </div>
@@ -597,6 +622,19 @@ export default function AdminSiteContent() {
                     <Field label="Sort order" type="number" value={r.sortOrder} onChange={v=>updateNestedList('academy','resources',r.id,'sortOrder',v)}/>
                     <Toggle label="Published" checked={r.published} onChange={v=>updateNestedList('academy','resources',r.id,'published',v)}/>
                   </div>
+                  <AdminAiAssist
+                    section="Academy resource"
+                    current={{ title: r.title, source: r.source, category: r.category, excerpt: r.excerpt }}
+                    fields={[
+                      { key: 'title', label: 'Title', type: 'text' },
+                      { key: 'source', label: 'Source', type: 'text' },
+                      { key: 'category', label: 'Category', type: 'text' },
+                      { key: 'excerpt', label: 'Excerpt', type: 'textarea' },
+                    ]}
+                    onApply={suggestions=>applyNestedListAi('academy','resources',r.id,suggestions,['title','source','category','excerpt'])}
+                    defaultInstruction="Summarize only what is already provided. Do not invent source details or health claims."
+                    className="mt-5"
+                  />
                 </Card>
               ))}
             </div>
@@ -618,6 +656,26 @@ export default function AdminSiteContent() {
                     <div className="md:col-span-2"><Field label="THA actions (one per line)" type="textarea" value={(topic.actions||[]).join('\n')} onChange={v=>setNestedValue('healthTopics',id,'actions',v.split('\n').map(x=>x.trim()).filter(Boolean))}/></div>
                     <Field label="Related URL" value={topic.related} onChange={v=>setNestedValue('healthTopics',id,'related',v)}/>
                   </div>
+                  <AdminAiAssist
+                    section={`Health topic: ${id}`}
+                    current={{
+                      title: topic.title || '',
+                      intro: topic.intro || '',
+                      overview: topic.overview || '',
+                      whyItMatters: topic.whyItMatters || '',
+                      relatedLabel: topic.relatedLabel || '',
+                    }}
+                    fields={[
+                      { key: 'title', label: 'Title', type: 'text' },
+                      { key: 'intro', label: 'Introduction', type: 'textarea' },
+                      { key: 'overview', label: 'Overview', type: 'textarea' },
+                      { key: 'whyItMatters', label: 'Why it matters', type: 'textarea' },
+                      { key: 'relatedLabel', label: 'Related button label', type: 'text' },
+                    ]}
+                    onApply={suggestions=>applyNestedObjectAi('healthTopics',id,suggestions,['title','intro','overview','whyItMatters','relatedLabel'])}
+                    defaultInstruction="Use factual, accessible public-health language. Do not diagnose or add unsupported statistics."
+                    className="mt-5"
+                  />
                 </Card>
               );
             })}
@@ -633,6 +691,16 @@ export default function AdminSiteContent() {
                   <div className="grid gap-4">
                     <Field label="Title" value={policy.title} onChange={v=>setNestedValue('policies',id,'title',v)}/>
                     <Field label="Introduction" type="textarea" value={policy.intro} onChange={v=>setNestedValue('policies',id,'intro',v)}/>
+                    <AdminAiAssist
+                      section={`Website policy: ${id}`}
+                      current={{ title: policy.title || '', intro: policy.intro || '' }}
+                      fields={[
+                        { key: 'title', label: 'Policy title', type: 'text' },
+                        { key: 'intro', label: 'Introduction', type: 'textarea' },
+                      ]}
+                      onApply={suggestions=>applyNestedObjectAi('policies',id,suggestions,['title','intro'])}
+                      defaultInstruction="Improve clarity only. Do not pretend to provide legal advice or add legal obligations that are not already stated."
+                    />
                     {(policy.sections||[]).map((section,index)=>(
                       <div key={section.id||index} className="rounded-xl bg-gray-50 p-4">
                         <div className="mb-3 flex items-center justify-between">
@@ -649,6 +717,25 @@ export default function AdminSiteContent() {
                           <Field label="Text" type="textarea" value={section.text} onChange={v=>{
                             const next=[...(policy.sections||[])]; next[index]={...section,text:v}; setNestedValue('policies',id,'sections',next);
                           }}/>
+                          <AdminAiAssist
+                            section={`Policy section: ${id}`}
+                            current={{ heading: section.heading || '', text: section.text || '' }}
+                            fields={[
+                              { key: 'heading', label: 'Heading', type: 'text' },
+                              { key: 'text', label: 'Text', type: 'textarea' },
+                            ]}
+                            onApply={suggestions=>{
+                              const next=[...(policy.sections||[])];
+                              const updated={...section};
+                              for(const suggestion of suggestions){
+                                if(['heading','text'].includes(suggestion.field)) updated[suggestion.field]=suggestion.value;
+                              }
+                              next[index]=updated;
+                              setNestedValue('policies',id,'sections',next);
+                            }}
+                            defaultInstruction="Make this easier to understand while preserving the existing meaning. Do not add new legal obligations."
+                            className="mt-4"
+                          />
                         </div>
                       </div>
                     ))}
