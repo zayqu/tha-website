@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import campaignsData from '../data/campaigns.json';
-import partners from '../data/partners.json';
 import testimonials from '../data/testimonials.json';
 import impactData from '../data/impact.json';
 import { PartnersCarousel } from '../components/PartnersCarousel';
@@ -164,6 +163,7 @@ export const Home = () => {
   const org = site.organization || {};
   const home = site.home || {};
   const contact = site.contact || {};
+  const partners = { partners: (site.partners || []).filter(partner => partner.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0)) };
   const [latestNews, setLatestNews] = useState([]);
   const [latestNewsLoading, setLatestNewsLoading] = useState(true);
   const [impactTotals, setImpactTotals] = useState(impactData.impactMetrics.total);
