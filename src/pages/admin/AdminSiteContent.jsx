@@ -483,6 +483,17 @@ export default function AdminSiteContent() {
                     <Field label="Sort order" type="number" value={item.sortOrder} onChange={v=>updateList('coreValues',item.id,'sortOrder',v)}/>
                     <Toggle label="Published" checked={item.published} onChange={v=>updateList('coreValues',item.id,'published',v)}/>
                   </div>
+                  <AdminAiAssist
+                    section="Core value"
+                    current={{ value: item.value, description: item.description }}
+                    fields={[
+                      { key: 'value', label: 'Value', type: 'text' },
+                      { key: 'description', label: 'What it means', type: 'textarea' },
+                    ]}
+                    onApply={suggestions=>applyListAi('coreValues',item.id,suggestions,['value','description'])}
+                    defaultInstruction="Keep the meaning practical and specific. Avoid generic NGO language."
+                    className="mt-5"
+                  />
                 </Card>
               ))}
             </div>
@@ -498,6 +509,17 @@ export default function AdminSiteContent() {
                     <Field label="Sort order" type="number" value={item.sortOrder} onChange={v=>updateList('objectives',item.id,'sortOrder',v)}/>
                     <Toggle label="Published" checked={item.published} onChange={v=>updateList('objectives',item.id,'published',v)}/>
                   </div>
+                  <AdminAiAssist
+                    section="THA objective"
+                    current={{ title: item.title, description: item.description }}
+                    fields={[
+                      { key: 'title', label: 'Title', type: 'text' },
+                      { key: 'description', label: 'Description', type: 'textarea' },
+                    ]}
+                    onApply={suggestions=>applyListAi('objectives',item.id,suggestions,['title','description'])}
+                    defaultInstruction="Make this objective clear, human and practical without inventing outcomes."
+                    className="mt-5"
+                  />
                 </Card>
               ))}
             </div>
@@ -517,6 +539,17 @@ export default function AdminSiteContent() {
                   <Field label="Sort order" type="number" value={item.sortOrder} onChange={v=>updateList('testimonials',item.id,'sortOrder',v)}/>
                   <Toggle label="Published" checked={item.published} onChange={v=>updateList('testimonials',item.id,'published',v)}/>
                 </div>
+                <AdminAiAssist
+                  section="Verified impact story"
+                  current={{ quote: item.quote, role: item.role }}
+                  fields={[
+                    { key: 'quote', label: 'Quote', type: 'textarea' },
+                    { key: 'role', label: 'Role / context', type: 'text' },
+                  ]}
+                  onApply={suggestions=>applyListAi('testimonials',item.id,suggestions,['quote','role'])}
+                  defaultInstruction="Do not invent or embellish the story. Improve only the wording already supplied."
+                  className="mt-5"
+                />
               </Card>
             ))}
           </section>
@@ -648,6 +681,17 @@ export default function AdminSiteContent() {
                   <Field label="Instagram URL" value={member.instagram} onChange={v=>updateList('team',member.id,'instagram',v)}/>
                   <Toggle label="Published" checked={member.published} onChange={v=>updateList('team',member.id,'published',v)}/>
                 </div>
+                <AdminAiAssist
+                  section="Team profile"
+                  current={{ title: member.title, bio: member.bio }}
+                  fields={[
+                    { key: 'title', label: 'Title', type: 'text' },
+                    { key: 'bio', label: 'Short bio', type: 'textarea' },
+                  ]}
+                  onApply={suggestions=>applyListAi('team',member.id,suggestions,['title','bio'])}
+                  defaultInstruction="Keep this factual and professional. Do not invent qualifications, roles or achievements."
+                  className="mt-5"
+                />
               </Card>
             ))}
           </section>
@@ -672,6 +716,17 @@ export default function AdminSiteContent() {
                   <Field label="Sort order" type="number" value={partner.sortOrder} onChange={v=>updateList('partners',partner.id,'sortOrder',v)}/>
                   <Toggle label="Published" checked={partner.published} onChange={v=>updateList('partners',partner.id,'published',v)}/>
                 </div>
+                <AdminAiAssist
+                  section="Partner record"
+                  current={{ relationship: partner.relationship, description: partner.description }}
+                  fields={[
+                    { key: 'relationship', label: 'Relationship', type: 'text' },
+                    { key: 'description', label: 'Description', type: 'textarea' },
+                  ]}
+                  onApply={suggestions=>applyListAi('partners',partner.id,suggestions,['relationship','description'])}
+                  defaultInstruction="Describe only the verified relationship. Do not imply a partnership or endorsement that is not already stated."
+                  className="mt-5"
+                />
               </Card>
             ))}
           </section>
@@ -707,6 +762,19 @@ export default function AdminSiteContent() {
                   <Toggle label="Published" checked={doc.published} onChange={v=>updateList('documents',doc.id,'published',v)}/>
                   <Toggle label="External link" checked={doc.external} onChange={v=>updateList('documents',doc.id,'external',v)}/>
                 </div>
+                <AdminAiAssist
+                  section="Document / accountability record"
+                  current={{ title: doc.title, category: doc.category, description: doc.description, action: doc.action }}
+                  fields={[
+                    { key: 'title', label: 'Title', type: 'text' },
+                    { key: 'category', label: 'Category', type: 'text' },
+                    { key: 'description', label: 'Description', type: 'textarea' },
+                    { key: 'action', label: 'Button label', type: 'text' },
+                  ]}
+                  onApply={suggestions=>applyListAi('documents',doc.id,suggestions,['title','category','description','action'])}
+                  defaultInstruction="Make the record clear and institutional. Do not invent dates, verification status or document contents."
+                  className="mt-5"
+                />
               </Card>
             ))}
           </section>
