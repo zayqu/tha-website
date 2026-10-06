@@ -22,6 +22,7 @@ import AdminNewsForm from './pages/admin/AdminNewsForm';
 import AdminProjectsDashboard from './pages/admin/AdminProjectsDashboard';
 import AdminProjectForm from './pages/admin/AdminProjectForm';
 import AdminJourneyDashboard from './pages/admin/AdminJourneyDashboard';
+import AdminSiteContent from './pages/admin/AdminSiteContent';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useEffect } from 'react';
@@ -76,6 +77,7 @@ function App() {
             <Route path="/admin/projects/new" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
             <Route path="/admin/projects/edit/:id" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
             <Route path="/admin/journey" element={<ProtectedRoute><AdminJourneyDashboard /></ProtectedRoute>} />
+            <Route path="/admin/site-content" element={<ProtectedRoute><AdminSiteContent /></ProtectedRoute>} />
 
             <Route element={<PublicLayout />}>
               <Route path="/" element={<Home />} />
