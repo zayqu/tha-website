@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { AdminHeader } from '../../components/admin/AdminHeader';
+import AdminAiAssist from '../../components/AdminAiAssist';
 
 const STATUSES = ['active', 'planned', 'completed', 'archived'];
 
@@ -66,6 +67,18 @@ export default function AdminProjectForm() {
   function handleChange(e) {
     const { name, type, checked, value } = e.target;
     setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+  }
+
+  function applyAiSuggestions(suggestions) {
+    setForm(prev => {
+      const next = { ...prev };
+      for (const suggestion of suggestions) {
+        if (['name', 'category', 'description'].includes(suggestion.field)) {
+          next[suggestion.field] = suggestion.value;
+        }
+      }
+      return next;
+    });
   }
 
   function updateMetric(index, field, value) {
@@ -150,6 +163,18 @@ export default function AdminProjectForm() {
               {errors._global}
             </div>
           )}
+
+          <AdminAiAssist
+            section="Campaign / Project"
+            current={{ name: form.name, category: form.category, description: form.description }}
+            fields={[
+              { key: 'name', label: 'Campaign name', type: 'text' },
+              { key: 'category', label: 'Category', type: 'text' },
+              { key: 'description', label: 'Description', type: 'textarea' },
+            ]}
+            onApply={applyAiSuggestions}
+            defaultInstruction="Use only the facts I provide. Make the campaign description clear, human and community-focused."
+          />
 
           <Field label="Campaign Name *" error={errors.name}>
             <input
