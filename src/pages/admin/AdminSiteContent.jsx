@@ -76,6 +76,13 @@ const SIMPLE_FIELDS = {
     ['heroText', 'Funding page hero', 'textarea'],
     ['donationIntro', 'Funding introduction', 'textarea'],
     ['institutionalText', 'Institutional funding text', 'textarea'],
+    ['funderTitle', 'Homepage funder section title'],
+    ['scopeTitle', 'Scope & budget title'],
+    ['scopeText', 'Scope & budget text', 'textarea'],
+    ['outcomesTitle', 'Measurement title'],
+    ['outcomesText', 'Measurement text', 'textarea'],
+    ['reportingTitle', 'Reporting title'],
+    ['reportingText', 'Reporting text', 'textarea'],
     ['partnerIntro', 'Partnership introduction', 'textarea'],
   ],
   documentsPage: [
