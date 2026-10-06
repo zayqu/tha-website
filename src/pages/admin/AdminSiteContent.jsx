@@ -9,6 +9,11 @@ const TABS = [
   ['about', 'About'],
   ['funding', 'Funding'],
   ['impact', 'Impact'],
+  ['values', 'Values & Objectives'],
+  ['stories', 'Stories'],
+  ['academy', 'Academy'],
+  ['topics', 'Health Topics'],
+  ['policies', 'Policies'],
   ['team', 'Team'],
   ['partners', 'Partners'],
   ['documents', 'Documents'],
@@ -151,6 +156,11 @@ export default function AdminSiteContent() {
   const documents = useMemo(() => Array.isArray(content?.documents) ? content.documents : [], [content]);
   const team = useMemo(() => Array.isArray(content?.team) ? content.team : [], [content]);
   const partners = useMemo(() => Array.isArray(content?.partners) ? content.partners : [], [content]);
+  const coreValues = useMemo(() => Array.isArray(content?.coreValues) ? content.coreValues : [], [content]);
+  const objectives = useMemo(() => Array.isArray(content?.objectives) ? content.objectives : [], [content]);
+  const testimonials = useMemo(() => Array.isArray(content?.testimonials) ? content.testimonials : [], [content]);
+  const academyGuides = useMemo(() => Array.isArray(content?.academy?.guides) ? content.academy.guides : [], [content]);
+  const academyResources = useMemo(() => Array.isArray(content?.academy?.resources) ? content.academy.resources : [], [content]);
 
   function setSectionValue(section, key, value) {
     setContent(prev => ({
@@ -163,6 +173,47 @@ export default function AdminSiteContent() {
     setContent(prev => ({
       ...prev,
       documents: (prev.documents || []).map(doc => doc.id === id ? { ...doc, [key]: value } : doc),
+    }));
+  }
+
+  function setNestedValue(section, key, nestedKey, value) {
+    setContent(prev => ({
+      ...prev,
+      [section]: {
+        ...(prev?.[section] || {}),
+        [key]: { ...(prev?.[section]?.[key] || {}), [nestedKey]: value },
+      },
+    }));
+  }
+
+  function updateNestedList(section, key, id, field, value) {
+    setContent(prev => ({
+      ...prev,
+      [section]: {
+        ...(prev?.[section] || {}),
+        [key]: (prev?.[section]?.[key] || []).map(item => item.id === id ? { ...item, [field]: value } : item),
+      },
+    }));
+  }
+
+  function addNestedListItem(section, key, item) {
+    setContent(prev => ({
+      ...prev,
+      [section]: {
+        ...(prev?.[section] || {}),
+        [key]: [...(prev?.[section]?.[key] || []), item],
+      },
+    }));
+  }
+
+  function removeNestedListItem(section, key, id, label) {
+    if (!window.confirm(`Remove ${label || 'this item'} from the website?`)) return;
+    setContent(prev => ({
+      ...prev,
+      [section]: {
+        ...(prev?.[section] || {}),
+        [key]: (prev?.[section]?.[key] || []).filter(item => item.id !== id),
+      },
     }));
   }
 
