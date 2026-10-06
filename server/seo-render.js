@@ -417,6 +417,65 @@ function renderPublicPage(templatePath, pathname, { project, siteContent = {} } 
       ].filter(Boolean),
       links: ['/about', '/documents', '/projects', '/news'],
     },
+    '/academy': {
+      title: `${siteContent.academy?.heroTitle || 'Public Health Knowledge Centre'} | ${org.name || SITE_NAME}`,
+      description: siteContent.academy?.heroText || PAGE_DEFINITIONS['/academy']?.description,
+      heading: siteContent.academy?.heroTitle || 'Public Health Knowledge Centre',
+      paragraphs: [
+        siteContent.academy?.heroText,
+        ...(siteContent.academy?.helpText || []),
+      ].filter(Boolean),
+      links: ['/health/hepatitis', '/health/hiv', '/health/mental-health', '/news'],
+    },
+    '/projects': {
+      title: `Campaigns | ${org.name || SITE_NAME}`,
+      description: 'Explore published Tanzania Health Alliance campaigns, activities and results.',
+      heading: 'Our Campaigns & Activities',
+      paragraphs: ['Explore published THA campaigns and their documented activities and results.'],
+      links: ['/impact', '/news', '/documents', '/contact'],
+    },
+    '/health/hepatitis': siteContent.healthTopics?.hepatitis ? {
+      title: `${siteContent.healthTopics.hepatitis.title} | ${org.name || SITE_NAME}`,
+      description: siteContent.healthTopics.hepatitis.intro,
+      heading: siteContent.healthTopics.hepatitis.title,
+      paragraphs: [siteContent.healthTopics.hepatitis.intro, siteContent.healthTopics.hepatitis.overview, siteContent.healthTopics.hepatitis.whyItMatters, ...(siteContent.healthTopics.hepatitis.actions || [])].filter(Boolean),
+      links: [siteContent.healthTopics.hepatitis.related || '/projects', '/academy', '/news'],
+    } : PAGE_DEFINITIONS['/health/hepatitis'],
+    '/health/hiv': siteContent.healthTopics?.hiv ? {
+      title: `${siteContent.healthTopics.hiv.title} | ${org.name || SITE_NAME}`,
+      description: siteContent.healthTopics.hiv.intro,
+      heading: siteContent.healthTopics.hiv.title,
+      paragraphs: [siteContent.healthTopics.hiv.intro, siteContent.healthTopics.hiv.overview, siteContent.healthTopics.hiv.whyItMatters, ...(siteContent.healthTopics.hiv.actions || [])].filter(Boolean),
+      links: [siteContent.healthTopics.hiv.related || '/projects', '/academy', '/news'],
+    } : PAGE_DEFINITIONS['/health/hiv'],
+    '/health/mental-health': siteContent.healthTopics?.['mental-health'] ? {
+      title: `${siteContent.healthTopics['mental-health'].title} | ${org.name || SITE_NAME}`,
+      description: siteContent.healthTopics['mental-health'].intro,
+      heading: siteContent.healthTopics['mental-health'].title,
+      paragraphs: [siteContent.healthTopics['mental-health'].intro, siteContent.healthTopics['mental-health'].overview, siteContent.healthTopics['mental-health'].whyItMatters, ...(siteContent.healthTopics['mental-health'].actions || [])].filter(Boolean),
+      links: [siteContent.healthTopics['mental-health'].related || '/projects', '/academy', '/news'],
+    } : PAGE_DEFINITIONS['/health/mental-health'],
+    '/privacy': siteContent.policies?.privacy ? {
+      title: `${siteContent.policies.privacy.title} | ${org.name || SITE_NAME}`,
+      description: siteContent.policies.privacy.intro,
+      heading: siteContent.policies.privacy.title,
+      paragraphs: [siteContent.policies.privacy.intro, ...(siteContent.policies.privacy.sections || []).map(section => `${section.heading}: ${section.text}`)].filter(Boolean),
+      links: ['/contact', '/documents'],
+    } : PAGE_DEFINITIONS['/privacy'],
+    '/cookies': siteContent.policies?.cookies ? {
+      title: `${siteContent.policies.cookies.title} | ${org.name || SITE_NAME}`,
+      description: siteContent.policies.cookies.intro,
+      heading: siteContent.policies.cookies.title,
+      paragraphs: [siteContent.policies.cookies.intro, ...(siteContent.policies.cookies.sections || []).map(section => `${section.heading}: ${section.text}`)].filter(Boolean),
+      links: ['/privacy', '/contact'],
+    } : PAGE_DEFINITIONS['/cookies'],
+    '/terms': siteContent.policies?.terms ? {
+      title: `${siteContent.policies.terms.title} | ${org.name || SITE_NAME}`,
+      description: siteContent.policies.terms.intro,
+      heading: siteContent.policies.terms.title,
+      paragraphs: [siteContent.policies.terms.intro, ...(siteContent.policies.terms.sections || []).map(section => `${section.heading}: ${section.text}`)].filter(Boolean),
+      links: ['/privacy', '/contact'],
+    } : PAGE_DEFINITIONS['/terms'],
   };
 
   if (dynamicPages[pathname]) definition = dynamicPages[pathname];
