@@ -30,6 +30,10 @@
   html {
     scroll-behavior: smooth;
     font-family: "Proxima Nova", "Avenir Next", Avenir, "Segoe UI", Arial, sans-serif;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
   }
 
   body,
@@ -42,6 +46,25 @@
 
   body {
     @apply font-sans text-near-black bg-white leading-tight antialiased;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+    position: relative;
+  }
+
+  #root {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  img,
+  video,
+  iframe,
+  svg {
+    max-width: 100%;
   }
 }
 
@@ -128,7 +151,25 @@
   }
 
   .public-mobile-shell {
+    width: 100%;
+    max-width: 100vw;
+    min-width: 0;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
     padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .public-mobile-shell > main {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .public-mobile-shell section,
+  .public-mobile-shell footer {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .mobile-fixed-chrome {
