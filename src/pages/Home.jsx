@@ -69,7 +69,7 @@ const Counter = ({ end, suffix = '+' }) => {
   }, [visible, end]);
 
   return (
-    <div ref={ref} className="text-4xl md:text-5xl font-bold text-white">
+    <div ref={ref} className="text-3xl md:text-5xl font-bold text-white">
       {count.toLocaleString()}{suffix}
     </div>
   );
@@ -86,13 +86,13 @@ const CampaignCard = ({ campaign, index }) => {
   return (
     <div
       ref={ref}
-      className={`group bg-white rounded-2xl shadow-card hover:shadow-elevated transition-all duration-700 overflow-hidden flex flex-col h-full ${
+      className={`group bg-white rounded-2xl shadow-card hover:shadow-elevated transition-all duration-700 overflow-hidden flex flex-col h-full min-w-[82vw] max-w-[82vw] md:min-w-0 md:max-w-none ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
       style={{ transitionDelay: `${index * 150}ms` }}
     >
       {/* Banner Image */}
-      <div className="relative overflow-hidden h-48 sm:h-56">
+      <div className="relative overflow-hidden h-40 sm:h-56">
         <img
           src={campaign.image}
           alt={campaign.name}
@@ -108,10 +108,10 @@ const CampaignCard = ({ campaign, index }) => {
       </div>
 
       {/* Content */}
-      <div className="p-5 sm:p-6 flex flex-col flex-grow">
+      <div className="p-4 sm:p-6 flex flex-col flex-grow">
         <div className="flex items-center gap-2 mb-3">
           <Icon name={campaignIcons[campaign.id] || 'campaign'} size={22} category="primary" />
-          <h3 className="font-bold text-xl text-primary tracking-tight">{campaign.name}</h3>
+          <h3 className="font-bold text-lg sm:text-xl text-primary tracking-tight">{campaign.name}</h3>
         </div>
         <p className="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">{campaign.subtitle}</p>
 
@@ -143,16 +143,16 @@ const ObjectiveCard = ({ obj, index }) => {
   return (
     <div
       ref={ref}
-      className={`p-6 bg-white rounded-xl shadow-card hover:shadow-elevated transition-all duration-300 ${
+      className={`p-4 sm:p-6 bg-white rounded-xl shadow-card hover:shadow-elevated transition-all duration-300 ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
       style={{ transitionDelay: `${index * 100}ms` }}
     >
-      <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center mb-4">
+      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-primary/5 flex items-center justify-center mb-3 sm:mb-4">
         <Icon name={obj.icon || 'check_circle'} size={20} category="primary" />
       </div>
-      <h3 className="font-bold text-primary mb-2">{obj.title}</h3>
-      <p className="text-gray-700 leading-relaxed">{obj.description}</p>
+      <h3 className="font-bold text-sm sm:text-base text-primary mb-1.5 sm:mb-2">{obj.title}</h3>
+      <p className="text-xs sm:text-base text-gray-700 leading-relaxed">{obj.description}</p>
     </div>
   );
 };
@@ -230,7 +230,7 @@ export const Home = () => {
       />
 
       {/* HERO */}
-      <section className="relative min-h-[calc(100dvh-3.5rem)] md:h-screen flex items-center justify-center text-center overflow-hidden">
+      <section className="relative min-h-[68svh] md:h-screen flex items-end md:items-center justify-center text-left md:text-center overflow-hidden">
         <img
           src={home.heroImage || "/images/hero-bg-lg.jpg"}
           alt=""
@@ -242,18 +242,20 @@ export const Home = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/90 to-primary/80" />
 
-        <div className="relative z-10 px-4 max-w-5xl mx-auto">
-          <h1 className="text-3xl md:text-5xl lg:text-6xl text-white font-bold mb-6 leading-tight">
-            <TypingText text={home.heroTitle || org.motto || "Together for a Healthier Tanzania"} />
+        <div className="relative z-10 w-full px-5 pb-10 pt-16 md:px-4 md:pb-0 md:pt-0 max-w-5xl mx-auto">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-white/70 md:hidden">Tanzania Health Alliance</p>
+          <h1 className="text-[2rem] md:text-5xl lg:text-6xl text-white font-bold mb-4 md:mb-6 leading-[1.05] md:leading-tight">
+            <span className="md:hidden">{home.heroTitle || org.motto || "Together for a Healthier Tanzania"}</span>
+            <span className="hidden md:inline"><TypingText text={home.heroTitle || org.motto || "Together for a Healthier Tanzania"} /></span>
           </h1>
 
-          <p className="text-white/90 text-lg md:text-xl mb-8 max-w-2xl mx-auto">
+          <p className="text-white/85 text-[15px] md:text-xl leading-relaxed mb-6 md:mb-8 max-w-2xl md:mx-auto">
             {home.heroDescription || thaData.heroDescription}
           </p>
 
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Link to="/about" className="btn-primary">Learn About THA</Link>
-            <Link to="/contact" className="px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-primary transition">
+          <div className="grid grid-cols-2 gap-3 md:flex md:gap-4 md:justify-center md:flex-wrap">
+            <Link to="/about" className="btn-primary justify-center px-4 py-2.5 text-sm md:px-6 md:py-3">Learn About THA</Link>
+            <Link to="/contact" className="px-4 py-2.5 md:px-6 md:py-3 border border-white/70 md:border-2 text-white text-sm md:text-base text-center font-semibold rounded-lg hover:bg-white hover:text-primary transition">
               Contact Us
             </Link>
           </div>
@@ -262,38 +264,38 @@ export const Home = () => {
 
       {/* TRUST & ACCOUNTABILITY */}
       <section className="border-b border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="flex items-start gap-3">
+        <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-5 lg:grid-cols-4">
+            <div className="flex min-w-0 items-start gap-2.5">
               <Icon name="verified" size={22} category="primary" />
               <div>
-                <p className="text-sm font-bold text-primary">Registered NGO</p>
-                <p className="text-xs text-gray-500">No. {org.registrationNumber || "00NGO/R/8379"} · {contact.city || "Dar es Salaam"}</p>
+                <p className="text-[13px] md:text-sm font-bold leading-tight text-primary">Registered NGO</p>
+                <p className="mt-1 text-[11px] leading-tight text-gray-500">No. {org.registrationNumber || "00NGO/R/8379"} · {contact.city || "Dar es Salaam"}</p>
               </div>
             </div>
             {whaEvidence ? (
-              <a href={whaEvidence.url} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 hover:opacity-80 transition">
+              <a href={whaEvidence.url} target="_blank" rel="noopener noreferrer" className="flex min-w-0 items-start gap-2.5 hover:opacity-80 transition">
                 <Icon name="public" size={22} category="primary" />
                 <div>
-                  <p className="text-sm font-bold text-primary">{whaEvidence.title}</p>
-                  <p className="text-xs text-gray-500">{whaEvidence.meta}</p>
+                  <p className="text-[13px] md:text-sm font-bold leading-tight text-primary">{whaEvidence.title}</p>
+                  <p className="mt-1 text-[11px] leading-tight text-gray-500">{whaEvidence.meta}</p>
                 </div>
               </a>
             ) : null}
             {awardEvidence ? (
-              <a href={awardEvidence.url} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 hover:opacity-80 transition">
+              <a href={awardEvidence.url} target="_blank" rel="noopener noreferrer" className="flex min-w-0 items-start gap-2.5 hover:opacity-80 transition">
                 <Icon name="workspace_premium" size={22} category="primary" />
                 <div>
-                  <p className="text-sm font-bold text-primary">{awardEvidence.title}</p>
-                  <p className="text-xs text-gray-500">{awardEvidence.meta}</p>
+                  <p className="text-[13px] md:text-sm font-bold leading-tight text-primary">{awardEvidence.title}</p>
+                  <p className="mt-1 text-[11px] leading-tight text-gray-500">{awardEvidence.meta}</p>
                 </div>
               </a>
             ) : null}
-            <Link to="/documents" className="flex items-start gap-3 hover:opacity-80 transition">
+            <Link to="/documents" className="flex min-w-0 items-start gap-2.5 hover:opacity-80 transition">
               <Icon name="description" size={22} category="primary" />
               <div>
-                <p className="text-sm font-bold text-primary">Documents & Accountability</p>
-                <p className="text-xs text-gray-500">Registration, records and verification</p>
+                <p className="text-[13px] md:text-sm font-bold leading-tight text-primary">Documents & Accountability</p>
+                <p className="mt-1 text-[11px] leading-tight text-gray-500">Registration, records and verification</p>
               </div>
             </Link>
           </div>
@@ -301,41 +303,41 @@ export const Home = () => {
       </section>
 
       {/* IMPACT STATS */}
-      <section className="py-16 bg-gradient-to-r from-primary to-primary-dark">
+      <section className="py-9 md:py-16 bg-gradient-to-r from-primary to-primary-dark">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-7 md:gap-8 text-center">
             <div>
               <Counter end={impactTotals.peopleReached} />
-              <p className="text-white/80 mt-2">People Reached</p>
+              <p className="text-white/75 mt-1.5 text-xs md:text-base">People Reached</p>
             </div>
             <div>
               <Counter end={impactTotals.studentsReached} />
-              <p className="text-white/80 mt-2">Students Reached</p>
+              <p className="text-white/75 mt-1.5 text-xs md:text-base">Students Reached</p>
             </div>
             <div>
               <Counter end={impactTotals.institutionsEngaged} suffix="" />
-              <p className="text-white/80 mt-2">Institutions Engaged</p>
+              <p className="text-white/75 mt-1.5 text-xs md:text-base">Institutions Engaged</p>
             </div>
             <div>
               <Counter end={impactTotals.communityEvents} suffix="" />
-              <p className="text-white/80 mt-2">Community Events</p>
+              <p className="text-white/75 mt-1.5 text-xs md:text-base">Community Events</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* CAMPAIGNS */}
-      <section className="py-20 bg-cool-gray">
+      <section className="py-12 md:py-20 bg-cool-gray">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-left md:text-center mb-7 md:mb-12">
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">What We Do</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2 mb-4">Our Campaigns & Impact</h2>
+            <h2 className="text-2xl md:text-4xl font-bold text-primary mt-2 mb-3 md:mb-4">Our Campaigns & Impact</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               {home.programsIntro || "Three focused programs built around practical public-health needs: hepatitis prevention, youth mental health and community support."}
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="-mx-4 flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:overflow-visible md:px-0 md:pb-0">
             {campaigns.map((campaign, index) => (
               <CampaignCard key={campaign.id} campaign={campaign} index={index} />
             ))}
@@ -344,10 +346,10 @@ export const Home = () => {
       </section>
 
       {/* YEAR ONE TIMELINE */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Our Journey</h2>
+          <div className="text-left md:text-center mb-7 md:mb-12">
+            <h2 className="text-2xl md:text-4xl font-bold text-primary mb-3 md:mb-4">Our Journey</h2>
             <p className="text-gray-600">{home.journeyIntro || "A growing public record of community work, advocacy and institutional engagement"}</p>
           </div>
           <JourneyTimeline milestones={journey} />
@@ -355,31 +357,31 @@ export const Home = () => {
       </section>
 
       {/* INSTITUTIONAL ENGAGEMENT */}
-      <section className="py-20 bg-primary-dark text-white">
+      <section className="py-12 md:py-20 bg-primary-dark text-white">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="max-w-3xl mb-10">
+          <div className="max-w-3xl mb-7 md:mb-10">
             <span className="text-white/60 text-sm uppercase tracking-wider font-semibold">Institutional Engagement</span>
-            <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4">{home.engagementTitle || "Turning advocacy into conversations that can move policy"}</h2>
-            <p className="text-white/80 text-lg">
+            <h2 className="text-2xl md:text-4xl font-bold mt-2 mb-3 md:mb-4">{home.engagementTitle || "Turning advocacy into conversations that can move policy"}</h2>
+            <p className="text-white/75 text-sm md:text-lg leading-relaxed">
               {home.engagementIntro || "THA’s public record includes engagement with national institutions and health partners on hepatitis prevention, birth-dose vaccination and community health."}
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="-mx-4 flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-3 md:px-0 md:overflow-visible">
             {parliamentEvidence ? (
-              <Link to={parliamentEvidence.url} className="rounded-2xl bg-white/10 p-6 hover:bg-white/15 transition">
+              <Link to={parliamentEvidence.url} className="min-w-[78vw] max-w-[78vw] snap-center rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:min-w-0 md:max-w-none md:p-6">
                 <p className="text-xs uppercase tracking-wider text-white/60 mb-2">{parliamentEvidence.meta}</p>
                 <h3 className="text-lg font-bold mb-2">{parliamentEvidence.title}</h3>
                 <p className="text-sm text-white/75">{parliamentEvidence.description}</p>
               </Link>
             ) : null}
             {unicefEvidence ? (
-              <Link to={unicefEvidence.url} className="rounded-2xl bg-white/10 p-6 hover:bg-white/15 transition">
+              <Link to={unicefEvidence.url} className="min-w-[78vw] max-w-[78vw] snap-center rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:min-w-0 md:max-w-none md:p-6">
                 <p className="text-xs uppercase tracking-wider text-white/60 mb-2">{unicefEvidence.meta}</p>
                 <h3 className="text-lg font-bold mb-2">{unicefEvidence.title}</h3>
                 <p className="text-sm text-white/75">{unicefEvidence.description}</p>
               </Link>
             ) : null}
-            <Link to="/documents" className="rounded-2xl bg-white/10 p-6 hover:bg-white/15 transition">
+            <Link to="/documents" className="min-w-[78vw] max-w-[78vw] snap-center rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:min-w-0 md:max-w-none md:p-6">
               <p className="text-xs uppercase tracking-wider text-white/60 mb-2">Public Record</p>
               <h3 className="text-lg font-bold mb-2">Evidence & Verification</h3>
               <p className="text-sm text-white/75">Review registration information, dated records and independent references.</p>
@@ -389,10 +391,10 @@ export const Home = () => {
       </section>
 
       {/* OBJECTIVES */}
-      <section className="py-20 bg-cool-gray">
+      <section className="py-12 md:py-20 bg-cool-gray">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-primary mb-12">What We Do</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-left md:text-center text-primary mb-7 md:mb-12">What We Do</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             {objectives.map((obj, i) => (
               <ObjectiveCard key={obj.id || i} obj={obj} index={i} />
             ))}
@@ -401,9 +403,9 @@ export const Home = () => {
       </section>
 
       {/* PARTNERS */}
-      <section id="partners" className="scroll-mt-16 py-20 bg-white">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-primary">Our Partners</h2>
+      <section id="partners" className="scroll-mt-16 py-12 md:py-20 bg-white">
+        <div className="text-left md:text-center px-4 mb-6 md:mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-primary">Our Partners</h2>
           <p className="text-gray-600 mt-2">Working with global and local organizations</p>
         </div>
         <PartnersCarousel partners={partners.partners} />
@@ -420,10 +422,10 @@ export const Home = () => {
       ) : null}
 
       {/* NEWS */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold text-primary">Latest News</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary">Latest News</h2>
             <Link to="/news" className="hidden sm:inline-flex items-center gap-1 text-secondary font-semibold hover:underline">
               View All <Icon name="arrow_forward" size={16} />
             </Link>
@@ -431,10 +433,8 @@ export const Home = () => {
           {latestNewsLoading ? (
             <p className="text-center text-gray-500 py-8">Loading latest news...</p>
           ) : latestNews.length > 0 ? (
-            <div className="grid md:grid-cols-3 gap-6">
-              {latestNews.map((n) => (
-                <NewsCard key={n.id} news={n} />
-              ))}
+            <div className="-mx-4 flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0">
+              {latestNews.map((n) => (\n                <div key={n.id} className="min-w-[82vw] max-w-[82vw] snap-center md:min-w-0 md:max-w-none"><NewsCard news={n} /></div>\n              ))}
             </div>
           ) : (
             <div className="rounded-xl bg-cool-gray px-6 py-8 text-center">
@@ -456,20 +456,20 @@ export const Home = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-gradient-to-r from-secondary to-secondary-dark text-white">
+      <section className="py-12 md:py-20 bg-gradient-to-r from-secondary to-secondary-dark text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Get Involved</h2>
-          <p className="text-white/90 text-lg mb-8">
+          <h2 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6">Get Involved</h2>
+          <p className="text-white/85 text-sm md:text-lg leading-relaxed mb-6 md:mb-8">
             {home.ctaText || "If you want to fund, partner, volunteer or bring a health concern to us, start with a conversation."}
           </p>
-          <div className="flex justify-center gap-4 flex-wrap">
-            <Link to="/make-a-difference" className="px-8 py-3 bg-white text-secondary font-bold rounded-lg hover:bg-cool-gray transition">
+          <div className="grid grid-cols-2 gap-3 sm:flex sm:justify-center sm:gap-4 sm:flex-wrap">
+            <Link to="/make-a-difference" className="px-4 py-2.5 md:px-8 md:py-3 bg-white text-secondary text-sm md:text-base font-bold rounded-lg hover:bg-cool-gray transition">
               Volunteer
             </Link>
-            <Link to="/make-a-difference" className="px-8 py-3 border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:text-secondary transition">
+            <Link to="/make-a-difference" className="px-4 py-2.5 md:px-8 md:py-3 border border-white md:border-2 text-white text-sm md:text-base font-bold rounded-lg hover:bg-white hover:text-secondary transition">
               Donate
             </Link>
-            <Link to="/contact" className="px-8 py-3 bg-accent text-white font-bold rounded-lg hover:bg-accent-dark transition">
+            <Link to="/contact" className="col-span-2 sm:col-auto px-4 py-2.5 md:px-8 md:py-3 bg-accent text-white text-sm md:text-base font-bold rounded-lg hover:bg-accent-dark transition">
               Partner With Us
             </Link>
           </div>
