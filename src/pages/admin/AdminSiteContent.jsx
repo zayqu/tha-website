@@ -88,6 +88,32 @@ function Field({ label, value, type = 'text', onChange }) {
   );
 }
 
+function makeId(prefix = 'item') {
+  return typeof crypto !== 'undefined' && crypto.randomUUID
+    ? crypto.randomUUID()
+    : `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+}
+
+function emptyValue() {
+  return { id: makeId('value'), value: '', description: '', icon: 'shield', published: true, sortOrder: Date.now() };
+}
+
+function emptyObjective() {
+  return { id: makeId('objective'), title: '', description: '', icon: 'check_circle', published: true, sortOrder: Date.now() };
+}
+
+function emptyStory() {
+  return { id: makeId('story'), quote: '', name: '', role: '', photo: '', published: true, sortOrder: Date.now() };
+}
+
+function emptyGuide() {
+  return { id: makeId('guide'), topic: 'HIV', icon: 'health_and_safety', title: '', summary: '', action: 'Explore', published: true, sortOrder: Date.now() };
+}
+
+function emptyResource() {
+  return { id: makeId('resource'), title: '', excerpt: '', source: '', url: '', date: '', category: 'Guidance', topics: [], published: true, sortOrder: Date.now() };
+}
+
 function emptyTeamMember() {
   return {
     id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
