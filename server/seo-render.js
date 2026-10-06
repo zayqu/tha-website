@@ -170,23 +170,23 @@ function renderSitemap(articles = [], projects = []) {
 const PAGE_DEFINITIONS = {
   '/': {
     title: 'Tanzania Health Alliance | Together for a Healthier Tanzania',
-    description: 'Tanzania Health Alliance advances public health through advocacy, capacity building, research and partnerships across viral hepatitis, HIV and mental health in Tanzania.',
+    description: 'Tanzania Health Alliance (THA), registered NGO No. 00NGO/R/8379, works with communities and partners on viral hepatitis, HIV and mental health in Tanzania.',
     heading: 'Together for a Healthier Tanzania',
     paragraphs: [
-      'Tanzania Health Alliance addresses critical public health challenges including viral hepatitis, HIV and mental health through awareness, advocacy, research, partnerships and improved access to care.',
-      'Our work supports equitable access to quality healthcare and stronger, more resilient health systems across Tanzania.'
+      'Tanzania Health Alliance (THA) is a registered NGO, No. 00NGO/R/8379, based in Dar es Salaam, Tanzania.',
+      'We work with communities, health institutions, government stakeholders and partners on viral hepatitis, HIV and mental health through practical community action, advocacy and public-health collaboration.'
     ],
-    links: ['/about', '/projects', '/impact', '/academy', '/news', '/contact']
+    links: ['/about', '/documents', '/projects', '/impact', '/academy', '/news', '/contact']
   },
   '/about': {
     title: 'About Tanzania Health Alliance | Tanzania Health Alliance',
-    description: 'Learn about Tanzania Health Alliance, our mission, vision, values, public health priorities and work across Tanzania.',
+    description: 'Learn about Tanzania Health Alliance (THA), registered NGO No. 00NGO/R/8379, its leadership, mission, programs and public-health work in Tanzania.',
     heading: 'About Tanzania Health Alliance',
     paragraphs: [
-      'Tanzania Health Alliance is a public health organization working to advance equitable access to quality healthcare in Tanzania.',
-      'Our mission is to advance public health through advocacy, capacity building, research and partnerships, contributing to sustainable and resilient healthcare.'
+      'Tanzania Health Alliance (THA) is a registered NGO, No. 00NGO/R/8379, based in Dar es Salaam.',
+      'THA works with communities, health institutions and partners on viral hepatitis, HIV and mental health, combining community action with advocacy and institutional engagement.'
     ],
-    links: ['/projects', '/impact', '/news', '/contact']
+    links: ['/documents', '/projects', '/impact', '/news', '/contact']
   },
   '/impact': {
     title: 'Our Impact | Tanzania Health Alliance',
