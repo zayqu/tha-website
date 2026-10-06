@@ -71,7 +71,6 @@ export const Footer = () => {
                 <li><Link to="/privacy" className="text-sm text-white/75 hover:text-secondary transition">Privacy Policy</Link></li>
                 <li><Link to="/cookies" className="text-sm text-white/75 hover:text-secondary transition">Cookies Policy</Link></li>
                 <li><Link to="/terms" className="text-sm text-white/75 hover:text-secondary transition">Terms &amp; Conditions</Link></li>
-                <li><Link to="/documents" className="text-sm text-white/75 hover:text-secondary transition">Documents &amp; Accountability</Link></li>
               </ul>
 
               <h4 className="text-base font-bold font-heading tracking-tight mt-8 mb-4 text-white">
