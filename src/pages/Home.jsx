@@ -329,20 +329,20 @@ export const Home = () => {
           />
           <ResponsiveRail desktopGrid="md:grid-cols-3" mobileWidth="78vw" className="md:gap-5">
             {parliamentEvidence ? (
-              <Link to={parliamentEvidence.url} className="min-w-[78vw] max-w-[78vw] snap-center rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:min-w-0 md:max-w-none md:p-6">
+              <Link to={parliamentEvidence.url} className="h-full rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:p-6">
                 <p className="text-xs uppercase tracking-wider text-white/60 mb-2">{parliamentEvidence.meta}</p>
                 <h3 className="text-lg font-bold mb-2">{parliamentEvidence.title}</h3>
                 <p className="text-sm text-white/75">{parliamentEvidence.description}</p>
               </Link>
             ) : null}
             {unicefEvidence ? (
-              <Link to={unicefEvidence.url} className="min-w-[78vw] max-w-[78vw] snap-center rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:min-w-0 md:max-w-none md:p-6">
+              <Link to={unicefEvidence.url} className="h-full rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:p-6">
                 <p className="text-xs uppercase tracking-wider text-white/60 mb-2">{unicefEvidence.meta}</p>
                 <h3 className="text-lg font-bold mb-2">{unicefEvidence.title}</h3>
                 <p className="text-sm text-white/75">{unicefEvidence.description}</p>
               </Link>
             ) : null}
-            <Link to="/documents" className="min-w-[78vw] max-w-[78vw] snap-center rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:min-w-0 md:max-w-none md:p-6">
+            <Link to="/documents" className="h-full rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:p-6">
               <p className="text-xs uppercase tracking-wider text-white/60 mb-2">Public Record</p>
               <h3 className="text-lg font-bold mb-2">Evidence & Verification</h3>
               <p className="text-sm text-white/75">Review registration information, dated records and independent references.</p>
@@ -351,41 +351,52 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* FUNDER READY */}
+      {/* COMMUNITY APPROACH */}
       <section className="bg-white py-12 md:py-20">
         <div className="max-w-6xl mx-auto px-4">
           <SectionHeader
-            eyebrow="For Funders & Partners"
-            title={site.funding?.funderTitle || "Fund measurable work, not vague promises"}
-            subtitle={site.funding?.institutionalText || "For institutional or project funding, THA can agree the activity, target group, budget, timeline and reporting requirements before implementation begins."}
+            eyebrow={home.approachEyebrow || "How We Work"}
+            title={home.approachTitle || "From community need to practical action"}
+            subtitle={home.approachIntro || "We start with the health issue people are facing, work with the right partners, and follow the work through with clear records and measurable progress."}
             centered
             compact
           />
 
           <div className="grid gap-3 md:grid-cols-3 md:gap-6">
             <div className="rounded-2xl border border-primary/10 bg-cool-gray p-5 md:p-6">
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"><Icon name="assignment" size={20} category="primary" /></div>
-              <h3 className="font-bold text-primary">{site.funding?.scopeTitle || "Defined scope & budget"}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">{site.funding?.scopeText || "Agree the activity, target group, locations, timeline and budget before implementation starts."}</p>
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                <Icon name="groups" size={20} category="primary" />
+              </div>
+              <h3 className="font-bold text-primary">{home.needTitle || "Start with the need"}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-600">
+                {home.needText || "Listen to communities and health partners, understand the gap, and define what practical support is needed."}
+              </p>
             </div>
+
             <div className="rounded-2xl border border-primary/10 bg-cool-gray p-5 md:p-6">
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"><Icon name="monitoring" size={20} category="primary" /></div>
-              <h3 className="font-bold text-primary">{site.funding?.outcomesTitle || "Measurable outcomes"}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">{site.funding?.outcomesText || "Track agreed indicators such as people reached, referrals, institutions engaged and campaign-specific results."}</p>
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                <Icon name="health_and_safety" size={20} category="primary" />
+              </div>
+              <h3 className="font-bold text-primary">{home.actionTitle || "Act with purpose"}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-600">
+                {home.actionText || "Turn that need into focused outreach, advocacy, education or referral activities with clear responsibilities."}
+              </p>
             </div>
+
             <div className="rounded-2xl border border-primary/10 bg-cool-gray p-5 md:p-6">
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"><Icon name="fact_check" size={20} category="primary" /></div>
-              <h3 className="font-bold text-primary">{site.funding?.reportingTitle || "Evidence & reporting"}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">{site.funding?.reportingText || "Receive agreed reporting, activity evidence and results that can be reviewed against the funded workplan."}</p>
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                <Icon name="fact_check" size={20} category="primary" />
+              </div>
+              <h3 className="font-bold text-primary">{home.learningTitle || "Track what changes"}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-600">
+                {home.learningText || "Document participation, results and lessons so the next activity can be stronger and more useful."}
+              </p>
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:justify-center">
-            <Link to="/make-a-difference" className="btn-primary justify-center px-4 py-2.5 text-sm md:px-6 md:py-3">
-              Discuss Funding
-            </Link>
-            <Link to="/documents" className="btn-secondary justify-center px-4 py-2.5 text-sm md:px-6 md:py-3">
-              Due Diligence
+          <div className="mt-6 flex justify-center">
+            <Link to="/impact" className="btn-primary justify-center px-5 py-2.5 text-sm md:px-6 md:py-3">
+              See Our Impact
             </Link>
           </div>
         </div>
@@ -468,7 +479,7 @@ export const Home = () => {
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6">Get Involved</h2>
           <p className="text-white/85 text-sm md:text-lg leading-relaxed mb-6 md:mb-8">
-            {home.ctaText || "If you want to fund, partner, volunteer or bring a health concern to us, start with a conversation."}
+            {home.ctaText || "If our work connects with your community, institution or area of interest, start a conversation with THA."}
           </p>
           <div className="grid grid-cols-2 gap-3 sm:flex sm:justify-center sm:gap-4 sm:flex-wrap">
             <Link to="/make-a-difference" className="px-4 py-2.5 md:px-8 md:py-3 bg-white text-secondary text-sm md:text-base font-bold rounded-lg hover:bg-cool-gray transition">
