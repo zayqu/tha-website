@@ -124,3 +124,49 @@ export async function fetchJourney() {
   const data = await res.json();
   return data.milestones || [];
 }
+
+let siteContentCache = null;
+let siteContentPromise = null;
+
+export async function fetchSiteContent({ force = false } = {}) {
+  if (!force && siteContentCache) return siteContentCache;
+  if (!force && siteContentPromise) return siteContentPromise;
+
+  siteContentPromise = fetch(apiUrl('/api/site-content'))
+    .then(async res => {
+      if (!res.ok) throw new Error('Failed to load site content');
+      const data = await res.json();
+      siteContentCache = data.content || {};
+      try {
+        window.localStorage.setItem('tha:site-content:v1', JSON.stringify(siteContentCache));
+      } catch {}
+      return siteContentCache;
+    })
+    .catch(error => {
+      try {
+        const cached = JSON.parse(window.localStorage.getItem('tha:site-content:v1') || 'null');
+        if (cached && typeof cached === 'object') {
+          siteContentCache = cached;
+          return cached;
+        }
+      } catch {}
+      throw error;
+    })
+    .finally(() => {
+      siteContentPromise = null;
+    });
+
+  return siteContentPromise;
+}
+
+export function getCachedSiteContent() {
+  if (siteContentCache) return siteContentCache;
+  try {
+    const cached = JSON.parse(window.localStorage.getItem('tha:site-content:v1') || 'null');
+    if (cached && typeof cached === 'object') {
+      siteContentCache = cached;
+      return cached;
+    }
+  } catch {}
+  return null;
+}
