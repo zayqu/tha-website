@@ -5,6 +5,7 @@ const NAV_ITEMS = [
   { label: 'News', path: '/admin' },
   { label: 'Campaigns', path: '/admin/projects' },
   { label: 'Journey', path: '/admin/journey' },
+  { label: 'Site Content', path: '/admin/site-content' },
 ];
 
 export function AdminHeader({ section, backTo }) {
