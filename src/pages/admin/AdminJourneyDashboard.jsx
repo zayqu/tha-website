@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AdminHeader } from '../../components/admin/AdminHeader';
 import { Icon } from '../../components/Icon';
 import { useAuth } from '../../contexts/AuthContext';
+import AdminAiAssist from '../../components/AdminAiAssist';
 
 const EMPTY_FORM = {
   month: '',
@@ -63,6 +64,18 @@ export default function AdminJourneyDashboard() {
       ...current,
       [name]: type === 'checkbox' ? checked : (name === 'sortOrder' ? Number(value) : value),
     }));
+  }
+
+  function applyAiSuggestions(suggestions) {
+    setForm(current => {
+      const next = { ...current };
+      for (const suggestion of suggestions) {
+        if (['month', 'milestone', 'description'].includes(suggestion.field)) {
+          next[suggestion.field] = suggestion.value;
+        }
+      }
+      return next;
+    });
   }
 
   function startEdit(item) {
@@ -153,6 +166,18 @@ export default function AdminJourneyDashboard() {
               <h2 className="text-xl font-bold text-primary">{editingId ? 'Edit milestone' : 'Add milestone'}</h2>
               {editingId ? <button type="button" onClick={resetForm} className="text-sm font-semibold text-gray-500 hover:text-primary">Cancel</button> : null}
             </div>
+
+            <AdminAiAssist
+              section="Journey milestone"
+              current={{ month: form.month, milestone: form.milestone, description: form.description }}
+              fields={[
+                { key: 'month', label: 'Date or period', type: 'text' },
+                { key: 'milestone', label: 'Milestone title', type: 'text' },
+                { key: 'description', label: 'Description', type: 'textarea' },
+              ]}
+              onApply={applyAiSuggestions}
+              defaultInstruction="Keep the date and facts accurate. Make this concise, human and suitable for a public institutional timeline."
+            />
 
             <label className="block text-sm font-semibold text-gray-700">
               Date or period
