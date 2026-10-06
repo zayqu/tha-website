@@ -170,7 +170,7 @@ app.get('/llms.txt', async (_req, res, next) => {
 
 const crawlablePages = new Set([
   '/', '/about', '/impact', '/projects', '/academy', '/make-a-difference',
-  '/contact', '/privacy', '/cookies', '/terms',
+  '/contact', '/documents', '/privacy', '/cookies', '/terms',
   '/health/hepatitis', '/health/hiv', '/health/mental-health',
   '/campaigns/kapime', '/campaigns/life-unlocked', '/campaigns/talk-to-heal',
 ]);
