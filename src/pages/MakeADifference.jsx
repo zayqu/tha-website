@@ -2,8 +2,12 @@ import { useState } from 'react';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
 import { thaData } from '../data/thaData';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 export const MakeADifference = () => {
+  const site = useSiteContent();
+  const funding = site.funding || {};
+  const contact = site.contact || {};
   const [activeTab, setActiveTab] = useState('volunteer');
   const roles = [
     {
@@ -41,7 +45,7 @@ export const MakeADifference = () => {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="heading-xl text-white mb-6">Make a Difference</h1>
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
-              Work with us where your time, funding or institutional support can meet a clear public-health need.
+              {funding.heroText || "Work with us where your time, funding or institutional support can meet a clear public-health need."}
             </p>
           </div>
         </div>
@@ -150,7 +154,7 @@ export const MakeADifference = () => {
             <div className="text-center mb-12">
               <h2 className="heading-lg mb-4">Support Our Mission</h2>
               <p className="body-lg max-w-3xl mx-auto">
-                We welcome support for clearly defined activities, with an agreed purpose, budget and reporting approach.
+                {funding.donationIntro || "We welcome support for clearly defined activities, with an agreed purpose, budget and reporting approach."}
               </p>
             </div>
 
@@ -161,10 +165,10 @@ export const MakeADifference = () => {
                 </div>
                 <h3 className="heading-sm mb-3">Fund a defined activity</h3>
                 <p className="body-md text-neutral-dark/70 mb-5">
-                  For institutional or project funding, THA can agree the activity, target group, budget, timeline and reporting requirements before implementation begins.
+                  {funding.institutionalText || "For institutional or project funding, THA can agree the activity, target group, budget, timeline and reporting requirements before implementation begins."}
                 </p>
                 <a
-                  href="mailto:info@tzhealthalliance.or.tz?subject=Funding%20or%20grant%20discussion"
+                  href="mailto:${contact.email || "info@tzhealthalliance.or.tz"}?subject=Funding%20or%20grant%20discussion"
                   className="inline-flex items-center gap-2 text-secondary font-semibold hover:underline"
                 >
                   Start a funding conversation
@@ -181,7 +185,7 @@ export const MakeADifference = () => {
                   To protect donors and THA, current banking or payment instructions are shared directly by the organization rather than published as unverified website data.
                 </p>
                 <a
-                  href="mailto:info@tzhealthalliance.or.tz?subject=Request%20for%20verified%20THA%20donation%20details"
+                  href="mailto:${contact.email || "info@tzhealthalliance.or.tz"}?subject=Request%20for%20verified%20THA%20donation%20details"
                   className="inline-flex items-center gap-2 text-secondary font-semibold hover:underline"
                 >
                   Request payment instructions
@@ -211,7 +215,7 @@ export const MakeADifference = () => {
             <div className="text-center mb-12">
               <h2 className="heading-lg mb-4">Partner With Us</h2>
               <p className="body-lg max-w-3xl mx-auto">
-                If our work aligns with your organization, tell us what you are trying to achieve and where collaboration may make sense.
+                {funding.partnerIntro || "If our work aligns with your organization, tell us what you are trying to achieve and where collaboration may make sense."}
               </p>
             </div>
 
