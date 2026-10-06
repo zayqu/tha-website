@@ -249,6 +249,42 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* TRUST & ACCOUNTABILITY */}
+      <section className="border-b border-gray-200 bg-white">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="flex items-start gap-3">
+              <Icon name="verified" size={22} category="primary" />
+              <div>
+                <p className="text-sm font-bold text-primary">Registered NGO</p>
+                <p className="text-xs text-gray-500">No. 00NGO/R/8379 · Dar es Salaam</p>
+              </div>
+            </div>
+            <a href="https://www.worldhepatitisalliance.org/our-team-2025/" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 hover:opacity-80 transition">
+              <Icon name="public" size={22} category="primary" />
+              <div>
+                <p className="text-sm font-bold text-primary">WHA AFRO Board</p>
+                <p className="text-xs text-gray-500">Founder Shaibu Issa</p>
+              </div>
+            </a>
+            <a href="https://abachepb.org/funding/current-awardees-2026/" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 hover:opacity-80 transition">
+              <Icon name="workspace_premium" size={22} category="primary" />
+              <div>
+                <p className="text-sm font-bold text-primary">2026 Awardee</p>
+                <p className="text-xs text-gray-500">KAPIME hepatitis campaign</p>
+              </div>
+            </a>
+            <Link to="/documents" className="flex items-start gap-3 hover:opacity-80 transition">
+              <Icon name="description" size={22} category="primary" />
+              <div>
+                <p className="text-sm font-bold text-primary">Documents & Accountability</p>
+                <p className="text-xs text-gray-500">Registration, records and verification</p>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* IMPACT STATS */}
       <section className="py-16 bg-gradient-to-r from-primary to-primary-dark">
         <div className="max-w-6xl mx-auto px-4">
@@ -280,7 +316,7 @@ export const Home = () => {
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">What We Do</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2 mb-4">Our Campaigns & Impact</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              THA campaigns addressing Tanzania's most pressing health challenges, each grounded in real community action.
+              Three focused programs built around practical public-health needs: hepatitis prevention, youth mental health and community support.
             </p>
           </div>
 
@@ -297,30 +333,39 @@ export const Home = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Our Journey</h2>
-            <p className="text-gray-600">From a single idea to national impact in just over a year</p>
+            <p className="text-gray-600">A growing public record of community work, advocacy and institutional engagement</p>
           </div>
           <JourneyTimeline milestones={journey} />
         </div>
       </section>
 
-      {/* GOVERNMENT PARTNERSHIP */}
-      <section className="py-20 bg-gradient-to-br from-primary-dark to-primary text-white">
-        <div className="max-w-5xl mx-auto px-4 text-center">
-          <Icon name="local_hospital" size={64} color="white" className="mx-auto mb-6" />
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            {impactData.governmentPartnership.headline}
-          </h2>
-          <p className="text-white/80 text-lg mb-8 max-w-3xl mx-auto">
-            {impactData.governmentPartnership.description}
-          </p>
-          <blockquote className="border-l-4 border-accent pl-6 max-w-2xl mx-auto text-left">
-            <p className="text-lg italic text-white/90">
-              "{impactData.governmentPartnership.permanentSecretaryQuote}"
+      {/* INSTITUTIONAL ENGAGEMENT */}
+      <section className="py-20 bg-primary-dark text-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="max-w-3xl mb-10">
+            <span className="text-white/60 text-sm uppercase tracking-wider font-semibold">Institutional Engagement</span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4">Turning advocacy into conversations that can move policy</h2>
+            <p className="text-white/80 text-lg">
+              THA’s public record includes engagement with national institutions and health partners on hepatitis prevention, birth-dose vaccination and community health.
             </p>
-            <cite className="text-sm text-white/60 mt-2 block">
-              — {impactData.governmentPartnership.permanentSecretaryTitle}
-            </cite>
-          </blockquote>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            <Link to="/news/tha-engages-parliamentary-committee-on-hepatitis-b-birth-dose-vaccination" className="rounded-2xl bg-white/10 p-6 hover:bg-white/15 transition">
+              <p className="text-xs uppercase tracking-wider text-white/60 mb-2">6 May 2026</p>
+              <h3 className="text-lg font-bold mb-2">Parliamentary Committee Engagement</h3>
+              <p className="text-sm text-white/75">Discussion on hepatitis B birth-dose vaccination and newborn protection.</p>
+            </Link>
+            <Link to="/news/tha-unicef-strategic-meeting-on-hepatitis-b-birth-dose-vaccination" className="rounded-2xl bg-white/10 p-6 hover:bg-white/15 transition">
+              <p className="text-xs uppercase tracking-wider text-white/60 mb-2">18 February 2026</p>
+              <h3 className="text-lg font-bold mb-2">THA–UNICEF Strategic Meeting</h3>
+              <p className="text-sm text-white/75">Focused on the systems needed to introduce timely hepatitis B birth-dose vaccination.</p>
+            </Link>
+            <Link to="/documents" className="rounded-2xl bg-white/10 p-6 hover:bg-white/15 transition">
+              <p className="text-xs uppercase tracking-wider text-white/60 mb-2">Public Record</p>
+              <h3 className="text-lg font-bold mb-2">Evidence & Verification</h3>
+              <p className="text-sm text-white/75">Review registration information, dated records and independent references.</p>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -394,7 +439,7 @@ export const Home = () => {
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Get Involved</h2>
           <p className="text-white/90 text-lg mb-8">
-            Join our mission to strengthen Tanzania's health systems. Every action counts.
+            If you want to fund, partner, volunteer or bring a health concern to us, start with a conversation.
           </p>
           <div className="flex justify-center gap-4 flex-wrap">
             <Link to="/make-a-difference" className="px-8 py-3 bg-white text-secondary font-bold rounded-lg hover:bg-cool-gray transition">
