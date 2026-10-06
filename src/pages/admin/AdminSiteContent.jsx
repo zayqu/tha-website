@@ -150,6 +150,7 @@ export default function AdminSiteContent() {
   const [content,setContent]=useState(null);
   const [loading,setLoading]=useState(true);
   const [saving,setSaving]=useState(false);
+  const [uploadingId,setUploadingId]=useState(null);
   const [message,setMessage]=useState('');
 
   useEffect(()=>{
@@ -193,6 +194,45 @@ export default function AdminSiteContent() {
   function removeNestedList(section,key,id,label){
     if(!window.confirm(`Remove ${label||'this item'} from the website?`)) return;
     setContent(prev=>({...prev,[section]:{...(prev?.[section]||{}),[key]:(prev?.[section]?.[key]||[]).filter(item=>item.id!==id)}}));
+  }
+
+  async function uploadDocumentFile(documentId, file) {
+    if (!file) return;
+    if (file.size > 6 * 1024 * 1024) {
+      setMessage('Document must be 6 MB or smaller.');
+      return;
+    }
+    setUploadingId(documentId);
+    setMessage('');
+    try {
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Could not read the selected file'));
+        reader.readAsDataURL(file);
+      });
+      const res = await authFetch('/api/site-content/documents/upload', {
+        method: 'POST',
+        body: JSON.stringify({ dataUrl, fileName: file.name }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Upload failed');
+      setContent(prev => ({
+        ...prev,
+        documents: (prev?.documents || []).map(doc => doc.id === documentId ? {
+          ...doc,
+          url: data.url,
+          external: false,
+          action: doc.action || 'View document',
+          title: doc.title || file.name.replace(/\.[^.]+$/, ''),
+        } : doc),
+      }));
+      setMessage('Document uploaded. Save changes to publish the updated record.');
+    } catch (error) {
+      setMessage(error.message);
+    } finally {
+      setUploadingId(null);
+    }
   }
 
   async function save(){
@@ -487,6 +527,20 @@ export default function AdminSiteContent() {
                   <Field label="Status badge" value={doc.status} onChange={v=>updateList('documents',doc.id,'status',v)}/>
                   <div className="md:col-span-2"><Field label="Description" type="textarea" value={doc.description} onChange={v=>updateList('documents',doc.id,'description',v)}/></div>
                   <Field label="Button label" value={doc.action} onChange={v=>updateList('documents',doc.id,'action',v)}/>
+                  <div>
+                    <span className="mb-2 block text-sm font-semibold text-gray-700">Upload document</span>
+                    <label className="flex min-h-12 cursor-pointer items-center justify-center rounded-xl border border-dashed border-primary/30 bg-primary/5 px-4 py-3 text-center text-sm font-semibold text-primary hover:bg-primary/10">
+                      {uploadingId === doc.id ? 'Uploading…' : 'Choose PDF or Office file'}
+                      <input
+                        type="file"
+                        className="sr-only"
+                        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,application/pdf"
+                        disabled={uploadingId === doc.id}
+                        onChange={e => uploadDocumentFile(doc.id, e.target.files?.[0])}
+                      />
+                    </label>
+                    <p className="mt-1 text-xs text-gray-400">Maximum 6 MB. Uploading fills the URL automatically.</p>
+                  </div>
                   <Field label="Document or external URL" value={doc.url} onChange={v=>updateList('documents',doc.id,'url',v)}/>
                   <Field label="Sort order" type="number" value={doc.sortOrder} onChange={v=>updateList('documents',doc.id,'sortOrder',v)}/>
                   <Toggle label="Published" checked={doc.published} onChange={v=>updateList('documents',doc.id,'published',v)}/>
