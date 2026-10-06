@@ -8,7 +8,13 @@ const defaults = require('../../src/data/siteContentDefaults.json');
 const router = express.Router();
 const CONTENT_FILE = path.join(__dirname, '../data/site-content.json');
 const DOCUMENT_DIR = path.join(__dirname, '../data/uploads/documents');
+const SITE_MEDIA_DIR = path.join(__dirname, '../data/uploads/site');
 const MAX_DOCUMENT_BYTES = 6 * 1024 * 1024;
+const ALLOWED_SITE_IMAGES = {
+  'image/jpeg': '.jpg',
+  'image/png': '.png',
+  'image/webp': '.webp',
+};
 const ALLOWED_DOCUMENTS = {
   'application/pdf': '.pdf',
   'application/msword': '.doc',
@@ -115,6 +121,39 @@ router.put('/', requireAuth, (req, res, next) => {
   }
 });
 
+router.post('/media/upload', requireAuth, (req, res, next) => {
+  try {
+    const { dataUrl, fileName } = req.body || {};
+    const match = String(dataUrl || '').match(/^data:([^;,]+);base64,([A-Za-z0-9+/=]+)$/);
+    if (!match) return res.status(400).json({ error: 'Invalid image upload' });
+
+    const mime = match[1].toLowerCase();
+    const ext = ALLOWED_SITE_IMAGES[mime];
+    if (!ext) return res.status(400).json({ error: 'Use JPG, PNG, or WebP images' });
+
+    const bytes = Buffer.from(match[2], 'base64');
+    if (!bytes.length || bytes.length > 4 * 1024 * 1024) {
+      return res.status(400).json({ error: 'Image must be 4 MB or smaller' });
+    }
+
+    fs.mkdirSync(SITE_MEDIA_DIR, { recursive: true });
+    const baseName = path.basename(String(fileName || 'image'), path.extname(String(fileName || 'image')))
+      .replace(/[^a-z0-9_-]+/gi, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 80) || 'image';
+    const storedName = `${Date.now()}-${uuidv4().slice(0, 8)}-${baseName}${ext}`;
+    fs.writeFileSync(path.join(SITE_MEDIA_DIR, storedName), bytes);
+    res.status(201).json({
+      url: `/api/media/site/${storedName}`,
+      fileName: path.basename(String(fileName || storedName)),
+      size: bytes.length,
+      mime,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post('/documents/upload', requireAuth, (req, res, next) => {
   try {
     const { dataUrl, fileName } = req.body || {};
@@ -201,5 +240,6 @@ router.delete('/documents/:id', requireAuth, (req, res, next) => {
 router.readContent = readContent;
 router.writeContent = writeContent;
 router.DOCUMENT_DIR = DOCUMENT_DIR;
+router.SITE_MEDIA_DIR = SITE_MEDIA_DIR;
 
 module.exports = router;
