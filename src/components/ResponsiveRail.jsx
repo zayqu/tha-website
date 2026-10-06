@@ -13,8 +13,8 @@ export default function ResponsiveRail({
         ? children.map((child, index) => (
             <div
               key={child?.key || index}
-              className={`shrink-0 snap-center md:min-w-0 md:max-w-none ${itemClassName}`}
-              style={{ width: `min(${mobileWidth}, calc(100vw - 2rem))` }}
+              className={`shrink-0 snap-center w-[min(var(--rail-mobile-width),calc(100vw-2rem))] md:w-auto md:min-w-0 md:max-w-none ${itemClassName}`}
+              style={{ '--rail-mobile-width': mobileWidth }}
             >
               {child}
             </div>
