@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AdminHeader } from '../../components/admin/AdminHeader';
 import { useAuth } from '../../contexts/AuthContext';
+import AdminAiAssist from '../../components/AdminAiAssist';
 
 const TABS = [
   ['organization', 'Organization'],
@@ -211,6 +212,18 @@ export default function AdminSiteContent() {
   function setSectionValue(section,key,value){
     setContent(prev=>({...prev,[section]:{...(prev?.[section]||{}),[key]:value}}));
   }
+
+  function applySimpleAi(section, suggestions) {
+    setContent(prev => {
+      const nextSection = { ...(prev?.[section] || {}) };
+      for (const suggestion of suggestions) {
+        if (Object.prototype.hasOwnProperty.call(nextSection, suggestion.field)) {
+          nextSection[suggestion.field] = suggestion.value;
+        }
+      }
+      return { ...prev, [section]: nextSection };
+    });
+  }
   function setNestedValue(section,key,nestedKey,value){
     setContent(prev=>({...prev,[section]:{...(prev?.[section]||{}),[key]:{...(prev?.[section]?.[key]||{}),[nestedKey]:value}}}));
   }
@@ -345,6 +358,17 @@ export default function AdminSiteContent() {
                 </div>
               ))}
             </div>
+
+            <AdminAiAssist
+              section={`Site Content: ${active}`}
+              current={content?.[active] || {}}
+              fields={(SIMPLE_FIELDS[active] || [])
+                .filter(([key, _label, type]) => type !== 'number' && !/url|phone|email|registration|year/i.test(key))
+                .map(([key, label, type]) => ({ key, label, type: type || 'text' }))}
+              onApply={suggestions => applySimpleAi(active, suggestions)}
+              defaultInstruction="Keep all facts exactly as provided. Make the wording clearer, more human and appropriate for THA."
+              className="mt-5"
+            />
 
             {active==='home' ? (
               <div className="border-t border-gray-100 pt-5">
