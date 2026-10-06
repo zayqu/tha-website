@@ -151,6 +151,7 @@ export default function AdminSiteContent() {
   const [loading,setLoading]=useState(true);
   const [saving,setSaving]=useState(false);
   const [uploadingId,setUploadingId]=useState(null);
+  const [uploadingMediaKey,setUploadingMediaKey]=useState(null);
   const [message,setMessage]=useState('');
 
   useEffect(()=>{
@@ -194,6 +195,36 @@ export default function AdminSiteContent() {
   function removeNestedList(section,key,id,label){
     if(!window.confirm(`Remove ${label||'this item'} from the website?`)) return;
     setContent(prev=>({...prev,[section]:{...(prev?.[section]||{}),[key]:(prev?.[section]?.[key]||[]).filter(item=>item.id!==id)}}));
+  }
+
+  async function uploadSiteImage(mediaKey, file, onUploaded) {
+    if (!file) return;
+    if (file.size > 4 * 1024 * 1024) {
+      setMessage('Image must be 4 MB or smaller.');
+      return;
+    }
+    setUploadingMediaKey(mediaKey);
+    setMessage('');
+    try {
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Could not read the selected image'));
+        reader.readAsDataURL(file);
+      });
+      const res = await authFetch('/api/site-content/media/upload', {
+        method: 'POST',
+        body: JSON.stringify({ dataUrl, fileName: file.name }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Image upload failed');
+      onUploaded(data.url);
+      setMessage('Image uploaded. Save changes to publish it.');
+    } catch (error) {
+      setMessage(error.message);
+    } finally {
+      setUploadingMediaKey(null);
+    }
   }
 
   async function uploadDocumentFile(documentId, file) {
@@ -280,6 +311,19 @@ export default function AdminSiteContent() {
                 </div>
               ))}
             </div>
+
+            {active==='home' ? (
+              <div className="border-t border-gray-100 pt-5">
+                <h3 className="mb-3 font-bold text-gray-800">Home hero image</h3>
+                <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
+                  <Field label="Image path / URL" value={content?.home?.heroImage} onChange={v=>setSectionValue('home','heroImage',v)}/>
+                  <label className="flex min-h-12 cursor-pointer items-center justify-center rounded-xl border border-dashed border-primary/30 bg-primary/5 px-4 py-3 text-sm font-semibold text-primary hover:bg-primary/10">
+                    {uploadingMediaKey==='home-hero'?'Uploading…':'Upload image'}
+                    <input type="file" className="sr-only" accept="image/jpeg,image/png,image/webp" disabled={uploadingMediaKey==='home-hero'} onChange={e=>uploadSiteImage('home-hero',e.target.files?.[0],url=>setSectionValue('home','heroImage',url))}/>
+                  </label>
+                </div>
+              </div>
+            ) : null}
 
             {active==='contact' ? (
               <div className="border-t border-gray-100 pt-5">
@@ -485,7 +529,13 @@ export default function AdminSiteContent() {
                 <div className="grid gap-4 md:grid-cols-2">
                   <Field label="Name" value={member.name} onChange={v=>updateList('team',member.id,'name',v)}/>
                   <Field label="Title" value={member.title} onChange={v=>updateList('team',member.id,'title',v)}/>
-                  <Field label="Photo path / URL" value={member.photo} onChange={v=>updateList('team',member.id,'photo',v)}/>
+                  <div>
+                    <Field label="Photo path / URL" value={member.photo} onChange={v=>updateList('team',member.id,'photo',v)}/>
+                    <label className="mt-2 flex min-h-11 cursor-pointer items-center justify-center rounded-xl border border-dashed border-primary/30 bg-primary/5 px-3 py-2 text-sm font-semibold text-primary hover:bg-primary/10">
+                      {uploadingMediaKey===`team-${member.id}`?'Uploading…':'Upload photo'}
+                      <input type="file" className="sr-only" accept="image/jpeg,image/png,image/webp" disabled={uploadingMediaKey===`team-${member.id}`} onChange={e=>uploadSiteImage(`team-${member.id}`,e.target.files?.[0],url=>updateList('team',member.id,'photo',url))}/>
+                    </label>
+                  </div>
                   <Field label="Sort order" type="number" value={member.sortOrder} onChange={v=>updateList('team',member.id,'sortOrder',v)}/>
                   <div className="md:col-span-2"><Field label="Short bio" type="textarea" value={member.bio} onChange={v=>updateList('team',member.id,'bio',v)}/></div>
                   <div className="md:col-span-2"><Field label="Credentials (one per line)" type="textarea" value={(member.credentials||[]).join('\n')} onChange={v=>updateList('team',member.id,'credentials',v.split('\n').map(x=>x.trim()).filter(Boolean))}/></div>
@@ -505,7 +555,13 @@ export default function AdminSiteContent() {
                 <div className="grid gap-4 md:grid-cols-2">
                   <Field label="Name" value={partner.name} onChange={v=>updateList('partners',partner.id,'name',v)}/>
                   <Field label="Relationship" value={partner.relationship} onChange={v=>updateList('partners',partner.id,'relationship',v)}/>
-                  <Field label="Logo path / URL" value={partner.logo} onChange={v=>updateList('partners',partner.id,'logo',v)}/>
+                  <div>
+                    <Field label="Logo path / URL" value={partner.logo} onChange={v=>updateList('partners',partner.id,'logo',v)}/>
+                    <label className="mt-2 flex min-h-11 cursor-pointer items-center justify-center rounded-xl border border-dashed border-primary/30 bg-primary/5 px-3 py-2 text-sm font-semibold text-primary hover:bg-primary/10">
+                      {uploadingMediaKey===`partner-${partner.id}`?'Uploading…':'Upload logo'}
+                      <input type="file" className="sr-only" accept="image/jpeg,image/png,image/webp" disabled={uploadingMediaKey===`partner-${partner.id}`} onChange={e=>uploadSiteImage(`partner-${partner.id}`,e.target.files?.[0],url=>updateList('partners',partner.id,'logo',url))}/>
+                    </label>
+                  </div>
                   <Field label="Website URL" value={partner.website} onChange={v=>updateList('partners',partner.id,'website',v)}/>
                   <div className="md:col-span-2"><Field label="Description" type="textarea" value={partner.description} onChange={v=>updateList('partners',partner.id,'description',v)}/></div>
                   <Field label="Sort order" type="number" value={partner.sortOrder} onChange={v=>updateList('partners',partner.id,'sortOrder',v)}/>
