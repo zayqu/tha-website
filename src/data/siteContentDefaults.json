@@ -38,8 +38,17 @@
     "programsIntro": "Three focused programs built around practical public-health needs: hepatitis prevention, youth mental health and community support.",
     "engagementTitle": "Turning advocacy into conversations that can move policy",
     "engagementIntro": "THA’s public record includes engagement with national institutions and health partners on hepatitis prevention, birth-dose vaccination and community health.",
-    "ctaText": "If you want to fund, partner, volunteer or bring a health concern to us, start with a conversation.",
-    "heroImage": "/images/hero-bg-lg.jpg"
+    "ctaText": "If our work connects with your community, institution or area of interest, start a conversation with THA.",
+    "heroImage": "/images/hero-bg-lg.jpg",
+    "approachEyebrow": "How We Work",
+    "approachTitle": "From community need to practical action",
+    "approachIntro": "We start with the health issue people are facing, work with the right partners, and follow the work through with clear records and measurable progress.",
+    "needTitle": "Start with the need",
+    "needText": "Listen to communities and health partners, understand the gap, and define what practical support is needed.",
+    "actionTitle": "Act with purpose",
+    "actionText": "Turn that need into focused outreach, advocacy, education or referral activities with clear responsibilities.",
+    "learningTitle": "Track what changes",
+    "learningText": "Document participation, results and lessons so the next activity can be stronger and more useful."
   },
   "about": {
     "heroText": "Tanzania Health Alliance (THA) is a registered NGO (No. 00NGO/R/8379) based in Dar es Salaam. We work with communities, health institutions and partners on Viral Hepatitis, HIV and Mental Health.",
