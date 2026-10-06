@@ -45,6 +45,7 @@ export default function Documents() {
   const site = useSiteContent();
   const org = site.organization || {};
   const contact = site.contact || {};
+  const page = site.documentsPage || {};
   const documents = (site.documents || [])
     .filter(item => item.published !== false)
     .sort((a, b) => Number(a.sortOrder || 0) - Number(b.sortOrder || 0));
@@ -85,10 +86,10 @@ export default function Documents() {
 
       <section className="bg-primary py-14 text-white md:py-20">
         <div className="mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-white/70">Transparency</p>
-          <h1 className="mb-5 text-4xl font-bold tracking-tight md:text-5xl">Documents & Accountability</h1>
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-white/70">{page.eyebrow || 'Transparency'}</p>
+          <h1 className="mb-5 text-4xl font-bold tracking-tight md:text-5xl">{page.title || 'Documents & Accountability'}</h1>
           <p className="mx-auto max-w-3xl text-lg leading-relaxed text-white/90">
-            Registration information, policies, public records and independent references that help partners, funders and communities understand who we are and how we work.
+            {page.intro || 'Registration information, policies, public records and independent references that help partners, funders and communities understand who we are and how we work.'}
           </p>
         </div>
       </section>
@@ -133,7 +134,7 @@ export default function Documents() {
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h2 className="mb-4 text-2xl font-bold text-primary">Need something that is not listed?</h2>
           <p className="mx-auto mb-7 max-w-2xl text-gray-600">
-            Funding partners and institutions can request registration, governance, program or due-diligence documents directly from THA.
+            {page.requestText || 'Funding partners and institutions can request registration, governance, program or due-diligence documents directly from THA.'}
           </p>
           <Link to="/contact" className="inline-flex items-center gap-2 rounded-lg border-2 border-primary px-6 py-3 font-semibold text-primary transition hover:bg-primary hover:text-white">
             Contact THA
