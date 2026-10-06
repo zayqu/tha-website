@@ -41,7 +41,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-app.use(express.json({ limit: '3mb' }));
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: false, limit: '3mb' }));
 app.use(cookieParser());
 
@@ -126,6 +126,7 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/journey', journeyRoutes);
 app.use('/api/site-content', siteContentRoutes);
 app.use('/api/media/news', express.static(MEDIA_DIR, { maxAge: '30d', immutable: true }));
+app.use('/api/media/documents', express.static(siteContentRoutes.DOCUMENT_DIR, { maxAge: '1h' }));
 
 app.get('/api/health', (_req, res) => {
   res.json({
