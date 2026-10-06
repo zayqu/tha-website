@@ -45,7 +45,7 @@ export const Contact = () => {
             Get in Touch
           </h1>
           <p className="text-lg text-white/90 max-w-2xl mx-auto">
-            Whether you are looking for program information, partnership opportunities, due-diligence documents or a way to support our work, talk to our team.
+            {contact.pageIntro || 'Whether you are looking for program information, partnership opportunities, due-diligence documents or a way to support our work, talk to our team.'}
           </p>
         </div>
       </section>
@@ -165,7 +165,7 @@ export const Contact = () => {
             {/* Contact Form */}
             <div className="bg-white rounded-xl shadow-card p-8 md:p-10 h-fit">
               <h2 className="text-2xl font-heading font-bold text-primary mb-2">Talk to our team</h2>
-              <p className="text-gray-600 text-sm mb-8">Whether you need health-program information, want to partner with us, or have a community concern, send us a message. Our team will respond as soon as possible.</p>
+              <p className="text-gray-600 text-sm mb-8">{contact.formIntro || 'Whether you need health-program information, want to partner with us, or have a community concern, send us a message. Our team will respond as soon as possible.'}</p>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div>
@@ -240,7 +240,7 @@ export const Contact = () => {
             Want to help with the work?
           </h3>
           <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
-            Tell us what you can contribute and how much time you have. We will match that with current THA activities where your support is genuinely useful.
+            {contact.volunteerCtaText || 'Tell us what you can contribute and how much time you have. We will match that with current THA activities where your support is genuinely useful.'}
           </p>
           <Link
             to="/make-a-difference"
