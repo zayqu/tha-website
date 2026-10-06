@@ -230,6 +230,53 @@ export default function AdminSiteContent() {
   function updateList(section,id,key,value){
     setContent(prev=>({...prev,[section]:(prev?.[section]||[]).map(item=>item.id===id?{...item,[key]:value}:item)}));
   }
+
+  function applyListAi(section, id, suggestions, allowedFields) {
+    const allowed = new Set(allowedFields);
+    setContent(prev => ({
+      ...prev,
+      [section]: (prev?.[section] || []).map(item => {
+        if (item.id !== id) return item;
+        const next = { ...item };
+        for (const suggestion of suggestions) {
+          if (allowed.has(suggestion.field)) next[suggestion.field] = suggestion.value;
+        }
+        return next;
+      }),
+    }));
+  }
+
+  function applyNestedListAi(section, key, id, suggestions, allowedFields) {
+    const allowed = new Set(allowedFields);
+    setContent(prev => ({
+      ...prev,
+      [section]: {
+        ...(prev?.[section] || {}),
+        [key]: (prev?.[section]?.[key] || []).map(item => {
+          if (item.id !== id) return item;
+          const next = { ...item };
+          for (const suggestion of suggestions) {
+            if (allowed.has(suggestion.field)) next[suggestion.field] = suggestion.value;
+          }
+          return next;
+        }),
+      },
+    }));
+  }
+
+  function applyNestedObjectAi(section, key, suggestions, allowedFields) {
+    const allowed = new Set(allowedFields);
+    setContent(prev => {
+      const next = { ...(prev?.[section]?.[key] || {}) };
+      for (const suggestion of suggestions) {
+        if (allowed.has(suggestion.field)) next[suggestion.field] = suggestion.value;
+      }
+      return {
+        ...prev,
+        [section]: { ...(prev?.[section] || {}), [key]: next },
+      };
+    });
+  }
   function addList(section,item){ setContent(prev=>({...prev,[section]:[...(prev?.[section]||[]),item]})); }
   function removeList(section,id,label){
     if(!window.confirm(`Remove ${label||'this item'} from the website?`)) return;
