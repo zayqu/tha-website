@@ -1,44 +1,16 @@
 import { Link, Navigate, useParams } from 'react-router-dom';
-import thematicData from '../data/thematicAreas.json';
 import { SEO } from '../components/SEO';
+import { useSiteContent } from '../hooks/useSiteContent';
 
-const topicMap = {
-  hepatitis: 'viral-hepatitis',
-  hiv: 'hiv',
-  'mental-health': 'mental-health',
-};
 
-const extraCopy = {
-  'viral-hepatitis': {
-    title: 'Viral Hepatitis in Tanzania',
-    intro: 'Tanzania Health Alliance works to improve awareness, prevention, early testing, vaccination advocacy and access to care for viral hepatitis, with particular attention to hepatitis B.',
-    searches: 'Hepatitis Tanzania, Hepatitis B Tanzania, hepatitis awareness, hepatitis testing, hepatitis vaccination, liver health, viral hepatitis NGO Tanzania, KAPIME.',
-    related: '/campaigns/kapime',
-    relatedLabel: 'Explore the KAPIME campaign',
-  },
-  hiv: {
-    title: 'HIV Awareness and Community Health in Tanzania',
-    intro: 'Tanzania Health Alliance supports HIV awareness, stigma reduction, testing education, treatment access and community-led health engagement in Tanzania.',
-    searches: 'HIV Tanzania, HIV awareness Tanzania, HIV testing Tanzania, HIV stigma reduction, HIV community health, public health NGO Tanzania.',
-    related: '/projects',
-    relatedLabel: 'Explore THA projects',
-  },
-  'mental-health': {
-    title: 'Mental Health Awareness in Tanzania',
-    intro: 'Tanzania Health Alliance supports mental health awareness, stigma reduction, youth resilience, peer support and healthier community conversations in Tanzania.',
-    searches: 'Mental health Tanzania, youth mental health Tanzania, mental health NGO Tanzania, mental health awareness, mental wellbeing, Life Unlocked, Talk To Heal.',
-    related: '/campaigns/life-unlocked',
-    relatedLabel: 'Explore Life Unlocked',
-  },
-};
 
 export default function TopicHub() {
   const { topicId } = useParams();
-  const id = topicMap[topicId];
-  const area = thematicData.thematicAreas.find(item => item.id === id);
-  const copy = extraCopy[id];
+  const site = useSiteContent();
+  const org = site.organization || {};
+  const copy = site.healthTopics?.[topicId];
 
-  if (!area || !copy) return <Navigate to="/about" replace />;
+  if (!copy) return <Navigate to="/about" replace />;
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -47,12 +19,12 @@ export default function TopicHub() {
     description: copy.intro,
     url: `https://tzhealthalliance.or.tz/health/${topicId}`,
     about: [
-      { '@type': 'Thing', name: area.name },
-      { '@type': 'NGO', name: 'Tanzania Health Alliance', alternateName: ['THA', 'THA Tanzania'] },
+      { '@type': 'Thing', name: copy.title },
+      { '@type': 'NGO', name: org.name || 'Tanzania Health Alliance', alternateName: [org.shortName || 'THA', 'THA Tanzania'] },
     ],
     isPartOf: {
       '@type': 'WebSite',
-      name: 'Tanzania Health Alliance',
+      name: org.name || 'Tanzania Health Alliance',
       url: 'https://tzhealthalliance.or.tz/',
     },
   };
@@ -78,13 +50,13 @@ export default function TopicHub() {
         <div className="container-custom max-w-5xl grid lg:grid-cols-2 gap-10">
           <div>
             <h2 className="heading-md mb-4">Why it matters</h2>
-            <p className="body-lg text-neutral-dark/80 mb-6">{area.overview}</p>
-            <p className="body-md text-neutral-dark/70">{area.whyItMatters}</p>
+            <p className="body-lg text-neutral-dark/80 mb-6">{copy.overview}</p>
+            <p className="body-md text-neutral-dark/70">{copy.whyItMatters}</p>
           </div>
           <div>
             <h2 className="heading-md mb-4">What THA does</h2>
             <ul className="space-y-3">
-              {area.ourActions.map(action => (
+              {(copy.actions || []).map(action => (
                 <li key={action} className="body-md text-neutral-dark/80">• {action}</li>
               ))}
             </ul>
@@ -94,8 +66,8 @@ export default function TopicHub() {
 
       <section className="section-padding bg-neutral">
         <div className="container-custom max-w-5xl">
-          <h2 className="heading-md mb-4">Related public health topics</h2>
-          <p className="body-md text-neutral-dark/70 mb-6">{copy.searches}</p>
+          <h2 className="heading-md mb-4">Related THA work</h2>
+          <p className="body-md text-neutral-dark/70 mb-6">Explore the campaigns, news and public-health resources connected to this topic.</p>
           <div className="flex flex-wrap gap-3">
             <Link to={copy.related} className="px-5 py-3 bg-primary text-white rounded-xl font-semibold">
               {copy.relatedLabel}
