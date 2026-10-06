@@ -51,6 +51,7 @@ export const About = () => {
   const org = site.organization || {};
   const about = site.about || {};
   const team = (site.team || []).filter(member => member.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0));
+  const founder = team.find(member => member.id === 'shaibu-issa') || team[0] || {};
   const partners = { partners: (site.partners || []).filter(partner => partner.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0)) };
   const [campaigns, setCampaigns] = React.useState(campaignsData.campaigns);
 
@@ -125,16 +126,16 @@ export const About = () => {
             {/* Image */}
             <div className="h-96 md:h-[28rem] rounded-2xl relative overflow-hidden">
               <img
-                src="/images/team/shaibu-issa.jpg"
-                alt="Shaibu Issa, Founder and Executive Director"
+                src={founder.photo || "/images/team/shaibu-issa.jpg"}
+                alt={`${founder.name || org.founderName || "Shaibu Issa"}, ${founder.title || org.founderTitle || "Founder and Executive Director"}`}
                 width="800"
                 height="800"
-                {...getTeamImageProps('/images/team/shaibu-issa.jpg', { priority: true })}
+                {...getTeamImageProps(founder.photo || '/images/team/shaibu-issa.jpg', { priority: true })}
                 className="absolute inset-0 w-full h-full object-cover object-top"
               />
               <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-card">
-                <p className="font-bold text-primary">Shaibu Issa</p>
-                <p className="text-sm text-gray-600">Founder</p>
+                <p className="font-bold text-primary">{founder.name || org.founderName || "Shaibu Issa"}</p>
+                <p className="text-sm text-gray-600">{founder.title || org.founderTitle || "Founder"}</p>
               </div>
             </div>
 
@@ -149,7 +150,7 @@ export const About = () => {
                 "In 2021, I lost my brother to a preventable liver disease. That loss became my calling: to ensure that no other family experiences the heartbreak we did."
               </div>
               <p className="text-gray-600 mb-4 text-lg">
-                <strong>— Shaibu Issa, {org.founderTitle || thaData.founder.title}</strong>
+                <strong>— {founder.name || org.founderName || "Shaibu Issa"}, {founder.title || org.founderTitle || thaData.founder.title}</strong>
               </p>
 
               <div className="space-y-4 text-gray-700">
@@ -208,7 +209,7 @@ export const About = () => {
                 <h3 className="text-2xl font-bold text-primary">Our Mission</h3>
               </div>
               <p className="text-lg text-gray-500 leading-relaxed">
-                {thaData.mission}
+                {org.mission || thaData.mission}
               </p>
             </div>
 
@@ -221,7 +222,7 @@ export const About = () => {
                 <h3 className="text-2xl font-bold text-primary">Our Vision</h3>
               </div>
               <p className="text-lg text-gray-500 leading-relaxed">
-                {thaData.vision}
+                {org.vision || thaData.vision}
               </p>
             </div>
           </div>
