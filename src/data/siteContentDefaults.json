@@ -444,7 +444,93 @@
         "sortOrder": 30
       }
     ],
-    "resources": [],
+    "resources": [
+      {
+        "id": "academy-1",
+        "title": "Guidelines for the care and treatment of persons diagnosed with chronic hepatitis C virus infection",
+        "excerpt": "WHO recommendations for simplified testing, care and treatment of chronic hepatitis C.",
+        "source": "World Health Organization",
+        "url": "https://www.who.int/publications/i/item/9789241550345",
+        "date": "2018-07-01",
+        "category": "Guidance",
+        "topics": [
+          "Hepatitis"
+        ],
+        "published": true,
+        "sortOrder": 10
+      },
+      {
+        "id": "academy-2",
+        "title": "Consolidated guidelines on HIV prevention, testing, treatment, service delivery and monitoring",
+        "excerpt": "WHO's consolidated public health recommendations across the HIV prevention and care continuum.",
+        "source": "World Health Organization",
+        "url": "https://www.who.int/publications/i/item/9789240031593",
+        "date": "2021-07-16",
+        "category": "Guidance",
+        "topics": [
+          "HIV"
+        ],
+        "published": true,
+        "sortOrder": 20
+      },
+      {
+        "id": "academy-3",
+        "title": "Global HIV, hepatitis and sexually transmitted infections programmes: strategies 2022–2030",
+        "excerpt": "Global strategies for accelerating progress toward ending AIDS and viral hepatitis as public health threats.",
+        "source": "World Health Organization",
+        "url": "https://www.who.int/publications/i/item/9789240053779",
+        "date": "2022-07-18",
+        "category": "Policy",
+        "topics": [
+          "HIV",
+          "Hepatitis"
+        ],
+        "published": true,
+        "sortOrder": 30
+      },
+      {
+        "id": "academy-4",
+        "title": "mhGAP intervention guide for mental, neurological and substance use disorders",
+        "excerpt": "Evidence-based protocols for assessment and management in non-specialized health settings.",
+        "source": "World Health Organization",
+        "url": "https://www.who.int/publications/i/item/9789241549790",
+        "date": "2016-05-31",
+        "category": "Training",
+        "topics": [
+          "Mental Health"
+        ],
+        "published": true,
+        "sortOrder": 40
+      },
+      {
+        "id": "academy-5",
+        "title": "Mental health at work",
+        "excerpt": "Practical evidence and recommendations for protecting and promoting mental health in the workplace.",
+        "source": "World Health Organization",
+        "url": "https://www.who.int/news-room/fact-sheets/detail/mental-health-at-work",
+        "date": "2024-09-02",
+        "category": "Training",
+        "topics": [
+          "Mental Health"
+        ],
+        "published": true,
+        "sortOrder": 50
+      },
+      {
+        "id": "academy-6",
+        "title": "Hepatitis B",
+        "excerpt": "An online overview of hepatitis B transmission, prevention, testing, treatment and WHO's global response.",
+        "source": "World Health Organization",
+        "url": "https://www.who.int/news-room/fact-sheets/detail/hepatitis-b",
+        "date": "2024-04-09",
+        "category": "Training",
+        "topics": [
+          "Hepatitis"
+        ],
+        "published": true,
+        "sortOrder": 60
+      }
+    ],
     "helpTitle": "Know when to seek help",
     "helpText": [
       "Visit a health facility if you may have been exposed to HIV or hepatitis, need testing, or have symptoms that concern you. Early advice and treatment can make a major difference.",
