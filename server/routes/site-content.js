@@ -7,6 +7,17 @@ const defaults = require('../../src/data/siteContentDefaults.json');
 
 const router = express.Router();
 const CONTENT_FILE = path.join(__dirname, '../data/site-content.json');
+const DOCUMENT_DIR = path.join(__dirname, '../data/uploads/documents');
+const MAX_DOCUMENT_BYTES = 6 * 1024 * 1024;
+const ALLOWED_DOCUMENTS = {
+  'application/pdf': '.pdf',
+  'application/msword': '.doc',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
+  'application/vnd.ms-excel': '.xls',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
+  'application/vnd.ms-powerpoint': '.ppt',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation': '.pptx',
+};
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
@@ -104,6 +115,39 @@ router.put('/', requireAuth, (req, res, next) => {
   }
 });
 
+router.post('/documents/upload', requireAuth, (req, res, next) => {
+  try {
+    const { dataUrl, fileName } = req.body || {};
+    const match = String(dataUrl || '').match(/^data:([^;,]+);base64,([A-Za-z0-9+/=]+)$/);
+    if (!match) return res.status(400).json({ error: 'Invalid document upload' });
+
+    const mime = match[1].toLowerCase();
+    const ext = ALLOWED_DOCUMENTS[mime];
+    if (!ext) return res.status(400).json({ error: 'Unsupported document type' });
+
+    const bytes = Buffer.from(match[2], 'base64');
+    if (!bytes.length || bytes.length > MAX_DOCUMENT_BYTES) {
+      return res.status(400).json({ error: 'Document must be 6 MB or smaller' });
+    }
+
+    fs.mkdirSync(DOCUMENT_DIR, { recursive: true });
+    const baseName = path.basename(String(fileName || 'document'), path.extname(String(fileName || 'document')))
+      .replace(/[^a-z0-9_-]+/gi, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 80) || 'document';
+    const storedName = `${Date.now()}-${uuidv4().slice(0, 8)}-${baseName}${ext}`;
+    fs.writeFileSync(path.join(DOCUMENT_DIR, storedName), bytes);
+    res.status(201).json({
+      url: `/api/media/documents/${storedName}`,
+      fileName: path.basename(String(fileName || storedName)),
+      size: bytes.length,
+      mime,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post('/documents', requireAuth, (req, res, next) => {
   try {
     const content = readContent();
@@ -156,5 +200,6 @@ router.delete('/documents/:id', requireAuth, (req, res, next) => {
 
 router.readContent = readContent;
 router.writeContent = writeContent;
+router.DOCUMENT_DIR = DOCUMENT_DIR;
 
 module.exports = router;
