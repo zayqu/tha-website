@@ -26,10 +26,10 @@ export const Footer = () => {
                 About Tanzania Health Alliance
               </h4>
               <p className="text-sm text-white/75 leading-relaxed mb-3">
-                Tanzania Health Alliance (THA) is a registered non-profit organization focused on improving health outcomes in Tanzania by addressing Viral Hepatitis, HIV, and Mental Health.
+                Tanzania Health Alliance (THA) is a registered NGO (No. 00NGO/R/8379) based in Dar es Salaam, working on Viral Hepatitis, HIV, and Mental Health.
               </p>
               <p className="text-sm text-white/75 leading-relaxed mb-5">
-                We work closely with communities, government institutions, and partners to deliver impactful health programs that respond to real community needs.
+                We work with communities, health institutions, government stakeholders and partners to turn public-health advocacy into practical community action.
               </p>
               <div className="flex gap-3">
                 <a
@@ -71,6 +71,7 @@ export const Footer = () => {
                 <li><Link to="/privacy" className="text-sm text-white/75 hover:text-secondary transition">Privacy Policy</Link></li>
                 <li><Link to="/cookies" className="text-sm text-white/75 hover:text-secondary transition">Cookies Policy</Link></li>
                 <li><Link to="/terms" className="text-sm text-white/75 hover:text-secondary transition">Terms &amp; Conditions</Link></li>
+                <li><Link to="/documents" className="text-sm text-white/75 hover:text-secondary transition">Documents &amp; Accountability</Link></li>
               </ul>
 
               <h4 className="text-base font-bold font-heading tracking-tight mt-8 mb-4 text-white">
@@ -104,6 +105,7 @@ export const Footer = () => {
                 <li><Link to="/make-a-difference" className="text-sm text-white/75 hover:text-secondary transition">Make a Difference</Link></li>
                 <li><Link to="/academy" className="text-sm text-white/75 hover:text-secondary transition">Academy</Link></li>
                 <li><Link to="/news" className="text-sm text-white/75 hover:text-secondary transition">News</Link></li>
+                <li><Link to="/documents" className="text-sm text-white/75 hover:text-secondary transition">Documents</Link></li>
                 <li><Link to="/contact" className="text-sm text-white/75 hover:text-secondary transition">Contact</Link></li>
               </ul>
             </div>
