@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
-import { thaData } from '../data/thaData';
 import { useSiteContent } from '../hooks/useSiteContent';
 
 export const MakeADifference = () => {
@@ -9,26 +8,11 @@ export const MakeADifference = () => {
   const funding = site.funding || {};
   const contact = site.contact || {};
   const [activeTab, setActiveTab] = useState('volunteer');
-  const roles = [
-    {
-      title: 'Health Ambassador',
-      time: '10-15 hours/week',
-      description: 'Conduct community outreach for hepatitis testing, vaccination drives, and health education sessions.',
-      icon: 'health_and_safety'
-    },
-    {
-      title: 'Youth Peer Supporter',
-      time: '5-10 hours/week',
-      description: 'Support young people through Life Unlocked programs, facilitating youth clubs and peer support groups.',
-      icon: 'diversity_3'
-    },
-    {
-      title: 'Mental Health Advocate',
-      time: 'Flexible',
-      description: 'Lead stigma-reduction campaigns and facilitate Talk To Heal support groups in your community.',
-      icon: 'volunteer_activism'
-    },
-  ];
+  const roles = (funding.volunteerRoles || [])
+    .filter(role => role.published !== false)
+    .sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0));
+  const successStory = funding.successStory || {};
+
 
 
   return (
@@ -84,7 +68,7 @@ export const MakeADifference = () => {
             <div className="text-center mb-12">
               <h2 className="heading-lg mb-4">Volunteer With Us</h2>
               <p className="body-lg max-w-3xl mx-auto">
-                Join our team of passionate volunteers making a real difference in communities across Tanzania
+                Support THA through a role that matches your time, skills and the needs of current programs.
               </p>
             </div>
 
@@ -128,9 +112,7 @@ export const MakeADifference = () => {
                 <div className="input-group">
                   <select className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-secondary focus:outline-none" required>
                     <option value="">Select preferred role</option>
-                    <option>Health Ambassador</option>
-                    <option>Youth Peer Supporter</option>
-                    <option>Mental Health Advocate</option>
+                    {roles.map(role => <option key={role.id || role.title}>{role.title}</option>)}
                   </select>
                 </div>
                 <div className="input-group">
@@ -265,29 +247,31 @@ export const MakeADifference = () => {
       )}
 
       {/* Success Story */}
-      <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
-        <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-8">
-              <h2 className="heading-lg text-white mb-4">Impact Story</h2>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm p-8 md:p-12 rounded-2xl">
-              <blockquote className="text-xl md:text-2xl text-white/95 mb-6 leading-relaxed italic">
-                "Getting tested through KAPIME saved my life. I discovered my hepatitis B status early and started treatment immediately. Now I help others in my community get tested too."
-              </blockquote>
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-                  <Icon name="person" size={32} color="white" />
-                </div>
-                <div>
-                  <div className="font-bold text-white">Fatima M.</div>
-                  <div className="text-white/80">KAPIME Beneficiary, Dar es Salaam</div>
+      {successStory.published && successStory.quote ? (
+        <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
+          <div className="container-custom">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="heading-lg text-white mb-4">Impact Story</h2>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm p-8 md:p-12 rounded-2xl">
+                <blockquote className="text-xl md:text-2xl text-white/95 mb-6 leading-relaxed italic">
+                  "{successStory.quote}"
+                </blockquote>
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                    <Icon name="person" size={32} color="white" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-white">{successStory.name}</div>
+                    <div className="text-white/80">{successStory.role}</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
     </div>
   );
 };
