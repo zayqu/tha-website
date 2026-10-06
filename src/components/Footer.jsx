@@ -9,8 +9,53 @@ export const Footer = () => {
   const contact = site.contact || {};
   return (
     <footer className="bg-primary-dark text-white">
-      {/* Main Footer Content */}
-      <div className="py-12 md:py-16">
+      {/* Mobile footer */}
+      <div className="px-4 py-8 md:hidden">
+        <div className="flex items-center justify-between gap-4">
+          <img
+            src="/logo/tha-logo.svg"
+            alt="Tanzania Health Alliance"
+            width="110"
+            height="44"
+            loading="lazy"
+            decoding="async"
+            className="h-10 w-auto brightness-0 invert"
+          />
+          <div className="flex gap-2">
+            <a href={contact.facebook || thaData.social.facebook} target="_blank" rel="noopener noreferrer" className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10" aria-label="Facebook"><Icon name="facebook" size={17} color="white" /></a>
+            <a href={contact.instagram || thaData.social.instagram} target="_blank" rel="noopener noreferrer" className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10" aria-label="Instagram"><Icon name="instagram" size={17} color="white" /></a>
+            <a href={contact.linkedin || thaData.social.linkedin} target="_blank" rel="noopener noreferrer" className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10" aria-label="LinkedIn"><Icon name="linkedin" size={17} color="white" /></a>
+          </div>
+        </div>
+
+        <p className="mt-4 text-sm leading-relaxed text-white/70">
+          {org.name || "Tanzania Health Alliance"} · Registered NGO {org.registrationNumber ? `No. ${org.registrationNumber}` : ''}
+        </p>
+
+        <div className="mt-5 grid grid-cols-2 gap-x-5 gap-y-3 text-sm">
+          <Link to="/about" className="text-white/80">About</Link>
+          <Link to="/projects" className="text-white/80">Campaigns</Link>
+          <Link to="/academy" className="text-white/80">Academy</Link>
+          <Link to="/news" className="text-white/80">News</Link>
+          <Link to="/documents" className="text-white/80">Documents</Link>
+          <Link to="/contact" className="text-white/80">Contact</Link>
+        </div>
+
+        <div className="mt-6 space-y-2 border-t border-white/10 pt-5 text-sm text-white/70">
+          <a href={`tel:${(contact.phone || '+255659114754').replace(/\s+/g,'')}`} className="flex items-center gap-2"><Icon name="phone" size={16} color="white" /> {contact.phone || '+255 659 114 754'}</a>
+          <a href={`mailto:${contact.email || 'info@tzhealthalliance.or.tz'}`} className="flex items-center gap-2 break-all"><Icon name="email" size={16} color="white" /> {contact.email || 'info@tzhealthalliance.or.tz'}</a>
+        </div>
+
+        <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-white/10 pt-5 text-xs text-white/50">
+          <span>© {new Date().getFullYear()} {org.shortName || 'THA'}</span>
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/terms">Terms</Link>
+          <a href="/admin" target="_blank" rel="noopener noreferrer">Staff</a>
+        </div>
+      </div>
+
+      {/* Desktop footer */}
+      <div className="hidden py-12 md:block md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
 
