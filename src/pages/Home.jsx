@@ -165,6 +165,11 @@ export const Home = () => {
   const partners = { partners: (site.partners || []).filter(partner => partner.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0)) };
   const objectives = (site.objectives || []).filter(item => item.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0));
   const testimonials = (site.testimonials || []).filter(item => item.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0));
+  const documents = (site.documents || []).filter(item => item.published !== false);
+  const whaEvidence = documents.find(item => item.id === 'wha-board');
+  const awardEvidence = documents.find(item => item.id === 'aba-2026');
+  const parliamentEvidence = documents.find(item => item.id === 'parliamentary-committee');
+  const unicefEvidence = documents.find(item => item.id === 'unicef-meeting');
   const [latestNews, setLatestNews] = useState([]);
   const [latestNewsLoading, setLatestNewsLoading] = useState(true);
   const [impactTotals, setImpactTotals] = useState(impactData.impactMetrics.total);
@@ -266,20 +271,24 @@ export const Home = () => {
                 <p className="text-xs text-gray-500">No. {org.registrationNumber || "00NGO/R/8379"} · {contact.city || "Dar es Salaam"}</p>
               </div>
             </div>
-            <a href="https://www.worldhepatitisalliance.org/our-team-2025/" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 hover:opacity-80 transition">
-              <Icon name="public" size={22} category="primary" />
-              <div>
-                <p className="text-sm font-bold text-primary">WHA AFRO Board</p>
-                <p className="text-xs text-gray-500">Founder Shaibu Issa</p>
-              </div>
-            </a>
-            <a href="https://abachepb.org/funding/current-awardees-2026/" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 hover:opacity-80 transition">
-              <Icon name="workspace_premium" size={22} category="primary" />
-              <div>
-                <p className="text-sm font-bold text-primary">2026 Awardee</p>
-                <p className="text-xs text-gray-500">KAPIME hepatitis campaign</p>
-              </div>
-            </a>
+            {whaEvidence ? (
+              <a href={whaEvidence.url} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 hover:opacity-80 transition">
+                <Icon name="public" size={22} category="primary" />
+                <div>
+                  <p className="text-sm font-bold text-primary">{whaEvidence.title}</p>
+                  <p className="text-xs text-gray-500">{whaEvidence.meta}</p>
+                </div>
+              </a>
+            ) : null}
+            {awardEvidence ? (
+              <a href={awardEvidence.url} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 hover:opacity-80 transition">
+                <Icon name="workspace_premium" size={22} category="primary" />
+                <div>
+                  <p className="text-sm font-bold text-primary">{awardEvidence.title}</p>
+                  <p className="text-xs text-gray-500">{awardEvidence.meta}</p>
+                </div>
+              </a>
+            ) : null}
             <Link to="/documents" className="flex items-start gap-3 hover:opacity-80 transition">
               <Icon name="description" size={22} category="primary" />
               <div>
@@ -356,16 +365,20 @@ export const Home = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
-            <Link to="/news/tha-engages-parliamentary-committee-on-hepatitis-b-birth-dose-vaccination" className="rounded-2xl bg-white/10 p-6 hover:bg-white/15 transition">
-              <p className="text-xs uppercase tracking-wider text-white/60 mb-2">6 May 2026</p>
-              <h3 className="text-lg font-bold mb-2">Parliamentary Committee Engagement</h3>
-              <p className="text-sm text-white/75">Discussion on hepatitis B birth-dose vaccination and newborn protection.</p>
-            </Link>
-            <Link to="/news/tha-unicef-strategic-meeting-on-hepatitis-b-birth-dose-vaccination" className="rounded-2xl bg-white/10 p-6 hover:bg-white/15 transition">
-              <p className="text-xs uppercase tracking-wider text-white/60 mb-2">18 February 2026</p>
-              <h3 className="text-lg font-bold mb-2">THA–UNICEF Strategic Meeting</h3>
-              <p className="text-sm text-white/75">Focused on the systems needed to introduce timely hepatitis B birth-dose vaccination.</p>
-            </Link>
+            {parliamentEvidence ? (
+              <Link to={parliamentEvidence.url} className="rounded-2xl bg-white/10 p-6 hover:bg-white/15 transition">
+                <p className="text-xs uppercase tracking-wider text-white/60 mb-2">{parliamentEvidence.meta}</p>
+                <h3 className="text-lg font-bold mb-2">{parliamentEvidence.title}</h3>
+                <p className="text-sm text-white/75">{parliamentEvidence.description}</p>
+              </Link>
+            ) : null}
+            {unicefEvidence ? (
+              <Link to={unicefEvidence.url} className="rounded-2xl bg-white/10 p-6 hover:bg-white/15 transition">
+                <p className="text-xs uppercase tracking-wider text-white/60 mb-2">{unicefEvidence.meta}</p>
+                <h3 className="text-lg font-bold mb-2">{unicefEvidence.title}</h3>
+                <p className="text-sm text-white/75">{unicefEvidence.description}</p>
+              </Link>
+            ) : null}
             <Link to="/documents" className="rounded-2xl bg-white/10 p-6 hover:bg-white/15 transition">
               <p className="text-xs uppercase tracking-wider text-white/60 mb-2">Public Record</p>
               <h3 className="text-lg font-bold mb-2">Evidence & Verification</h3>
