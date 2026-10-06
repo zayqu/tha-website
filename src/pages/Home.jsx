@@ -13,6 +13,7 @@ import NewsCard from '../components/NewsCard';
 import { fetchPublishedNews, fetchImpactTotals, fetchProjects, fetchJourney } from '../lib/api';
 import { getHeroImageProps } from '../lib/imageUtils';
 import { JourneyTimeline } from '../components/JourneyTimeline';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 /* =========================
    Typing Animation
@@ -159,6 +160,10 @@ const ObjectiveCard = ({ obj, index }) => {
 };
 
 export const Home = () => {
+  const site = useSiteContent();
+  const org = site.organization || {};
+  const home = site.home || {};
+  const contact = site.contact || {};
   const [latestNews, setLatestNews] = useState([]);
   const [latestNewsLoading, setLatestNewsLoading] = useState(true);
   const [impactTotals, setImpactTotals] = useState(impactData.impactMetrics.total);
@@ -233,11 +238,11 @@ export const Home = () => {
 
         <div className="relative z-10 px-4 max-w-5xl mx-auto">
           <h1 className="text-3xl md:text-5xl lg:text-6xl text-white font-bold mb-6 leading-tight">
-            <TypingText text="Together for a Healthier Tanzania" />
+            <TypingText text={home.heroTitle || org.motto || "Together for a Healthier Tanzania"} />
           </h1>
 
           <p className="text-white/90 text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-            {thaData.heroDescription}
+            {home.heroDescription || thaData.heroDescription}
           </p>
 
           <div className="flex gap-4 justify-center flex-wrap">
@@ -257,7 +262,7 @@ export const Home = () => {
               <Icon name="verified" size={22} category="primary" />
               <div>
                 <p className="text-sm font-bold text-primary">Registered NGO</p>
-                <p className="text-xs text-gray-500">No. 00NGO/R/8379 · Dar es Salaam</p>
+                <p className="text-xs text-gray-500">No. {org.registrationNumber || "00NGO/R/8379"} · {contact.city || "Dar es Salaam"}</p>
               </div>
             </div>
             <a href="https://www.worldhepatitisalliance.org/our-team-2025/" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 hover:opacity-80 transition">
@@ -316,7 +321,7 @@ export const Home = () => {
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">What We Do</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2 mb-4">Our Campaigns & Impact</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Three focused programs built around practical public-health needs: hepatitis prevention, youth mental health and community support.
+              {home.programsIntro || "Three focused programs built around practical public-health needs: hepatitis prevention, youth mental health and community support."}
             </p>
           </div>
 
@@ -333,7 +338,7 @@ export const Home = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Our Journey</h2>
-            <p className="text-gray-600">A growing public record of community work, advocacy and institutional engagement</p>
+            <p className="text-gray-600">{home.journeyIntro || "A growing public record of community work, advocacy and institutional engagement"}</p>
           </div>
           <JourneyTimeline milestones={journey} />
         </div>
@@ -344,9 +349,9 @@ export const Home = () => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="max-w-3xl mb-10">
             <span className="text-white/60 text-sm uppercase tracking-wider font-semibold">Institutional Engagement</span>
-            <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4">Turning advocacy into conversations that can move policy</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4">{home.engagementTitle || "Turning advocacy into conversations that can move policy"}</h2>
             <p className="text-white/80 text-lg">
-              THA’s public record includes engagement with national institutions and health partners on hepatitis prevention, birth-dose vaccination and community health.
+              {home.engagementIntro || "THA’s public record includes engagement with national institutions and health partners on hepatitis prevention, birth-dose vaccination and community health."}
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
@@ -439,7 +444,7 @@ export const Home = () => {
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Get Involved</h2>
           <p className="text-white/90 text-lg mb-8">
-            If you want to fund, partner, volunteer or bring a health concern to us, start with a conversation.
+            {home.ctaText || "If you want to fund, partner, volunteer or bring a health concern to us, start with a conversation."}
           </p>
           <div className="flex justify-center gap-4 flex-wrap">
             <Link to="/make-a-difference" className="px-8 py-3 bg-white text-secondary font-bold rounded-lg hover:bg-cool-gray transition">
