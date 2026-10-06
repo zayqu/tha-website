@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
+import { useSiteContent } from '../hooks/useSiteContent';
 import campaignsData from '../data/campaigns.json';
 import { fetchProjects } from '../lib/api';
 
@@ -12,6 +13,8 @@ const campaignIcons = {
 };
 
 export const Projects = () => {
+  const site = useSiteContent();
+  const page = site.projectsPage || {};
   const [campaigns, setCampaigns] = useState(campaignsData.campaigns);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -42,9 +45,9 @@ export const Projects = () => {
       {/* Hero */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">Our Campaigns & Activities</h1>
+          <h1 className="text-3xl md:text-5xl font-bold mb-4">{page.heroTitle || 'Our Campaigns & Activities'}</h1>
           <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
-            Explore every published THA campaign and the results being achieved with communities across Tanzania.
+            {page.heroText || 'Explore every published THA campaign and the results being achieved with communities across Tanzania.'}
           </p>
         </div>
       </section>
@@ -136,9 +139,9 @@ export const Projects = () => {
       {/* CTA */}
       <section className="py-16 bg-gradient-to-r from-secondary to-secondary-dark text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">Be Part of the Change</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">{page.ctaTitle || 'Work with a THA campaign'}</h2>
           <p className="text-white/90 text-base md:text-lg mb-8">
-            Support our campaigns and help us reach more communities across Tanzania.
+            {page.ctaText || 'If one of these priorities aligns with your institution or community, talk to us about a practical way to contribute.'}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/make-a-difference" className="px-8 py-3 bg-white text-secondary font-bold rounded-xl hover:bg-cool-gray transition">
