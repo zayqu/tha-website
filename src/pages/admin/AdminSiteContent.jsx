@@ -8,6 +8,9 @@ const TABS = [
   ['home', 'Home'],
   ['about', 'About'],
   ['funding', 'Funding'],
+  ['impact', 'Impact'],
+  ['team', 'Team'],
+  ['partners', 'Partners'],
   ['documents', 'Documents'],
 ];
 
@@ -58,6 +61,12 @@ const sectionFields = {
     ['institutionalText', 'Institutional funding text', 'textarea'],
     ['partnerIntro', 'Partnership introduction', 'textarea'],
   ],
+  impact: [
+    ['heroTitle', 'Impact page title'],
+    ['heroText', 'Impact page introduction', 'textarea'],
+    ['metricsIntro', 'Metrics explanation', 'textarea'],
+    ['evidenceIntro', 'Evidence introduction', 'textarea'],
+  ],
 };
 
 function Field({ label, value, type = 'text', onChange }) {
@@ -72,6 +81,34 @@ function Field({ label, value, type = 'text', onChange }) {
       )}
     </label>
   );
+}
+
+function emptyTeamMember() {
+  return {
+    id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    name: '',
+    title: '',
+    photo: '',
+    bio: '',
+    credentials: [],
+    linkedIn: '',
+    instagram: '',
+    published: true,
+    sortOrder: Date.now(),
+  };
+}
+
+function emptyPartner() {
+  return {
+    id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    name: '',
+    logo: '',
+    description: '',
+    relationship: '',
+    website: '',
+    published: true,
+    sortOrder: Date.now(),
+  };
 }
 
 function emptyDocument() {
@@ -112,6 +149,8 @@ export default function AdminSiteContent() {
   }, [authFetch]);
 
   const documents = useMemo(() => Array.isArray(content?.documents) ? content.documents : [], [content]);
+  const team = useMemo(() => Array.isArray(content?.team) ? content.team : [], [content]);
+  const partners = useMemo(() => Array.isArray(content?.partners) ? content.partners : [], [content]);
 
   function setSectionValue(section, key, value) {
     setContent(prev => ({
@@ -125,6 +164,22 @@ export default function AdminSiteContent() {
       ...prev,
       documents: (prev.documents || []).map(doc => doc.id === id ? { ...doc, [key]: value } : doc),
     }));
+  }
+
+  function updateListItem(section, id, key, value) {
+    setContent(prev => ({
+      ...prev,
+      [section]: (prev[section] || []).map(item => item.id === id ? { ...item, [key]: value } : item),
+    }));
+  }
+
+  function addListItem(section, item) {
+    setContent(prev => ({ ...prev, [section]: [...(prev[section] || []), item] }));
+  }
+
+  function removeListItem(section, id, label) {
+    if (!window.confirm(`Remove ${label || 'this item'} from the website?`)) return;
+    setContent(prev => ({ ...prev, [section]: (prev[section] || []).filter(item => item.id !== id) }));
   }
 
   function addDocument() {
@@ -192,7 +247,7 @@ export default function AdminSiteContent() {
           </div>
         </div>
 
-        {active !== 'documents' ? (
+        {['organization','contact','home','about','funding','impact'].includes(active) ? (
           <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
             <div className="grid gap-5 md:grid-cols-2">
               {(sectionFields[active] || []).map(([key, label, type]) => (
@@ -206,6 +261,76 @@ export default function AdminSiteContent() {
                 </div>
               ))}
             </div>
+          </section>
+        ) : active === 'team' ? (
+          <section className="space-y-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-lg font-bold text-gray-900">Team</h2>
+                <p className="text-sm text-gray-500">Manage public leadership profiles and their order.</p>
+              </div>
+              <button type="button" onClick={() => addListItem('team', emptyTeamMember())} className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white sm:w-auto">+ Add team member</button>
+            </div>
+            {team.map((member, index) => (
+              <article key={member.id} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Person {index + 1}</p>
+                    <h3 className="font-bold text-gray-800">{member.name || 'New team member'}</h3>
+                  </div>
+                  <button type="button" onClick={() => removeListItem('team', member.id, member.name)} className="rounded-lg px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50">Remove</button>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field label="Name" value={member.name} onChange={v => updateListItem('team', member.id, 'name', v)} />
+                  <Field label="Title" value={member.title} onChange={v => updateListItem('team', member.id, 'title', v)} />
+                  <Field label="Photo path / URL" value={member.photo} onChange={v => updateListItem('team', member.id, 'photo', v)} />
+                  <Field label="Sort order" type="number" value={member.sortOrder} onChange={v => updateListItem('team', member.id, 'sortOrder', v)} />
+                  <div className="md:col-span-2"><Field label="Short bio" type="textarea" value={member.bio} onChange={v => updateListItem('team', member.id, 'bio', v)} /></div>
+                  <div className="md:col-span-2">
+                    <Field label="Credentials (one per line)" type="textarea" value={(member.credentials || []).join('\n')} onChange={v => updateListItem('team', member.id, 'credentials', v.split('\n').map(x => x.trim()).filter(Boolean))} />
+                  </div>
+                  <Field label="LinkedIn URL" value={member.linkedIn} onChange={v => updateListItem('team', member.id, 'linkedIn', v)} />
+                  <Field label="Instagram URL" value={member.instagram} onChange={v => updateListItem('team', member.id, 'instagram', v)} />
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                    <input type="checkbox" checked={Boolean(member.published)} onChange={e => updateListItem('team', member.id, 'published', e.target.checked)} className="h-5 w-5 rounded border-gray-300" />
+                    Published
+                  </label>
+                </div>
+              </article>
+            ))}
+          </section>
+        ) : active === 'partners' ? (
+          <section className="space-y-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-lg font-bold text-gray-900">Partners</h2>
+                <p className="text-sm text-gray-500">Keep only relationships THA can support with evidence.</p>
+              </div>
+              <button type="button" onClick={() => addListItem('partners', emptyPartner())} className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white sm:w-auto">+ Add partner</button>
+            </div>
+            {partners.map((partner, index) => (
+              <article key={partner.id} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Partner {index + 1}</p>
+                    <h3 className="font-bold text-gray-800">{partner.name || 'New partner'}</h3>
+                  </div>
+                  <button type="button" onClick={() => removeListItem('partners', partner.id, partner.name)} className="rounded-lg px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50">Remove</button>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field label="Name" value={partner.name} onChange={v => updateListItem('partners', partner.id, 'name', v)} />
+                  <Field label="Relationship" value={partner.relationship} onChange={v => updateListItem('partners', partner.id, 'relationship', v)} />
+                  <Field label="Logo path / URL" value={partner.logo} onChange={v => updateListItem('partners', partner.id, 'logo', v)} />
+                  <Field label="Website URL" value={partner.website} onChange={v => updateListItem('partners', partner.id, 'website', v)} />
+                  <div className="md:col-span-2"><Field label="Description" type="textarea" value={partner.description} onChange={v => updateListItem('partners', partner.id, 'description', v)} /></div>
+                  <Field label="Sort order" type="number" value={partner.sortOrder} onChange={v => updateListItem('partners', partner.id, 'sortOrder', v)} />
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                    <input type="checkbox" checked={Boolean(partner.published)} onChange={e => updateListItem('partners', partner.id, 'published', e.target.checked)} className="h-5 w-5 rounded border-gray-300" />
+                    Published
+                  </label>
+                </div>
+              </article>
+            ))}
           </section>
         ) : (
           <section className="space-y-4">
