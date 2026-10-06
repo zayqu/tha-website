@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import campaignsData from '../data/campaigns.json';
-import testimonials from '../data/testimonials.json';
 import impactData from '../data/impact.json';
 import { PartnersCarousel } from '../components/PartnersCarousel';
 import { TestimonialsCarousel } from '../components/TestimonialCarousel';
@@ -139,7 +138,6 @@ const CampaignCard = ({ campaign, index }) => {
 /* =========================
    Objective Card — Clean Minimal
 ========================= */
-const objectiveIcons = ['local_hospital', 'school', 'search', 'groups', 'favorite'];
 const ObjectiveCard = ({ obj, index }) => {
   const [ref, show] = useReveal();
   return (
@@ -151,9 +149,10 @@ const ObjectiveCard = ({ obj, index }) => {
       style={{ transitionDelay: `${index * 100}ms` }}
     >
       <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center mb-4">
-        <Icon name={objectiveIcons[index] || 'check_circle'} size={20} category="primary" />
+        <Icon name={obj.icon || 'check_circle'} size={20} category="primary" />
       </div>
-      <p className="text-gray-700 leading-relaxed">{obj}</p>
+      <h3 className="font-bold text-primary mb-2">{obj.title}</h3>
+      <p className="text-gray-700 leading-relaxed">{obj.description}</p>
     </div>
   );
 };
@@ -164,6 +163,8 @@ export const Home = () => {
   const home = site.home || {};
   const contact = site.contact || {};
   const partners = { partners: (site.partners || []).filter(partner => partner.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0)) };
+  const objectives = (site.objectives || []).filter(item => item.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0));
+  const testimonials = (site.testimonials || []).filter(item => item.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0));
   const [latestNews, setLatestNews] = useState([]);
   const [latestNewsLoading, setLatestNewsLoading] = useState(true);
   const [impactTotals, setImpactTotals] = useState(impactData.impactMetrics.total);
@@ -379,8 +380,8 @@ export const Home = () => {
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-primary mb-12">What We Do</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {thaData.objectives.map((obj, i) => (
-              <ObjectiveCard key={i} obj={obj} index={i} />
+            {objectives.map((obj, i) => (
+              <ObjectiveCard key={obj.id || i} obj={obj} index={i} />
             ))}
           </div>
         </div>
@@ -396,12 +397,14 @@ export const Home = () => {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-20 bg-cool-gray">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-primary">Stories of Impact</h2>
-        </div>
-        <TestimonialsCarousel testimonials={testimonials.testimonials} />
-      </section>
+      {testimonials.length > 0 ? (
+        <section className="py-20 bg-cool-gray">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-primary">Stories of Impact</h2>
+          </div>
+          <TestimonialsCarousel testimonials={testimonials} />
+        </section>
+      ) : null}
 
       {/* NEWS */}
       <section className="py-20 bg-white">
