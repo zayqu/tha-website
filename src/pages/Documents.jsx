@@ -33,10 +33,12 @@ function DocumentCard({ item }) {
     </>
   );
 
-  if (item.external || /^mailto:/i.test(item.url || '')) {
-    return <a href={item.url} target={/^mailto:/i.test(item.url || '') ? undefined : '_blank'} rel="noopener noreferrer" className={classes}>{content}</a>;
+  const url = item.url || '#';
+  const isFile = /^\/api\/media\/documents\//i.test(url);
+  if (item.external || /^mailto:/i.test(url) || isFile) {
+    return <a href={url} target={/^mailto:/i.test(url) ? undefined : '_blank'} rel="noopener noreferrer" className={classes}>{content}</a>;
   }
-  return <Link to={item.url || '#'} className={classes}>{content}</Link>;
+  return <Link to={url} className={classes}>{content}</Link>;
 }
 
 export default function Documents() {
