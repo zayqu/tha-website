@@ -1,118 +1,74 @@
-import { useState, useRef, useEffect } from 'react';
 import { getPartnerImageProps } from '../lib/imageUtils';
 
-export const PartnersCarousel = ({ partners }) => {
-  const [isPaused, setIsPaused] = useState(false);
-  const scrollRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+function PartnerItem({ partner, mobile = false }) {
+  return (
+    <a
+      href={partner.website || '#'}
+      target={partner.website ? '_blank' : undefined}
+      rel={partner.website ? 'noopener noreferrer' : undefined}
+      className={`flex shrink-0 items-center justify-center rounded-xl border border-gray-100 bg-white shadow-card transition hover:-translate-y-0.5 hover:shadow-elevated ${mobile ? 'h-16 w-36' : 'h-20 w-44 md:h-24 md:w-48'}`}
+      aria-label={partner.name}
+    >
+      {partner.logo ? (
+        <img
+          src={partner.logo}
+          alt={partner.name}
+          width={mobile ? 112 : 150}
+          height={mobile ? 42 : 60}
+          {...getPartnerImageProps(partner.logo)}
+          className={`${mobile ? 'max-h-10 max-w-[112px]' : 'max-h-14 max-w-[150px]'} object-contain px-2`}
+        />
+      ) : (
+        <span className="px-3 text-center text-xs font-bold leading-tight text-gray-700 md:text-sm">
+          {partner.name}
+        </span>
+      )}
+    </a>
+  );
+}
 
-  // Duplicate for infinite scroll on desktop
-  const duplicated = [...partners, ...partners];
-
-  // Touch/drag handlers for mobile swipe
-  const handleStart = (clientX) => {
-    setIsDragging(true);
-    setStartX(clientX - scrollRef.current.offsetLeft);
-    setScrollLeft(scrollRef.current.scrollLeft);
-  };
-
-  const handleMove = (clientX) => {
-    if (!isDragging) return;
-    const x = clientX - scrollRef.current.offsetLeft;
-    scrollRef.current.scrollLeft = scrollLeft - (x - startX);
-  };
-
-  const handleEnd = () => setIsDragging(false);
+export const PartnersCarousel = ({ partners = [] }) => {
+  if (!partners.length) return null;
+  const loop = [...partners, ...partners];
 
   return (
-    <div className="w-full">
-      {/* Mobile: swipeable horizontal scroll */}
-      <div
-        ref={scrollRef}
-        className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth px-4 pb-4 -mx-4 no-scrollbar"
-        onTouchStart={(e) => handleStart(e.touches[0].clientX)}
-        onTouchMove={(e) => handleMove(e.touches[0].clientX)}
-        onTouchEnd={handleEnd}
-        onMouseDown={(e) => { handleStart(e.clientX); e.preventDefault(); }}
-        onMouseMove={(e) => handleMove(e.clientX)}
-        onMouseUp={handleEnd}
-        onMouseLeave={handleEnd}
-      >
-        {partners.map((partner) => (
-          <a
-            key={partner.id}
-            href={partner.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-shrink-0 snap-center flex items-center justify-center h-20 w-40 bg-white rounded-xl shadow-card cursor-pointer"
-          >
-            {partner.logo ? (
-              <img
-                src={partner.logo}
-                alt={partner.name}
-                width="128"
-                height="52"
-                {...getPartnerImageProps(partner.logo)}
-                className="max-h-12 max-w-[128px] object-contain px-2"
-              />
-            ) : (
-              <span className="font-bold text-center px-3 text-xs text-gray-700">
-                {partner.name}
-              </span>
-            )}
-          </a>
+    <div className="partner-marquee w-full overflow-hidden">
+      <div className="partner-track flex w-max items-center gap-4 px-4 md:gap-6 md:px-0">
+        {loop.map((partner, index) => (
+          <PartnerItem
+            key={`${partner.id || partner.name}-${index}`}
+            partner={partner}
+            mobile={true}
+          />
         ))}
       </div>
 
-      {/* Desktop: auto-scrolling infinite carousel */}
-      <div
-        className="hidden md:block overflow-hidden w-full"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        <div
-          className="flex gap-6 flex-nowrap items-center animate-partnersScroll"
-          style={{ animationPlayState: isPaused ? 'paused' : 'running' }}
-        >
-          {duplicated.map((partner, idx) => (
-            <a
-              key={`${partner.id}-${idx}`}
-              href={partner.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-shrink-0 flex items-center justify-center h-24 w-48 bg-white rounded-lg shadow-card hover:shadow-elevated transition-shadow group cursor-pointer"
-            >
-              {partner.logo ? (
-                <img
-                  src={partner.logo}
-                  alt={partner.name}
-                  width="160"
-                  height="64"
-                  {...getPartnerImageProps(partner.logo)}
-                  className="max-h-16 max-w-[160px] object-contain px-3"
-                />
-              ) : (
-                <span className="font-bold text-center px-3 text-sm group-hover:text-secondary transition-colors">
-                  {partner.name}
-                </span>
-              )}
-            </a>
-          ))}
-        </div>
-      </div>
-
       <style>{`
-        @keyframes partnersScroll {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+        .partner-marquee {
+          mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
         }
-        .animate-partnersScroll {
-          animation: partnersScroll 30s linear infinite;
+        .partner-track {
+          animation: thaPartnerMarquee 24s linear infinite;
+          will-change: transform;
         }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .partner-marquee:hover .partner-track,
+        .partner-marquee:focus-within .partner-track {
+          animation-play-state: paused;
+        }
+        @keyframes thaPartnerMarquee {
+          from { transform: translate3d(0,0,0); }
+          to { transform: translate3d(calc(-50% - 0.5rem),0,0); }
+        }
+        @media (min-width: 768px) {
+          .partner-track { animation-duration: 30s; }
+          .partner-track > a { width: 12rem; height: 6rem; }
+          .partner-track > a img { max-width: 160px; max-height: 64px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .partner-track { animation: none; }
+          .partner-marquee { overflow-x: auto; }
+        }
       `}</style>
     </div>
   );
