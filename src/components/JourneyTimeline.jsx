@@ -125,7 +125,7 @@ export function JourneyTimeline({ milestones }) {
 
       <div
         ref={viewportRef}
-        className="max-w-full snap-x snap-mandatory touch-pan-x overflow-x-auto overscroll-x-contain scroll-smooth pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="max-w-full snap-x snap-mandatory touch-auto overflow-x-auto overscroll-x-contain scroll-smooth pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         tabIndex="0"
         role="region"
         aria-label="Journey milestones carousel"
@@ -172,7 +172,7 @@ export function JourneyTimeline({ milestones }) {
       </div>
 
       <p className="mt-2 text-center text-xs text-gray-500 sm:hidden">
-        Use the arrows or swipe to explore more milestones.
+        Swipe across or use the arrows to explore milestones. Scroll normally to continue down the page.
       </p>
     </section>
   );
