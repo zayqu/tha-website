@@ -20,7 +20,12 @@
     "email": "info@tzhealthalliance.or.tz",
     "facebook": "https://www.facebook.com/tanzaniahealthalliance",
     "instagram": "https://instagram.com/tanzania_healthalliance",
-    "linkedin": "https://www.linkedin.com/company/tanzania-health-alliance"
+    "linkedin": "https://www.linkedin.com/company/tanzania-health-alliance",
+    "workHours": {
+      "mondayFriday": "9:00 AM – 5:00 PM",
+      "saturday": "10:00 AM – 2:00 PM",
+      "sunday": "Closed"
+    }
   },
   "home": {
     "heroTitle": "Together for a Healthier Tanzania",
@@ -43,7 +48,42 @@
     "heroText": "Work with us where your time, funding or institutional support can meet a clear public-health need.",
     "donationIntro": "We welcome support for clearly defined activities, with an agreed purpose, budget and reporting approach.",
     "institutionalText": "For institutional or project funding, THA can agree the activity, target group, budget, timeline and reporting requirements before implementation begins.",
-    "partnerIntro": "If our work aligns with your organization, tell us what you are trying to achieve and where collaboration may make sense."
+    "partnerIntro": "If our work aligns with your organization, tell us what you are trying to achieve and where collaboration may make sense.",
+    "volunteerRoles": [
+      {
+        "id": "health-ambassador",
+        "title": "Health Ambassador",
+        "time": "10–15 hours/week",
+        "description": "Support community outreach, health education and campaign activities.",
+        "icon": "health_and_safety",
+        "published": true,
+        "sortOrder": 10
+      },
+      {
+        "id": "youth-peer-supporter",
+        "title": "Youth Peer Supporter",
+        "time": "5–10 hours/week",
+        "description": "Support youth-focused Life Unlocked activities and peer conversations.",
+        "icon": "diversity_3",
+        "published": true,
+        "sortOrder": 20
+      },
+      {
+        "id": "mental-health-advocate",
+        "title": "Mental Health Advocate",
+        "time": "Flexible",
+        "description": "Support stigma-reduction activities and community mental-health conversations.",
+        "icon": "volunteer_activism",
+        "published": true,
+        "sortOrder": 30
+      }
+    ],
+    "successStory": {
+      "published": false,
+      "quote": "",
+      "name": "",
+      "role": ""
+    }
   },
   "documents": [
     {
@@ -299,5 +339,236 @@
     "heroText": "We track our work through dated activities, campaign records, partner engagement and project-level results rather than broad claims.",
     "metricsIntro": "Where numerical results are shown, they should come from the corresponding project record in Admin.",
     "evidenceIntro": "Our public record includes community outreach, youth mental-health sessions, hepatitis advocacy, institutional meetings and regional recognition."
+  },
+  "coreValues": [
+    {
+      "id": "integrity",
+      "value": "Integrity",
+      "description": "We act with honesty, transparency and accountability.",
+      "icon": "shield",
+      "published": true,
+      "sortOrder": 10
+    },
+    {
+      "id": "equity",
+      "value": "Equity",
+      "description": "We work so quality health information and services are easier to reach, regardless of background or location.",
+      "icon": "scale",
+      "published": true,
+      "sortOrder": 20
+    },
+    {
+      "id": "collaboration",
+      "value": "Collaboration",
+      "description": "We work with communities, institutions and partners because public-health problems are rarely solved by one organization alone.",
+      "icon": "groups",
+      "published": true,
+      "sortOrder": 30
+    },
+    {
+      "id": "evidence",
+      "value": "Evidence",
+      "description": "We prefer documented work, measurable results and credible health guidance over broad claims.",
+      "icon": "fact_check",
+      "published": true,
+      "sortOrder": 40
+    }
+  ],
+  "objectives": [
+    {
+      "id": "access",
+      "title": "Improve access",
+      "description": "Support practical pathways to health information, prevention, testing and care.",
+      "icon": "local_hospital",
+      "published": true,
+      "sortOrder": 10
+    },
+    {
+      "id": "capacity",
+      "title": "Build capacity",
+      "description": "Strengthen the people and community systems that carry public-health work forward.",
+      "icon": "school",
+      "published": true,
+      "sortOrder": 20
+    },
+    {
+      "id": "evidence",
+      "title": "Use evidence",
+      "description": "Generate, share and apply evidence that can improve public-health decisions.",
+      "icon": "search",
+      "published": true,
+      "sortOrder": 30
+    },
+    {
+      "id": "partnerships",
+      "title": "Build partnerships",
+      "description": "Work with communities, institutions, government stakeholders and funders around clear health priorities.",
+      "icon": "groups",
+      "published": true,
+      "sortOrder": 40
+    }
+  ],
+  "testimonials": [],
+  "academy": {
+    "heroTitle": "Public Health Knowledge Centre",
+    "heroText": "Find clear answers about HIV, viral hepatitis and mental health, then explore trusted guidance when you want to learn more.",
+    "guides": [
+      {
+        "id": "hiv",
+        "topic": "HIV",
+        "icon": "health_and_safety",
+        "title": "HIV can be prevented and treated",
+        "summary": "Testing is the only way to know your HIV status. Early treatment protects your health, and people who take effective treatment can live long, healthy lives.",
+        "action": "Explore HIV information",
+        "published": true,
+        "sortOrder": 10
+      },
+      {
+        "id": "hepatitis",
+        "topic": "Hepatitis",
+        "icon": "vaccines",
+        "title": "Protect your liver from viral hepatitis",
+        "summary": "Hepatitis B and C can damage the liver without obvious early symptoms. Vaccination prevents hepatitis B, while testing and treatment help prevent serious complications.",
+        "action": "Explore hepatitis information",
+        "published": true,
+        "sortOrder": 20
+      },
+      {
+        "id": "mental-health",
+        "topic": "Mental Health",
+        "icon": "psychology",
+        "title": "Mental health deserves care",
+        "summary": "Persistent sadness, anxiety, sleep problems or loss of interest can affect anyone. Speaking with someone you trust and seeking professional support are important first steps.",
+        "action": "Explore mental health information",
+        "published": true,
+        "sortOrder": 30
+      }
+    ],
+    "resources": [],
+    "helpTitle": "Know when to seek help",
+    "helpText": [
+      "Visit a health facility if you may have been exposed to HIV or hepatitis, need testing, or have symptoms that concern you. Early advice and treatment can make a major difference.",
+      "If emotional distress is affecting daily life, speak with a qualified health professional or someone you trust. Urgent help is important if you or another person may be in immediate danger.",
+      "These resources support learning and informed conversations; a health professional can provide advice for your individual needs."
+    ]
+  },
+  "healthTopics": {
+    "hepatitis": {
+      "title": "Viral Hepatitis in Tanzania",
+      "intro": "Tanzania Health Alliance works to improve awareness, prevention, early testing, vaccination advocacy and access to care for viral hepatitis, with particular attention to hepatitis B.",
+      "overview": "Viral hepatitis can damage the liver for years before symptoms become obvious. Earlier testing, prevention and linkage to care can reduce avoidable illness and deaths.",
+      "whyItMatters": "Hepatitis B can be prevented through vaccination, while testing helps people understand their status and seek appropriate care.",
+      "actions": [
+        "Community awareness and health education",
+        "Advocacy for hepatitis B vaccination, including the birth dose",
+        "Promoting testing and linkage to appropriate care",
+        "Working with health and policy stakeholders"
+      ],
+      "related": "/campaigns/kapime",
+      "relatedLabel": "Explore the KAPIME campaign"
+    },
+    "hiv": {
+      "title": "HIV Awareness and Community Health in Tanzania",
+      "intro": "Tanzania Health Alliance supports HIV awareness, stigma reduction, testing education, treatment access and community-led health engagement in Tanzania.",
+      "overview": "HIV prevention, testing and treatment have changed what is possible for people living with HIV, but stigma and gaps in access still prevent some people from getting help early.",
+      "whyItMatters": "Knowing your status and starting appropriate treatment early protects health and supports better long-term outcomes.",
+      "actions": [
+        "Awareness and stigma-reduction activities",
+        "Testing education and referral",
+        "Community health conversations",
+        "Partnership and advocacy around access to care"
+      ],
+      "related": "/projects",
+      "relatedLabel": "Explore THA projects"
+    },
+    "mental-health": {
+      "title": "Mental Health Awareness in Tanzania",
+      "intro": "Tanzania Health Alliance supports mental health awareness, stigma reduction, youth resilience, peer support and healthier community conversations in Tanzania.",
+      "overview": "Mental-health challenges can affect study, work, relationships and physical health. Young people may face particular pressure during school-to-work and other major life transitions.",
+      "whyItMatters": "Early support, safe conversations and access to qualified care can help people manage distress before it becomes more severe.",
+      "actions": [
+        "Youth mental-health awareness",
+        "Peer-support and resilience conversations",
+        "Stigma reduction",
+        "Referral to appropriate professional support where needed"
+      ],
+      "related": "/campaigns/life-unlocked",
+      "relatedLabel": "Explore Life Unlocked"
+    }
+  },
+  "policies": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "intro": "How Tanzania Health Alliance handles information shared through this website.",
+      "sections": [
+        {
+          "id": "collect",
+          "heading": "Information we collect",
+          "text": "We collect information that you voluntarily provide through contact, registration, partnership, volunteer, donation and administrative forms. We may also collect limited technical information needed to keep the website secure and reliable."
+        },
+        {
+          "id": "use",
+          "heading": "How information is used",
+          "text": "Information is used to respond to requests, manage participation in THA activities, operate the website, protect accounts and improve our public-health programmes and communications."
+        },
+        {
+          "id": "sharing",
+          "heading": "Information sharing",
+          "text": "THA does not sell personal information. Information is shared only with authorised service providers or partners when necessary to deliver a requested service, comply with the law or protect people and the organisation."
+        },
+        {
+          "id": "choices",
+          "heading": "Your choices",
+          "text": "You may request access, correction or deletion of information you submitted by contacting THA. Some records may be retained when required for security, legal or programme-accountability purposes."
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Cookies Policy",
+      "intro": "How this website uses essential browser storage and similar technologies.",
+      "sections": [
+        {
+          "id": "essential",
+          "heading": "Essential storage",
+          "text": "The website may use essential cookies or browser storage to maintain secure administrator sessions, remember necessary preferences and protect forms."
+        },
+        {
+          "id": "analytics",
+          "heading": "Analytics",
+          "text": "If audience measurement is enabled, it should be configured to collect only the information needed to understand website performance and improve public information."
+        },
+        {
+          "id": "control",
+          "heading": "Your control",
+          "text": "You can remove or block cookies through your browser settings. Blocking essential storage may prevent secure areas of the website from working correctly."
+        }
+      ]
+    },
+    "terms": {
+      "title": "Terms and Conditions",
+      "intro": "Conditions for using Tanzania Health Alliance’s public website and information.",
+      "sections": [
+        {
+          "id": "health",
+          "heading": "Health information",
+          "text": "Website content is provided for education and public awareness. It does not replace diagnosis, treatment or advice from a qualified health professional. Seek urgent medical help when needed."
+        },
+        {
+          "id": "use",
+          "heading": "Acceptable use",
+          "text": "Do not misuse the website, attempt unauthorised access, interfere with its operation or submit unlawful, harmful or misleading material."
+        },
+        {
+          "id": "links",
+          "heading": "Content and links",
+          "text": "THA works to keep information accurate and current. External links are provided for context and remain the responsibility of their respective publishers."
+        },
+        {
+          "id": "updates",
+          "heading": "Updates",
+          "text": "These terms may be updated when website services or legal requirements change. The current version will remain available on this page."
+        }
+      ]
+    }
   }
 }
