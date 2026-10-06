@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
 import { thaData, sendEmail } from '../data/thaData';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 export const Contact = () => {
+  const site = useSiteContent();
+  const contact = site.contact || {};
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -48,7 +51,7 @@ export const Contact = () => {
             Get in Touch
           </h1>
           <p className="text-lg text-white/90 max-w-2xl mx-auto">
-            We'd love to hear from you! Whether you have questions, want to collaborate, or are looking for ways to get involved, reach out to us.
+            Whether you are looking for program information, partnership opportunities, due-diligence documents or a way to support our work, talk to our team.
           </p>
         </div>
       </section>
@@ -69,9 +72,9 @@ export const Contact = () => {
                   <div>
                     <h3 className="font-bold text-primary mb-1">Physical Address</h3>
                     <p className="text-sm text-gray-600 leading-relaxed">
-                      Adda Estate, House No. 03, Kinondoni,<br />
-                      P.O. Box 31902,<br />
-                      Dar es Salaam, Tanzania
+                      {contact.address || 'Adda Estate, House No. 03, Kinondoni'},<br />
+                      {contact.poBox || 'P.O. Box 31902'},<br />
+                      {contact.city || 'Dar es Salaam'}, {contact.country || 'Tanzania'}
                     </p>
                   </div>
                 </div>
@@ -113,14 +116,14 @@ export const Contact = () => {
                     <h3 className="font-bold text-primary mb-1">Phone & Mobile</h3>
                     <p className="text-sm text-gray-600">
                       Phone:{' '}
-                      <a href={`tel:${thaData.contact.phone}`} className="hover:text-secondary transition">
-                        {thaData.contact.phone}
+                      <a href={`tel:${contact.phone || thaData.contact.phone}`} className="hover:text-secondary transition">
+                        {contact.phone || thaData.contact.phone}
                       </a>
                     </p>
                     <p className="text-sm text-gray-600 mt-1">
                       Mobile:{' '}
-                      <a href={`tel:${thaData.contact.mobile}`} className="hover:text-secondary transition">
-                        {thaData.contact.mobile}
+                      <a href={`tel:${contact.secondaryPhone || contact.phone || thaData.contact.mobile}`} className="hover:text-secondary transition">
+                        {contact.secondaryPhone || contact.phone || thaData.contact.mobile}
                       </a>
                     </p>
                   </div>
@@ -136,10 +139,10 @@ export const Contact = () => {
                   <div>
                     <h3 className="font-bold text-primary mb-1">Email</h3>
                     <a
-                      href={`mailto:${thaData.contact.emails[0]}`}
+                      href={`mailto:${contact.email || thaData.contact.emails[0]}`}
                       className="text-sm text-gray-600 hover:text-secondary transition"
                     >
-                      {thaData.contact.emails[0]}
+                      {contact.email || thaData.contact.emails[0]}
                     </a>
                   </div>
                 </div>
@@ -149,15 +152,15 @@ export const Contact = () => {
               <div className="bg-white rounded-xl shadow-card p-6">
                 <h3 className="font-bold text-primary mb-4">Follow Us</h3>
                 <div className="flex gap-3">
-                  <a href={thaData.social.facebook} target="_blank" rel="noopener noreferrer"
+                  <a href={contact.facebook || thaData.social.facebook} target="_blank" rel="noopener noreferrer"
                     className="w-11 h-11 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-secondary transition">
                     <Icon name="facebook" size={22} color="white" />
                   </a>
-                  <a href={thaData.social.instagram} target="_blank" rel="noopener noreferrer"
+                  <a href={contact.instagram || thaData.social.instagram} target="_blank" rel="noopener noreferrer"
                     className="w-11 h-11 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-secondary transition">
                     <Icon name="instagram" size={22} color="white" />
                   </a>
-                  <a href={thaData.social.linkedin} target="_blank" rel="noopener noreferrer"
+                  <a href={contact.linkedin || thaData.social.linkedin} target="_blank" rel="noopener noreferrer"
                     className="w-11 h-11 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-secondary transition">
                     <Icon name="linkedin" size={22} color="white" />
                   </a>
