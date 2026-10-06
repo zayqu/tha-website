@@ -9,6 +9,7 @@ import campaignsData from '../data/campaigns.json';
 import { thaData } from '../data/thaData';
 import { getTeamImageProps } from '../lib/imageUtils';
 import { fetchProjects } from '../lib/api';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 /* =========================
    Scroll Reveal Hook
@@ -48,6 +49,9 @@ const CoreValueCard = ({ value, index }) => {
 };
 
 export const About = () => {
+  const site = useSiteContent();
+  const org = site.organization || {};
+  const about = site.about || {};
   const [campaigns, setCampaigns] = React.useState(campaignsData.campaigns);
 
   React.useEffect(() => {
@@ -109,7 +113,7 @@ export const About = () => {
             About Tanzania Health Alliance
           </h1>
           <p className="text-xl text-white/90 max-w-3xl mx-auto">
-            Tanzania Health Alliance (THA) is a registered NGO (No. 00NGO/R/8379) based in Dar es Salaam. We work with communities, health institutions and partners on Viral Hepatitis, HIV and Mental Health.
+            {about.heroText || `Tanzania Health Alliance (THA) is a registered NGO (No. ${org.registrationNumber || "00NGO/R/8379"}) based in Dar es Salaam. We work with communities, health institutions and partners on Viral Hepatitis, HIV and Mental Health.`}
           </p>
         </div>
       </section>
@@ -138,18 +142,18 @@ export const About = () => {
             <div>
               <span className="text-accent font-semibold text-sm uppercase tracking-wider">Our Founder's Story</span>
               <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2 mb-6">
-                Why THA Exists
+                {about.founderHeading || "Why THA Exists"}
               </h2>
 
               <div className="text-xl italic text-gray-700 border-l-4 border-accent pl-6 mb-6 leading-relaxed">
                 "In 2021, I lost my brother to a preventable liver disease. That loss became my calling: to ensure that no other family experiences the heartbreak we did."
               </div>
               <p className="text-gray-600 mb-4 text-lg">
-                <strong>— Shaibu Issa, {thaData.founder.title}</strong>
+                <strong>— Shaibu Issa, {org.founderTitle || thaData.founder.title}</strong>
               </p>
 
               <div className="space-y-4 text-gray-700">
-                <p>{thaData.founder.story}</p>
+                <p>{about.founderStory || thaData.founder.story}</p>
               </div>
 
               {/* Key Recognition */}
@@ -247,7 +251,7 @@ export const About = () => {
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">How We Work</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2">Our Campaign Approach</h2>
             <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
-              Our work is organized through focused campaigns so that activities, partners and results can be traced back to a clear public-health purpose.
+              {about.campaignsIntro || "Our work is organized through focused campaigns so that activities, partners and results can be traced back to a clear public-health purpose."}
             </p>
           </div>
 
@@ -354,7 +358,7 @@ export const About = () => {
           <div className="text-center mb-12">
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">Collaboration</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2">Our Partners</h2>
-            <p className="text-gray-600 mt-4">Working with organizations that strengthen our reach, technical work and accountability</p>
+            <p className="text-gray-600 mt-4">{about.partnersIntro || "Working with organizations that strengthen our reach, technical work and accountability"}</p>
           </div>
 
           <PartnersCarousel partners={partners.partners} />
@@ -368,7 +372,7 @@ export const About = () => {
             Join Our Movement
           </h2>
           <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-            If our work aligns with your institution, community or funding priorities, we would be glad to start with a practical conversation about where collaboration can make the most difference.
+            {about.closingText || "If our work aligns with your institution, community or funding priorities, we would be glad to start with a practical conversation about where collaboration can make the most difference."}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/make-a-difference" className="px-8 py-3 bg-secondary text-white font-bold rounded-lg hover:bg-secondary-dark transition">
