@@ -356,7 +356,7 @@ export const Home = () => {
         <div className="max-w-6xl mx-auto px-4">
           <SectionHeader
             eyebrow="For Funders & Partners"
-            title="Fund measurable work, not vague promises"
+            title={site.funding?.funderTitle || "Fund measurable work, not vague promises"}
             subtitle={site.funding?.institutionalText || "For institutional or project funding, THA can agree the activity, target group, budget, timeline and reporting requirements before implementation begins."}
             centered
             compact
@@ -365,18 +365,18 @@ export const Home = () => {
           <div className="grid gap-3 md:grid-cols-3 md:gap-6">
             <div className="rounded-2xl border border-primary/10 bg-cool-gray p-5 md:p-6">
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"><Icon name="assignment" size={20} category="primary" /></div>
-              <h3 className="font-bold text-primary">Defined scope & budget</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">Agree the activity, target group, locations, timeline and budget before implementation starts.</p>
+              <h3 className="font-bold text-primary">{site.funding?.scopeTitle || "Defined scope & budget"}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-600">{site.funding?.scopeText || "Agree the activity, target group, locations, timeline and budget before implementation starts."}</p>
             </div>
             <div className="rounded-2xl border border-primary/10 bg-cool-gray p-5 md:p-6">
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"><Icon name="monitoring" size={20} category="primary" /></div>
-              <h3 className="font-bold text-primary">Measurable outcomes</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">Track agreed indicators such as people reached, referrals, institutions engaged and campaign-specific results.</p>
+              <h3 className="font-bold text-primary">{site.funding?.outcomesTitle || "Measurable outcomes"}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-600">{site.funding?.outcomesText || "Track agreed indicators such as people reached, referrals, institutions engaged and campaign-specific results."}</p>
             </div>
             <div className="rounded-2xl border border-primary/10 bg-cool-gray p-5 md:p-6">
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"><Icon name="fact_check" size={20} category="primary" /></div>
-              <h3 className="font-bold text-primary">Evidence & reporting</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">Receive agreed reporting, activity evidence and results that can be reviewed against the funded workplan.</p>
+              <h3 className="font-bold text-primary">{site.funding?.reportingTitle || "Evidence & reporting"}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-600">{site.funding?.reportingText || "Receive agreed reporting, activity evidence and results that can be reviewed against the funded workplan."}</p>
             </div>
           </div>
 
