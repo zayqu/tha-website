@@ -12,25 +12,10 @@ import { fetchPublishedNews, fetchImpactTotals, fetchProjects, fetchJourney } fr
 import { getHeroImageProps } from '../lib/imageUtils';
 import { JourneyTimeline } from '../components/JourneyTimeline';
 import { useSiteContent } from '../hooks/useSiteContent';
-
-/* =========================
-   Typing Animation
-========================= */
-const TypingText = ({ text, speed = 40 }) => {
-  const [display, setDisplay] = useState('');
-
-  useEffect(() => {
-    let i = 0;
-    const interval = setInterval(() => {
-      setDisplay(text.slice(0, i));
-      i++;
-      if (i > text.length) clearInterval(interval);
-    }, speed);
-    return () => clearInterval(interval);
-  }, [text, speed]);
-
-  return <span>{display}</span>;
-};
+import SectionHeader from '../components/SectionHeader';
+import ResponsiveRail from '../components/ResponsiveRail';
+import CounterAnimation from '../components/CounterAnimation';
+import { TypingText } from '../components/TypingText';
 
 /* =========================
    Scroll Reveal Hook
@@ -51,31 +36,6 @@ const useReveal = () => {
 };
 
 /* =========================
-   Counter
-========================= */
-const Counter = ({ end, suffix = '+' }) => {
-  const [ref, visible] = useReveal();
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!visible) return;
-    let start = Date.now();
-    const t = setInterval(() => {
-      const p = Math.min((Date.now() - start) / 2000, 1);
-      setCount(Math.floor(p * end));
-      if (p === 1) clearInterval(t);
-    }, 16);
-    return () => clearInterval(t);
-  }, [visible, end]);
-
-  return (
-    <div ref={ref} className="text-3xl md:text-5xl font-bold text-white">
-      {count.toLocaleString()}{suffix}
-    </div>
-  );
-};
-
-/* =========================
    Campaign Card — Banner + White Body
 ========================= */
 const campaignIcons = { kapime: 'health_and_safety', 'life-unlocked': 'psychology', 'talk-to-heal': 'forum' };
@@ -86,7 +46,7 @@ const CampaignCard = ({ campaign, index }) => {
   return (
     <div
       ref={ref}
-      className={`group bg-white rounded-2xl shadow-card hover:shadow-elevated transition-all duration-700 overflow-hidden flex flex-col h-full min-w-[82vw] max-w-[82vw] md:min-w-0 md:max-w-none ${
+      className={`group bg-white rounded-2xl shadow-card hover:shadow-elevated transition-all duration-700 overflow-hidden flex flex-col h-full ${
         show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
       style={{ transitionDelay: `${index * 150}ms` }}
@@ -246,7 +206,7 @@ export const Home = () => {
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-white/70 md:hidden">Tanzania Health Alliance</p>
           <h1 className="text-[2rem] md:text-5xl lg:text-6xl text-white font-bold mb-4 md:mb-6 leading-[1.05] md:leading-tight">
             <span className="md:hidden">{home.heroTitle || org.motto || "Together for a Healthier Tanzania"}</span>
-            <span className="hidden md:inline"><TypingText text={home.heroTitle || org.motto || "Together for a Healthier Tanzania"} /></span>
+            <span className="hidden md:inline"><TypingText text={home.heroTitle || org.motto || "Together for a Healthier Tanzania"} speed={40} loop={false} /></span>
           </h1>
 
           <p className="text-white/85 text-[15px] md:text-xl leading-relaxed mb-6 md:mb-8 max-w-2xl md:mx-auto">
@@ -307,19 +267,19 @@ export const Home = () => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-7 md:gap-8 text-center">
             <div>
-              <Counter end={impactTotals.peopleReached} />
+              <div className="text-3xl md:text-5xl font-bold text-white"><CounterAnimation end={impactTotals.peopleReached} suffix="+" /></div>
               <p className="text-white/75 mt-1.5 text-xs md:text-base">People Reached</p>
             </div>
             <div>
-              <Counter end={impactTotals.studentsReached} />
+              <div className="text-3xl md:text-5xl font-bold text-white"><CounterAnimation end={impactTotals.studentsReached} suffix="+" /></div>
               <p className="text-white/75 mt-1.5 text-xs md:text-base">Students Reached</p>
             </div>
             <div>
-              <Counter end={impactTotals.institutionsEngaged} suffix="" />
+              <div className="text-3xl md:text-5xl font-bold text-white"><CounterAnimation end={impactTotals.institutionsEngaged} /></div>
               <p className="text-white/75 mt-1.5 text-xs md:text-base">Institutions Engaged</p>
             </div>
             <div>
-              <Counter end={impactTotals.communityEvents} suffix="" />
+              <div className="text-3xl md:text-5xl font-bold text-white"><CounterAnimation end={impactTotals.communityEvents} /></div>
               <p className="text-white/75 mt-1.5 text-xs md:text-base">Community Events</p>
             </div>
           </div>
@@ -329,29 +289,30 @@ export const Home = () => {
       {/* CAMPAIGNS */}
       <section className="py-12 md:py-20 bg-cool-gray">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-left md:text-center mb-7 md:mb-12">
-            <span className="text-accent font-semibold text-sm uppercase tracking-wider">What We Do</span>
-            <h2 className="text-2xl md:text-4xl font-bold text-primary mt-2 mb-3 md:mb-4">Our Campaigns & Impact</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              {home.programsIntro || "Three focused programs built around practical public-health needs: hepatitis prevention, youth mental health and community support."}
-            </p>
-          </div>
-
-          <div className="-mx-4 flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:overflow-visible md:px-0 md:pb-0">
+          <SectionHeader
+            eyebrow="What We Do"
+            title="Our Campaigns & Impact"
+            subtitle={home.programsIntro || "Three focused programs built around practical public-health needs: hepatitis prevention, youth mental health and community support."}
+            centered
+            compact
+          />
+          <ResponsiveRail desktopGrid="md:grid-cols-2 lg:grid-cols-3" mobileWidth="82vw">
             {campaigns.map((campaign, index) => (
               <CampaignCard key={campaign.id} campaign={campaign} index={index} />
             ))}
-          </div>
+          </ResponsiveRail>
         </div>
       </section>
 
       {/* YEAR ONE TIMELINE */}
       <section className="py-12 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-left md:text-center mb-7 md:mb-12">
-            <h2 className="text-2xl md:text-4xl font-bold text-primary mb-3 md:mb-4">Our Journey</h2>
-            <p className="text-gray-600">{home.journeyIntro || "A growing public record of community work, advocacy and institutional engagement"}</p>
-          </div>
+          <SectionHeader
+            title="Our Journey"
+            subtitle={home.journeyIntro || "A growing public record of community work, advocacy and institutional engagement"}
+            centered
+            compact
+          />
           <JourneyTimeline milestones={journey} />
         </div>
       </section>
@@ -359,14 +320,14 @@ export const Home = () => {
       {/* INSTITUTIONAL ENGAGEMENT */}
       <section className="py-12 md:py-20 bg-primary-dark text-white">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="max-w-3xl mb-7 md:mb-10">
-            <span className="text-white/60 text-sm uppercase tracking-wider font-semibold">Institutional Engagement</span>
-            <h2 className="text-2xl md:text-4xl font-bold mt-2 mb-3 md:mb-4">{home.engagementTitle || "Turning advocacy into conversations that can move policy"}</h2>
-            <p className="text-white/75 text-sm md:text-lg leading-relaxed">
-              {home.engagementIntro || "THA’s public record includes engagement with national institutions and health partners on hepatitis prevention, birth-dose vaccination and community health."}
-            </p>
-          </div>
-          <div className="-mx-4 flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-3 md:px-0 md:overflow-visible">
+          <SectionHeader
+            eyebrow="Institutional Engagement"
+            title={home.engagementTitle || "Turning advocacy into conversations that can move policy"}
+            subtitle={home.engagementIntro || "THA’s public record includes engagement with national institutions and health partners on hepatitis prevention, birth-dose vaccination and community health."}
+            inverse
+            compact
+          />
+          <ResponsiveRail desktopGrid="md:grid-cols-3" mobileWidth="78vw" className="md:gap-5">
             {parliamentEvidence ? (
               <Link to={parliamentEvidence.url} className="min-w-[78vw] max-w-[78vw] snap-center rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:min-w-0 md:max-w-none md:p-6">
                 <p className="text-xs uppercase tracking-wider text-white/60 mb-2">{parliamentEvidence.meta}</p>
@@ -386,6 +347,46 @@ export const Home = () => {
               <h3 className="text-lg font-bold mb-2">Evidence & Verification</h3>
               <p className="text-sm text-white/75">Review registration information, dated records and independent references.</p>
             </Link>
+          </ResponsiveRail>
+        </div>
+      </section>
+
+      {/* FUNDER READY */}
+      <section className="bg-white py-12 md:py-20">
+        <div className="max-w-6xl mx-auto px-4">
+          <SectionHeader
+            eyebrow="For Funders & Partners"
+            title="Fund measurable work, not vague promises"
+            subtitle={site.funding?.institutionalText || "For institutional or project funding, THA can agree the activity, target group, budget, timeline and reporting requirements before implementation begins."}
+            centered
+            compact
+          />
+
+          <div className="grid gap-3 md:grid-cols-3 md:gap-6">
+            <div className="rounded-2xl border border-primary/10 bg-cool-gray p-5 md:p-6">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"><Icon name="assignment" size={20} category="primary" /></div>
+              <h3 className="font-bold text-primary">Defined scope & budget</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-600">Agree the activity, target group, locations, timeline and budget before implementation starts.</p>
+            </div>
+            <div className="rounded-2xl border border-primary/10 bg-cool-gray p-5 md:p-6">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"><Icon name="monitoring" size={20} category="primary" /></div>
+              <h3 className="font-bold text-primary">Measurable outcomes</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-600">Track agreed indicators such as people reached, referrals, institutions engaged and campaign-specific results.</p>
+            </div>
+            <div className="rounded-2xl border border-primary/10 bg-cool-gray p-5 md:p-6">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"><Icon name="fact_check" size={20} category="primary" /></div>
+              <h3 className="font-bold text-primary">Evidence & reporting</h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-600">Receive agreed reporting, activity evidence and results that can be reviewed against the funded workplan.</p>
+            </div>
+          </div>
+
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:justify-center">
+            <Link to="/make-a-difference" className="btn-primary justify-center px-4 py-2.5 text-sm md:px-6 md:py-3">
+              Discuss Funding
+            </Link>
+            <Link to="/documents" className="btn-secondary justify-center px-4 py-2.5 text-sm md:px-6 md:py-3">
+              Due Diligence
+            </Link>
           </div>
         </div>
       </section>
@@ -393,7 +394,7 @@ export const Home = () => {
       {/* OBJECTIVES */}
       <section className="py-12 md:py-20 bg-cool-gray">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-left md:text-center text-primary mb-7 md:mb-12">What We Do</h2>
+          <SectionHeader title="What We Do" centered compact />
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             {objectives.map((obj, i) => (
               <ObjectiveCard key={obj.id || i} obj={obj} index={i} />
@@ -404,9 +405,14 @@ export const Home = () => {
 
       {/* PARTNERS */}
       <section id="partners" className="scroll-mt-16 py-12 md:py-20 bg-white">
-        <div className="text-left md:text-center px-4 mb-6 md:mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-primary">Our Partners</h2>
-          <p className="text-gray-600 mt-2">Working with global and local organizations</p>
+        <div className="px-4">
+          <SectionHeader
+            eyebrow="Trust & Collaboration"
+            title="Our Partners"
+            subtitle={site.about?.partnersIntro || "Working with organizations that strengthen our reach, technical work and accountability."}
+            centered
+            compact
+          />
         </div>
         <PartnersCarousel partners={partners.partners} />
       </section>
@@ -424,22 +430,20 @@ export const Home = () => {
       {/* NEWS */}
       <section className="py-12 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-primary">Latest News</h2>
-            <Link to="/news" className="hidden sm:inline-flex items-center gap-1 text-secondary font-semibold hover:underline">
+          <div className="flex items-start justify-between gap-4">
+            <SectionHeader title="Latest News" compact />
+            <Link to="/news" className="hidden sm:inline-flex items-center gap-1 pt-1 text-secondary font-semibold hover:underline">
               View All <Icon name="arrow_forward" size={16} />
             </Link>
           </div>
           {latestNewsLoading ? (
             <p className="text-center text-gray-500 py-8">Loading latest news...</p>
           ) : latestNews.length > 0 ? (
-            <div className="-mx-4 flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0">
+            <ResponsiveRail desktopGrid="md:grid-cols-3" mobileWidth="82vw">
               {latestNews.map((n) => (
-                <div key={n.id} className="min-w-[82vw] max-w-[82vw] snap-center md:min-w-0 md:max-w-none">
-                  <NewsCard news={n} />
-                </div>
+                <NewsCard key={n.id} news={n} />
               ))}
-            </div>
+            </ResponsiveRail>
           ) : (
             <div className="rounded-xl bg-cool-gray px-6 py-8 text-center">
               <p className="text-gray-600 mb-4">Latest news is temporarily unavailable.</p>
