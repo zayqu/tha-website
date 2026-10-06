@@ -434,7 +434,11 @@ export const Home = () => {
             <p className="text-center text-gray-500 py-8">Loading latest news...</p>
           ) : latestNews.length > 0 ? (
             <div className="-mx-4 flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0">
-              {latestNews.map((n) => (\n                <div key={n.id} className="min-w-[82vw] max-w-[82vw] snap-center md:min-w-0 md:max-w-none"><NewsCard news={n} /></div>\n              ))}
+              {latestNews.map((n) => (
+                <div key={n.id} className="min-w-[82vw] max-w-[82vw] snap-center md:min-w-0 md:max-w-none">
+                  <NewsCard news={n} />
+                </div>
+              ))}
             </div>
           ) : (
             <div className="rounded-xl bg-cool-gray px-6 py-8 text-center">
