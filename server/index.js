@@ -127,6 +127,7 @@ app.use('/api/journey', journeyRoutes);
 app.use('/api/site-content', siteContentRoutes);
 app.use('/api/media/news', express.static(MEDIA_DIR, { maxAge: '30d', immutable: true }));
 app.use('/api/media/documents', express.static(siteContentRoutes.DOCUMENT_DIR, { maxAge: '1h' }));
+app.use('/api/media/site', express.static(siteContentRoutes.SITE_MEDIA_DIR, { maxAge: '30d', immutable: true }));
 
 app.get('/api/health', (_req, res) => {
   res.json({
