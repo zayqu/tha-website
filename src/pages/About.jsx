@@ -109,7 +109,7 @@ export const About = () => {
             About Tanzania Health Alliance
           </h1>
           <p className="text-xl text-white/90 max-w-3xl mx-auto">
-            Dedicated to transforming health outcomes and strengthening health systems across Tanzania through advocacy, research, and community engagement.
+            Tanzania Health Alliance (THA) is a registered NGO (No. 00NGO/R/8379) based in Dar es Salaam. We work with communities, health institutions and partners on Viral Hepatitis, HIV and Mental Health.
           </p>
         </div>
       </section>
@@ -138,7 +138,7 @@ export const About = () => {
             <div>
               <span className="text-accent font-semibold text-sm uppercase tracking-wider">Our Founder's Story</span>
               <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2 mb-6">
-                From Personal Loss to Global Impact
+                Why THA Exists
               </h2>
 
               <div className="text-xl italic text-gray-700 border-l-4 border-accent pl-6 mb-6 leading-relaxed">
@@ -154,20 +154,37 @@ export const About = () => {
 
               {/* Key Recognition */}
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-cool-gray rounded-lg p-4 flex items-center gap-3">
-                  <Icon name="film" size={32} category="accent" />
+                <a
+                  href="https://www.worldhepatitisalliance.org/our-team-2025/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-cool-gray rounded-lg p-4 flex items-center gap-3 hover:shadow-card transition"
+                >
+                  <Icon name="public" size={32} category="accent" />
                   <div>
-                    <p className="font-bold text-sm">WHO Documentary</p>
-                    <p className="text-xs text-gray-500">Featured in 2025</p>
+                    <p className="font-bold text-sm">WHA AFRO Board Member</p>
+                    <p className="text-xs text-gray-500">Independent verification</p>
                   </div>
-                </div>
-                <div className="bg-cool-gray rounded-lg p-4 flex items-center gap-3">
-                  <Icon name="award" size={32} category="secondary" />
+                </a>
+                <a
+                  href="https://abachepb.org/funding/current-awardees-2026/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-cool-gray rounded-lg p-4 flex items-center gap-3 hover:shadow-card transition"
+                >
+                  <Icon name="verified" size={32} category="secondary" />
                   <div>
-                    <p className="font-bold text-sm">WHA Board Member</p>
-                    <p className="text-xs text-gray-500">Elected Nov 2025</p>
+                    <p className="font-bold text-sm">2026 Hepatitis B Advocacy Awardee</p>
+                    <p className="text-xs text-gray-500">KAPIME campaign</p>
                   </div>
-                </div>
+                </a>
+              </div>
+
+              <div className="mt-6">
+                <Link to="/documents" className="inline-flex items-center gap-2 text-secondary font-semibold hover:underline">
+                  View registration, records and independent verification
+                  <Icon name="arrow_forward" size={16} category="secondary" />
+                </Link>
               </div>
             </div>
           </div>
@@ -230,7 +247,7 @@ export const About = () => {
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">How We Work</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2">Our Campaign Approach</h2>
             <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
-              THA delivers impact through structured campaigns. Every activity and outreach maps to a campaign, ensuring focused, measurable results.
+              Our work is organized through focused campaigns so that activities, partners and results can be traced back to a clear public-health purpose.
             </p>
           </div>
 
@@ -337,7 +354,7 @@ export const About = () => {
           <div className="text-center mb-12">
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">Collaboration</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2">Our Partners</h2>
-            <p className="text-gray-600 mt-4">Working with global and local organizations to advance health outcomes</p>
+            <p className="text-gray-600 mt-4">Working with organizations that strengthen our reach, technical work and accountability</p>
           </div>
 
           <PartnersCarousel partners={partners.partners} />
@@ -351,7 +368,7 @@ export const About = () => {
             Join Our Movement
           </h2>
           <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-            Tanzania Health Alliance is building a healthier future. Be part of our mission to strengthen health systems and save lives across Tanzania.
+            If our work aligns with your institution, community or funding priorities, we would be glad to start with a practical conversation about where collaboration can make the most difference.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/make-a-difference" className="px-8 py-3 bg-secondary text-white font-bold rounded-lg hover:bg-secondary-dark transition">
