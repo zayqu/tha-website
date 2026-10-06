@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Icon } from './Icon';
 import { thaData } from '../data/thaData';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 export const Footer = () => {
+  const site = useSiteContent();
+  const org = site.organization || {};
+  const contact = site.contact || {};
   return (
     <footer className="bg-primary-dark text-white">
       {/* Main Footer Content */}
@@ -26,14 +30,14 @@ export const Footer = () => {
                 About Tanzania Health Alliance
               </h4>
               <p className="text-sm text-white/75 leading-relaxed mb-3">
-                Tanzania Health Alliance (THA) is a registered NGO (No. 00NGO/R/8379) based in Dar es Salaam, working on Viral Hepatitis, HIV, and Mental Health.
+                {`${org.name || "Tanzania Health Alliance"} (${org.shortName || "THA"}) is a registered NGO (No. ${org.registrationNumber || "00NGO/R/8379"}) based in ${contact.city || "Dar es Salaam"}, working on Viral Hepatitis, HIV, and Mental Health.`}
               </p>
               <p className="text-sm text-white/75 leading-relaxed mb-5">
                 We work with communities, health institutions, government stakeholders and partners to turn public-health advocacy into practical community action.
               </p>
               <div className="flex gap-3">
                 <a
-                  href={thaData.social.facebook}
+                  href={contact.facebook || thaData.social.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-9 h-9 rounded-md bg-white/10 flex items-center justify-center hover:bg-secondary transition"
@@ -42,7 +46,7 @@ export const Footer = () => {
                   <Icon name="facebook" size={18} color="white" />
                 </a>
                 <a
-                  href={thaData.social.instagram}
+                  href={contact.instagram || thaData.social.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-9 h-9 rounded-md bg-white/10 flex items-center justify-center hover:bg-secondary transition"
@@ -51,7 +55,7 @@ export const Footer = () => {
                   <Icon name="instagram" size={18} color="white" />
                 </a>
                 <a
-                  href={thaData.social.linkedin}
+                  href={contact.linkedin || thaData.social.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-9 h-9 rounded-md bg-white/10 flex items-center justify-center hover:bg-secondary transition"
@@ -118,25 +122,25 @@ export const Footer = () => {
                 <div className="flex items-start gap-3">
                   <Icon name="location_on" size={18} color="white" className="mt-0.5 flex-shrink-0 opacity-75" />
                   <p className="text-sm text-white/75 leading-relaxed">
-                    Adda Estate, House No. 03, Kinondoni,<br />
-                    P.O. Box 31902,<br />
-                    Dar es Salaam, Tanzania
+                    {contact.address || 'Adda Estate, House No. 03, Kinondoni'},<br />
+                    {contact.poBox || 'P.O. Box 31902'},<br />
+                    {contact.city || 'Dar es Salaam'}, {contact.country || 'Tanzania'}
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
                   <Icon name="phone" size={18} color="white" className="flex-shrink-0 opacity-75" />
                   <div>
-                    <p className="text-sm text-white/75">+255 659-114-754</p>
-                    <p className="text-sm text-white/75">+255 659-114-754</p>
+                    <p className="text-sm text-white/75">{contact.phone || '+255 659 114 754'}</p>
+                    {contact.secondaryPhone ? <p className="text-sm text-white/75">{contact.secondaryPhone}</p> : null}
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <Icon name="email" size={18} color="white" className="flex-shrink-0 opacity-75" />
                   <a
-                    href="mailto:info@tzhealthalliance.or.tz"
+                    href={`mailto:${contact.email || "info@tzhealthalliance.or.tz"}`}
                     className="text-sm text-white/75 hover:text-secondary transition"
                   >
-                    info@tzhealthalliance.or.tz
+                    {contact.email || "info@tzhealthalliance.or.tz"}
                   </a>
                 </div>
               </div>
@@ -146,7 +150,7 @@ export const Footer = () => {
           {/* Bottom Bar */}
           <div className="border-t border-white/15 pt-8 pb-16 md:pb-0 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-white/60">
-              Copyright &copy; {new Date().getFullYear()} - Tanzania Health Alliance
+              Copyright &copy; {new Date().getFullYear()} - {org.name || "Tanzania Health Alliance"}
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
               <Link to="/privacy" className="text-sm text-white/60 hover:text-secondary transition">Privacy Policy</Link>
