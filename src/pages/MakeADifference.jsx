@@ -5,8 +5,6 @@ import { thaData } from '../data/thaData';
 
 export const MakeADifference = () => {
   const [activeTab, setActiveTab] = useState('volunteer');
-  const [donationAmount, setDonationAmount] = useState(50000);
-
   const roles = [
     {
       title: 'Health Ambassador',
@@ -28,14 +26,6 @@ export const MakeADifference = () => {
     },
   ];
 
-  const impactCalculations = {
-    50000: 'Tests 10 people for Hepatitis B (KAPIME)',
-    100000: 'Screens 25 community members and provides education',
-    250000: 'Funds 5 counseling sessions for youth (Life Unlocked)',
-    500000: 'Trains 1 peer supporter for Talk To Heal program',
-    1000000: 'Supports a full community health screening event',
-    2000000: 'Funds 1 support group for an entire month',
-  };
 
   return (
     <div className="pt-14 md:pt-16">
@@ -51,7 +41,7 @@ export const MakeADifference = () => {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="heading-xl text-white mb-6">Make a Difference</h1>
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
-              Your support helps us reach more communities, save more lives, and build a healthier Tanzania.
+              Work with us where your time, funding or institutional support can meet a clear public-health need.
             </p>
           </div>
         </div>
@@ -160,61 +150,54 @@ export const MakeADifference = () => {
             <div className="text-center mb-12">
               <h2 className="heading-lg mb-4">Support Our Mission</h2>
               <p className="body-lg max-w-3xl mx-auto">
-                Your generous donation directly funds health programs, education, and community support
+                We welcome support for clearly defined activities, with an agreed purpose, budget and reporting approach.
               </p>
             </div>
 
-            <div className="max-w-4xl mx-auto">
-              {/* Impact Calculator */}
-              <div className="bg-gradient-to-br from-secondary/10 to-secondary/5 p-8 md:p-12 rounded-2xl mb-8">
-                <h3 className="heading-md mb-6 text-center">Your Impact</h3>
-                <div className="mb-6">
-                  <input
-                    type="range"
-                    min="50000"
-                    max="500000"
-                    step="50000"
-                    value={donationAmount}
-                    onChange={(e) => setDonationAmount(Number(e.target.value))}
-                    className="w-full h-3 bg-secondary/20 rounded-lg appearance-none cursor-pointer"
-                  />
-                  <div className="text-center mt-4">
-                    <div className="text-4xl font-bold text-secondary mb-2">
-                      {donationAmount.toLocaleString()} TZS
-                    </div>
-                    <p className="body-md text-primary">
-                      {impactCalculations[donationAmount]}
-                    </p>
-                  </div>
+            <div className="max-w-4xl mx-auto grid gap-6 md:grid-cols-2">
+              <div className="bg-white p-6 md:p-8 rounded-2xl shadow-card">
+                <div className="w-11 h-11 rounded-xl bg-primary/5 flex items-center justify-center mb-5">
+                  <Icon name="assignment" size={22} category="primary" />
                 </div>
+                <h3 className="heading-sm mb-3">Fund a defined activity</h3>
+                <p className="body-md text-neutral-dark/70 mb-5">
+                  For institutional or project funding, THA can agree the activity, target group, budget, timeline and reporting requirements before implementation begins.
+                </p>
+                <a
+                  href="mailto:info@tzhealthalliance.or.tz?subject=Funding%20or%20grant%20discussion"
+                  className="inline-flex items-center gap-2 text-secondary font-semibold hover:underline"
+                >
+                  Start a funding conversation
+                  <Icon name="arrow_forward" size={17} category="secondary" />
+                </a>
               </div>
 
-              {/* Payment Methods */}
               <div className="bg-white p-6 md:p-8 rounded-2xl shadow-card">
-                <h4 className="heading-sm mb-6">Bank Transfer</h4>
-                <div className="space-y-4 text-sm">
-                  <div className="p-4 bg-neutral rounded-lg">
-                    <div className="font-semibold text-primary mb-1">Bank Name</div>
-                    <div className="text-neutral-dark/70">{thaData.bankDetails.bankName}</div>
-                  </div>
-                  <div className="p-4 bg-neutral rounded-lg">
-                    <div className="font-semibold text-primary mb-1">Account Name</div>
-                    <div className="text-neutral-dark/70">{thaData.bankDetails.accountName}</div>
-                  </div>
-                  <div className="p-4 bg-neutral rounded-lg">
-                    <div className="font-semibold text-primary mb-1">Account Number</div>
-                    <div className="text-neutral-dark/70 text-lg font-mono">{thaData.bankDetails.accountNumber}</div>
-                  </div>
-                  <div className="p-4 bg-neutral rounded-lg">
-                    <div className="font-semibold text-primary mb-1">SWIFT Code</div>
-                    <div className="text-neutral-dark/70 font-mono">{thaData.bankDetails.swiftCode}</div>
-                  </div>
-                  <div className="mt-6 p-4 bg-secondary/10 rounded-lg">
-                    <p className="text-xs text-primary">
-                      Please include your name and contact information in the transfer reference. Donations are tax-deductible where applicable.
-                    </p>
-                  </div>
+                <div className="w-11 h-11 rounded-xl bg-primary/5 flex items-center justify-center mb-5">
+                  <Icon name="account_balance" size={22} category="primary" />
                 </div>
+                <h3 className="heading-sm mb-3">Request verified donation details</h3>
+                <p className="body-md text-neutral-dark/70 mb-5">
+                  To protect donors and THA, current banking or payment instructions are shared directly by the organization rather than published as unverified website data.
+                </p>
+                <a
+                  href="mailto:info@tzhealthalliance.or.tz?subject=Request%20for%20verified%20THA%20donation%20details"
+                  className="inline-flex items-center gap-2 text-secondary font-semibold hover:underline"
+                >
+                  Request payment instructions
+                  <Icon name="mail" size={17} category="secondary" />
+                </a>
+              </div>
+
+              <div className="md:col-span-2 rounded-2xl bg-primary p-6 md:p-8 text-white">
+                <h3 className="text-xl font-bold mb-3">For grantmakers and institutional partners</h3>
+                <p className="text-white/80 mb-5 max-w-3xl">
+                  Registration information, public activity records and independent verification are available on our Documents & Accountability page. Additional due-diligence documents can be requested directly from THA.
+                </p>
+                <a href="/documents" className="inline-flex items-center gap-2 font-semibold text-white hover:underline">
+                  Review Documents & Accountability
+                  <Icon name="arrow_forward" size={17} color="white" />
+                </a>
               </div>
             </div>
           </div>
@@ -228,7 +211,7 @@ export const MakeADifference = () => {
             <div className="text-center mb-12">
               <h2 className="heading-lg mb-4">Partner With Us</h2>
               <p className="body-lg max-w-3xl mx-auto">
-                Join leading organizations in supporting sustainable health solutions across Tanzania
+                If our work aligns with your organization, tell us what you are trying to achieve and where collaboration may make sense.
               </p>
             </div>
 
