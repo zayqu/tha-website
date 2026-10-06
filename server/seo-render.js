@@ -351,10 +351,75 @@ function projectFallback(project) {
   });
 }
 
-function renderPublicPage(templatePath, pathname, { project } = {}) {
+function renderPublicPage(templatePath, pathname, { project, siteContent = {} } = {}) {
   let html = fs.readFileSync(templatePath, 'utf8');
   let definition = PAGE_DEFINITIONS[pathname];
   let fallback;
+
+  const org = siteContent.organization || {};
+  const contact = siteContent.contact || {};
+  const home = siteContent.home || {};
+  const about = siteContent.about || {};
+  const impact = siteContent.impact || {};
+  const funding = siteContent.funding || {};
+
+  const dynamicPages = {
+    '/': {
+      title: `${org.name || SITE_NAME} | ${home.heroTitle || org.motto || 'Together for a Healthier Tanzania'}`,
+      description: home.heroDescription || PAGE_DEFINITIONS['/']?.description,
+      heading: home.heroTitle || org.motto || 'Together for a Healthier Tanzania',
+      paragraphs: [
+        home.heroDescription,
+        org.registrationNumber ? `${org.name || SITE_NAME} is a registered NGO (No. ${org.registrationNumber}) based in ${contact.city || 'Dar es Salaam'}, ${contact.country || 'Tanzania'}.` : '',
+        home.engagementIntro,
+      ].filter(Boolean),
+      links: ['/about', '/projects', '/impact', '/academy', '/news', '/documents', '/contact'],
+    },
+    '/about': {
+      title: `About ${org.name || SITE_NAME} | ${SITE_NAME}`,
+      description: about.heroText || PAGE_DEFINITIONS['/about']?.description,
+      heading: `About ${org.name || SITE_NAME}`,
+      paragraphs: [about.heroText, about.founderStory, org.mission, org.vision].filter(Boolean),
+      links: ['/projects', '/impact', '/documents', '/news', '/contact'],
+    },
+    '/impact': {
+      title: `Impact | ${org.name || SITE_NAME}`,
+      description: impact.heroText || PAGE_DEFINITIONS['/impact']?.description,
+      heading: impact.heroTitle || 'Impact built through documented work',
+      paragraphs: [impact.heroText, impact.metricsIntro, impact.evidenceIntro].filter(Boolean),
+      links: ['/projects', '/documents', '/news', '/contact'],
+    },
+    '/documents': {
+      title: `Documents & Accountability | ${org.name || SITE_NAME}`,
+      description: 'Access registration information, policies, public activity records and independent verification links.',
+      heading: 'Documents & Accountability',
+      paragraphs: [
+        org.registrationNumber ? `${org.name || SITE_NAME} (${org.shortName || 'THA'}) is a registered NGO, No. ${org.registrationNumber}, based in ${contact.city || 'Dar es Salaam'}, ${contact.country || 'Tanzania'}.` : '',
+        'This page brings together registration information, policies, dated activity records and independent references for partners, funders and communities.',
+      ].filter(Boolean),
+      links: ['/about', '/impact', '/projects', '/news', '/contact'],
+    },
+    '/make-a-difference': {
+      title: `Make a Difference | ${org.name || SITE_NAME}`,
+      description: funding.heroText || PAGE_DEFINITIONS['/make-a-difference']?.description,
+      heading: 'Make a Difference',
+      paragraphs: [funding.heroText, funding.donationIntro, funding.institutionalText, funding.partnerIntro].filter(Boolean),
+      links: ['/projects', '/documents', '/contact', '/impact'],
+    },
+    '/contact': {
+      title: `Contact ${org.name || SITE_NAME}`,
+      description: `Contact ${org.name || SITE_NAME} for partnerships, public health programs, advocacy and community engagement.`,
+      heading: `Contact ${org.name || SITE_NAME}`,
+      paragraphs: [
+        [contact.address, contact.poBox, contact.city, contact.country].filter(Boolean).join(', '),
+        contact.email ? `Email: ${contact.email}.` : '',
+        contact.phone ? `Phone: ${contact.phone}.` : '',
+      ].filter(Boolean),
+      links: ['/about', '/documents', '/projects', '/news'],
+    },
+  };
+
+  if (dynamicPages[pathname]) definition = dynamicPages[pathname];
 
   if (pathname.startsWith('/campaigns/')) {
     const campaignId = decodeURIComponent(pathname.split('/').filter(Boolean)[1] || '');
@@ -393,8 +458,8 @@ function renderPublicPage(templatePath, pathname, { project } = {}) {
       },
       about: {
         '@type': 'NGO',
-        name: SITE_NAME,
-        alternateName: ['THA', 'THA Tanzania', 'Tanzania Health Alliance (THA)'],
+        name: org.name || SITE_NAME,
+        alternateName: [org.shortName || 'THA', 'THA Tanzania', `${org.name || SITE_NAME} (${org.shortName || 'THA'})`],
         url: SITE_URL + '/',
         knowsAbout: ['Viral Hepatitis', 'Hepatitis B', 'HIV', 'Mental Health', 'Public Health'],
       },
@@ -402,8 +467,8 @@ function renderPublicPage(templatePath, pathname, { project } = {}) {
     ...(pathname === '/' ? [{
       '@context': 'https://schema.org',
       '@type': 'NGO',
-      name: SITE_NAME,
-      alternateName: ['THA', 'THA Tanzania', 'Tanzania Health Alliance (THA)'],
+      name: org.name || SITE_NAME,
+      alternateName: [org.shortName || 'THA', 'THA Tanzania', `${org.name || SITE_NAME} (${org.shortName || 'THA'})`],
       url: SITE_URL + '/',
       logo: SITE_URL + '/logo/tha-logo.svg',
       description: definition.description,
@@ -424,13 +489,13 @@ function renderPublicPage(templatePath, pathname, { project } = {}) {
       ],
       founder: {
         '@type': 'Person',
-        name: 'Shaibu Issa',
-        jobTitle: 'Founder and Executive Director',
+        name: org.founderName || 'Shaibu Issa',
+        jobTitle: org.founderTitle || 'Founder and Executive Director',
       },
       sameAs: [
-        'https://instagram.com/tanzania_healthalliance',
-        'https://www.linkedin.com/company/tanzania-health-alliance',
-        'https://www.facebook.com/tanzaniahealthalliance',
+        contact.instagram || 'https://instagram.com/tanzania_healthalliance',
+        contact.linkedin || 'https://www.linkedin.com/company/tanzania-health-alliance',
+        contact.facebook || 'https://www.facebook.com/tanzaniahealthalliance',
       ],
     }] : []),
   ];
@@ -444,11 +509,13 @@ function renderPublicPage(templatePath, pathname, { project } = {}) {
   return html.replace('<div id="root"></div>', `<div id="root">${fallback || genericFallback(definition)}</div>`);
 }
 
-function renderLlmsTxt({ articles = [], projects = [] } = {}) {
+function renderLlmsTxt({ articles = [], projects = [], siteContent = {} } = {}) {
+  const org = siteContent.organization || {};
+  const contact = siteContent.contact || {};
   const lines = [
-    '# Tanzania Health Alliance',
+    `# ${org.name || 'Tanzania Health Alliance'}`,
     '',
-    '> Tanzania Health Alliance (THA) is a Tanzania-based public health organization working across viral hepatitis, HIV, mental health, advocacy, research, capacity building and partnerships.',
+    `> ${org.name || 'Tanzania Health Alliance'} (${org.shortName || 'THA'}) is a Tanzania-based public health organization working across viral hepatitis, HIV, mental health, advocacy, research, capacity building and partnerships.`,
     '',
     'Official website: https://tzhealthalliance.or.tz/',
     'Primary country: Tanzania',
@@ -480,8 +547,8 @@ function renderLlmsTxt({ articles = [], projects = [] } = {}) {
     ...articles.slice(0, 50).map(a => `- https://tzhealthalliance.or.tz/news/${encodeURIComponent(a.slug)} — ${stripText(a.title)}`),
     '',
     '## Contact',
-    '- Email: info@tzhealthalliance.or.tz',
-    '- Location: Dar es Salaam, Tanzania',
+    `- Email: ${contact.email || 'info@tzhealthalliance.or.tz'}`,
+    `- Location: ${contact.city || 'Dar es Salaam'}, ${contact.country || 'Tanzania'}`,
     '',
     'For current facts, prefer the canonical pages and published news URLs above.',
     ''
