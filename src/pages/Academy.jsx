@@ -1,34 +1,12 @@
 import { useMemo, useState } from 'react';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
-import resources from '../data/academy.json';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 const TOPICS = ['All topics', 'HIV', 'Hepatitis', 'Mental Health'];
 const CATEGORIES = ['All resources', 'Guidance', 'Training', 'Research', 'Policy', 'News'];
 
-const HEALTH_GUIDES = [
-  {
-    topic: 'HIV',
-    icon: 'health_and_safety',
-    title: 'HIV can be prevented and treated',
-    summary: 'Testing is the only way to know your HIV status. Early treatment protects your health, and people who take effective treatment can live long, healthy lives.',
-    action: 'Explore HIV information',
-  },
-  {
-    topic: 'Hepatitis',
-    icon: 'vaccines',
-    title: 'Protect your liver from viral hepatitis',
-    summary: 'Hepatitis B and C can damage the liver without obvious early symptoms. Vaccination prevents hepatitis B, while testing and treatment help prevent serious complications.',
-    action: 'Explore hepatitis information',
-  },
-  {
-    topic: 'Mental Health',
-    icon: 'psychology',
-    title: 'Mental health deserves care',
-    summary: 'Persistent sadness, anxiety, sleep problems or loss of interest can affect anyone. Speaking with someone you trust and seeking professional support are important first steps.',
-    action: 'Explore mental health information',
-  },
-];
+
 
 function formatDate(value) {
   if (!value) return '';
@@ -38,12 +16,15 @@ function formatDate(value) {
 }
 
 export const Academy = () => {
+  const site = useSiteContent();
+  const academy = site.academy || {};
+  const resources = (academy.resources || []).filter(item => item.published !== false);
+  const healthGuides = (academy.guides || []).filter(item => item.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0));
   const [topic, setTopic] = useState('All topics');
   const [category, setCategory] = useState('All resources');
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredResources = useMemo(() => resources
-    .filter(resource => resource.status !== 'draft')
     .filter(resource => topic === 'All topics' || resource.topics?.includes(topic))
     .filter(resource => category === 'All resources' || resource.category === category)
     .filter(resource => {
@@ -52,12 +33,12 @@ export const Academy = () => {
       return [resource.title, resource.excerpt, resource.source, ...(resource.topics || [])]
         .join(' ').toLowerCase().includes(query);
     })
-    .sort((a, b) => new Date(b.date) - new Date(a.date)), [topic, category, searchQuery]);
+    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0)), [resources, topic, category, searchQuery]);
 
   return (
     <div className="pt-14 md:pt-16">
       <SEO
-        title="Public Health Knowledge Centre"
+        title={academy.heroTitle || "Public Health Knowledge Centre"}
         description="Read trusted online guidance, training and health information on HIV, viral hepatitis and mental health."
         canonicalPath="/academy"
       />
@@ -65,9 +46,9 @@ export const Academy = () => {
       <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="heading-xl text-white mb-5">Public Health Knowledge Centre</h1>
+            <h1 className="heading-xl text-white mb-5">{academy.heroTitle || 'Public Health Knowledge Centre'}</h1>
             <p className="text-lg md:text-xl text-white/85 max-w-3xl mx-auto">
-              Find clear answers about HIV, viral hepatitis and mental health, then explore trusted guidance when you want to learn more.
+              {academy.heroText || 'Find clear answers about HIV, viral hepatitis and mental health, then explore trusted guidance when you want to learn more.'}
             </p>
           </div>
         </div>
@@ -98,7 +79,7 @@ export const Academy = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {HEALTH_GUIDES.map(guide => (
+            {healthGuides.map(guide => (
               <article key={guide.topic} className="rounded-2xl border border-gray-100 bg-neutral p-6">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5">
                   <Icon name={guide.icon} size={26} className="text-primary" />
@@ -199,12 +180,10 @@ export const Academy = () => {
           <div className="max-w-4xl mx-auto grid md:grid-cols-[1fr_1.4fr] gap-8 items-start">
             <div>
               <p className="text-secondary font-semibold mb-2">Your health matters</p>
-              <h2 className="heading-lg">Know when to seek help</h2>
+              <h2 className="heading-lg">{academy.helpTitle || 'Know when to seek help'}</h2>
             </div>
             <div className="space-y-4 text-gray-600">
-              <p>Visit a health facility if you may have been exposed to HIV or hepatitis, need testing, or have symptoms that concern you. Early advice and treatment can make a major difference.</p>
-              <p>If emotional distress is affecting daily life, speak with a qualified health professional or someone you trust. Urgent help is important if you or another person may be in immediate danger.</p>
-              <p>The resources above support learning and informed conversations; a health professional can provide advice for your individual needs.</p>
+              {(academy.helpText || []).map((text, index) => <p key={index}>{text}</p>)}
             </div>
           </div>
         </div>
