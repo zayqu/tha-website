@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
-import { thaData, sendEmail } from '../data/thaData';
+import { thaData } from '../data/thaData';
 import { useSiteContent } from '../hooks/useSiteContent';
 
 export const Contact = () => {
@@ -14,26 +14,20 @@ export const Contact = () => {
     subject: '',
     message: ''
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      await sendEmail({ subject: formData.subject, ...formData });
-      setSubmitted(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-    } catch {
-      alert('Something went wrong. Please try again or email us directly.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    const email = contact.email || thaData.contact.emails[0];
+    const subject = encodeURIComponent(formData.subject || 'Website enquiry');
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
+    );
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -91,15 +85,15 @@ export const Contact = () => {
                     <div className="space-y-1 text-sm text-gray-600">
                       <div className="flex justify-between gap-8">
                         <span>Monday – Friday</span>
-                        <span className="font-medium text-primary">9:00 AM – 5:00 PM</span>
+                        <span className="font-medium text-primary">{contact.workHours?.mondayFriday || '9:00 AM – 5:00 PM'}</span>
                       </div>
                       <div className="flex justify-between gap-8">
                         <span>Saturday</span>
-                        <span className="font-medium text-primary">10:00 AM – 2:00 PM</span>
+                        <span className="font-medium text-primary">{contact.workHours?.saturday || '10:00 AM – 2:00 PM'}</span>
                       </div>
                       <div className="flex justify-between gap-8">
                         <span>Sunday</span>
-                        <span className="font-medium text-gray-400">Closed</span>
+                        <span className="font-medium text-gray-400">{contact.workHours?.sunday || 'Closed'}</span>
                       </div>
                     </div>
                   </div>
@@ -173,19 +167,6 @@ export const Contact = () => {
               <h2 className="text-2xl font-heading font-bold text-primary mb-2">Talk to our team</h2>
               <p className="text-gray-600 text-sm mb-8">Whether you need health-program information, want to partner with us, or have a community concern, send us a message. Our team will respond as soon as possible.</p>
 
-              {submitted ? (
-                <div className="text-center py-10">
-                  <Icon name="check_circle" size={56} category="secondary" className="mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-primary mb-2">Message Sent!</h3>
-                  <p className="text-gray-600">Thank you for reaching out. We'll get back to you shortly.</p>
-                  <button
-                    onClick={() => setSubmitted(false)}
-                    className="mt-6 px-6 py-2 border-2 border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition font-semibold"
-                  >
-                    Send Another
-                  </button>
-                </div>
-              ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div>
                     <label className="block text-sm font-semibold text-near-black mb-1.5">Full Name *</label>
@@ -240,11 +221,11 @@ export const Contact = () => {
                     disabled={isSubmitting}
                     className="w-full px-6 py-3 bg-secondary text-white font-bold rounded-lg hover:bg-secondary-dark transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                    Send Message
                     <Icon name="arrow_forward" size={20} color="white" />
                   </button>
                 </form>
-              )}
+
             </div>
           </div>
         </div>
