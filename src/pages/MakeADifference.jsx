@@ -168,7 +168,7 @@ export const MakeADifference = () => {
                   {funding.institutionalText || "For institutional or project funding, THA can agree the activity, target group, budget, timeline and reporting requirements before implementation begins."}
                 </p>
                 <a
-                  href="mailto:${contact.email || "info@tzhealthalliance.or.tz"}?subject=Funding%20or%20grant%20discussion"
+                  href={`mailto:${contact.email || "info@tzhealthalliance.or.tz"}?subject=Funding%20or%20grant%20discussion`}
                   className="inline-flex items-center gap-2 text-secondary font-semibold hover:underline"
                 >
                   Start a funding conversation
@@ -185,7 +185,7 @@ export const MakeADifference = () => {
                   To protect donors and THA, current banking or payment instructions are shared directly by the organization rather than published as unverified website data.
                 </p>
                 <a
-                  href="mailto:${contact.email || "info@tzhealthalliance.or.tz"}?subject=Request%20for%20verified%20THA%20donation%20details"
+                  href={`mailto:${contact.email || "info@tzhealthalliance.or.tz"}?subject=Request%20for%20verified%20THA%20donation%20details`}
                   className="inline-flex items-center gap-2 text-secondary font-semibold hover:underline"
                 >
                   Request payment instructions
