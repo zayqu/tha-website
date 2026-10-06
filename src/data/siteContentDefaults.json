@@ -25,7 +25,11 @@
       "mondayFriday": "9:00 AM – 5:00 PM",
       "saturday": "10:00 AM – 2:00 PM",
       "sunday": "Closed"
-    }
+    },
+    "pageIntro": "Whether you are looking for program information, partnership opportunities, due-diligence documents or a way to support our work, talk to our team.",
+    "formIntro": "Whether you need health-program information, want to partner with us, or have a community concern, send us a message. Our team will respond as soon as possible.",
+    "volunteerCtaTitle": "Want to help with the work?",
+    "volunteerCtaText": "Tell us what you can contribute and how much time you have. We will match that with current THA activities where your support is genuinely useful."
   },
   "home": {
     "heroTitle": "Together for a Healthier Tanzania",
@@ -657,5 +661,17 @@
         }
       ]
     }
+  },
+  "projectsPage": {
+    "heroTitle": "Our Campaigns & Activities",
+    "heroText": "Explore every published THA campaign and the results being achieved with communities across Tanzania.",
+    "ctaTitle": "Work with a THA campaign",
+    "ctaText": "If one of these priorities aligns with your institution or community, talk to us about a practical way to contribute."
+  },
+  "documentsPage": {
+    "eyebrow": "Transparency",
+    "title": "Documents & Accountability",
+    "intro": "Registration information, policies, public records and independent references that help partners, funders and communities understand who we are and how we work.",
+    "requestText": "Funding partners and institutions can request registration, governance, program or due-diligence documents directly from THA."
   }
 }
