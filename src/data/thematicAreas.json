@@ -1,0 +1,94 @@
+{
+  "thematicAreas": [
+    {
+      "id": "viral-hepatitis",
+      "name": "Viral Hepatitis",
+      "icon": "disease",
+      "color": "#024d85",
+      "overview": "Viral hepatitis is a major public health challenge affecting millions globally. In Tanzania, thousands remain undiagnosed, leading to serious liver complications.",
+      "whyItMatters": "Limited awareness, undiagnosed cases, and inadequate access to treatment are key barriers to hepatitis elimination.",
+      "statistics": [
+        "Millions affected globally",
+        "Thousands unaware in Tanzania",
+        "Preventable through vaccination",
+        "Treatable if caught early"
+      ],
+      "challenges": [
+        "Limited awareness and understanding of disease transmission",
+        "Large numbers of undiagnosed cases",
+        "Inadequate access to testing and treatment services",
+        "Limited vaccine coverage",
+        "Stigma associated with the disease"
+      ],
+      "ourActions": [
+        "Increase public awareness on prevention, diagnosis, and treatment",
+        "Promote vaccination campaigns, especially for hepatitis B",
+        "Collaborate with healthcare providers for early detection and care",
+        "Train health ambassadors and community workers",
+        "Advocate for policy changes to improve vaccine access"
+      ],
+      "relatedPrograms": ["KAPIME"],
+      "image": "/images/thematic-areas/hepatitis.jpg"
+    },
+    {
+      "id": "hiv",
+      "name": "HIV",
+      "icon": "health",
+      "color": "#26b805",
+      "overview": "HIV remains a critical health issue in Tanzania and globally. With advances in treatment, people living with HIV can live long, healthy lives, but stigma and barriers to care persist.",
+      "whyItMatters": "Stigma, lack of education, and barriers to care for vulnerable populations prevent many from accessing testing and treatment.",
+      "statistics": [
+        "Global epidemic still affecting millions",
+        "Effective treatments now available",
+        "Early testing critical for outcomes",
+        "Prevention and care equally important"
+      ],
+      "challenges": [
+        "Persistent stigma in communities",
+        "Lack of comprehensive HIV education",
+        "Barriers to care for vulnerable populations",
+        "Limited access to testing in remote areas",
+        "Inadequate mental health support for people living with HIV"
+      ],
+      "ourActions": [
+        "Conduct education campaigns to reduce stigma",
+        "Promote HIV testing and counseling services",
+        "Ensure access to treatment and care",
+        "Advocate for better policies to improve healthcare access",
+        "Support community-led prevention and care programs"
+      ],
+      "relatedPrograms": [],
+      "image": "/images/thematic-areas/hiv.jpg"
+    },
+    {
+      "id": "mental-health",
+      "name": "Mental Health",
+      "icon": "psychology",
+      "color": "#ff9c1a",
+      "overview": "Mental health is critical to overall well-being and quality of life. Yet mental health services remain under-resourced and stigmatized in many communities.",
+      "whyItMatters": "Stigma, lack of resources, and growing demand for mental health services create significant gaps in care and support.",
+      "statistics": [
+        "Rising mental health challenges",
+        "Limited mental health services",
+        "Stigma prevents help-seeking",
+        "Youth particularly vulnerable"
+      ],
+      "challenges": [
+        "Significant stigma surrounding mental health",
+        "Lack of funding for mental health services",
+        "Limited access to mental health professionals",
+        "Growing demand among youth populations",
+        "Weak community-based support systems"
+      ],
+      "ourActions": [
+        "Raise awareness and reduce stigma in communities",
+        "Advocate for mental health funding and policy changes",
+        "Establish support programs to promote mental well-being",
+        "Provide peer support and counseling services",
+        "Train community health workers in mental health support"
+      ],
+      "relatedPrograms": ["Life Unlocked", "Talk To Heal"],
+      "image": "/images/thematic-areas/mental-health.jpg"
+    }
+  ]
+}

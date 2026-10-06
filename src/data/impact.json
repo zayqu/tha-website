@@ -1,0 +1,119 @@
+{
+  "yearOneTimeline": [
+    {
+      "month": "January 2025",
+      "milestone": "Initiative Founded",
+      "description": "Tanzania Health Alliance officially launched to combat Hepatitis, HIV, and Mental Health challenges",
+      "icon": "rocket_launch",
+      "color": "primary"
+    },
+    {
+      "month": "Mid-2025",
+      "milestone": "WHO Documentary Featured",
+      "description": "THA's innovative approach to hepatitis response featured in World Health Organization documentary",
+      "icon": "movie",
+      "color": "accent"
+    },
+    {
+      "month": "September 2025",
+      "milestone": "WHA Membership Recognized",
+      "description": "Gained official membership with World Hepatitis Alliance, expanding global network",
+      "icon": "public",
+      "color": "secondary"
+    },
+    {
+      "month": "November 2025",
+      "milestone": "Shaibu Elected to WHA Board",
+      "description": "Founder Shaibu Issa elected to World Hepatitis Alliance Board, representing Tanzania's voice globally",
+      "icon": "emoji_events",
+      "color": "accent"
+    },
+    {
+      "month": "January 2026",
+      "milestone": "Donor Funding Secured",
+      "description": "Major donor partnerships secured, enabling expansion of all three campaigns",
+      "icon": "handshake",
+      "color": "secondary"
+    },
+    {
+      "month": "March 2026",
+      "milestone": "National Health Partnership",
+      "description": "Strategic partnership with Tanzania's Ministry of Health to scale health interventions nationally",
+      "icon": "account_balance",
+      "color": "primary"
+    }
+  ],
+  "impactMetrics": {
+    "total": {
+      "peopleReached": 1500,
+      "studentsReached": 1000,
+      "institutionsEngaged": 3,
+      "communityEvents": 2
+    },
+    "byProgram": {
+      "kapime": {
+        "label": "KAPIME: Get Tested",
+        "peopleScreened": 12500,
+        "peopleVaccinated": 8300,
+        "positivesCaught": 340,
+        "icon": "health_and_safety",
+        "color": "hepatitis"
+      },
+      "lifeUnlocked": {
+        "label": "Life Unlocked: Youth Mental Health",
+        "youthReached": 5600,
+        "clubsEstablished": 28,
+        "counselingSessionsProvided": 1340,
+        "icon": "psychology",
+        "color": "mental"
+      },
+      "talkToHeal": {
+        "label": "Talk To Heal: Peer Support",
+        "supportGroupsActive": 35,
+        "peerSupporters": 89,
+        "peopleServed": 3400,
+        "counselingHoursProvided": 2100,
+        "icon": "groups",
+        "color": "mental"
+      }
+    },
+    "globalRecognition": {
+      "whoDocumentary": "Featured in World Health Organization hepatitis response documentary",
+      "whaBoard": "Founder Shaibu Issa serves on World Hepatitis Alliance Board",
+      "whaMembers": "Official World Hepatitis Alliance member organization",
+      "partners": 4,
+      "mediaEngagements": 1
+    }
+  },
+  "governmentPartnership": {
+    "headline": "Formally Recognized at the National Level",
+    "description": "In March 2026, THA formalized a strategic partnership with Tanzania's Ministry of Health, marking a historic commitment to scaling health interventions across the country.",
+    "permanentSecretaryQuote": "We are proud to partner with Tanzania Health Alliance in our mission to strengthen healthcare systems and improve health outcomes for all Tanzanians. Their work in hepatitis, HIV, and mental health aligns perfectly with our national health priorities.",
+    "permanentSecretaryTitle": "Permanent Secretary, Ministry of Health, Tanzania",
+    "whatItMeans": [
+      "National-level recognition and alignment with Tanzania's health priorities",
+      "Access to public health facilities for testing and screening",
+      "Integration of THA programs into national health strategy",
+      "Joint funding and resource allocation",
+      "Pathway to scale across all regions of Tanzania"
+    ],
+    "impact": "This partnership ensures THA's programs are not just community-led but also nationally recognized, creating sustainable, nationwide health infrastructure improvement."
+  },
+  "internationalRecognition": {
+    "whoDocumentary": {
+      "title": "Featured in WHO Hepatitis Response Documentary",
+      "description": "THA's innovative approach to hepatitis awareness and prevention was highlighted in a World Health Organization documentary showcasing effective global responses to viral hepatitis.",
+      "relevance": "Recognition from WHO validates THA's evidence-based approach and positions Tanzania as a leader in hepatitis response in East Africa."
+    },
+    "whaBoard": {
+      "title": "Founder Elected to World Hepatitis Alliance Board",
+      "description": "Shaibu Issa's election to the WHA Board (November 2025) gives Tanzania a voice in global hepatitis policy and strategy.",
+      "relevance": "This positions THA at the forefront of the global health movement and enables direct influence on international hepatitis initiatives."
+    },
+    "whaMemembership": {
+      "title": "World Hepatitis Alliance Membership",
+      "description": "Official membership in the World Hepatitis Alliance connects THA to a global network of 800+ organizations working on viral hepatitis.",
+      "relevance": "Access to global best practices, research, and collaborative opportunities."
+    }
+  }
+}

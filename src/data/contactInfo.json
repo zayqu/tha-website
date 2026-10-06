@@ -1,0 +1,67 @@
+{
+  "contactInfo": {
+    "organization": "Tanzania Health Alliance (THA)",
+    "registrationNumber": "00NGO/R/8379",
+    "address": {
+      "street": "Adda Estate, House No. 03, Kinondoni",
+      "poBox": "P.O. Box 31902",
+      "city": "Dar es Salaam",
+      "country": "Tanzania",
+      "full": "Adda Estate, House No. 03, Kinondoni, P.O. Box 31902, Dar es Salaam, Tanzania"
+    },
+    "phone": {
+      "primary": "+255 578 393 4937",
+      "secondary": "+255 659-114-754"
+    },
+    "email": "info@tzhealthalliance.or.tz",
+    "workingHours": {
+      "monday_friday": "9:00 AM – 5:00 PM",
+      "saturday": "10:00 AM – 2:00 PM",
+      "sunday": "Closed"
+    },
+    "socialMedia": {
+      "facebook": "https://facebook.com/tzhealthalliance",
+      "twitter": "https://twitter.com/tzhealthalliance",
+      "linkedin": "https://linkedin.com/company/tanzania-health-alliance",
+      "instagram": "https://instagram.com/tzhealthalliance"
+    },
+    "mapCoordinates": {
+      "latitude": -6.7924,
+      "longitude": 39.2083,
+      "zoom": 15
+    }
+  },
+  "formFields": [
+    {
+      "name": "fullName",
+      "label": "Full Name",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "email",
+      "label": "Email Address",
+      "type": "email",
+      "required": true
+    },
+    {
+      "name": "phone",
+      "label": "Phone Number",
+      "type": "tel",
+      "required": false
+    },
+    {
+      "name": "subject",
+      "label": "Subject",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "message",
+      "label": "Message",
+      "type": "textarea",
+      "required": true,
+      "rows": 5
+    }
+  ]
+}
