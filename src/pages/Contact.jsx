@@ -218,7 +218,6 @@ export const Contact = () => {
                   </div>
                   <button
                     type="submit"
-                    disabled={isSubmitting}
                     className="w-full px-6 py-3 bg-secondary text-white font-bold rounded-lg hover:bg-secondary-dark transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     Send Message
@@ -238,10 +237,10 @@ export const Contact = () => {
             Become a Volunteer
           </h2>
           <h3 className="text-xl font-semibold text-white/90 mb-4">
-            Strong Communities Start with You!
+            Want to help with the work?
           </h3>
           <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
-            Whether it's raising awareness, organizing screenings, or providing support, your volunteer work helps create lasting change in Tanzania and beyond.
+            Tell us what you can contribute and how much time you have. We will match that with current THA activities where your support is genuinely useful.
           </p>
           <Link
             to="/make-a-difference"
