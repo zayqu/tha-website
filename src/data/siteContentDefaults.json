@@ -1,0 +1,693 @@
+{
+  "organization": {
+    "name": "Tanzania Health Alliance",
+    "shortName": "THA",
+    "registrationNumber": "00NGO/R/8379",
+    "foundedYear": 2025,
+    "mission": "To advance public health through advocacy, capacity building, research, and partnerships, contributing to sustainable and resilient healthcare in Tanzania.",
+    "vision": "To achieve a healthier Tanzania where every individual has access to equitable and quality healthcare.",
+    "motto": "Together for a Healthier Tanzania",
+    "founderName": "Shaibu Issa",
+    "founderTitle": "Founder & Executive Director"
+  },
+  "contact": {
+    "address": "Adda Estate, House No. 03, Kinondoni",
+    "poBox": "P.O. Box 31902",
+    "city": "Dar es Salaam",
+    "country": "Tanzania",
+    "phone": "+255 659 114 754",
+    "secondaryPhone": "",
+    "email": "info@tzhealthalliance.or.tz",
+    "facebook": "https://www.facebook.com/tanzaniahealthalliance",
+    "instagram": "https://instagram.com/tanzania_healthalliance",
+    "linkedin": "https://www.linkedin.com/company/tanzania-health-alliance",
+    "workHours": {
+      "mondayFriday": "9:00 AM – 5:00 PM",
+      "saturday": "10:00 AM – 2:00 PM",
+      "sunday": "Closed"
+    },
+    "pageIntro": "Whether you are looking for program information, partnership opportunities, due-diligence documents or a way to support our work, talk to our team.",
+    "formIntro": "Whether you need health-program information, want to partner with us, or have a community concern, send us a message. Our team will respond as soon as possible.",
+    "volunteerCtaTitle": "Want to help with the work?",
+    "volunteerCtaText": "Tell us what you can contribute and how much time you have. We will match that with current THA activities where your support is genuinely useful."
+  },
+  "home": {
+    "heroTitle": "Together for a Healthier Tanzania",
+    "heroDescription": "We address critical public health challenges including Viral Hepatitis, HIV, and Mental Health through awareness, advocacy, and improved access to care across Tanzania.",
+    "journeyIntro": "A growing public record of community work, advocacy and institutional engagement.",
+    "programsIntro": "Three focused programs built around practical public-health needs: hepatitis prevention, youth mental health and community support.",
+    "engagementTitle": "Turning advocacy into conversations that can move policy",
+    "engagementIntro": "THA’s public record includes engagement with national institutions and health partners on hepatitis prevention, birth-dose vaccination and community health.",
+    "ctaText": "If our work connects with your community, institution or area of interest, start a conversation with THA.",
+    "heroImage": "/images/hero-bg-lg.jpg",
+    "approachEyebrow": "How We Work",
+    "approachTitle": "From community need to practical action",
+    "approachIntro": "We start with the health issue people are facing, work with the right partners, and follow the work through with clear records and measurable progress.",
+    "needTitle": "Start with the need",
+    "needText": "Listen to communities and health partners, understand the gap, and define what practical support is needed.",
+    "actionTitle": "Act with purpose",
+    "actionText": "Turn that need into focused outreach, advocacy, education or referral activities with clear responsibilities.",
+    "learningTitle": "Track what changes",
+    "learningText": "Document participation, results and lessons so the next activity can be stronger and more useful."
+  },
+  "about": {
+    "heroText": "Tanzania Health Alliance (THA) is a registered NGO (No. 00NGO/R/8379) based in Dar es Salaam. We work with communities, health institutions and partners on Viral Hepatitis, HIV and Mental Health.",
+    "founderHeading": "Why THA Exists",
+    "founderStory": "The organization was inspired by the personal experience of its founder, Shaibu Issa, who lost his brother to liver cancer in 2021, a preventable condition with early detection and vaccination. This experience led to the creation of THA to increase awareness, promote prevention, improve access to healthcare, and address stigma related to diseases such as hepatitis.",
+    "campaignsIntro": "Our work is organized through focused campaigns so that activities, partners and results can be traced back to a clear public-health purpose.",
+    "partnersIntro": "Working with organizations that strengthen our reach, technical work and accountability.",
+    "closingText": "If our work aligns with your institution, community or funding priorities, we would be glad to start with a practical conversation about where collaboration can make the most difference."
+  },
+  "funding": {
+    "heroText": "Work with us where your time, funding or institutional support can meet a clear public-health need.",
+    "donationIntro": "We welcome support for clearly defined activities, with an agreed purpose, budget and reporting approach.",
+    "institutionalText": "For institutional or project funding, THA can agree the activity, target group, budget, timeline and reporting requirements before implementation begins.",
+    "partnerIntro": "If our work aligns with your organization, tell us what you are trying to achieve and where collaboration may make sense.",
+    "volunteerRoles": [
+      {
+        "id": "health-ambassador",
+        "title": "Health Ambassador",
+        "time": "10–15 hours/week",
+        "description": "Support community outreach, health education and campaign activities.",
+        "icon": "health_and_safety",
+        "published": true,
+        "sortOrder": 10
+      },
+      {
+        "id": "youth-peer-supporter",
+        "title": "Youth Peer Supporter",
+        "time": "5–10 hours/week",
+        "description": "Support youth-focused Life Unlocked activities and peer conversations.",
+        "icon": "diversity_3",
+        "published": true,
+        "sortOrder": 20
+      },
+      {
+        "id": "mental-health-advocate",
+        "title": "Mental Health Advocate",
+        "time": "Flexible",
+        "description": "Support stigma-reduction activities and community mental-health conversations.",
+        "icon": "volunteer_activism",
+        "published": true,
+        "sortOrder": 30
+      }
+    ],
+    "successStory": {
+      "published": false,
+      "quote": "",
+      "name": "",
+      "role": ""
+    },
+    "funderTitle": "Fund measurable work, not vague promises",
+    "scopeTitle": "Defined scope & budget",
+    "scopeText": "Agree the activity, target group, locations, timeline and budget before implementation starts.",
+    "outcomesTitle": "Measurable outcomes",
+    "outcomesText": "Track agreed indicators such as people reached, referrals, institutions engaged and campaign-specific results.",
+    "reportingTitle": "Evidence & reporting",
+    "reportingText": "Receive agreed reporting, activity evidence and results that can be reviewed against the funded workplan."
+  },
+  "documents": [
+    {
+      "id": "registration",
+      "category": "Legal & Registration",
+      "title": "NGO Registration",
+      "meta": "Registration No. 00NGO/R/8379",
+      "description": "Tanzania Health Alliance (THA) is registered as a non-governmental organization in Tanzania and is based in Dar es Salaam.",
+      "status": "Verified in THA records",
+      "action": "Request certificate copy",
+      "url": "mailto:info@tzhealthalliance.or.tz?subject=Request%20for%20THA%20registration%20certificate",
+      "external": true,
+      "published": true,
+      "sortOrder": 10
+    },
+    {
+      "id": "privacy",
+      "category": "Legal & Registration",
+      "title": "Privacy Policy",
+      "meta": "Website policy",
+      "description": "How THA handles information submitted through this website.",
+      "action": "View policy",
+      "url": "/privacy",
+      "external": false,
+      "published": true,
+      "sortOrder": 20
+    },
+    {
+      "id": "cookies",
+      "category": "Legal & Registration",
+      "title": "Cookie Policy",
+      "meta": "Website policy",
+      "description": "Information about cookies and related technologies used on the THA website.",
+      "action": "View policy",
+      "url": "/cookies",
+      "external": false,
+      "published": true,
+      "sortOrder": 30
+    },
+    {
+      "id": "terms",
+      "category": "Legal & Registration",
+      "title": "Terms of Use",
+      "meta": "Website policy",
+      "description": "Terms governing use of the THA website and its public information.",
+      "action": "View terms",
+      "url": "/terms",
+      "external": false,
+      "published": true,
+      "sortOrder": 40
+    },
+    {
+      "id": "wha-board",
+      "category": "External Verification",
+      "title": "World Hepatitis Alliance — AFRO Board",
+      "meta": "Independent verification",
+      "description": "World Hepatitis Alliance identifies Shaibu Issa, Founder and Director of THA, as its AFRO Board Member.",
+      "action": "Verify externally",
+      "url": "https://www.worldhepatitisalliance.org/our-team-2025/",
+      "external": true,
+      "published": true,
+      "sortOrder": 50
+    },
+    {
+      "id": "aasld",
+      "category": "External Verification",
+      "title": "AASLD — Patient Advocate Profile",
+      "meta": "Independent verification",
+      "description": "AASLD identifies Shaibu Issa as Founder and Director of Tanzania Health Alliance and a WHA African Region Board Member.",
+      "action": "Verify externally",
+      "url": "https://www.aasld.org/tlm-26/shaibu-issa",
+      "external": true,
+      "published": true,
+      "sortOrder": 60
+    },
+    {
+      "id": "uhc-2025",
+      "category": "External Verification",
+      "title": "2025 UHC Day Champion",
+      "meta": "Independent recognition",
+      "description": "Universal Health Coverage Day recognizes Shaibu Issa as Founder and Director of THA and highlights THA’s hepatitis advocacy.",
+      "action": "View recognition",
+      "url": "https://www.universalhealthcoverageday.org/uhc-champions/2025-uhc-champion-shaibu-issa/",
+      "external": true,
+      "published": true,
+      "sortOrder": 70
+    },
+    {
+      "id": "aba-2026",
+      "category": "External Verification",
+      "title": "2026 Hepatitis B Advocacy Awardee",
+      "meta": "Independent funding record",
+      "description": "The African Hepatitis B Advocacy Coalition lists Tanzania Health Alliance as a 2026 awardee for the KAPIME campaign.",
+      "action": "View awardee record",
+      "url": "https://abachepb.org/funding/current-awardees-2026/",
+      "external": true,
+      "published": true,
+      "sortOrder": 80
+    },
+    {
+      "id": "parliamentary-committee",
+      "category": "Public Activity & Evidence",
+      "title": "Parliamentary Committee Engagement",
+      "meta": "6 May 2026",
+      "description": "THA engaged the Parliamentary Committee on Health and Wellbeing on hepatitis B birth-dose vaccination.",
+      "action": "Read record",
+      "url": "/news/tha-engages-parliamentary-committee-on-hepatitis-b-birth-dose-vaccination",
+      "external": false,
+      "published": true,
+      "sortOrder": 90
+    },
+    {
+      "id": "parliament-recognition",
+      "category": "Public Activity & Evidence",
+      "title": "Recognition in Parliament",
+      "meta": "2026",
+      "description": "THA recorded recognition in the Parliament of Tanzania for its contribution to the fight against viral hepatitis.",
+      "action": "Read record",
+      "url": "/news/tha-recognized-in-parliament-for-contribution-to-the-fight-against-viral-hepatitis",
+      "external": false,
+      "published": true,
+      "sortOrder": 100
+    },
+    {
+      "id": "unicef-meeting",
+      "category": "Public Activity & Evidence",
+      "title": "THA–UNICEF Strategic Meeting",
+      "meta": "18 February 2026",
+      "description": "A strategic discussion focused on hepatitis B birth-dose vaccination and maternal-newborn health systems.",
+      "action": "Read record",
+      "url": "/news/tha-unicef-strategic-meeting-on-hepatitis-b-birth-dose-vaccination",
+      "external": false,
+      "published": true,
+      "sortOrder": 110
+    },
+    {
+      "id": "actionaid-youth",
+      "category": "Public Activity & Evidence",
+      "title": "Youth Mental Health with ActionAid Tanzania",
+      "meta": "7 February 2026",
+      "description": "THA documented a youth mental-health session delivered in partnership with ActionAid Tanzania.",
+      "action": "Read record",
+      "url": "/news/tanzania-health-alliance-hosts-youth-mental-health-session-in-partnership-with-actionaid-tanzania",
+      "external": false,
+      "published": true,
+      "sortOrder": 120
+    }
+  ],
+  "team": [
+    {
+      "id": "shaibu-issa",
+      "name": "Shaibu Issa",
+      "title": "Founder & Executive Director",
+      "photo": "/images/team/shaibu-issa.jpg",
+      "bio": "Shaibu founded Tanzania Health Alliance after personal experience with hepatitis B and the loss of his brother to liver cancer. His work focuses on hepatitis advocacy, community awareness and strengthening access to prevention and care.",
+      "credentials": [
+        "World Hepatitis Alliance AFRO Board Member",
+        "2025 UHC Day Champion",
+        "2025 Hepatitis Elimination Champion"
+      ],
+      "linkedIn": "https://www.linkedin.com/in/shaibu-issa-89b6391b8/",
+      "instagram": "https://www.instagram.com/shaibu_issa0/",
+      "published": true,
+      "sortOrder": 10
+    },
+    {
+      "id": "shuwena-ali",
+      "name": "Shuwena H. Ali",
+      "title": "Associate Director & Administrative Manager",
+      "photo": "/images/team/associate-director.jpg",
+      "bio": "Shuwena supports THA operations, administration and program coordination, helping turn plans into organized activities and partner engagement.",
+      "credentials": [
+        "Program coordination",
+        "Administration",
+        "Community health support"
+      ],
+      "linkedIn": "https://www.linkedin.com/in/shuwena-h-ali-8a575929b/",
+      "instagram": "https://www.instagram.com/shuwena_h.ali/",
+      "published": true,
+      "sortOrder": 20
+    },
+    {
+      "id": "enock-sichone",
+      "name": "Enock Sichone",
+      "title": "General Secretary",
+      "photo": "/images/team/general-secretary.jpg",
+      "bio": "Enock supports governance, administration and organizational coordination within Tanzania Health Alliance.",
+      "credentials": [
+        "Governance",
+        "Administration",
+        "Community engagement"
+      ],
+      "linkedIn": "https://www.linkedin.com/in/enock-sichone-6028442b5/",
+      "instagram": "https://www.instagram.com/enock_sichone2/",
+      "published": true,
+      "sortOrder": 30
+    }
+  ],
+  "partners": [
+    {
+      "id": "wha",
+      "name": "World Hepatitis Alliance",
+      "logo": "/images/partners/wha-logo.png",
+      "description": "Global hepatitis network in which THA is represented through AFRO board leadership.",
+      "relationship": "Membership and regional representation",
+      "website": "https://www.worldhepatitisalliance.org/",
+      "published": true,
+      "sortOrder": 10
+    },
+    {
+      "id": "taskforce-cghe",
+      "name": "The Task Force for Global Health / CGHE",
+      "logo": "/images/partners/taskforce-logo.png",
+      "description": "Collaboration around hepatitis B birth-dose advocacy and hepatitis elimination.",
+      "relationship": "Hepatitis B advocacy collaboration",
+      "website": "https://www.taskforce.org/",
+      "published": true,
+      "sortOrder": 20
+    },
+    {
+      "id": "aba",
+      "name": "African Hepatitis B Advocacy Coalition",
+      "logo": "/images/partners/abachepb-logo.png",
+      "description": "Regional hepatitis B advocacy coalition that lists THA as a 2026 KAPIME campaign awardee.",
+      "relationship": "Regional advocacy and funding",
+      "website": "https://abachepb.org/",
+      "published": true,
+      "sortOrder": 30
+    },
+    {
+      "id": "unicef-tanzania",
+      "name": "UNICEF Tanzania",
+      "logo": "",
+      "description": "THA documented a strategic meeting with UNICEF Tanzania on hepatitis B birth-dose vaccination and maternal-newborn health systems.",
+      "relationship": "Strategic technical engagement",
+      "website": "https://www.unicef.org/tanzania/",
+      "published": true,
+      "sortOrder": 40
+    },
+    {
+      "id": "actionaid-tanzania",
+      "name": "ActionAid Tanzania",
+      "logo": "",
+      "description": "THA documented youth mental-health work delivered in partnership with ActionAid Tanzania.",
+      "relationship": "Youth mental health collaboration",
+      "website": "https://tanzania.actionaid.org/",
+      "published": true,
+      "sortOrder": 50
+    }
+  ],
+  "impact": {
+    "heroTitle": "Impact built through documented work",
+    "heroText": "We track our work through dated activities, campaign records, partner engagement and project-level results rather than broad claims.",
+    "metricsIntro": "Where numerical results are shown, they should come from the corresponding project record in Admin.",
+    "evidenceIntro": "Our public record includes community outreach, youth mental-health sessions, hepatitis advocacy, institutional meetings and regional recognition."
+  },
+  "coreValues": [
+    {
+      "id": "integrity",
+      "value": "Integrity",
+      "description": "We act with honesty, transparency and accountability.",
+      "icon": "shield",
+      "published": true,
+      "sortOrder": 10
+    },
+    {
+      "id": "equity",
+      "value": "Equity",
+      "description": "We work so quality health information and services are easier to reach, regardless of background or location.",
+      "icon": "scale",
+      "published": true,
+      "sortOrder": 20
+    },
+    {
+      "id": "collaboration",
+      "value": "Collaboration",
+      "description": "We work with communities, institutions and partners because public-health problems are rarely solved by one organization alone.",
+      "icon": "groups",
+      "published": true,
+      "sortOrder": 30
+    },
+    {
+      "id": "evidence",
+      "value": "Evidence",
+      "description": "We prefer documented work, measurable results and credible health guidance over broad claims.",
+      "icon": "fact_check",
+      "published": true,
+      "sortOrder": 40
+    }
+  ],
+  "objectives": [
+    {
+      "id": "access",
+      "title": "Improve access",
+      "description": "Support practical pathways to health information, prevention, testing and care.",
+      "icon": "local_hospital",
+      "published": true,
+      "sortOrder": 10
+    },
+    {
+      "id": "capacity",
+      "title": "Build capacity",
+      "description": "Strengthen the people and community systems that carry public-health work forward.",
+      "icon": "school",
+      "published": true,
+      "sortOrder": 20
+    },
+    {
+      "id": "evidence",
+      "title": "Use evidence",
+      "description": "Generate, share and apply evidence that can improve public-health decisions.",
+      "icon": "search",
+      "published": true,
+      "sortOrder": 30
+    },
+    {
+      "id": "partnerships",
+      "title": "Build partnerships",
+      "description": "Work with communities, institutions, government stakeholders and funders around clear health priorities.",
+      "icon": "groups",
+      "published": true,
+      "sortOrder": 40
+    }
+  ],
+  "testimonials": [],
+  "academy": {
+    "heroTitle": "Public Health Knowledge Centre",
+    "heroText": "Find clear answers about HIV, viral hepatitis and mental health, then explore trusted guidance when you want to learn more.",
+    "guides": [
+      {
+        "id": "hiv",
+        "topic": "HIV",
+        "icon": "health_and_safety",
+        "title": "HIV can be prevented and treated",
+        "summary": "Testing is the only way to know your HIV status. Early treatment protects your health, and people who take effective treatment can live long, healthy lives.",
+        "action": "Explore HIV information",
+        "published": true,
+        "sortOrder": 10
+      },
+      {
+        "id": "hepatitis",
+        "topic": "Hepatitis",
+        "icon": "vaccines",
+        "title": "Protect your liver from viral hepatitis",
+        "summary": "Hepatitis B and C can damage the liver without obvious early symptoms. Vaccination prevents hepatitis B, while testing and treatment help prevent serious complications.",
+        "action": "Explore hepatitis information",
+        "published": true,
+        "sortOrder": 20
+      },
+      {
+        "id": "mental-health",
+        "topic": "Mental Health",
+        "icon": "psychology",
+        "title": "Mental health deserves care",
+        "summary": "Persistent sadness, anxiety, sleep problems or loss of interest can affect anyone. Speaking with someone you trust and seeking professional support are important first steps.",
+        "action": "Explore mental health information",
+        "published": true,
+        "sortOrder": 30
+      }
+    ],
+    "resources": [
+      {
+        "id": "academy-1",
+        "title": "Guidelines for the care and treatment of persons diagnosed with chronic hepatitis C virus infection",
+        "excerpt": "WHO recommendations for simplified testing, care and treatment of chronic hepatitis C.",
+        "source": "World Health Organization",
+        "url": "https://www.who.int/publications/i/item/9789241550345",
+        "date": "2018-07-01",
+        "category": "Guidance",
+        "topics": [
+          "Hepatitis"
+        ],
+        "published": true,
+        "sortOrder": 10
+      },
+      {
+        "id": "academy-2",
+        "title": "Consolidated guidelines on HIV prevention, testing, treatment, service delivery and monitoring",
+        "excerpt": "WHO's consolidated public health recommendations across the HIV prevention and care continuum.",
+        "source": "World Health Organization",
+        "url": "https://www.who.int/publications/i/item/9789240031593",
+        "date": "2021-07-16",
+        "category": "Guidance",
+        "topics": [
+          "HIV"
+        ],
+        "published": true,
+        "sortOrder": 20
+      },
+      {
+        "id": "academy-3",
+        "title": "Global HIV, hepatitis and sexually transmitted infections programmes: strategies 2022–2030",
+        "excerpt": "Global strategies for accelerating progress toward ending AIDS and viral hepatitis as public health threats.",
+        "source": "World Health Organization",
+        "url": "https://www.who.int/publications/i/item/9789240053779",
+        "date": "2022-07-18",
+        "category": "Policy",
+        "topics": [
+          "HIV",
+          "Hepatitis"
+        ],
+        "published": true,
+        "sortOrder": 30
+      },
+      {
+        "id": "academy-4",
+        "title": "mhGAP intervention guide for mental, neurological and substance use disorders",
+        "excerpt": "Evidence-based protocols for assessment and management in non-specialized health settings.",
+        "source": "World Health Organization",
+        "url": "https://www.who.int/publications/i/item/9789241549790",
+        "date": "2016-05-31",
+        "category": "Training",
+        "topics": [
+          "Mental Health"
+        ],
+        "published": true,
+        "sortOrder": 40
+      },
+      {
+        "id": "academy-5",
+        "title": "Mental health at work",
+        "excerpt": "Practical evidence and recommendations for protecting and promoting mental health in the workplace.",
+        "source": "World Health Organization",
+        "url": "https://www.who.int/news-room/fact-sheets/detail/mental-health-at-work",
+        "date": "2024-09-02",
+        "category": "Training",
+        "topics": [
+          "Mental Health"
+        ],
+        "published": true,
+        "sortOrder": 50
+      },
+      {
+        "id": "academy-6",
+        "title": "Hepatitis B",
+        "excerpt": "An online overview of hepatitis B transmission, prevention, testing, treatment and WHO's global response.",
+        "source": "World Health Organization",
+        "url": "https://www.who.int/news-room/fact-sheets/detail/hepatitis-b",
+        "date": "2024-04-09",
+        "category": "Training",
+        "topics": [
+          "Hepatitis"
+        ],
+        "published": true,
+        "sortOrder": 60
+      }
+    ],
+    "helpTitle": "Know when to seek help",
+    "helpText": [
+      "Visit a health facility if you may have been exposed to HIV or hepatitis, need testing, or have symptoms that concern you. Early advice and treatment can make a major difference.",
+      "If emotional distress is affecting daily life, speak with a qualified health professional or someone you trust. Urgent help is important if you or another person may be in immediate danger.",
+      "These resources support learning and informed conversations; a health professional can provide advice for your individual needs."
+    ]
+  },
+  "healthTopics": {
+    "hepatitis": {
+      "title": "Viral Hepatitis in Tanzania",
+      "intro": "Tanzania Health Alliance works to improve awareness, prevention, early testing, vaccination advocacy and access to care for viral hepatitis, with particular attention to hepatitis B.",
+      "overview": "Viral hepatitis can damage the liver for years before symptoms become obvious. Earlier testing, prevention and linkage to care can reduce avoidable illness and deaths.",
+      "whyItMatters": "Hepatitis B can be prevented through vaccination, while testing helps people understand their status and seek appropriate care.",
+      "actions": [
+        "Community awareness and health education",
+        "Advocacy for hepatitis B vaccination, including the birth dose",
+        "Promoting testing and linkage to appropriate care",
+        "Working with health and policy stakeholders"
+      ],
+      "related": "/campaigns/kapime",
+      "relatedLabel": "Explore the KAPIME campaign"
+    },
+    "hiv": {
+      "title": "HIV Awareness and Community Health in Tanzania",
+      "intro": "Tanzania Health Alliance supports HIV awareness, stigma reduction, testing education, treatment access and community-led health engagement in Tanzania.",
+      "overview": "HIV prevention, testing and treatment have changed what is possible for people living with HIV, but stigma and gaps in access still prevent some people from getting help early.",
+      "whyItMatters": "Knowing your status and starting appropriate treatment early protects health and supports better long-term outcomes.",
+      "actions": [
+        "Awareness and stigma-reduction activities",
+        "Testing education and referral",
+        "Community health conversations",
+        "Partnership and advocacy around access to care"
+      ],
+      "related": "/projects",
+      "relatedLabel": "Explore THA projects"
+    },
+    "mental-health": {
+      "title": "Mental Health Awareness in Tanzania",
+      "intro": "Tanzania Health Alliance supports mental health awareness, stigma reduction, youth resilience, peer support and healthier community conversations in Tanzania.",
+      "overview": "Mental-health challenges can affect study, work, relationships and physical health. Young people may face particular pressure during school-to-work and other major life transitions.",
+      "whyItMatters": "Early support, safe conversations and access to qualified care can help people manage distress before it becomes more severe.",
+      "actions": [
+        "Youth mental-health awareness",
+        "Peer-support and resilience conversations",
+        "Stigma reduction",
+        "Referral to appropriate professional support where needed"
+      ],
+      "related": "/campaigns/life-unlocked",
+      "relatedLabel": "Explore Life Unlocked"
+    }
+  },
+  "policies": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "intro": "How Tanzania Health Alliance handles information shared through this website.",
+      "sections": [
+        {
+          "id": "collect",
+          "heading": "Information we collect",
+          "text": "We collect information that you voluntarily provide through contact, registration, partnership, volunteer, donation and administrative forms. We may also collect limited technical information needed to keep the website secure and reliable."
+        },
+        {
+          "id": "use",
+          "heading": "How information is used",
+          "text": "Information is used to respond to requests, manage participation in THA activities, operate the website, protect accounts and improve our public-health programmes and communications."
+        },
+        {
+          "id": "sharing",
+          "heading": "Information sharing",
+          "text": "THA does not sell personal information. Information is shared only with authorised service providers or partners when necessary to deliver a requested service, comply with the law or protect people and the organisation."
+        },
+        {
+          "id": "choices",
+          "heading": "Your choices",
+          "text": "You may request access, correction or deletion of information you submitted by contacting THA. Some records may be retained when required for security, legal or programme-accountability purposes."
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Cookies Policy",
+      "intro": "How this website uses essential browser storage and similar technologies.",
+      "sections": [
+        {
+          "id": "essential",
+          "heading": "Essential storage",
+          "text": "The website may use essential cookies or browser storage to maintain secure administrator sessions, remember necessary preferences and protect forms."
+        },
+        {
+          "id": "analytics",
+          "heading": "Analytics",
+          "text": "If audience measurement is enabled, it should be configured to collect only the information needed to understand website performance and improve public information."
+        },
+        {
+          "id": "control",
+          "heading": "Your control",
+          "text": "You can remove or block cookies through your browser settings. Blocking essential storage may prevent secure areas of the website from working correctly."
+        }
+      ]
+    },
+    "terms": {
+      "title": "Terms and Conditions",
+      "intro": "Conditions for using Tanzania Health Alliance’s public website and information.",
+      "sections": [
+        {
+          "id": "health",
+          "heading": "Health information",
+          "text": "Website content is provided for education and public awareness. It does not replace diagnosis, treatment or advice from a qualified health professional. Seek urgent medical help when needed."
+        },
+        {
+          "id": "use",
+          "heading": "Acceptable use",
+          "text": "Do not misuse the website, attempt unauthorised access, interfere with its operation or submit unlawful, harmful or misleading material."
+        },
+        {
+          "id": "links",
+          "heading": "Content and links",
+          "text": "THA works to keep information accurate and current. External links are provided for context and remain the responsibility of their respective publishers."
+        },
+        {
+          "id": "updates",
+          "heading": "Updates",
+          "text": "These terms may be updated when website services or legal requirements change. The current version will remain available on this page."
+        }
+      ]
+    }
+  },
+  "projectsPage": {
+    "heroTitle": "Our Campaigns & Activities",
+    "heroText": "Explore every published THA campaign and the results being achieved with communities across Tanzania.",
+    "ctaTitle": "Work with a THA campaign",
+    "ctaText": "If one of these priorities aligns with your institution or community, talk to us about a practical way to contribute."
+  },
+  "documentsPage": {
+    "eyebrow": "Transparency",
+    "title": "Documents & Accountability",
+    "intro": "Registration information, policies, public records and independent references that help partners, funders and communities understand who we are and how we work.",
+    "requestText": "Funding partners and institutions can request registration, governance, program or due-diligence documents directly from THA."
+  }
+}
