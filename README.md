@@ -1,4 +1,4 @@
-# Taqwa Humanitarian Association Website
+# Tanzania Health Alliance ( THA)
 
 A modern, responsive website built with React, Vite, and TailwindCSS.
 
