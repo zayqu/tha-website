@@ -33,10 +33,18 @@ function loadOrCreate() {
   return created;
 }
 
-const secrets = loadOrCreate();
+const configuredSecrets = {
+  jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
+  contentImportSecret: process.env.CONTENT_IMPORT_SECRET,
+};
+
+const secrets = Object.values(configuredSecrets).every(Boolean)
+  ? configuredSecrets
+  : loadOrCreate();
 
 module.exports = {
-  jwtAccessSecret: process.env.JWT_ACCESS_SECRET || secrets.jwtAccessSecret,
-  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || secrets.jwtRefreshSecret,
-  contentImportSecret: process.env.CONTENT_IMPORT_SECRET || secrets.contentImportSecret,
+  jwtAccessSecret: configuredSecrets.jwtAccessSecret || secrets.jwtAccessSecret,
+  jwtRefreshSecret: configuredSecrets.jwtRefreshSecret || secrets.jwtRefreshSecret,
+  contentImportSecret: configuredSecrets.contentImportSecret || secrets.contentImportSecret,
 };
