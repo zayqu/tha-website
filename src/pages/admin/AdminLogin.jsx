@@ -9,7 +9,7 @@ export default function AdminLogin() {
   const location = useLocation();
   const from = location.state?.from?.pathname || '/admin';
 
-  const [mode, setMode] = useState('login');
+  const [mode, setMode] = useState(location.pathname === '/register' ? 'register' : 'login');
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [notice, setNotice] = useState('');
