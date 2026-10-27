@@ -70,6 +70,7 @@ function App() {
           <ScrollToTop />
           <Routes>
             <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/register" element={<AdminLogin />} />
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
             <Route path="/admin/news/new" element={<ProtectedRoute><AdminNewsForm /></ProtectedRoute>} />
             <Route path="/admin/news/edit/:id" element={<ProtectedRoute><AdminNewsForm /></ProtectedRoute>} />
