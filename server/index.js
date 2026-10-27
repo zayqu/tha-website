@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 const express = require('express');
 const path = require('path');
 const helmet = require('helmet');
@@ -149,6 +150,21 @@ app.get('/api/health', (_req, res) => {
 // from one Node process. API routes stay above the SPA fallback.
 const frontendDist = path.resolve(__dirname, '../dist');
 const frontendIndex = path.join(frontendDist, 'index.html');
+
+// The Vercel backend project deploys only the server directory. Keep its root
+// endpoint healthy and avoid trying to render frontend files that are not part
+// of that deployment. Combined cPanel deployments still serve the React app.
+if (!fs.existsSync(frontendIndex)) {
+  app.get('/', (_req, res) => res.json({
+    status: 'ok',
+    service: 'THA Content API',
+    health: '/api/health',
+  }));
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/api/') || req.path === '/sitemap.xml' || req.path === '/llms.txt') return next();
+    return res.status(404).json({ error: 'Not found' });
+  });
+}
 
 // SEO-critical public routes are rendered with meaningful HTML before React
 // starts. This keeps News fully crawlable even when a bot does not execute JS.
