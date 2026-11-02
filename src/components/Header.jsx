@@ -17,6 +17,7 @@ export const Header = () => {
     { label: 'Campaigns', path: '/projects' },
     { label: 'Academy', path: '/academy' },
     { label: 'News', path: '/news' },
+    { label: 'Events', path: '/events' },
     { label: 'Contact', path: '/contact' },
   ];
 

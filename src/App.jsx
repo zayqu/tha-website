@@ -16,6 +16,8 @@ import NewsDetail from './pages/NewsDetail';
 import LegalPolicy from './pages/LegalPolicy';
 import TopicHub from './pages/TopicHub';
 import Documents from './pages/Documents';
+import Events from './pages/Events';
+import AdminEvents from './pages/admin/AdminEvents';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminNewsForm from './pages/admin/AdminNewsForm';
@@ -79,6 +81,7 @@ function App() {
             <Route path="/admin/projects/edit/:id" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
             <Route path="/admin/journey" element={<ProtectedRoute><AdminJourneyDashboard /></ProtectedRoute>} />
             <Route path="/admin/site-content" element={<ProtectedRoute><AdminSiteContent /></ProtectedRoute>} />
+            <Route path="/admin/events" element={<ProtectedRoute><AdminEvents /></ProtectedRoute>} />
 
             <Route element={<PublicLayout />}>
               <Route path="/" element={<Home />} />
@@ -91,6 +94,8 @@ function App() {
               <Route path="/news/:slug" element={<NewsDetail />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/documents" element={<Documents />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/events/:slug" element={<Events />} />
               <Route path="/campaigns/:campaignId" element={<CampaignDetail />} />
               <Route path="/health/:topicId" element={<TopicHub />} />
               <Route path="/privacy" element={<LegalPolicy type="privacy" />} />
