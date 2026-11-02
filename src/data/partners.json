@@ -1,0 +1,52 @@
+{
+  "partners": [
+    {
+      "id": 1,
+      "name": "World Health Organization",
+      "logo": "/images/partners/who-logo.png",
+      "description": "Global health leader featuring THA in hepatitis response documentary",
+      "relationship": "Documentary partnership and health collaboration",
+      "website": "https://www.who.int/"
+    },
+    {
+      "id": 2,
+      "name": "World Hepatitis Alliance",
+      "logo": "/images/partners/wha-logo.png",
+      "description": "Global network of 800+ organizations working on viral hepatitis",
+      "relationship": "Official membership, Board representation",
+      "website": "https://www.worldhepatitisalliance.org/"
+    },
+    {
+      "id": 3,
+      "name": "Global Liver Institute",
+      "logo": "/images/partners/global-liver-logo.webp",
+      "description": "International organization dedicated to liver health",
+      "relationship": "Research and awareness collaboration",
+      "website": "https://globalliver.org/"
+    },
+    {
+      "id": 4,
+      "name": "The Task Force for Global Health",
+      "logo": "/images/partners/taskforce-logo.png",
+      "description": "Hosts the Coalition for Global Hepatitis Elimination (CGHE)",
+      "relationship": "HepB birth dose advocacy collaboration",
+      "website": "https://www.taskforce.org/"
+    },
+    {
+      "id": 5,
+      "name": "African Hepatitis B Advocacy Coalition",
+      "logo": "/images/partners/abachepb-logo.png",
+      "description": "Coalition advancing hepatitis B advocacy across Africa",
+      "relationship": "Regional advocacy partnership",
+      "website": "https://abachepb.org/"
+    },
+    {
+      "id": 6,
+      "name": "Tanzania Ministry of Health",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c2/Coat_of_arms_of_Tanzania.svg",
+      "description": "Strategic partner for nationwide health initiatives",
+      "relationship": "Strategic health partnership (March 2026)",
+      "website": "https://www.moh.go.tz/"
+    }
+  ]
+}

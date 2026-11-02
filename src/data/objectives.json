@@ -1,0 +1,29 @@
+{
+  "objectives": [
+    {
+      "id": 1,
+      "title": "Advocate for Health Equity",
+      "description": "Advocate for health equity and the right to accessible, affordable, and quality healthcare."
+    },
+    {
+      "id": 2,
+      "title": "Strengthen Healthcare Systems",
+      "description": "Strengthen healthcare systems through training, capacity building, and support for healthcare providers."
+    },
+    {
+      "id": 3,
+      "title": "Conduct Public Health Research",
+      "description": "Conduct and disseminate public health research to inform policies and best practices."
+    },
+    {
+      "id": 4,
+      "title": "Foster Collaboration",
+      "description": "Foster collaboration among stakeholders, including government agencies, NGOs, donors, and communities."
+    },
+    {
+      "id": 5,
+      "title": "Promote Community Initiatives",
+      "description": "Promote community health initiatives and education to address key health challenges."
+    }
+  ]
+}
