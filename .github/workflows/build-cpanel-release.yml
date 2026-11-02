@@ -55,7 +55,7 @@ jobs:
           cp -R dist/. /tmp/tha-cpanel-release/dist/
           # Retain a bounded number of historical versioned CSS/JS files.
           # Never delete the files produced by the current build.
-          find /tmp/tha-cpanel-release/dist/assets -maxdepth 1 -type f \\( -name 'index-*.css' -o -name 'index-*.js' \\) -printf '%T@ %p\\n' | sort -rn | tail -n +31 | cut -d' ' -f2- | while IFS= read -r old_asset; do
+          find /tmp/tha-cpanel-release/dist/assets -maxdepth 1 -type f \( -name 'index-*.css' -o -name 'index-*.js' \) -printf '%T@ %p\n' | sort -rn | tail -n +31 | cut -d' ' -f2- | while IFS= read -r old_asset; do
             if [ ! -f "dist/assets/$(basename "$old_asset")" ]; then rm -f "$old_asset"; fi
           done
           cp -R server /tmp/tha-cpanel-release/server
