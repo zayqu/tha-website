@@ -49,12 +49,12 @@ export default function Events() {
   return <main className="min-h-screen bg-cool-gray pt-14 md:pt-16">
     <SEO title={event?.title || 'Events & Bootcamps'} canonicalPath={slug ? '/events/' + slug : '/events'}
       description="Discover Tanzania Health Alliance events, bootcamps and community programmes." />
-    <section className="bg-gradient-to-br from-primary to-primary-dark py-14 text-white md:py-20">
+    <section className="bg-gradient-to-br from-primary to-primary-dark py-16 px-4 text-white sm:px-6 lg:px-8 md:py-24">
       <div className="container-custom">
         {slug && <Link to="/events" className="mb-5 inline-block text-sm font-semibold text-white/80 hover:text-white">← All events</Link>}
-        <div className={slug ? 'max-w-4xl' : 'mx-auto max-w-3xl text-center'}>
+        <div className="mx-auto max-w-4xl text-center">
           <p className="mb-3 text-sm font-bold uppercase tracking-wider text-white/80">THA Events & Bootcamps</p>
-          <h1 className="heading-xl text-white">{event?.title || 'Events & Bootcamps'}</h1>
+          <h1 className="heading-xl mx-auto max-w-4xl text-white break-words">{event?.title || 'Events & Bootcamps'}</h1>
           {!slug && <p className="mt-5 text-lg text-white/90">Explore upcoming programmes, leadership experiences and community events.</p>}
           {event && <p className="mt-5 text-base text-white/90">{displayDate(event.startAt)} – {displayDate(event.endAt)} · {event.location}</p>}
         </div>
