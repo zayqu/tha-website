@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const NAV_ITEMS = [
   { label: 'News', path: '/admin' },
+  { label: 'Events', path: '/admin/events' },
   { label: 'Campaigns', path: '/admin/projects' },
   { label: 'Journey', path: '/admin/journey' },
   { label: 'Site Content', path: '/admin/site-content' },
