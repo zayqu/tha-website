@@ -70,8 +70,8 @@ export const thaData = {
     }
   ],
   contact: {
-    address: "Adda Estate, House No. 03, Kinondoni",
-    poBox: "P.O. Box 31902",
+    address: "Sinza B Street, Block Number 33 (Bolt, 33 Sinza B)",
+    poBox: "P.O. Box 16102",
     city: "Dar es Salaam",
     country: "Tanzania",
     emails: ["info@tzhealthalliance.or.tz"],
