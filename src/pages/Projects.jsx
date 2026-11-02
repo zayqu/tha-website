@@ -1,3 +1,4 @@
+import { PageHero } from '../components/PageHero';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
@@ -42,15 +43,8 @@ export const Projects = () => {
         canonicalPath="/projects"
       />
 
-      {/* Hero */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-primary to-primary-dark text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">{page.heroTitle || 'Our Campaigns & Activities'}</h1>
-          <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
-            {page.heroText || 'Explore every published THA campaign and the results being achieved with communities across Tanzania.'}
-          </p>
-        </div>
-      </section>
+      <PageHero title={page.heroTitle || 'Our Campaigns & Activities'}
+        description={page.heroText || 'Explore every published THA campaign and the results being achieved with communities across Tanzania.'} />
 
       {/* Campaign Cards */}
       <section className="py-12 md:py-20">
