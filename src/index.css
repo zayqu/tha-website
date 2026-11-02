@@ -212,3 +212,11 @@
     @apply bg-primary/30 rounded-full;
   }
 }
+
+/* Sticky side panels need ancestors that do not create horizontal scroll containers.
+   Clip horizontal overflow on desktop without disabling sticky positioning. */
+@media (min-width: 1024px) {
+  html, body, #root, .public-mobile-shell {
+    overflow-x: clip;
+  }
+}
