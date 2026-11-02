@@ -322,11 +322,28 @@ function linksHtml(links = []) {
 
 function genericFallback(definition) {
   const paragraphs = (definition.paragraphs || []).map(p => `<p>${escapeHtml(p)}</p>`).join('\n');
+  const links = (definition.links || []).map(href => {
+    const label = href === '/' ? 'Home' : href.split('/').filter(Boolean).join(' ').replace(/-/g, ' ').replace(/\\b\\w/g, letter => letter.toUpperCase());
+    return `<li><a href="${escapeHtml(href)}">${escapeHtml(label)}</a></li>`;
+  }).join('');
+  // This is visible only before React starts, or if JavaScript is blocked.
+  // Inline critical CSS means visitors do not see unstyled SEO fallback text
+  // even if an old cached stylesheet is unavailable after a deployment.
   return `
+    <style id="seo-fallback-style">
+      #seo-page{box-sizing:border-box;min-height:100vh;padding:clamp(90px,12vw,150px) 22px 65px;background:#f4f8fb;color:#17334d;font:16px/1.7 Arial,sans-serif;text-align:center}
+      #seo-page *{box-sizing:border-box}
+      #seo-page h1{max-width:900px;margin:0 auto 26px;color:#024d85;font-size:clamp(30px,5vw,56px);line-height:1.15;font-weight:750}
+      #seo-page p{max-width:770px;margin:0 auto 17px}
+      #seo-page nav{max-width:900px;margin:34px auto 0}
+      #seo-page ul{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:0;padding:0;list-style:none}
+      #seo-page a{display:inline-block;padding:9px 15px;border-radius:8px;background:#024d85;color:white;text-decoration:none;font-weight:600}
+      #seo-page a:hover,#seo-page a:focus{background:#036bb4}
+    </style>
     <main id="seo-page">
       <h1>${escapeHtml(definition.heading)}</h1>
       ${paragraphs}
-      ${definition.links?.length ? `<nav aria-label="Related pages"><ul>${linksHtml(definition.links)}</ul></nav>` : ''}
+      ${links ? `<nav aria-label="Related pages"><ul>${links}</ul></nav>` : ''}
     </main>`;
 }
 
