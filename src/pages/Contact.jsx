@@ -66,8 +66,8 @@ export const Contact = () => {
                   <div>
                     <h3 className="font-bold text-primary mb-1">Physical Address</h3>
                     <p className="text-sm text-gray-600 leading-relaxed">
-                      {contact.address || 'Adda Estate, House No. 03, Kinondoni'},<br />
-                      {contact.poBox || 'P.O. Box 31902'},<br />
+                      {contact.address || 'Sinza B Street, Block Number 33 (Bolt, 33 Sinza B)'},<br />
+                      {contact.poBox || 'P.O. Box 16102'},<br />
                       {contact.city || 'Dar es Salaam'}, {contact.country || 'Tanzania'}
                     </p>
                   </div>
