@@ -1,3 +1,4 @@
+import { DetailBody, DetailCard, DetailSection } from '../components/DetailBody';
 import { useEffect, useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Icon } from '../components/Icon';
@@ -112,7 +113,7 @@ export default function NewsDetail() {
       </div>
 
       {/* Article Body */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <DetailBody narrow>
 
         {/* Back link */}
         <Link
@@ -142,6 +143,8 @@ export default function NewsDetail() {
         </div>
 
         {/* Content */}
+        <DetailCard>
+        <DetailSection>
         <div className="text-gray-700 leading-relaxed text-lg space-y-6">
           {news.content.split('\n\n').map((paragraph, i) => {
             const paragraphNumber = i + 1;
@@ -175,6 +178,9 @@ export default function NewsDetail() {
           })}
         </div>
 
+        </DetailSection>
+        </DetailCard>
+
         {/* Tags */}
         {news.tags && news.tags.length > 0 && (
           <div className="mt-12 pt-8 border-t border-gray-100 flex flex-wrap gap-2">
@@ -197,7 +203,7 @@ export default function NewsDetail() {
           </Link>
         </div>
 
-      </div>
+      </DetailBody>
     </div>
   );
 }

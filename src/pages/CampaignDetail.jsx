@@ -1,3 +1,4 @@
+import { DetailBody, DetailCard, DetailSection } from '../components/DetailBody';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
@@ -112,13 +113,13 @@ export const CampaignDetail = () => {
 
       {/* Activities & Impact */}
       <section className="py-16 md:py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <DetailBody className="!py-0">
           <div className="text-center mb-12">
             <span className="text-primary/50 font-semibold text-xs uppercase tracking-widest">Campaign Progress</span>
             <h2 className="text-3xl font-bold text-primary mt-2">What We Did & What We Achieved</h2>
           </div>
 
-          <div className="bg-white rounded-2xl overflow-hidden shadow-card">
+          <DetailCard>
             <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-100">
 
               {/* Activities */}
@@ -162,7 +163,7 @@ export const CampaignDetail = () => {
               </div>
 
             </div>
-          </div>
+          </DetailCard>
 
           {/* Recent Activity — sourced live from published news, not hardcoded */}
           {relatedNews.length > 0 && (
@@ -190,7 +191,7 @@ export const CampaignDetail = () => {
               </div>
             </div>
           )}
-        </div>
+        </DetailBody>
       </section>
 
       {campaign.whatIs ? (
