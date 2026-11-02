@@ -1,3 +1,4 @@
+import { DetailBody, DetailCard, DetailSection } from '../components/DetailBody';
 import { PageHero } from '../components/PageHero';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -55,22 +56,21 @@ export default function Events() {
       description={slug ? undefined : 'Explore upcoming programmes, leadership experiences and community events.'}
       meta={event ? displayDate(event.startAt) + ' – ' + displayDate(event.endAt) + ' · ' + event.location : undefined} />
     <section className="section-padding">
-      <div className="container-custom">
+      <DetailBody className="!py-0 !px-0">
         {loading && <p className="text-gray-600">Loading events…</p>}
         {error && <p role="alert" className="rounded-lg bg-white p-5 text-red-700">{error}</p>}
         {!loading && !error && !events.length && <p className="rounded-xl bg-white p-8 text-center">No events available yet.</p>}
         {slug ? event && <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
-          <article className="min-w-0 overflow-hidden rounded-2xl bg-white shadow-card">
+          <DetailCard>
             {event.imageUrl && <div className="bg-gray-50 p-4 md:p-6">
               <img src={event.imageUrl} alt={event.title + ' event poster'} className="mx-auto max-h-[640px] w-full object-contain" />
             </div>}
-            <div className="p-6 md:p-10">
-              <h2 className="heading-md mb-5">About the event</h2>
+            <DetailSection title="About the event">
               <div className="whitespace-pre-line break-words text-base leading-8 text-gray-700">{event.description}</div>
               {event.organizers && <p className="mt-7 border-t pt-5 text-sm text-gray-600"><strong>Organized by:</strong> {event.organizers}</p>}
               <div className="mt-7"><ShareButtons title={event.title} url={typeof window !== 'undefined' ? window.location.href : ''}/></div>
-            </div>
-          </article>
+            </DetailSection>
+          </DetailCard>
           <aside className="rounded-2xl bg-white p-6 shadow-card lg:sticky lg:top-24">
             <p className="mb-5 text-sm font-semibold uppercase tracking-wide text-primary">{event.status.replaceAll('_',' ')}</p>
             <h2 className="mb-4 text-xl font-bold">Event details</h2>
@@ -94,7 +94,7 @@ export default function Events() {
             </div>
           </article>)}
         </div>}
-      </div>
+      </DetailBody>
     </section>
   </main>;
 }
