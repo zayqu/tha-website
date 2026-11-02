@@ -56,6 +56,7 @@ function validate(input) {
   if (text('registrationOpensAt') && text('registrationClosesAt') && Date.parse(text('registrationOpensAt'))>=Date.parse(text('registrationClosesAt'))) throw Error('Registration opening must precede closing');
   for (const field of ['registrationUrl','imageUrl']) {
     if (text(field)) {
+      if (field === 'imageUrl' && /^\/api\/media\/site\/[a-zA-Z0-9_.-]+$/.test(text(field))) continue;
       const url = new URL(text(field));
       if (url.protocol !== 'https:') throw Error(field+' must use HTTPS');
     }
