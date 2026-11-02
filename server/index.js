@@ -203,7 +203,7 @@ app.get([...crawlablePages], async (req, res, next) => {
   try {
     const html = renderPublicPage(frontendIndex, req.path, { siteContent: siteContentRoutes.readContent() });
     if (!html) return next();
-    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    res.set('Cache-Control', 'no-cache, must-revalidate');
     res.type('html').send(html);
   } catch (error) {
     next(error);
@@ -214,13 +214,13 @@ app.get('/campaigns/:campaignId', async (req, res, next) => {
   try {
     const staticHtml = renderPublicPage(frontendIndex, req.path, { siteContent: siteContentRoutes.readContent() });
     if (staticHtml) {
-      res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+      res.set('Cache-Control', 'no-cache, must-revalidate');
       return res.type('html').send(staticHtml);
     }
     const project = await projectRoutes.findProject(req.params.campaignId);
     if (!project) return next();
     const html = renderPublicPage(frontendIndex, req.path, { project, siteContent: siteContentRoutes.readContent() });
-    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    res.set('Cache-Control', 'no-cache, must-revalidate');
     return res.type('html').send(html);
   } catch (error) {
     next(error);
@@ -230,7 +230,7 @@ app.get('/campaigns/:campaignId', async (req, res, next) => {
 app.get('/news', async (_req, res, next) => {
   try {
     const articles = await news.findPublished({ limit: 100, offset: 0 });
-    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    res.set('Cache-Control', 'no-cache, must-revalidate');
     res.type('html').send(renderHtml(frontendIndex, { articles }));
   } catch (error) {
     next(error);
@@ -241,7 +241,7 @@ app.get('/news/:slug', async (req, res, next) => {
   try {
     const article = await news.findBySlug(req.params.slug);
     if (!article) return res.status(404).type('html').send('Article not found');
-    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    res.set('Cache-Control', 'no-cache, must-revalidate');
     res.type('html').send(renderHtml(frontendIndex, { article }));
   } catch (error) {
     next(error);
@@ -254,6 +254,8 @@ app.use(express.static(frontendDist, {
 }));
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) return next();
+  if (req.path.startsWith('/assets/')) return res.status(404).type('text/plain').send('Asset not found');
+  res.set('Cache-Control', 'no-cache, must-revalidate');
   return res.sendFile(frontendIndex, err => {
     if (err) next(err);
   });
