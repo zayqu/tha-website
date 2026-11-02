@@ -60,7 +60,7 @@ function validate(input) {
       if (url.protocol !== 'https:') throw Error(field+' must use HTTPS');
     }
   }
-  return { title,slug,startAt,endAt,registrationOpensAt:text('registrationOpensAt'),registrationClosesAt:text('registrationClosesAt'),registrationUrl:text('registrationUrl'),imageUrl:text('imageUrl'),location:text('location').slice(0,250),description:text('description').slice(0,10000),organizers:text('organizers').slice(0,500),fee:text('fee').slice(0,100),newsUrl:text('newsUrl'),published:input.published===true,registrationClosed:input.registrationClosed===true,cancelled:input.cancelled===true };
+  return { title,slug,startAt,endAt,registrationOpensAt:text('registrationOpensAt'),registrationClosesAt:text('registrationClosesAt'),registrationUrl:text('registrationUrl'),imageUrl:text('imageUrl'),location:text('location').slice(0,250),description:text('description').slice(0,10000),organizers:text('organizers').slice(0,500),fee:text('fee').slice(0,100),feeOptions:Array.isArray(input.feeOptions)?input.feeOptions.slice(0,12).map(o=>({label:String(o?.label||'').trim().slice(0,80),price:String(o?.price||'').trim().slice(0,80)})).filter(o=>o.label&&o.price):[],newsUrl:text('newsUrl'),published:input.published===true,registrationClosed:input.registrationClosed===true,cancelled:input.cancelled===true };
 }
 router.get('/', async (_req,res,next)=> { try { res.json({events:(await all()).filter(e=>e.published).map(publicEvent).sort((a,b)=>Date.parse(b.startAt)-Date.parse(a.startAt))}); } catch(e){next(e);} });
 router.get('/admin',requireAuth,async (_req,res,next)=>{try{res.json({events:(await all()).map(e=>({...e,status:status(e)}))});}catch(e){next(e);}});
