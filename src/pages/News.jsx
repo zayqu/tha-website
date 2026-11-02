@@ -1,3 +1,4 @@
+import { PageHero } from '../components/PageHero';
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
@@ -93,17 +94,8 @@ export const News = () => {
         canonicalPath="/news"
       />
 
-      {/* Hero */}
-      <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
-        <div className="container-custom">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="heading-xl text-white mb-6">News &amp; Updates</h1>
-            <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
-              See what is happening in our communities, learn from people creating change, and follow progress in HIV, hepatitis and mental health.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero title="News & Updates"
+        description="See what is happening in our communities, learn from people creating change, and follow progress in HIV, hepatitis and mental health." />
 
       {/* Category Filter */}
       <section className="bg-white shadow-md sticky top-14 md:top-16 z-30">
