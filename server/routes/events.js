@@ -42,7 +42,7 @@ async function save(item) {
 function status(e, now=Date.now()) {
   if (e.cancelled) return 'cancelled';
   if (now >= Date.parse(e.endAt)) return 'completed';
-  if (!e.registrationUrl || e.registrationClosed || (e.registrationClosesAt && now >= Date.parse(e.registrationClosesAt))) return 'registration_closed';
+  if (!e.registrationUrl || e.registrationClosed || now >= Date.parse(e.startAt) || (e.registrationClosesAt && now >= Date.parse(e.registrationClosesAt))) return 'registration_closed';
   if (e.registrationOpensAt && now < Date.parse(e.registrationOpensAt)) return 'upcoming';
   return 'registration_open';
 }
@@ -63,7 +63,7 @@ function validate(input) {
   return { title,slug,startAt,endAt,registrationOpensAt:text('registrationOpensAt'),registrationClosesAt:text('registrationClosesAt'),registrationUrl:text('registrationUrl'),imageUrl:text('imageUrl'),location:text('location').slice(0,250),description:text('description').slice(0,10000),organizers:text('organizers').slice(0,500),fee:text('fee').slice(0,100),newsUrl:text('newsUrl'),published:input.published===true,registrationClosed:input.registrationClosed===true,cancelled:input.cancelled===true };
 }
 router.get('/', async (_req,res,next)=> { try { res.json({events:(await all()).filter(e=>e.published).map(publicEvent).sort((a,b)=>Date.parse(b.startAt)-Date.parse(a.startAt))}); } catch(e){next(e);} });
-router.get('/admin',requireAuth,async (_req,res,next)=>{try{res.json({events:(await all()).map(publicEvent)});}catch(e){next(e);}});
+router.get('/admin',requireAuth,async (_req,res,next)=>{try{res.json({events:(await all()).map(e=>({...e,status:status(e)}))});}catch(e){next(e);}});
 router.get('/:slug',async (req,res,next)=>{try {const event=(await all()).find(e=>e.slug===req.params.slug&&e.published);if(!event)return res.status(404).json({error:'Event not found'});res.json({event:publicEvent(event)});}catch(e){next(e);}});
 router.post('/',requireAuth,async(req,res,next)=>{try{const data=validate(req.body);if((await all()).some(e=>e.slug===data.slug))return res.status(409).json({error:'URL slug already exists'});const event={...data,id:crypto.randomUUID(),createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};await save(event);res.status(201).json({event:publicEvent(event)});}catch(e){if(e instanceof TypeError||e.message?.includes('required')||e.message?.includes('Invalid')||e.message?.includes('must'))return res.status(400).json({error:e.message});next(e);}});
 router.put('/:id',requireAuth,async(req,res,next)=>{try{const items=await all(),previous=items.find(e=>e.id===req.params.id);if(!previous)return res.status(404).json({error:'Event not found'});const data=validate(req.body);if(items.some(e=>e.slug===data.slug&&e.id!==previous.id))return res.status(409).json({error:'URL slug already exists'});const event={...previous,...data,updatedAt:new Date().toISOString()};await save(event);res.json({event:publicEvent(event)});}catch(e){if(e instanceof TypeError||e.message?.includes('required')||e.message?.includes('Invalid')||e.message?.includes('must'))return res.status(400).json({error:e.message});next(e);}});
