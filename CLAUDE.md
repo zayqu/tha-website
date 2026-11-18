@@ -78,3 +78,8 @@ Both must run simultaneously for local development. The Vite dev server proxies 
 ## Deployment
 - Deployed on Vercel; config in `vercel.json`.
 - Frontend build: `npm run build` → `dist/`.
+
+**Shared engineering process and Figma requirement:** follow
+`DEVELOPMENT_PROCESS.md` for every task, in addition to the rules above.
+Figma is required for UI design/implementation; preserve project-specific
+security and production controls.
