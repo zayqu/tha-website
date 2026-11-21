@@ -34,7 +34,7 @@ const useReveal = () => {
 };
 
 /* =========================
-   Campaign Card — Banner + White Body
+   Campaign card
 ========================= */
 const campaignIcons = { kapime: 'health_and_safety', 'life-unlocked': 'psychology', 'talk-to-heal': 'forum' };
 
@@ -93,9 +93,6 @@ const CampaignCard = ({ campaign, index }) => {
   );
 };
 
-/* =========================
-   Objective Card — Clean Minimal
-========================= */
 export const Home = () => {
   const site = useSiteContent();
   const org = site.organization || {};
@@ -106,6 +103,9 @@ export const Home = () => {
   const documents = (site.documents || []).filter(item => item.published !== false);
   const parliamentEvidence = documents.find(item => item.id === 'parliamentary-committee');
   const unicefEvidence = documents.find(item => item.id === 'unicef-meeting');
+  const unicefCard = unicefEvidence && /^THA[–-]UNICEF Strategic Meeting$/.test(unicefEvidence.title)
+    ? { ...unicefEvidence, title: 'Strategic meeting with UNICEF' }
+    : unicefEvidence;
   const [latestNews, setLatestNews] = useState([]);
   const [latestNewsLoading, setLatestNewsLoading] = useState(true);
   const [impactTotals, setImpactTotals] = useState(impactData.impactMetrics.total);
@@ -224,7 +224,6 @@ export const Home = () => {
       <section className="py-12 md:py-20 bg-cool-gray">
         <div className="max-w-7xl mx-auto px-4">
           <SectionHeader
-            eyebrow="What We Do"
             title="Our campaigns"
             subtitle={home.programsIntro || "Explore our work on hepatitis, HIV and mental health."}
             centered
@@ -252,18 +251,16 @@ export const Home = () => {
       </section>
 
       {/* INSTITUTIONAL ENGAGEMENT */}
-      <section className="py-12 md:py-20 bg-primary-dark text-white">
+      <section className="bg-white py-12 md:py-20">
         <div className="max-w-6xl mx-auto px-4">
           <SectionHeader
-            title="Our work with institutions"
-            subtitle={home.engagementIntro || "THA’s public record includes engagement with national institutions and health partners on hepatitis prevention, birth-dose vaccination and community health."}
-            inverse
+            title="Institutional engagement"
             compact
           />
           <ResponsiveRail desktopGrid="md:grid-cols-3" mobileWidth="78vw" className="md:gap-5">
             {[
               parliamentEvidence,
-              unicefEvidence,
+              unicefCard,
               {
                 id: 'verification',
                 url: '/documents',
@@ -275,11 +272,11 @@ export const Home = () => {
               <Link
                 key={record.id}
                 to={record.url}
-                className="block h-full rounded-2xl bg-white/10 p-5 transition hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:p-6"
+                className="block h-full rounded-2xl border border-gray-200 bg-white p-5 transition hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary md:p-6"
               >
-                <p className="mb-2 text-xs uppercase tracking-wider text-white/60">{record.meta}</p>
-                <h3 className="mb-2 text-lg font-bold">{record.title}</h3>
-                <p className="text-sm text-white/75">{record.description}</p>
+                <p className="mb-2 text-xs uppercase tracking-wider text-gray-600">{record.meta}</p>
+                <h3 className="mb-2 text-lg font-bold text-primary">{record.title}</h3>
+                <p className="text-sm text-gray-700">{record.description}</p>
               </Link>
             ))}
           </ResponsiveRail>

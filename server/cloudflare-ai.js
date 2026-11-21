@@ -26,6 +26,7 @@ async function generateCloudflareDraft({ topic, purpose, facts, categories }) {
     'Use clear English for a general Tanzanian audience and short paragraphs.',
     'Start with what happened and why it matters to people in Tanzania when supplied facts support that connection.',
     'Use only as many short paragraphs as the facts warrant. Avoid filler, slogans, repetition, hashtags, and Markdown headings.',
+    'Use periods, commas, or parentheses instead of long dashes.',
     'Keep source names and links as supplied. Never add a source or a medical claim from memory.',
     'Choose an existing category when suitable; otherwise suggest one concise professional category.',
   ].join(' ');
@@ -127,6 +128,7 @@ async function generateAdminAssistance({ section, action, instruction, current =
     'Write natural, human English suitable for a Tanzanian public-health NGO.',
     'Do not sound like marketing copy, a grant application, or generic AI prose.',
     'Never invent names, dates, locations, statistics, quotes, partnerships, awards, outcomes, legal facts, medical claims, or financial details.',
+    'Use periods, commas, or parentheses instead of long dashes.',
     'Preserve verified facts already present in the supplied content.',
     'For health content, do not diagnose or give individual medical advice.',
     'For policies, keep wording clear and cautious rather than pretending to be legal counsel.',

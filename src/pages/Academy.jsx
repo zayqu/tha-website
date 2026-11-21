@@ -43,7 +43,7 @@ export const Academy = () => {
         canonicalPath="/academy"
       />
 
-      <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
+      <section className="section-padding bg-primary-dark text-white">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="heading-xl text-white mb-5">{academy.heroTitle || 'Public Health Knowledge Centre'}</h1>

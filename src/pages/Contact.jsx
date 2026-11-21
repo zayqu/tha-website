@@ -39,7 +39,7 @@ export const Contact = () => {
       />
 
       {/* Hero */}
-      <section className="py-12 md:py-20 bg-gradient-to-br from-primary to-primary-dark text-white">
+      <section className="py-12 md:py-20 bg-primary-dark text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-hero-lg font-heading font-bold tracking-tighter mb-4">
             Get in Touch
@@ -231,7 +231,7 @@ export const Contact = () => {
       </section>
 
       {/* Volunteer CTA */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-primary to-primary-dark text-white">
+      <section className="py-16 md:py-24 bg-primary-dark text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-hero-md font-heading font-bold tracking-tighter mb-4">
             Become a Volunteer
