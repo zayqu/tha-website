@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { AdminHeader } from '../../components/admin/AdminHeader';
 import { HealthDraftImport } from '../../components/admin/HealthDraftImport';
+import { EditorialInbox } from '../../components/admin/EditorialInbox';
 
 const CATEGORY_COLORS = {
   'Events':          'bg-blue-100 text-blue-700',
@@ -13,8 +14,10 @@ const CATEGORY_COLORS = {
 
 export default function AdminDashboard() {
   const { admin, authFetch } = useAuth();
+  const { state } = useLocation();
 
   const [articles, setArticles] = useState([]);
+  const [academyRefresh, setAcademyRefresh] = useState(0);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState('');
   const [deleting, setDeleting] = useState(null);
@@ -113,61 +116,65 @@ export default function AdminDashboard() {
       <AdminHeader section="News Dashboard" />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <HealthDraftImport
-          onImported={fetchArticles}
-          newsDraftCount={loading || error ? null : draftCount}
-          onReviewNews={() => {
-            setFilter('drafts');
-            document.getElementById('news-review')?.scrollIntoView({ block: 'start' });
-          }}
-        />
-
-        {admin?.role === 'superadmin' && (
-          <section className="mb-8 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between mb-4">
-              <div>
-                <h2 className="font-bold text-gray-800">Account approval</h2>
-                <p className="text-sm text-gray-500">Review people requesting access to publish and manage news.</p>
-              </div>
-              <span className="mt-2 sm:mt-0 rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">
-                {pendingAccounts.length} pending
-              </span>
-            </div>
-
-            {pendingAccounts.length === 0 ? (
-              <p className="rounded-xl bg-gray-50 px-4 py-4 text-sm text-gray-500">No account requests are waiting for approval.</p>
-            ) : (
-              <div className="space-y-3">
-                {pendingAccounts.map(account => (
-                  <div key={account.id} className="flex flex-col gap-3 rounded-xl border border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <p className="font-semibold text-gray-800">{account.name}</p>
-                      <p className="text-sm text-gray-500">{account.identifier}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        disabled={reviewingAccount === account.id}
-                        onClick={() => reviewAccount(account.id, 'rejected')}
-                        className="rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
-                      >
-                        Reject
-                      </button>
-                      <button
-                        type="button"
-                        disabled={reviewingAccount === account.id}
-                        onClick={() => reviewAccount(account.id, 'approved')}
-                        className="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary-dark disabled:opacity-50"
-                      >
-                        Approve
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
+        {state?.saved && (
+          <p role="status" className="mb-4 rounded-xl bg-green-50 px-4 py-3 text-sm font-semibold text-green-800">
+            {state.published ? 'Post published.' : 'News draft saved.'}
+          </p>
         )}
+        <EditorialInbox articles={articles} newsLoading={loading} newsError={error} academyRefresh={academyRefresh} />
+        <details className="mb-6 rounded-2xl border border-gray-200 bg-white p-4 sm:p-5">
+          <summary className="cursor-pointer font-semibold text-gray-800">More tools</summary>
+          <HealthDraftImport onImported={fetchArticles} onAcademyImported={() => setAcademyRefresh(value => value + 1)} />
+          <Link to="/admin/site-content?tab=academy#academy-resources" className="mt-3 inline-block text-sm font-semibold text-primary">Manage all Academy resources</Link>
+
+          {admin?.role === 'superadmin' && (
+            <section className="mb-8 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between mb-4">
+                <div>
+                  <h2 className="font-bold text-gray-800">Account approval</h2>
+                  <p className="text-sm text-gray-500">Review people requesting access to publish and manage news.</p>
+                </div>
+                <span className="mt-2 sm:mt-0 rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">
+                  {pendingAccounts.length} pending
+                </span>
+              </div>
+
+              {pendingAccounts.length === 0 ? (
+                <p className="rounded-xl bg-gray-50 px-4 py-4 text-sm text-gray-500">No account requests are waiting for approval.</p>
+              ) : (
+                <div className="space-y-3">
+                  {pendingAccounts.map(account => (
+                    <div key={account.id} className="flex flex-col gap-3 rounded-xl border border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="font-semibold text-gray-800">{account.name}</p>
+                        <p className="text-sm text-gray-500">{account.identifier}</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          disabled={reviewingAccount === account.id}
+                          onClick={() => reviewAccount(account.id, 'rejected')}
+                          className="rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
+                        >
+                          Reject
+                        </button>
+                        <button
+                          type="button"
+                          disabled={reviewingAccount === account.id}
+                          onClick={() => reviewAccount(account.id, 'approved')}
+                          className="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary-dark disabled:opacity-50"
+                        >
+                          Approve
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
+        </details>
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-8">
@@ -226,7 +233,7 @@ export default function AdminDashboard() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-24 bg-white rounded-2xl border border-gray-100">
             <div className="text-5xl mb-4">📭</div>
-            <p className="text-gray-500">No articles yet.</p>
+            <p className="text-gray-500">{filter === 'drafts' ? 'No News drafts to review.' : 'No articles yet.'}</p>
             <Link to="/admin/news/new" className="mt-4 inline-block text-primary font-semibold hover:underline">
               Create your first article →
             </Link>
@@ -265,35 +272,31 @@ export default function AdminDashboard() {
 
                   {/* Actions */}
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    <Link
-                      to={`/news/${article.slug}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-1.5 rounded-lg text-gray-400 hover:text-secondary hover:bg-secondary/10 transition-colors"
-                      title="View"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                    </Link>
+                    {article.published && (
+                      <>
+                        <Link
+                          to={`/news/${article.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-secondary hover:bg-secondary/10 transition-colors"
+                          title="View"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                        </Link>
 
-                    <button
-                      onClick={() => handleTogglePublish(article)}
-                      title={article.published ? 'Unpublish' : 'Publish'}
-                      className={`p-1.5 rounded-lg transition-colors text-sm ${
-                        article.published
-                          ? 'text-green-600 hover:bg-red-50 hover:text-red-600'
-                          : 'text-gray-400 hover:bg-green-50 hover:text-green-600'
-                      }`}
-                    >
-                      {article.published ? (
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
-                      ) : (
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                      )}
-                    </button>
+                        <button
+                          onClick={() => handleTogglePublish(article)}
+                          title="Unpublish"
+                          className="p-1.5 rounded-lg text-green-600 transition-colors hover:bg-red-50 hover:text-red-600"
+                        >
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+                        </button>
 
+                      </>
+                    )}
                     <Link
                       to={`/admin/news/edit/${article.id}`}
                       className="p-1.5 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors"

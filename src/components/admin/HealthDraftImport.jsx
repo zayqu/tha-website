@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const DESTINATIONS = [
@@ -7,9 +6,7 @@ const DESTINATIONS = [
   ['academy', 'Academy', '/api/site-content/academy/import'],
 ];
 
-const ACADEMY_RESOURCES = '/admin/site-content?tab=academy#academy-resources';
-
-export function HealthDraftImport({ onImported, onReviewNews, newsDraftCount }) {
+export function HealthDraftImport({ onImported, onAcademyImported }) {
   const { authFetch } = useAuth();
   const [input, setInput] = useState('');
   const [result, setResult] = useState([]);
@@ -46,6 +43,7 @@ export function HealthDraftImport({ onImported, onReviewNews, newsDraftCount }) 
     const completed = outcomes.flatMap(outcome => outcome.status === 'fulfilled' ? [outcome.value] : []);
     setResult(completed);
     if (completed.some(item => item.label === 'News' && item.imported)) onImported();
+    if (completed.some(item => item.label === 'Academy' && item.imported)) onAcademyImported();
     if (outcomes.some(outcome => outcome.status === 'rejected')) {
       setError('Part of the batch could not be imported. You can safely retry the same batch.');
     } else if (!completed.some(item => item.invalid)) {
@@ -55,47 +53,32 @@ export function HealthDraftImport({ onImported, onReviewNews, newsDraftCount }) 
   }
 
   return (
-    <section aria-labelledby="editorial-review-heading" className="mb-8 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-      <h2 id="editorial-review-heading" className="font-bold text-gray-800">News & Academy drafts</h2>
-      <p className="mt-2 text-sm text-gray-600">
-        The daily collector saves matching items as private drafts. Open a draft to edit it and decide whether to publish.
-      </p>
-      <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-primary">
-        <button type="button" className="underline" onClick={onReviewNews}>
-          Review News drafts{newsDraftCount == null ? '' : ` (${newsDraftCount})`}
-        </button>
-        <Link to={ACADEMY_RESOURCES} className="underline">Review Academy resources</Link>
+    <details className="mt-4 border-t border-gray-100 pt-3">
+      <summary className="cursor-pointer text-sm font-semibold text-gray-800">Import health drafts</summary>
+      <p className="mt-3 text-sm text-gray-600">Paste a JSON batch from the THA editorial watch to add it to the same draft queues.</p>
+      <label htmlFor="health-drafts" className="mt-4 block text-sm font-semibold text-gray-700">Editorial batch JSON</label>
+      <textarea
+        id="health-drafts"
+        value={input}
+        onChange={event => setInput(event.target.value)}
+        disabled={importing}
+        rows={5}
+        className="mt-2 w-full rounded-xl border border-gray-300 p-3 font-mono text-sm"
+      />
+      <button
+        type="button"
+        onClick={importDrafts}
+        disabled={!input.trim() || importing}
+        className="mt-3 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+      >
+        {importing ? 'Importing…' : 'Import as drafts'}
+      </button>
+      {error && <p role="alert" className="mt-3 text-sm text-red-700">{error}</p>}
+      <div role="status" className="mt-2 text-sm text-gray-700">
+        {result.map(item => (
+          <p key={item.label}>{item.label} · {item.imported} imported · {item.duplicates} already present · {item.invalid} invalid</p>
+        ))}
       </div>
-      <details className="mt-4 border-t border-gray-100 pt-3">
-        <summary className="cursor-pointer text-sm font-semibold text-gray-800">Import health drafts</summary>
-        <p className="mt-3 text-sm text-gray-600">Paste a JSON batch from the THA editorial watch to add it to the same draft queues.</p>
-        <label htmlFor="health-drafts" className="mt-4 block text-sm font-semibold text-gray-700">Editorial batch JSON</label>
-        <textarea
-          id="health-drafts"
-          value={input}
-          onChange={event => setInput(event.target.value)}
-          disabled={importing}
-          rows={5}
-          className="mt-2 w-full rounded-xl border border-gray-300 p-3 font-mono text-sm"
-        />
-        <button
-          type="button"
-          onClick={importDrafts}
-          disabled={!input.trim() || importing}
-          className="mt-3 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
-        >
-          {importing ? 'Importing…' : 'Import as drafts'}
-        </button>
-        {error && <p role="alert" className="mt-3 text-sm text-red-700">{error}</p>}
-        <div role="status" className="mt-2 text-sm text-gray-700">
-          {result.map(item => (
-            <p key={item.label}>{item.label} · {item.imported} imported · {item.duplicates} already present · {item.invalid} invalid</p>
-          ))}
-          {result.some(item => item.label === 'Academy' && item.imported > 0) && (
-            <Link to={ACADEMY_RESOURCES} className="font-semibold text-primary underline">Review Academy drafts</Link>
-          )}
-        </div>
-      </details>
-    </section>
+    </details>
   );
 }
