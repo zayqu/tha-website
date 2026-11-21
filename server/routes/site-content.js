@@ -1,9 +1,11 @@
 const express = require('express');
 const fs = require('fs');
+const crypto = require('crypto');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const { requireAuth } = require('../middleware/auth');
 const defaults = require('../../src/data/siteContentDefaults.json');
+const { normalizeHealthDraft, sourceId, sourceKey } = require('../health-content');
 
 const router = express.Router();
 const CONTENT_FILE = path.join(__dirname, '../data/site-content.json');
@@ -97,25 +99,86 @@ function cleanDocuments(items = []) {
   }));
 }
 
+function publicContent() {
+  const content = readContent();
+  if (Array.isArray(content.academy?.resources)) {
+    content.academy.resources = content.academy.resources.filter(item => item?.published !== false);
+  }
+  return content;
+}
+
+function contentRevision(content) {
+  return crypto.createHash('sha256').update(JSON.stringify(content)).digest('hex');
+}
+
 router.get('/', (_req, res) => {
   res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
-  res.json({ content: readContent() });
+  res.json({ content: publicContent() });
 });
 
 router.get('/admin', requireAuth, (_req, res) => {
+  const content = readContent();
   res.set('Cache-Control', 'no-store');
-  res.json({ content: readContent() });
+  res.json({ content, revision: contentRevision(content) });
 });
 
 router.put('/', requireAuth, (req, res, next) => {
   try {
     const existing = readContent();
-    const next = cleanObject(req.body?.content || {}, existing);
-    next.documents = cleanDocuments(req.body?.content?.documents ?? existing.documents ?? []);
+    const { content, revision } = req.body || {};
+    const next = cleanObject(content || {}, existing);
+    const incomingResources = next.academy?.resources;
+    const existingResources = existing.academy?.resources;
+    const hasMissingImports = Array.isArray(existingResources) && existingResources.some(item =>
+      String(item?.id || '').startsWith('editorial-')
+      && (!Array.isArray(incomingResources) || !incomingResources.some(resource => resource?.id === item.id))
+    );
+    if (revision ? revision !== contentRevision(existing) : hasMissingImports) {
+      return res.status(409).json({ error: 'Site content changed after you opened it. Reload Site Content before saving.' });
+    }
+    next.documents = cleanDocuments(content?.documents ?? existing.documents ?? []);
     next.updatedAt = Math.floor(Date.now() / 1000);
     next.updatedBy = req.admin?.identifier || req.admin?.id || 'admin';
     writeContent(next);
-    res.json({ content: next });
+    res.json({ content: next, revision: contentRevision(next) });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/academy/import', requireAuth, (req, res, next) => {
+  try {
+    const { items } = req.body || {};
+    if (!Array.isArray(items) || !items.length || items.length > 25) {
+      return res.status(400).json({ error: 'Submit between 1 and 25 Academy drafts.' });
+    }
+    const content = readContent();
+    const resources = Array.isArray(content.academy?.resources) ? content.academy.resources : [];
+    const knownSources = new Set(resources.map(item => sourceKey(item?.url)).filter(Boolean));
+    const drafts = [];
+    let invalid = 0;
+    let duplicates = 0;
+    for (const raw of items) {
+      const candidate = normalizeHealthDraft(raw, { academy: true });
+      if (!candidate) {
+        invalid++;
+        continue;
+      }
+      const key = sourceKey(candidate.url);
+      if (knownSources.has(key)) {
+        duplicates++;
+        continue;
+      }
+      knownSources.add(key);
+      drafts.push({ ...candidate, id: `editorial-${sourceId(candidate.url)}`, published: false });
+    }
+    if (drafts.length) {
+      content.academy = { ...content.academy, resources: [...drafts, ...resources] };
+      content.updatedAt = Math.floor(Date.now() / 1000);
+      content.updatedBy = req.admin.identifier || req.admin.id;
+      writeContent(content);
+    }
+    res.status(201).json({ imported: drafts.length, duplicates, invalid });
   } catch (error) {
     next(error);
   }

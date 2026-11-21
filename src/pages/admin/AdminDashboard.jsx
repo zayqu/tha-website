@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { AdminHeader } from '../../components/admin/AdminHeader';
+import { HealthDraftImport } from '../../components/admin/HealthDraftImport';
 
 const CATEGORY_COLORS = {
   'Events':          'bg-blue-100 text-blue-700',
@@ -112,6 +113,7 @@ export default function AdminDashboard() {
       <AdminHeader section="News Dashboard" />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <HealthDraftImport onImported={fetchArticles} />
 
         {admin?.role === 'superadmin' && (
           <section className="mb-8 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
