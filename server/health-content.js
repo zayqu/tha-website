@@ -11,6 +11,8 @@ const SOURCES = [
   ['worldhepatitisalliance.org', 'World Hepatitis Alliance'],
   ['unaids.org', 'UNAIDS'],
 ];
+const NEWS_REVIEW_NOTE = 'Editorial review required. Replace this note with original THA reporting and explain the local relevance before publishing.';
+const NEWS_REVIEW_EXCERPT = 'Source update pending a THA summary.';
 const TOPICS = ['Hepatitis', 'HIV', 'Mental Health'];
 const SCOPES = ['Tanzania', 'Africa', 'Global'];
 const ACADEMY_CATEGORIES = ['Guidance', 'Training', 'Research', 'Policy'];
@@ -74,4 +76,4 @@ function sourceId(value) {
   return crypto.createHash('sha256').update(sourceKey(value)).digest('hex').slice(0, 20);
 }
 
-module.exports = { normalizeHealthDraft, sourceId, sourceKey, sourceLink };
+module.exports = { normalizeHealthDraft, sourceId, sourceKey, sourceLink, NEWS_REVIEW_NOTE, NEWS_REVIEW_EXCERPT };

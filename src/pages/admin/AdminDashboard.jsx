@@ -90,8 +90,8 @@ export default function AdminDashboard() {
         method: 'PUT',
         body: JSON.stringify(updated),
       });
-      if (!res.ok) throw new Error('Update failed');
       const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Update failed');
       setArticles(prev => prev.map(a => a.id === article.id ? data.article : a));
     } catch (err) {
       alert(err.message);

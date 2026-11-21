@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('node:crypto');
 require('dotenv').config();
-const { jwtAccessSecret } = require('../runtime-secrets');
+const { jwtAccessSecret, contentImportSecret } = require('../runtime-secrets');
 
 /**
  * Verifies the Bearer access token in the Authorization header.
@@ -36,4 +37,13 @@ function requireSuperAdmin(req, res, next) {
   next();
 }
 
-module.exports = { requireAuth, requireSuperAdmin };
+function requireEditorialImport(req, res, next) {
+  const expected = Buffer.from(process.env.CONTENT_IMPORT_SECRET || contentImportSecret || '');
+  const supplied = Buffer.from(req.get('authorization')?.match(/^Bearer (.+)$/)?.[1] || '');
+  if (expected.length && expected.length === supplied.length && crypto.timingSafeEqual(expected, supplied)) {
+    return next();
+  }
+  return requireAuth(req, res, next);
+}
+
+module.exports = { requireAuth, requireSuperAdmin, requireEditorialImport };
