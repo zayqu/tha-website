@@ -180,7 +180,7 @@ const PAGE_DEFINITIONS = {
       'Tanzania Health Alliance (THA) is a registered NGO, No. 00NGO/R/8379, based in Dar es Salaam, Tanzania.',
       'We work with communities, health institutions, government stakeholders and partners on viral hepatitis, HIV and mental health through practical community action, advocacy and public-health collaboration.'
     ],
-    links: ['/about', '/documents', '/projects', '/impact', '/academy', '/news', '/contact']
+    links: ['/about', '/documents', '/projects', '/impact', '/academy', '/news', '/contact', '/make-a-difference']
   },
   '/about': {
     title: 'About Tanzania Health Alliance | Tanzania Health Alliance',
@@ -394,7 +394,7 @@ function renderPublicPage(templatePath, pathname, { project, siteContent = {} } 
         org.registrationNumber ? `${org.name || SITE_NAME} is a registered NGO (No. ${org.registrationNumber}) based in ${contact.city || 'Dar es Salaam'}, ${contact.country || 'Tanzania'}.` : '',
         home.engagementIntro,
       ].filter(Boolean),
-      links: ['/about', '/projects', '/impact', '/academy', '/news', '/documents', '/contact'],
+      links: ['/about', '/projects', '/impact', '/academy', '/news', '/documents', '/contact', '/make-a-difference'],
     },
     '/about': {
       title: `About ${org.name || SITE_NAME} | ${SITE_NAME}`,

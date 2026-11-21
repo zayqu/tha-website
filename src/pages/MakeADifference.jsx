@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
 import { useSiteContent } from '../hooks/useSiteContent';
@@ -7,7 +7,9 @@ export const MakeADifference = () => {
   const site = useSiteContent();
   const funding = site.funding || {};
   const contact = site.contact || {};
-  const [activeTab, setActiveTab] = useState('volunteer');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedTab = searchParams.get('tab');
+  const activeTab = ['donate', 'partner'].includes(requestedTab) ? requestedTab : 'volunteer';
   const roles = (funding.volunteerRoles || [])
     .filter(role => role.published !== false)
     .sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0));
@@ -46,8 +48,9 @@ export const MakeADifference = () => {
             ].map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold transition-all text-sm ${
+                onClick={() => setSearchParams({ tab: tab.id })}
+                aria-pressed={activeTab === tab.id}
+                className={`flex items-center gap-2 px-3 py-2.5 sm:px-5 rounded-lg font-semibold transition-all text-sm ${
                   activeTab === tab.id
                     ? 'bg-secondary text-white shadow-sm'
                     : 'bg-cool-gray text-primary hover:bg-gray-200'
@@ -134,7 +137,7 @@ export const MakeADifference = () => {
         <section className="section-padding">
           <div className="container-custom">
             <div className="text-center mb-12">
-              <h2 className="heading-lg mb-4">Support Our Mission</h2>
+              <h2 className="heading-lg mb-4">Support THA’s work</h2>
               <p className="body-lg max-w-3xl mx-auto">
                 {funding.donationIntro || "We welcome support for clearly defined activities, with an agreed purpose, budget and reporting approach."}
               </p>
@@ -164,7 +167,7 @@ export const MakeADifference = () => {
                 </div>
                 <h3 className="heading-sm mb-3">Request verified donation details</h3>
                 <p className="body-md text-neutral-dark/70 mb-5">
-                  To protect donors and THA, current banking or payment instructions are shared directly by the organization rather than published as unverified website data.
+                  Contact THA to confirm current payment details before sending a donation.
                 </p>
                 <a
                   href={`mailto:${contact.email || "info@tzhealthalliance.or.tz"}?subject=Request%20for%20verified%20THA%20donation%20details`}
@@ -180,10 +183,10 @@ export const MakeADifference = () => {
                 <p className="text-white/80 mb-5 max-w-3xl">
                   Registration information, public activity records and independent verification are available on our Documents & Accountability page. Additional due-diligence documents can be requested directly from THA.
                 </p>
-                <a href="/documents" className="inline-flex items-center gap-2 font-semibold text-white hover:underline">
+                <Link to="/documents" className="inline-flex items-center gap-2 font-semibold text-white hover:underline">
                   Review Documents & Accountability
                   <Icon name="arrow_forward" size={17} color="white" />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
