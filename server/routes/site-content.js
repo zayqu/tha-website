@@ -3,7 +3,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-const { requireAuth } = require('../middleware/auth');
+const { requireAuth, requireEditorialImport } = require('../middleware/auth');
 const defaults = require('../../src/data/siteContentDefaults.json');
 const { normalizeHealthDraft, sourceId, sourceKey } = require('../health-content');
 
@@ -146,7 +146,7 @@ router.put('/', requireAuth, (req, res, next) => {
   }
 });
 
-router.post('/academy/import', requireAuth, (req, res, next) => {
+router.post('/academy/import', requireEditorialImport, (req, res, next) => {
   try {
     const { items } = req.body || {};
     if (!Array.isArray(items) || !items.length || items.length > 25) {
@@ -175,7 +175,7 @@ router.post('/academy/import', requireAuth, (req, res, next) => {
     if (drafts.length) {
       content.academy = { ...content.academy, resources: [...drafts, ...resources] };
       content.updatedAt = Math.floor(Date.now() / 1000);
-      content.updatedBy = req.admin.identifier || req.admin.id;
+      content.updatedBy = req.admin?.identifier || req.admin?.id || 'content-import';
       writeContent(content);
     }
     res.status(201).json({ imported: drafts.length, duplicates, invalid });

@@ -4,12 +4,12 @@ const { v4: uuidv4, v5: uuidv5 } = require('uuid');
 const crypto = require('crypto');
 const { body, param, query, validationResult } = require('express-validator');
 const { news } = require('../db');
-const { requireAuth } = require('../middleware/auth');
+const { requireAuth, requireEditorialImport } = require('../middleware/auth');
 const { generateCloudflareDraft } = require('../cloudflare-ai');
 const { persistArticleImages } = require('../media-storage');
 const { contentImportSecret } = require('../runtime-secrets');
 const { notifyIndexNow } = require('../indexnow');
-const { normalizeHealthDraft, sourceId, sourceKey, sourceLink } = require('../health-content');
+const { normalizeHealthDraft, sourceId, sourceKey, sourceLink, NEWS_REVIEW_NOTE, NEWS_REVIEW_EXCERPT } = require('../health-content');
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 function slugify(text) {
@@ -196,7 +196,7 @@ async function importEditorialDrafts(items) {
   };
 }
 
-router.post('/import/editorial', requireAuth, async (req, res, next) => {
+router.post('/import/editorial', requireEditorialImport, async (req, res, next) => {
   const { items } = req.body || {};
   if (!Array.isArray(items) || !items.length || items.length > 25) {
     return res.status(400).json({ error: 'Submit between 1 and 25 News drafts.' });
@@ -324,6 +324,10 @@ router.put('/:id', requireAuth, [
     title, excerpt, content, image, category, author, date,
     tags = [], inline_images = [], is_featured = false, published = false,
   } = req.body;
+
+  if (published && (content.includes(NEWS_REVIEW_NOTE) || excerpt === NEWS_REVIEW_EXCERPT)) {
+    return res.status(400).json({ error: 'Write the THA summary and replace the editorial note before publishing.' });
+  }
 
   // Regenerate slug only if title changed
   let slug = existing.slug;

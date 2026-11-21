@@ -1,17 +1,28 @@
-const CONTENT_API_URL = (process.env.CONTENT_API_URL || 'https://tha-webacdb.vercel.app').replace(/\/$/, '');
-let CONTENT_IMPORT_SECRET = process.env.CONTENT_IMPORT_SECRET;
-if (!CONTENT_IMPORT_SECRET) {
-  try {
-    CONTENT_IMPORT_SECRET = require('../server/runtime-secrets').contentImportSecret;
-  } catch {}
-}
+const CONTENT_API_URL = new URL(process.env.CONTENT_API_URL || 'https://tzhealthalliance.or.tz').origin;
+const FETCH_TIMEOUT = 12000;
 
 const DEFAULT_FEEDS = [
   {
     url: 'https://www.who.int/rss-feeds/news-english.xml',
     source: 'World Health Organization',
+    scope: 'Global',
+  },
+  {
+    url: 'https://afro.who.int/rss/featured-news.xml',
+    source: 'WHO Regional Office for Africa',
+    scope: 'Africa',
   },
 ];
+
+const PUBLICATIONS_URL = new URL('https://www.who.int/api/hubs/publications');
+PUBLICATIONS_URL.search = new URLSearchParams({
+  sf_site: '15210d59-ad60-47ff-a542-7ed76645f0c7',
+  sf_provider: 'OpenAccessProvider',
+  sf_culture: 'en',
+  $orderby: 'PublicationDateAndTime desc',
+  $select: 'Title,ItemDefaultUrl,FormatedDate,Tag',
+  $top: '50',
+}).toString();
 
 const TOPIC_RULES = {
   HIV: {
@@ -58,7 +69,6 @@ function hasPhrase(text, phrase) {
 function classifyRelevance(title, excerpt) {
   const titleText = normalizeText(title);
   const excerptText = normalizeText(excerpt);
-  const combined = `${titleText} ${excerptText}`;
 
   const matches = [];
   for (const [topic, rules] of Object.entries(TOPIC_RULES)) {
@@ -97,13 +107,13 @@ function safeDate(rawDate) {
 }
 
 function isRecentEnough(date) {
-  if (!date) return true;
+  if (!date) return false;
   const ageMs = Date.now() - date.getTime();
-  if (ageMs < -2 * 24 * 60 * 60 * 1000) return false;
+  if (ageMs < 0) return false;
   return ageMs <= MAX_ITEM_AGE_DAYS * 24 * 60 * 60 * 1000;
 }
 
-function parseFeed(xml, source) {
+function parseFeed(xml, feed) {
   const blocks = xml.match(/<item[\s\S]*?<\/item>|<entry[\s\S]*?<\/entry>/gi) || [];
   const accepted = [];
   const rejected = [];
@@ -112,7 +122,7 @@ function parseFeed(xml, source) {
     const linkText = tag(block, 'link');
     const href = block.match(/<link[^>]+href=["']([^"']+)/i)?.[1];
     const title = tag(block, 'title');
-    const excerpt = tag(block, 'description') || tag(block, 'summary') || tag(block, 'content');
+    const excerpt = (tag(block, 'description') || tag(block, 'summary') || tag(block, 'content')).replace(/<[^>]+>/g, ' ').trim();
     const rawDate = tag(block, 'pubDate') || tag(block, 'published') || tag(block, 'updated');
     const parsedDate = safeDate(rawDate);
     const url = href || linkText;
@@ -131,10 +141,9 @@ function parseFeed(xml, source) {
 
     accepted.push({
       title,
-      excerpt: excerpt.slice(0, 500),
       url,
-      source,
-      date: (parsedDate || new Date()).toISOString().slice(0, 10),
+      scope: url.includes('/countries/united-republic-tanzania/') ? 'Tanzania' : (['Tanzania', 'Africa', 'Global'].includes(feed.scope) ? feed.scope : 'Global'),
+      date: parsedDate.toISOString().slice(0, 10),
       topics,
     });
   }
@@ -143,63 +152,110 @@ function parseFeed(xml, source) {
   return { accepted: accepted.slice(0, MAX_ITEMS_PER_FEED), rejected };
 }
 
+async function fetchSource(url) {
+  const response = await fetch(url, {
+    signal: AbortSignal.timeout(FETCH_TIMEOUT),
+    headers: { 'User-Agent': 'Tanzania Health Alliance content monitor' },
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response;
+}
+
+function readAcademyPublications(data) {
+  if (!Array.isArray(data?.value)) throw new Error('Unexpected WHO publications response');
+  return data.value.flatMap(item => {
+    const title = String(item.Title || '').trim();
+    const topicMatches = classifyRelevance(title, '');
+    const date = safeDate(item.FormatedDate);
+    const path = String(item.ItemDefaultUrl || '');
+    if (!topicMatches.length || !isRecentEnough(date) || !/^\/[a-z0-9-]+$/i.test(path)) return [];
+    const kind = String(item.Tag || '').toLowerCase();
+    const category = /policy/.test(kind) ? 'Policy' : /research/.test(kind) ? 'Research' : 'Guidance';
+    return [{
+      title,
+      excerpt: `WHO publication on ${topicMatches.join(', ').toLowerCase()}.`,
+      url: `https://www.who.int/publications/i/item${path}`,
+      date: date.toISOString().slice(0, 10),
+      topics: topicMatches,
+      scope: /\btanzania\b/i.test(title) ? 'Tanzania' : /\bafrican?\b/i.test(title) ? 'Africa' : 'Global',
+      category,
+    }];
+  });
+}
+
+function latest(items) {
+  const priority = { Tanzania: 0, Africa: 1, Global: 2 };
+  const unique = [...new Map(items.map(item => [item.url, item])).values()];
+  return unique.sort((a, b) => priority[a.scope] - priority[b.scope] || b.date.localeCompare(a.date)).slice(0, 12);
+}
+
+async function submit(path, items, secret) {
+  if (!items.length) return;
+  const response = await fetch(new URL(path, CONTENT_API_URL), {
+    method: 'POST',
+    redirect: 'error',
+    signal: AbortSignal.timeout(FETCH_TIMEOUT),
+    headers: { Authorization: `Bearer ${secret}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items }),
+  });
+  if (!response.ok) throw new Error(`Draft import at ${path} failed: HTTP ${response.status}`);
+  const result = await response.json();
+  console.log(`${path}: ${result.imported} new, ${result.duplicates} duplicate, ${result.invalid} invalid.`);
+  if (result.invalid) process.exitCode = 1;
+}
+
 async function main() {
-  if (!CONTENT_IMPORT_SECRET) throw new Error('CONTENT_IMPORT_SECRET is required');
-
-  const configured = process.env.HEALTH_SOURCE_FEEDS
-    ? JSON.parse(process.env.HEALTH_SOURCE_FEEDS)
-    : [];
-  const feeds = [...DEFAULT_FEEDS, ...configured];
-  const discoveries = [];
-  let rejectedCount = 0;
-
+  const dryRun = process.argv.includes('--dry-run');
+  const { default: { NEWS_REVIEW_NOTE, NEWS_REVIEW_EXCERPT } } = await import('../server/health-content.js');
+  const extraFeeds = process.env.HEALTH_SOURCE_FEEDS ? JSON.parse(process.env.HEALTH_SOURCE_FEEDS) : [];
+  if (!Array.isArray(extraFeeds) || extraFeeds.length > 5) throw new Error('Configure at most five additional feeds.');
+  const feeds = [...DEFAULT_FEEDS, ...extraFeeds];
+  const candidates = [];
+  let sourcesSucceeded = 0;
   for (const feed of feeds) {
-    if (!feed?.url || !feed?.source || !/^https:\/\//i.test(feed.url)) {
-      console.warn('Skipping invalid feed configuration.');
-      continue;
+    try {
+      if (!feed?.source || new URL(feed.url).protocol !== 'https:') throw new Error('Invalid feed configuration');
+      const xml = await (await fetchSource(feed.url)).text();
+      if (!/<(?:rss|feed)[\s>]/i.test(xml)) throw new Error('Expected an RSS or Atom feed');
+      const { accepted } = parseFeed(xml, feed);
+      candidates.push(...accepted);
+      sourcesSucceeded++;
+      console.log(`${feed.source}: ${accepted.length} News candidate(s).`);
+    } catch (error) {
+      console.warn(`${feed?.source || 'Feed'}: ${error.message}`);
     }
-
-    const response = await fetch(feed.url, {
-      headers: { 'User-Agent': 'Tanzania Health Alliance content monitor' },
-    });
-    if (!response.ok) {
-      console.warn(`Skipping ${feed.url}: HTTP ${response.status}`);
-      continue;
+  }
+  let academy = [];
+  try {
+    academy = latest(readAcademyPublications(await (await fetchSource(PUBLICATIONS_URL)).json()));
+    sourcesSucceeded++;
+    console.log(`WHO catalogue: ${academy.length} Academy candidate(s).`);
+  } catch (error) {
+    console.warn(`WHO catalogue: ${error.message}`);
+  }
+  if (!sourcesSucceeded) throw new Error('No trusted source could be read.');
+  const news = latest(candidates).map(item => ({ ...item, excerpt: NEWS_REVIEW_EXCERPT, content: NEWS_REVIEW_NOTE }));
+  if (dryRun) {
+    console.log(JSON.stringify({ news, academy }, null, 2));
+    return;
+  }
+  const secret = process.env.CONTENT_IMPORT_SECRET
+    || (await import('../server/runtime-secrets.js')).default.contentImportSecret;
+  if (!secret) throw new Error('CONTENT_IMPORT_SECRET is required');
+  const api = new URL(CONTENT_API_URL);
+  if (api.protocol !== 'https:' && !['127.0.0.1', 'localhost'].includes(api.hostname)) {
+    throw new Error('The content API must use HTTPS or local loopback.');
+  }
+  const results = await Promise.allSettled([
+    submit('/api/news/import/editorial', news, secret),
+    submit('/api/site-content/academy/import', academy, secret),
+  ]);
+  for (const result of results) {
+    if (result.status === 'rejected') {
+      console.error(result.reason.message);
+      process.exitCode = 1;
     }
-
-    const { accepted, rejected } = parseFeed(await response.text(), feed.source);
-    discoveries.push(...accepted);
-    rejectedCount += rejected.length;
-
-    console.log(
-      `${feed.source}: ${accepted.length} relevant item(s), ${rejected.length} rejected as unrelated/invalid.`
-    );
   }
-
-  const unique = [...new Map(discoveries.map(item => [item.url, item])).values()];
-  let imported = 0;
-  let duplicates = 0;
-  let invalid = 0;
-
-  for (let i = 0; i < unique.length; i += 25) {
-    const response = await fetch(`${CONTENT_API_URL}/api/news/import`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${CONTENT_IMPORT_SECRET}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ items: unique.slice(i, i + 25) }),
-    });
-    if (!response.ok) throw new Error(`Content API import failed: HTTP ${response.status}`);
-    const result = await response.json();
-    imported += result.imported || 0;
-    duplicates += result.duplicates || 0;
-    invalid += result.invalid || 0;
-  }
-
-  console.log(
-    `Draft import complete: ${imported} new, ${duplicates} duplicate, ${invalid} invalid, ${rejectedCount} rejected before import.`
-  );
 }
 
 main().catch(error => {
