@@ -110,7 +110,7 @@ export default function AdminNewsForm() {
   const { authFetch } = useAuth();
   const navigate = useNavigate();
 
-  const [mode, setMode] = useState(isEditing ? 'manual' : null);
+  const [mode, setMode] = useState('manual');
   const [form, setForm] = useState(EMPTY_FORM);
   const [assistant, setAssistant] = useState({ details: '', purpose: 'announcement' });
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -120,6 +120,7 @@ export default function AdminNewsForm() {
   const [processingImages, setProcessingImages] = useState(false);
   const [generatingDraft, setGeneratingDraft] = useState(false);
   const [loadError, setLoadError] = useState('');
+  const [loadedArticle, setLoadedArticle] = useState(null);
 
   useEffect(() => {
     authFetch('/api/news/admin')
@@ -157,6 +158,7 @@ export default function AdminNewsForm() {
           label: `Article image ${index + 1}`,
         }));
         setUploadedImages(restored);
+        setLoadedArticle(id);
       })
       .catch(() => {
         if (isEditing) setLoadError('Failed to load article.');
@@ -324,55 +326,26 @@ export default function AdminNewsForm() {
       <AdminHeader section={isEditing ? 'Edit Article' : 'New Article'} backTo="/admin" />
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {!isEditing && !mode ? (
-          <div className="space-y-5">
-            <div>
-              <h1 className="text-2xl font-bold text-primary">How would you like to post?</h1>
-              <p className="text-gray-500 mt-1">Choose one workflow. You will not see the other controls while posting.</p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <button
-                type="button"
-                onClick={() => setMode('ai')}
-                className="text-left bg-white border-2 border-primary rounded-2xl p-6 shadow-sm hover:shadow-md transition"
-              >
-                <div className="text-xs font-bold uppercase tracking-widest text-primary mb-2">Recommended</div>
-                <h2 className="text-xl font-bold text-gray-900">Create with AI</h2>
-                <p className="text-sm text-gray-600 mt-2">
-                  Add a short description and your photos. THA prepares the complete article, headline, summary, category, tags and image placement.
-                </p>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setMode('manual')}
-                className="text-left bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:border-primary hover:shadow-md transition"
-              >
-                <div className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Full control</div>
-                <h2 className="text-xl font-bold text-gray-900">Post manually</h2>
-                <p className="text-sm text-gray-600 mt-2">
-                  Write the headline, summary and article yourself. The system will still optimize and place your photos.
-                </p>
-              </button>
-            </div>
-          </div>
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <h1 className="text-2xl font-bold text-primary">{isEditing ? (form.published ? 'Edit post' : 'Review News draft') : 'New post'}</h1>
+          {!isEditing && (
+            <button
+              type="button"
+              onClick={() => setMode(mode === 'ai' ? 'manual' : 'ai')}
+              className="text-sm font-semibold text-primary underline"
+            >
+              {mode === 'ai' ? 'Write it myself' : 'Help me write'}
+            </button>
+          )}
+        </div>
+        {isEditing && loadedArticle !== id ? (
+          <p role="status" className="text-sm text-gray-600">Loading post…</p>
         ) : (
-          <form onSubmit={event => handleSubmit(event, true)} noValidate className="space-y-6">
+          <form onSubmit={event => event.preventDefault()} noValidate className="space-y-6">
             {errors._global && (
               <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm">
                 {errors._global}
               </div>
-            )}
-
-            {!isEditing && (
-              <button
-                type="button"
-                onClick={() => setMode(null)}
-                className="text-sm font-semibold text-primary hover:underline"
-              >
-                ← Change posting method
-              </button>
             )}
 
             {mode === 'ai' && !isEditing && (
@@ -555,7 +528,8 @@ export default function AdminNewsForm() {
                     Save as draft
                   </button>
                   <button
-                    type="submit"
+                    type="button"
+                    onClick={event => handleSubmit(event, true)}
                     disabled={saving || processingImages || generatingDraft}
                     className="px-6 py-2.5 bg-primary text-white font-bold text-sm rounded-xl hover:bg-primary-dark disabled:opacity-60"
                   >

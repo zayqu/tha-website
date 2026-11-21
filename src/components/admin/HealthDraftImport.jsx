@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const DESTINATIONS = [
@@ -7,7 +6,7 @@ const DESTINATIONS = [
   ['academy', 'Academy', '/api/site-content/academy/import'],
 ];
 
-export function HealthDraftImport({ onImported }) {
+export function HealthDraftImport({ onImported, onAcademyImported }) {
   const { authFetch } = useAuth();
   const [input, setInput] = useState('');
   const [result, setResult] = useState([]);
@@ -44,6 +43,7 @@ export function HealthDraftImport({ onImported }) {
     const completed = outcomes.flatMap(outcome => outcome.status === 'fulfilled' ? [outcome.value] : []);
     setResult(completed);
     if (completed.some(item => item.label === 'News' && item.imported)) onImported();
+    if (completed.some(item => item.label === 'Academy' && item.imported)) onAcademyImported();
     if (outcomes.some(outcome => outcome.status === 'rejected')) {
       setError('Part of the batch could not be imported. You can safely retry the same batch.');
     } else if (!completed.some(item => item.invalid)) {
@@ -53,11 +53,9 @@ export function HealthDraftImport({ onImported }) {
   }
 
   return (
-    <details className="mb-8 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-      <summary className="cursor-pointer font-bold text-gray-800">Import health drafts</summary>
-      <p className="mt-3 text-sm text-gray-600">
-        Paste the JSON batch from the THA editorial watch. Review articles under News Drafts and resources under Site Content → Academy.
-      </p>
+    <details className="mt-4 border-t border-gray-100 pt-3">
+      <summary className="cursor-pointer text-sm font-semibold text-gray-800">Import health drafts</summary>
+      <p className="mt-3 text-sm text-gray-600">Paste a JSON batch from the THA editorial watch to add it to the same draft queues.</p>
       <label htmlFor="health-drafts" className="mt-4 block text-sm font-semibold text-gray-700">Editorial batch JSON</label>
       <textarea
         id="health-drafts"
@@ -80,9 +78,6 @@ export function HealthDraftImport({ onImported }) {
         {result.map(item => (
           <p key={item.label}>{item.label} · {item.imported} imported · {item.duplicates} already present · {item.invalid} invalid</p>
         ))}
-        {result.some(item => item.label === 'Academy' && item.imported > 0) && (
-          <Link to="/admin/site-content?tab=academy" className="font-semibold text-primary underline">Review Academy drafts</Link>
-        )}
       </div>
     </details>
   );
