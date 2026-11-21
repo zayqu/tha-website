@@ -13,16 +13,20 @@ const CARD_ACCENTS = {
   accent: 'from-accent to-accent/70',
 };
 
-export function JourneyTimeline({ milestones }) {
+export function JourneyTimeline({ milestones: chronologicalMilestones = [] }) {
+  // The API and seed data return milestones from earliest to latest.
+  const milestones = [...chronologicalMilestones].reverse();
   const viewportRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [mobileIndex, setMobileIndex] = useState(0);
   const [canGoBack, setCanGoBack] = useState(false);
   const [canGoForward, setCanGoForward] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const mobileMilestone = milestones?.[activeIndex] || milestones?.[0];
+  const mobilePosition = Math.min(mobileIndex, Math.max(0, milestones.length - 1));
+  const mobileMilestone = milestones[mobilePosition];
   const mobileProgress = milestones?.length
-    ? ((activeIndex + 1) / milestones.length) * 100
+    ? ((mobilePosition + 1) / milestones.length) * 100
     : 0;
 
   const updateNavigation = useCallback(() => {
@@ -99,7 +103,7 @@ export function JourneyTimeline({ milestones }) {
           <div className="min-w-0 flex-1">
             <div className="mb-2 flex items-center justify-between gap-3 text-xs font-bold uppercase tracking-[0.14em] text-primary">
               <span>Our journey</span>
-              <span className="text-gray-400">{activeIndex + 1}/{milestones.length}</span>
+              <span className="text-gray-400">{mobilePosition + 1}/{milestones.length}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-primary/10" aria-hidden="true">
               <div
@@ -130,20 +134,20 @@ export function JourneyTimeline({ milestones }) {
         <div className="mt-4 grid grid-cols-2 gap-3">
           <button
             type="button"
-            onClick={() => setActiveIndex(index => Math.max(index - 1, 0))}
-            disabled={activeIndex === 0}
+            onClick={() => setMobileIndex(mobilePosition - 1)}
+            disabled={mobilePosition === 0}
             className="inline-flex items-center justify-center gap-2 rounded-xl border border-primary/20 bg-white px-4 py-3 text-sm font-semibold text-primary disabled:opacity-35"
           >
             <Icon name="chevron_left" size={20} color="currentColor" />
-            Previous
+            Newer
           </button>
           <button
             type="button"
-            onClick={() => setActiveIndex(index => Math.min(index + 1, milestones.length - 1))}
-            disabled={activeIndex === milestones.length - 1}
+            onClick={() => setMobileIndex(mobilePosition + 1)}
+            disabled={mobilePosition === milestones.length - 1}
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white disabled:opacity-35"
           >
-            Next
+            Older
             <Icon name="chevron_right" size={20} color="white" />
           </button>
         </div>
@@ -170,7 +174,7 @@ export function JourneyTimeline({ milestones }) {
               onClick={() => moveJourney(-1)}
               disabled={!canGoBack}
               className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary/20 bg-white text-primary shadow-card transition hover:-translate-y-0.5 hover:border-primary hover:bg-primary hover:text-white hover:shadow-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-35"
-              aria-label="View previous journey milestone"
+              aria-label="View newer journey milestones"
             >
               <Icon name="chevron_left" size={26} color="currentColor" />
             </button>
@@ -179,7 +183,7 @@ export function JourneyTimeline({ milestones }) {
               onClick={() => moveJourney(1)}
               disabled={!canGoForward}
               className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary/20 bg-white text-primary shadow-card transition hover:-translate-y-0.5 hover:border-primary hover:bg-primary hover:text-white hover:shadow-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-35"
-              aria-label="View next journey milestone"
+              aria-label="View older journey milestones"
             >
               <Icon name="chevron_right" size={26} color="currentColor" />
             </button>
