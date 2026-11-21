@@ -113,7 +113,14 @@ export default function AdminDashboard() {
       <AdminHeader section="News Dashboard" />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <HealthDraftImport onImported={fetchArticles} />
+        <HealthDraftImport
+          onImported={fetchArticles}
+          newsDraftCount={loading || error ? null : draftCount}
+          onReviewNews={() => {
+            setFilter('drafts');
+            document.getElementById('news-review')?.scrollIntoView({ block: 'start' });
+          }}
+        />
 
         {admin?.role === 'superadmin' && (
           <section className="mb-8 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
@@ -177,7 +184,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Header row */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div id="news-review" className="mb-6 flex scroll-mt-4 flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div className="flex gap-2">
             {['all', 'published', 'drafts'].map(f => (
               <button

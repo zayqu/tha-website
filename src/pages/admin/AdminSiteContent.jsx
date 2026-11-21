@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { AdminHeader } from '../../components/admin/AdminHeader';
 import { useAuth } from '../../contexts/AuthContext';
 import AdminAiAssist from '../../components/AdminAiAssist';
@@ -183,6 +183,7 @@ const emptyPolicySection=()=>({id:makeId('policy'),heading:'',text:''});
 export default function AdminSiteContent() {
   const { authFetch } = useAuth();
   const [params] = useSearchParams();
+  const { hash } = useLocation();
   const [active,setActive]=useState(() => params.get('tab') === 'academy' ? 'academy' : 'organization');
   const [content,setContent]=useState(null);
   const [revision,setRevision]=useState(null);
@@ -201,6 +202,12 @@ export default function AdminSiteContent() {
       .finally(()=>{ if(mounted) setLoading(false); });
     return()=>{mounted=false;};
   },[authFetch]);
+
+  useEffect(() => {
+    if (!loading && active === 'academy' && hash === '#academy-resources') {
+      document.getElementById('academy-resources')?.scrollIntoView({ block: 'start' });
+    }
+  }, [active, hash, loading]);
 
   const list=(key)=>Array.isArray(content?.[key])?content[key]:[];
   const coreValues=useMemo(()=>list('coreValues'),[content]);
@@ -610,11 +617,11 @@ export default function AdminSiteContent() {
                 </Card>
               ))}
             </div>
-            <div className="space-y-4">
-              <AddRow title="Trusted resources" description="Links to WHO, MOH and other trusted sources." button="+ Add resource" onClick={()=>addNestedList('academy','resources',emptyResource())}/>
-              {academyResources.map((r,index)=>(
+            <div id="academy-resources" className="space-y-4 scroll-mt-4">
+              <AddRow title="Trusted resources" description="Review drafts here. To make a resource public, turn on Published and save your changes." button="+ Add resource" onClick={()=>addNestedList('academy','resources',emptyResource())}/>
+              {academyResources.map(r=>(
                 <Card key={r.id}>
-                  <CardHeader eyebrow={`Resource ${index+1}`} title={r.title||'New resource'} onRemove={()=>removeNestedList('academy','resources',r.id,r.title)}/>
+                  <CardHeader eyebrow={r.published === false ? "Draft" : "Published"} title={r.title||'New resource'} onRemove={()=>removeNestedList('academy','resources',r.id,r.title)}/>
                   <div className="grid gap-4 md:grid-cols-2">
                     <Field label="Title" value={r.title} onChange={v=>updateNestedList('academy','resources',r.id,'title',v)}/>
                     <Field label="Source" value={r.source} onChange={v=>updateNestedList('academy','resources',r.id,'source',v)}/>

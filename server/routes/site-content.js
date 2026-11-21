@@ -50,7 +50,14 @@ function readContent() {
   try {
     if (!fs.existsSync(CONTENT_FILE)) return clone(defaults);
     const parsed = JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8'));
-    return mergeDeep(clone(defaults), parsed);
+    const content = mergeDeep(clone(defaults), parsed);
+    if (Array.isArray(content.documents)) {
+      const unicefMeeting = content.documents.find(item => item?.id === 'unicef-meeting');
+      if (unicefMeeting?.url === '/news/tha-unicef-strategic-meeting-on-hepatitis-b-birth-dose-vaccination') {
+        unicefMeeting.url = '/news/tha-unicef-strategic-meeting-hepatitis-b-birth-dose-vaccination';
+      }
+    }
+    return content;
   } catch {
     return clone(defaults);
   }

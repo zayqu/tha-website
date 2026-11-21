@@ -328,25 +328,27 @@ export const Home = () => {
             compact
           />
           <ResponsiveRail desktopGrid="md:grid-cols-3" mobileWidth="78vw" className="md:gap-5">
-            {parliamentEvidence ? (
-              <Link to={parliamentEvidence.url} className="h-full rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:p-6">
-                <p className="text-xs uppercase tracking-wider text-white/60 mb-2">{parliamentEvidence.meta}</p>
-                <h3 className="text-lg font-bold mb-2">{parliamentEvidence.title}</h3>
-                <p className="text-sm text-white/75">{parliamentEvidence.description}</p>
+            {[
+              parliamentEvidence,
+              unicefEvidence,
+              {
+                id: 'verification',
+                url: '/documents',
+                meta: 'Public Record',
+                title: 'Evidence & Verification',
+                description: 'Review registration information, dated records and independent references.',
+              },
+            ].filter(record => record?.url).map(record => (
+              <Link
+                key={record.id}
+                to={record.url}
+                className="block h-full rounded-2xl bg-white/10 p-5 transition hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:p-6"
+              >
+                <p className="mb-2 text-xs uppercase tracking-wider text-white/60">{record.meta}</p>
+                <h3 className="mb-2 text-lg font-bold">{record.title}</h3>
+                <p className="text-sm text-white/75">{record.description}</p>
               </Link>
-            ) : null}
-            {unicefEvidence ? (
-              <Link to={unicefEvidence.url} className="h-full rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:p-6">
-                <p className="text-xs uppercase tracking-wider text-white/60 mb-2">{unicefEvidence.meta}</p>
-                <h3 className="text-lg font-bold mb-2">{unicefEvidence.title}</h3>
-                <p className="text-sm text-white/75">{unicefEvidence.description}</p>
-              </Link>
-            ) : null}
-            <Link to="/documents" className="h-full rounded-2xl bg-white/10 p-5 hover:bg-white/15 transition md:p-6">
-              <p className="text-xs uppercase tracking-wider text-white/60 mb-2">Public Record</p>
-              <h3 className="text-lg font-bold mb-2">Evidence & Verification</h3>
-              <p className="text-sm text-white/75">Review registration information, dated records and independent references.</p>
-            </Link>
+            ))}
           </ResponsiveRail>
         </div>
       </section>
