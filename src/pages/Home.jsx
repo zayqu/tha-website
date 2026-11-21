@@ -304,8 +304,8 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* YEAR ONE TIMELINE */}
-      <section className="py-12 md:py-20 bg-white">
+      {/* JOURNEY TIMELINE */}
+      <section id="our-journey" className="scroll-mt-20 py-12 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <SectionHeader
             title="Our Journey"
