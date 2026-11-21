@@ -148,13 +148,16 @@ export default function NewsDetail() {
         <div className="text-gray-700 leading-relaxed text-lg space-y-6">
           {news.content.split('\n\n').map((paragraph, i) => {
             const paragraphNumber = i + 1;
+            const originalUrl = paragraph.trim().match(/^Read the original update: (https:\/\/[^\s]+)$/)?.[1];
             const inlineImages = (news.inline_images || []).filter(
               image => Number(image.after_paragraph) === paragraphNumber
             );
 
             return (
               <div key={i} className="space-y-6">
-                <p>{paragraph}</p>
+                <p>{originalUrl
+                  ? <a href={originalUrl} className="font-semibold text-primary underline" target="_blank" rel="noopener noreferrer">Read the original update</a>
+                  : paragraph}</p>
                 {inlineImages.map((image, imageIndex) => (
                   <figure key={imageIndex} className="my-8">
                     <img

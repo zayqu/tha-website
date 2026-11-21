@@ -1,3 +1,4 @@
+const { sourceLink } = require('./health-content');
 const fs = require('fs');
 const path = require('path');
 
@@ -56,7 +57,10 @@ function articleFallback(article) {
     .split(/\n\n+/)
     .map(p => p.trim())
     .filter(Boolean)
-    .map(p => `<p>${escapeHtml(p)}</p>`)
+    .map(p => {
+      const url = sourceLink(p);
+      return url ? `<p><a href="${escapeHtml(url)}">Read the original update</a></p>` : `<p>${escapeHtml(p)}</p>`;
+    })
     .join('\n');
 
   return `

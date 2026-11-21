@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4, v5: uuidv5 } = require('uuid');
 const crypto = require('crypto');
 const { body, param, query, validationResult } = require('express-validator');
 const { news } = require('../db');
@@ -9,6 +9,7 @@ const { generateCloudflareDraft } = require('../cloudflare-ai');
 const { persistArticleImages } = require('../media-storage');
 const { contentImportSecret } = require('../runtime-secrets');
 const { notifyIndexNow } = require('../indexnow');
+const { normalizeHealthDraft, sourceId, sourceKey, sourceLink } = require('../health-content');
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 function slugify(text) {
@@ -141,6 +142,71 @@ router.post('/import', async (req, res, next) => {
     });
   } catch (err) {
     next(err);
+  }
+});
+
+// Editorial batches contain original THA copy and always enter the CMS as drafts.
+let editorialImportQueue = Promise.resolve();
+
+async function importEditorialDrafts(items) {
+  const existing = await news.findAll();
+  const knownSources = new Set(existing.flatMap(article => String(article.content || '')
+    .split(/\r?\n/).map(sourceLink).map(sourceKey).filter(Boolean)));
+  const results = [];
+
+  for (const raw of items) {
+    const draft = normalizeHealthDraft(raw);
+    if (!draft) {
+      results.push('invalid');
+      continue;
+    }
+    const key = sourceKey(draft.url);
+    const id = uuidv5(key, uuidv5.URL);
+    const slug = `${slugify(draft.title) || 'health-update'}-${sourceId(draft.url)}`;
+    if (knownSources.has(key) || await news.findById(id)) {
+      results.push('duplicate');
+      continue;
+    }
+    try {
+      await news.create({
+        id,
+        slug,
+        title: draft.title,
+        excerpt: draft.excerpt,
+        content: `${draft.content}\n\nSource: ${draft.source}\n\nRead the original update: ${draft.url}`,
+        image: '/images/og-image.jpg',
+        category: 'Announcements',
+        author: 'THA Communications',
+        date: draft.date,
+        tags: [...draft.topics, draft.scope],
+        is_featured: false,
+        published: false,
+      });
+      knownSources.add(key);
+      results.push('drafted');
+    } catch (error) {
+      if (error.code !== '23505' || !await news.findById(id)) throw error;
+      results.push('duplicate');
+    }
+  }
+  return {
+    imported: results.filter(status => status === 'drafted').length,
+    duplicates: results.filter(status => status === 'duplicate').length,
+    invalid: results.filter(status => status === 'invalid').length,
+  };
+}
+
+router.post('/import/editorial', requireAuth, async (req, res, next) => {
+  const { items } = req.body || {};
+  if (!Array.isArray(items) || !items.length || items.length > 25) {
+    return res.status(400).json({ error: 'Submit between 1 and 25 News drafts.' });
+  }
+  const operation = editorialImportQueue.then(() => importEditorialDrafts(items));
+  editorialImportQueue = operation.catch(() => {});
+  try {
+    res.status(201).json(await operation);
+  } catch (error) {
+    next(error);
   }
 });
 

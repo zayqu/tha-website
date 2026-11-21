@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { AdminHeader } from '../../components/admin/AdminHeader';
 import { useAuth } from '../../contexts/AuthContext';
 import AdminAiAssist from '../../components/AdminAiAssist';
@@ -181,8 +182,10 @@ const emptyPolicySection=()=>({id:makeId('policy'),heading:'',text:''});
 
 export default function AdminSiteContent() {
   const { authFetch } = useAuth();
-  const [active,setActive]=useState('organization');
+  const [params] = useSearchParams();
+  const [active,setActive]=useState(() => params.get('tab') === 'academy' ? 'academy' : 'organization');
   const [content,setContent]=useState(null);
+  const [revision,setRevision]=useState(null);
   const [loading,setLoading]=useState(true);
   const [saving,setSaving]=useState(false);
   const [uploadingId,setUploadingId]=useState(null);
@@ -193,7 +196,7 @@ export default function AdminSiteContent() {
     let mounted=true;
     authFetch('/api/site-content/admin')
       .then(async res=>{ if(!res.ok) throw new Error('Could not load site content'); return res.json(); })
-      .then(data=>{ if(mounted) setContent(data.content); })
+      .then(data=>{ if(mounted) { setContent(data.content); setRevision(data.revision); } })
       .catch(err=>{ if(mounted) setMessage(err.message); })
       .finally(()=>{ if(mounted) setLoading(false); });
     return()=>{mounted=false;};
@@ -363,11 +366,12 @@ export default function AdminSiteContent() {
   async function save(){
     setSaving(true); setMessage('');
     try{
-      const res=await authFetch('/api/site-content',{method:'PUT',body:JSON.stringify({content})});
+      const res=await authFetch('/api/site-content',{method:'PUT',body:JSON.stringify({content,revision})});
       const data=await res.json();
       if(!res.ok) throw new Error(data.error||'Save failed');
       setContent(data.content);
-      try{window.localStorage.setItem('tha:site-content:v1',JSON.stringify(data.content));}catch{}
+      setRevision(data.revision);
+      try{window.localStorage.removeItem('tha:site-content:v1');}catch{}
       setMessage('Saved. Public pages will use these updates.');
     }catch(error){ setMessage(error.message); }
     finally{ setSaving(false); }
@@ -617,6 +621,9 @@ export default function AdminSiteContent() {
                     <Field label="URL" value={r.url} onChange={v=>updateNestedList('academy','resources',r.id,'url',v)}/>
                     <Field label="Date" type="date" value={r.date} onChange={v=>updateNestedList('academy','resources',r.id,'date',v)}/>
                     <Field label="Category" value={r.category} onChange={v=>updateNestedList('academy','resources',r.id,'category',v)}/>
+                    <Field label="Audience" value={r.audience} onChange={v=>updateNestedList('academy','resources',r.id,'audience',v)}/>
+                    <Field label="Language" value={r.language} onChange={v=>updateNestedList('academy','resources',r.id,'language',v)}/>
+                    <Field label="Geographic scope" value={r.scope} onChange={v=>updateNestedList('academy','resources',r.id,'scope',v)}/>
                     <Field label="Topics (comma separated)" value={(r.topics||[]).join(', ')} onChange={v=>updateNestedList('academy','resources',r.id,'topics',v.split(',').map(x=>x.trim()).filter(Boolean))}/>
                     <div className="md:col-span-2"><Field label="Excerpt" type="textarea" value={r.excerpt} onChange={v=>updateNestedList('academy','resources',r.id,'excerpt',v)}/></div>
                     <Field label="Sort order" type="number" value={r.sortOrder} onChange={v=>updateNestedList('academy','resources',r.id,'sortOrder',v)}/>

@@ -143,6 +143,11 @@ export const Academy = () => {
                   </div>
                   <h3 className="heading-sm mb-3">{resource.title}</h3>
                   <p className="body-md text-gray-600 mb-5 flex-grow">{resource.excerpt}</p>
+                  {(resource.audience || resource.language || resource.scope) && (
+                    <p className="mb-4 text-sm text-gray-600">
+                      {[resource.audience, resource.language, resource.scope].filter(Boolean).join(' · ')}
+                    </p>
+                  )}
                   <div className="border-t border-gray-100 pt-4">
                     <div className="flex items-center justify-between gap-4 text-sm text-gray-500 mb-4">
                       <span className="font-semibold text-primary">{resource.source}</span>
