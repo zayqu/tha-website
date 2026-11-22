@@ -1,6 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Icon } from './Icon';
 
+const COLOR_STYLES = {
+  primary: 'border-primary bg-primary text-white',
+  secondary: 'border-secondary bg-secondary text-white',
+  accent: 'border-accent bg-accent text-white',
+};
+
+const CARD_ACCENTS = {
+  primary: 'from-primary to-primary/70',
+  secondary: 'from-secondary to-secondary/70',
+  accent: 'from-accent to-accent/70',
+};
+
 export function JourneyTimeline({ milestones: chronologicalMilestones = [] }) {
   // The API and seed data return milestones from earliest to latest.
   const milestones = [...chronologicalMilestones].reverse();
@@ -90,24 +102,29 @@ export function JourneyTimeline({ milestones: chronologicalMilestones = [] }) {
         <div className="mb-5 flex items-center justify-between gap-3">
           <div className="min-w-0 flex-1">
             <div className="mb-2 flex items-center justify-between gap-3 text-xs font-bold uppercase tracking-[0.14em] text-primary">
+              <span>Our journey</span>
               <span className="text-gray-400">{mobilePosition + 1}/{milestones.length}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-primary/10" aria-hidden="true">
               <div
-                className="h-full rounded-full bg-primary transition-[width] duration-300"
+                className="h-full rounded-full bg-gradient-to-r from-primary via-secondary to-accent transition-[width] duration-300"
                 style={{ width: `${mobileProgress}%` }}
               />
             </div>
           </div>
         </div>
 
-        <article className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5">
+        <article className="relative overflow-hidden rounded-2xl border border-primary/10 bg-white p-5 shadow-card">
+          <div
+            className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${CARD_ACCENTS[mobileMilestone.color] || CARD_ACCENTS.primary}`}
+            aria-hidden="true"
+          />
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-white">
+            <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-4 shadow-sm ${COLOR_STYLES[mobileMilestone.color] || COLOR_STYLES.primary}`}>
               <Icon name={mobileMilestone.icon || 'flag'} size={20} color="white" />
             </div>
             <div className="min-w-0">
-              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-600">{mobileMilestone.month}</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-accent">{mobileMilestone.month}</p>
               <h3 className="mt-1 text-lg font-bold leading-tight text-primary">{mobileMilestone.milestone}</h3>
             </div>
           </div>
@@ -140,9 +157,12 @@ export function JourneyTimeline({ milestones: chronologicalMilestones = [] }) {
       <div className="hidden md:block">
         <div className="mb-6 flex items-center justify-between gap-4">
           <div className="min-w-0 flex-1">
+            <div className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-primary">
+              <span>Explore our journey</span>
+            </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-primary/10" aria-hidden="true">
               <div
-                className="h-full rounded-full bg-primary transition-[width] duration-300"
+                className="h-full rounded-full bg-gradient-to-r from-primary via-secondary to-accent transition-[width] duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -186,21 +206,26 @@ export function JourneyTimeline({ milestones: chronologicalMilestones = [] }) {
               >
                 {index < milestones.length - 1 ? (
                   <div
-                    className="pointer-events-none absolute left-7 top-8 h-1 w-[calc(100%+1.25rem)] -translate-y-1/2 bg-primary"
+                    className="pointer-events-none absolute left-7 top-8 h-1 w-[calc(100%+1.25rem)] -translate-y-1/2 bg-gradient-to-r from-primary via-secondary to-accent"
                     aria-hidden="true"
                   />
                 ) : null}
 
-                <div className="relative z-10 mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white">
+                <div className={`relative z-10 mb-5 flex h-14 w-14 items-center justify-center rounded-full border-4 shadow-card ${COLOR_STYLES[item.color] || COLOR_STYLES.primary}`}>
                   <Icon name={item.icon || 'flag'} size={23} color="white" />
                 </div>
 
-                <article className="relative min-h-[15rem] min-w-0 overflow-hidden rounded-3xl border border-gray-200 bg-white p-6">
+                <article className="group relative min-h-[15rem] min-w-0 overflow-hidden rounded-3xl border border-primary/10 bg-white p-6 shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-elevated">
+                  <div
+                    className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${CARD_ACCENTS[item.color] || CARD_ACCENTS.primary}`}
+                    aria-hidden="true"
+                  />
                   <div className="mb-5">
-                    <p className="text-xs font-bold uppercase tracking-[0.14em] text-gray-600">{item.month}</p>
+                    <p className="text-xs font-bold uppercase tracking-[0.14em] text-accent">{item.month}</p>
                   </div>
                   <h3 className="break-words text-xl font-bold leading-tight text-primary">{item.milestone}</h3>
                   <p className="mt-4 text-sm leading-relaxed text-gray-600">{item.description}</p>
+                  <div className="absolute bottom-0 right-0 h-20 w-20 translate-x-8 translate-y-8 rounded-full bg-secondary/10 transition-transform duration-300 group-hover:scale-125" aria-hidden="true" />
                 </article>
               </li>
             ))}

@@ -42,7 +42,7 @@ const CampaignImpactCard = ({ campaign }) => (
   <div className="bg-white rounded-2xl shadow-card hover:shadow-elevated transition-all overflow-hidden">
     <div className="h-40 relative overflow-hidden">
       <img src={campaign.image} alt={campaign.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
-      <div className="absolute inset-0 bg-black/45" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       <div className="absolute bottom-3 left-4 flex items-center gap-2">
         <Icon name={campaignIcons[campaign.id] || 'campaign'} size={20} color="white" />
         <h3 className="text-lg font-bold text-white">{campaign.name}</h3>

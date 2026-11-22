@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 const ACTIONS = [
   ['draft', 'Draft'],
   ['improve', 'Improve'],
-  ['humanize', 'Plain language'],
+  ['humanize', 'Make human'],
   ['shorten', 'Shorten'],
 ];
 
@@ -42,9 +42,8 @@ export default function AdminAiAssist({
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'AI assistant unavailable.');
-      const next = Array.isArray(data.suggestions) ? data.suggestions : [];
-      setSuggestions(next);
-      setNote(data.note || (next.length ? '' : 'No edits suggested. Try adding more facts or a specific instruction.'));
+      setSuggestions(Array.isArray(data.suggestions) ? data.suggestions : []);
+      setNote(data.note || '');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -61,10 +60,10 @@ export default function AdminAiAssist({
   return (
     <section className={`rounded-2xl border border-primary/15 bg-primary/[0.03] p-4 sm:p-5 ${className}`}>
       <div className="mb-4">
-        <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary/60">Writing help</p>
-        <h3 className="mt-1 text-lg font-bold text-primary">Suggest edits</h3>
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary/60">AI Assist</p>
+        <h3 className="mt-1 text-lg font-bold text-primary">Help with this section</h3>
         <p className="mt-1 text-sm leading-relaxed text-gray-500">
-          Preview the suggested edits before applying them to the form.
+          AI suggests edits only. Nothing is saved or published until you review and save it yourself.
         </p>
       </div>
 

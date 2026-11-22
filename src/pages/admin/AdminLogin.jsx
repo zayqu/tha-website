@@ -73,7 +73,7 @@ export default function AdminLogin() {
   const inputClass = 'w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-800 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-50';
 
   return (
-    <div className="min-h-screen bg-primary-dark flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-7">
           <a href="/" target="_blank" rel="noopener noreferrer" className="mb-4 inline-flex rounded-2xl bg-white px-5 py-3 shadow-lg" title="Open public website in a new tab">

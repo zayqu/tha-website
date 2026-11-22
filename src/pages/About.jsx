@@ -80,7 +80,7 @@ export const About = () => {
       />
 
       {/* Hero Section */}
-      <section className="py-20 md:py-28 bg-primary-dark text-white">
+      <section className="py-20 md:py-28 bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
             About Tanzania Health Alliance
@@ -118,11 +118,11 @@ export const About = () => {
                 {about.founderHeading || "Why THA Exists"}
               </h2>
 
-              <div className="text-xl italic text-gray-700 rounded-lg bg-cool-gray p-5 mb-6 leading-relaxed">
+              <div className="text-xl italic text-gray-700 border-l-4 border-accent pl-6 mb-6 leading-relaxed">
                 "In 2021, I lost my brother to a preventable liver disease. That loss became my calling: to ensure that no other family experiences the heartbreak we did."
               </div>
               <p className="text-gray-600 mb-4 text-lg">
-                <strong>{founder.name || org.founderName || "Shaibu Issa"}, {founder.title || org.founderTitle || thaData.founder.title}</strong>
+                <strong>— {founder.name || org.founderName || "Shaibu Issa"}, {founder.title || org.founderTitle || thaData.founder.title}</strong>
               </p>
 
               <div className="space-y-4 text-gray-700">
@@ -339,7 +339,7 @@ export const About = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 md:py-24 bg-primary-dark text-white">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-primary to-primary-dark text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">
             Join Our Movement
