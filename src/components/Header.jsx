@@ -37,11 +37,11 @@ export const Header = () => {
             />
           </Link>
           <Link
-            to="/make-a-difference"
+            to="/make-a-difference?tab=donate"
             className="flex items-center gap-1.5 px-3.5 py-1.5 bg-secondary text-white text-xs font-semibold rounded-lg hover:bg-secondary-dark transition shadow-sm"
           >
             <Icon name="volunteer_activism" size={14} color="white" />
-            Join
+            Support THA
           </Link>
         </div>
       </div>
@@ -80,11 +80,11 @@ export const Header = () => {
             </nav>
 
             <Link
-              to="/make-a-difference"
+              to="/make-a-difference?tab=donate"
               className="flex items-center gap-2 px-4 py-2 bg-secondary text-white font-medium rounded-md hover:bg-secondary-dark transition shadow-subtle"
             >
               <Icon name="volunteer_activism" size={16} color="white" />
-              Join the Alliance
+              Support THA
             </Link>
           </div>
         </div>

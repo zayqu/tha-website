@@ -14,8 +14,6 @@ import { JourneyTimeline } from '../components/JourneyTimeline';
 import { useSiteContent } from '../hooks/useSiteContent';
 import SectionHeader from '../components/SectionHeader';
 import ResponsiveRail from '../components/ResponsiveRail';
-import CounterAnimation from '../components/CounterAnimation';
-import { TypingText } from '../components/TypingText';
 
 /* =========================
    Scroll Reveal Hook
@@ -36,7 +34,7 @@ const useReveal = () => {
 };
 
 /* =========================
-   Campaign Card — Banner + White Body
+   Campaign card
 ========================= */
 const campaignIcons = { kapime: 'health_and_safety', 'life-unlocked': 'psychology', 'talk-to-heal': 'forum' };
 
@@ -95,41 +93,19 @@ const CampaignCard = ({ campaign, index }) => {
   );
 };
 
-/* =========================
-   Objective Card — Clean Minimal
-========================= */
-const ObjectiveCard = ({ obj, index }) => {
-  const [ref, show] = useReveal();
-  return (
-    <div
-      ref={ref}
-      className={`p-4 sm:p-6 bg-white rounded-xl shadow-card hover:shadow-elevated transition-all duration-300 ${
-        show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-      }`}
-      style={{ transitionDelay: `${index * 100}ms` }}
-    >
-      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-primary/5 flex items-center justify-center mb-3 sm:mb-4">
-        <Icon name={obj.icon || 'check_circle'} size={20} category="primary" />
-      </div>
-      <h3 className="font-bold text-sm sm:text-base text-primary mb-1.5 sm:mb-2">{obj.title}</h3>
-      <p className="text-xs sm:text-base text-gray-700 leading-relaxed">{obj.description}</p>
-    </div>
-  );
-};
-
 export const Home = () => {
   const site = useSiteContent();
   const org = site.organization || {};
   const home = site.home || {};
   const contact = site.contact || {};
   const partners = { partners: (site.partners || []).filter(partner => partner.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0)) };
-  const objectives = (site.objectives || []).filter(item => item.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0));
   const testimonials = (site.testimonials || []).filter(item => item.published !== false).sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0));
   const documents = (site.documents || []).filter(item => item.published !== false);
-  const whaEvidence = documents.find(item => item.id === 'wha-board');
-  const awardEvidence = documents.find(item => item.id === 'aba-2026');
   const parliamentEvidence = documents.find(item => item.id === 'parliamentary-committee');
   const unicefEvidence = documents.find(item => item.id === 'unicef-meeting');
+  const unicefCard = unicefEvidence && /^THA[–-]UNICEF Strategic Meeting$/.test(unicefEvidence.title)
+    ? { ...unicefEvidence, title: 'Strategic meeting with UNICEF' }
+    : unicefEvidence;
   const [latestNews, setLatestNews] = useState([]);
   const [latestNewsLoading, setLatestNewsLoading] = useState(true);
   const [impactTotals, setImpactTotals] = useState(impactData.impactMetrics.total);
@@ -190,7 +166,7 @@ export const Home = () => {
       />
 
       {/* HERO */}
-      <section className="relative min-h-[68svh] md:h-screen flex items-end md:items-center justify-center text-left md:text-center overflow-hidden">
+      <section className="relative flex min-h-[32rem] items-center overflow-hidden text-left md:min-h-[34rem]">
         <img
           src={home.heroImage || "/images/hero-bg-lg.jpg"}
           alt=""
@@ -200,88 +176,46 @@ export const Home = () => {
           {...getHeroImageProps(home.heroImage || '/images/hero-bg-lg.jpg')}
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/90 to-primary/80" />
+        <div className="absolute inset-0 bg-primary-dark/85" />
 
-        <div className="relative z-10 w-full px-5 pb-10 pt-16 md:px-4 md:pb-0 md:pt-0 max-w-5xl mx-auto">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-white/70 md:hidden">Tanzania Health Alliance</p>
-          <h1 className="text-[2rem] md:text-5xl lg:text-6xl text-white font-bold mb-4 md:mb-6 leading-[1.05] md:leading-tight">
-            <span className="md:hidden">{home.heroTitle || org.motto || "Together for a Healthier Tanzania"}</span>
-            <span className="hidden md:inline"><TypingText text={home.heroTitle || org.motto || "Together for a Healthier Tanzania"} speed={40} loop={false} /></span>
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-5 py-16 md:px-4">
+          <h1 className="max-w-3xl text-4xl font-bold leading-tight text-white md:text-6xl">
+            {home.heroTitle || org.motto || "Together for a Healthier Tanzania"}
           </h1>
 
-          <p className="text-white/85 text-[15px] md:text-xl leading-relaxed mb-6 md:mb-8 max-w-2xl md:mx-auto">
+          <p className="mb-6 mt-4 max-w-xl text-base leading-relaxed text-white/90 md:text-lg">
             {home.heroDescription || thaData.heroDescription}
           </p>
 
-          <div className="grid grid-cols-2 gap-3 md:flex md:gap-4 md:justify-center md:flex-wrap">
-            <Link to="/about" className="btn-primary justify-center px-4 py-2.5 text-sm md:px-6 md:py-3">Learn About THA</Link>
-            <Link to="/contact" className="px-4 py-2.5 md:px-6 md:py-3 border border-white/70 md:border-2 text-white text-sm md:text-base text-center font-semibold rounded-lg hover:bg-white hover:text-primary transition">
-              Contact Us
+          <div className="flex flex-wrap items-center gap-3">
+            <Link to="/make-a-difference?tab=donate" className="rounded-lg bg-white px-5 py-3 font-semibold text-primary hover:bg-cool-gray">
+              Support our work
+            </Link>
+            <Link to="/impact" className="rounded-lg border border-white/70 px-5 py-3 font-semibold text-white hover:bg-white/15">
+              See our impact
             </Link>
           </div>
         </div>
       </section>
 
-      {/* TRUST & ACCOUNTABILITY */}
-      <section className="border-b border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
-          <div className="grid grid-cols-2 gap-x-4 gap-y-5 lg:grid-cols-4">
-            <div className="flex min-w-0 items-start gap-2.5">
-              <Icon name="verified" size={22} category="primary" />
-              <div>
-                <p className="text-[13px] md:text-sm font-bold leading-tight text-primary">Registered NGO</p>
-                <p className="mt-1 text-[11px] leading-tight text-gray-500">No. {org.registrationNumber || "00NGO/R/8379"} · {contact.city || "Dar es Salaam"}</p>
+      <section aria-label="Registration and impact" className="border-b border-gray-200 bg-white">
+        <div className="mx-auto max-w-6xl px-5 py-8 md:px-4">
+          <dl className="grid grid-cols-2 gap-5 md:grid-cols-4">
+            {[
+              ['peopleReached', 'People reached'],
+              ['studentsReached', 'Students reached'],
+              ['institutionsEngaged', 'Institutions engaged'],
+              ['communityEvents', 'Community events'],
+            ].map(([key, label]) => (
+              <div key={key} className="flex flex-col-reverse gap-1">
+                <dt className="text-sm text-gray-600">{label}</dt>
+                <dd className="text-3xl font-bold text-primary">{Number(impactTotals[key]).toLocaleString('en-TZ')}</dd>
               </div>
-            </div>
-            {whaEvidence ? (
-              <a href={whaEvidence.url} target="_blank" rel="noopener noreferrer" className="flex min-w-0 items-start gap-2.5 hover:opacity-80 transition">
-                <Icon name="public" size={22} category="primary" />
-                <div>
-                  <p className="text-[13px] md:text-sm font-bold leading-tight text-primary">{whaEvidence.title}</p>
-                  <p className="mt-1 text-[11px] leading-tight text-gray-500">{whaEvidence.meta}</p>
-                </div>
-              </a>
-            ) : null}
-            {awardEvidence ? (
-              <a href={awardEvidence.url} target="_blank" rel="noopener noreferrer" className="flex min-w-0 items-start gap-2.5 hover:opacity-80 transition">
-                <Icon name="workspace_premium" size={22} category="primary" />
-                <div>
-                  <p className="text-[13px] md:text-sm font-bold leading-tight text-primary">{awardEvidence.title}</p>
-                  <p className="mt-1 text-[11px] leading-tight text-gray-500">{awardEvidence.meta}</p>
-                </div>
-              </a>
-            ) : null}
-            <Link to="/documents" className="flex min-w-0 items-start gap-2.5 hover:opacity-80 transition">
-              <Icon name="description" size={22} category="primary" />
-              <div>
-                <p className="text-[13px] md:text-sm font-bold leading-tight text-primary">Documents & Accountability</p>
-                <p className="mt-1 text-[11px] leading-tight text-gray-500">Registration, records and verification</p>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* IMPACT STATS */}
-      <section className="py-9 md:py-16 bg-gradient-to-r from-primary to-primary-dark">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-7 md:gap-8 text-center">
-            <div>
-              <div className="text-3xl md:text-5xl font-bold text-white"><CounterAnimation end={impactTotals.peopleReached} suffix="+" /></div>
-              <p className="text-white/75 mt-1.5 text-xs md:text-base">People Reached</p>
-            </div>
-            <div>
-              <div className="text-3xl md:text-5xl font-bold text-white"><CounterAnimation end={impactTotals.studentsReached} suffix="+" /></div>
-              <p className="text-white/75 mt-1.5 text-xs md:text-base">Students Reached</p>
-            </div>
-            <div>
-              <div className="text-3xl md:text-5xl font-bold text-white"><CounterAnimation end={impactTotals.institutionsEngaged} /></div>
-              <p className="text-white/75 mt-1.5 text-xs md:text-base">Institutions Engaged</p>
-            </div>
-            <div>
-              <div className="text-3xl md:text-5xl font-bold text-white"><CounterAnimation end={impactTotals.communityEvents} /></div>
-              <p className="text-white/75 mt-1.5 text-xs md:text-base">Community Events</p>
-            </div>
+            ))}
+          </dl>
+          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-gray-100 pt-4 text-sm">
+            <p className="text-gray-600">Registered NGO No. {org.registrationNumber || '00NGO/R/8379'} · {contact.city || 'Dar es Salaam'}</p>
+            <Link to="/documents" className="font-semibold text-primary underline underline-offset-4">Documents &amp; Accountability</Link>
           </div>
         </div>
       </section>
@@ -290,9 +224,8 @@ export const Home = () => {
       <section className="py-12 md:py-20 bg-cool-gray">
         <div className="max-w-7xl mx-auto px-4">
           <SectionHeader
-            eyebrow="What We Do"
-            title="Our Campaigns & Impact"
-            subtitle={home.programsIntro || "Three focused programs built around practical public-health needs: hepatitis prevention, youth mental health and community support."}
+            title="Our campaigns"
+            subtitle={home.programsIntro || "Explore our work on hepatitis, HIV and mental health."}
             centered
             compact
           />
@@ -318,19 +251,16 @@ export const Home = () => {
       </section>
 
       {/* INSTITUTIONAL ENGAGEMENT */}
-      <section className="py-12 md:py-20 bg-primary-dark text-white">
+      <section className="bg-white py-12 md:py-20">
         <div className="max-w-6xl mx-auto px-4">
           <SectionHeader
-            eyebrow="Institutional Engagement"
-            title={home.engagementTitle || "Turning advocacy into conversations that can move policy"}
-            subtitle={home.engagementIntro || "THA’s public record includes engagement with national institutions and health partners on hepatitis prevention, birth-dose vaccination and community health."}
-            inverse
+            title="Institutional engagement"
             compact
           />
           <ResponsiveRail desktopGrid="md:grid-cols-3" mobileWidth="78vw" className="md:gap-5">
             {[
               parliamentEvidence,
-              unicefEvidence,
+              unicefCard,
               {
                 id: 'verification',
                 url: '/documents',
@@ -342,87 +272,21 @@ export const Home = () => {
               <Link
                 key={record.id}
                 to={record.url}
-                className="block h-full rounded-2xl bg-white/10 p-5 transition hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:p-6"
+                className="block h-full rounded-2xl border border-gray-200 bg-white p-5 transition hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary md:p-6"
               >
-                <p className="mb-2 text-xs uppercase tracking-wider text-white/60">{record.meta}</p>
-                <h3 className="mb-2 text-lg font-bold">{record.title}</h3>
-                <p className="text-sm text-white/75">{record.description}</p>
+                <p className="mb-2 text-xs uppercase tracking-wider text-gray-600">{record.meta}</p>
+                <h3 className="mb-2 text-lg font-bold text-primary">{record.title}</h3>
+                <p className="text-sm text-gray-700">{record.description}</p>
               </Link>
             ))}
           </ResponsiveRail>
         </div>
       </section>
 
-      {/* COMMUNITY APPROACH */}
-      <section className="bg-white py-12 md:py-20">
-        <div className="max-w-6xl mx-auto px-4">
-          <SectionHeader
-            eyebrow={home.approachEyebrow || "How We Work"}
-            title={home.approachTitle || "From community need to practical action"}
-            subtitle={home.approachIntro || "We start with the health issue people are facing, work with the right partners, and follow the work through with clear records and measurable progress."}
-            centered
-            compact
-          />
-
-          <div className="grid gap-3 md:grid-cols-3 md:gap-6">
-            <div className="rounded-2xl border border-primary/10 bg-cool-gray p-5 md:p-6">
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                <Icon name="groups" size={20} category="primary" />
-              </div>
-              <h3 className="font-bold text-primary">{home.needTitle || "Start with the need"}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">
-                {home.needText || "Listen to communities and health partners, understand the gap, and define what practical support is needed."}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-primary/10 bg-cool-gray p-5 md:p-6">
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                <Icon name="health_and_safety" size={20} category="primary" />
-              </div>
-              <h3 className="font-bold text-primary">{home.actionTitle || "Act with purpose"}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">
-                {home.actionText || "Turn that need into focused outreach, advocacy, education or referral activities with clear responsibilities."}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-primary/10 bg-cool-gray p-5 md:p-6">
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                <Icon name="fact_check" size={20} category="primary" />
-              </div>
-              <h3 className="font-bold text-primary">{home.learningTitle || "Track what changes"}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">
-                {home.learningText || "Document participation, results and lessons so the next activity can be stronger and more useful."}
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-6 flex justify-center">
-            <Link to="/impact" className="btn-primary justify-center px-5 py-2.5 text-sm md:px-6 md:py-3">
-              See Our Impact
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* OBJECTIVES */}
-      <section className="py-12 md:py-20 bg-cool-gray">
-        <div className="max-w-7xl mx-auto px-4">
-          <SectionHeader title="What We Do" centered compact />
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-            {objectives.map((obj, i) => (
-              <ObjectiveCard key={obj.id || i} obj={obj} index={i} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* PARTNERS */}
       <section id="partners" className="scroll-mt-16 py-12 md:py-20 bg-white">
         <div className="px-4">
           <SectionHeader
-            eyebrow="Trust & Collaboration"
             title="Our Partners"
-            subtitle={site.about?.partnersIntro || "Working with organizations that strengthen our reach, technical work and accountability."}
             centered
             compact
           />
@@ -476,26 +340,6 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-12 md:py-20 bg-gradient-to-r from-secondary to-secondary-dark text-white">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6">Get Involved</h2>
-          <p className="text-white/85 text-sm md:text-lg leading-relaxed mb-6 md:mb-8">
-            {home.ctaText || "If our work connects with your community, institution or area of interest, start a conversation with THA."}
-          </p>
-          <div className="grid grid-cols-2 gap-3 sm:flex sm:justify-center sm:gap-4 sm:flex-wrap">
-            <Link to="/make-a-difference" className="px-4 py-2.5 md:px-8 md:py-3 bg-white text-secondary text-sm md:text-base font-bold rounded-lg hover:bg-cool-gray transition">
-              Volunteer
-            </Link>
-            <Link to="/make-a-difference" className="px-4 py-2.5 md:px-8 md:py-3 border border-white md:border-2 text-white text-sm md:text-base font-bold rounded-lg hover:bg-white hover:text-secondary transition">
-              Donate
-            </Link>
-            <Link to="/contact" className="col-span-2 sm:col-auto px-4 py-2.5 md:px-8 md:py-3 bg-accent text-white text-sm md:text-base font-bold rounded-lg hover:bg-accent-dark transition">
-              Partner With Us
-            </Link>
-          </div>
-        </div>
-      </section>
 
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { SEO } from '../components/SEO';
 import { useSiteContent } from '../hooks/useSiteContent';
@@ -6,14 +6,14 @@ import { useSiteContent } from '../hooks/useSiteContent';
 export const MakeADifference = () => {
   const site = useSiteContent();
   const funding = site.funding || {};
-  const contact = site.contact || {};
-  const [activeTab, setActiveTab] = useState('volunteer');
+  const contactEmail = site.contact?.email || "info@tzhealthalliance.or.tz";
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedTab = searchParams.get('tab');
+  const activeTab = ['donate', 'partner'].includes(requestedTab) ? requestedTab : 'volunteer';
   const roles = (funding.volunteerRoles || [])
     .filter(role => role.published !== false)
     .sort((a,b) => Number(a.sortOrder||0)-Number(b.sortOrder||0));
   const successStory = funding.successStory || {};
-
-
 
   return (
     <div className="pt-14 md:pt-16">
@@ -24,7 +24,7 @@ export const MakeADifference = () => {
       />
 
       {/* Hero */}
-      <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
+      <section className="section-padding bg-primary-dark text-white">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="heading-xl text-white mb-6">Make a Difference</h1>
@@ -46,8 +46,9 @@ export const MakeADifference = () => {
             ].map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold transition-all text-sm ${
+                onClick={() => setSearchParams({ tab: tab.id })}
+                aria-pressed={activeTab === tab.id}
+                className={`flex items-center gap-2 px-3 py-2.5 sm:px-5 rounded-lg font-semibold transition-all text-sm ${
                   activeTab === tab.id
                     ? 'bg-secondary text-white shadow-sm'
                     : 'bg-cool-gray text-primary hover:bg-gray-200'
@@ -74,13 +75,13 @@ export const MakeADifference = () => {
 
             <div className="grid md:grid-cols-3 gap-8 mb-12">
               {roles.map((role) => (
-                <div key={role.title} className="bg-white p-6 md:p-8 rounded-2xl shadow-card hover:shadow-elevated transition-all">
+                <div key={role.title} className="bg-white p-6 md:p-8 rounded-2xl border border-gray-200 hover:shadow-elevated transition-all">
                   <div className="w-14 h-14 bg-primary/5 rounded-xl flex items-center justify-center mb-5">
                     <Icon name={role.icon} size={28} category="primary" />
                   </div>
-                  <div className="inline-flex items-center gap-1 bg-accent/10 text-accent text-xs font-semibold px-3 py-1 rounded-full mb-4">
-                    <Icon name="schedule" size={12} color="#ff9c1a" />
-                    {role.time}
+                  <div className="mb-4 inline-flex items-center gap-1 text-xs font-semibold text-gray-600">
+                    <Icon name="schedule" size={12} color="currentColor" />
+                    {role.time?.replace(/–/g, ' to ')}
                   </div>
                   <h3 className="text-lg font-bold text-primary mb-2">{role.title}</h3>
                   <p className="text-sm text-gray-600 leading-relaxed">{role.description}</p>
@@ -88,42 +89,11 @@ export const MakeADifference = () => {
               ))}
             </div>
 
-            <div className="bg-neutral p-8 md:p-12 rounded-2xl">
-              <h3 className="heading-md mb-6 text-center">Volunteer Application</h3>
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                alert('Thank you for your interest! We have received your application and will contact you within 48 hours to discuss our current volunteer opportunities.');
-                e.target.reset();
-              }} className="max-w-2xl mx-auto space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="input-group">
-                    <input type="text" required />
-                    <label>Full Name</label>
-                  </div>
-                  <div className="input-group">
-                    <input type="email" required />
-                    <label>Email Address</label>
-                  </div>
-                </div>
-                <div className="input-group">
-                  <input type="tel" required />
-                  <label>Phone Number</label>
-                </div>
-                <div className="input-group">
-                  <select className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-secondary focus:outline-none" required>
-                    <option value="">Select preferred role</option>
-                    {roles.map(role => <option key={role.id || role.title}>{role.title}</option>)}
-                  </select>
-                </div>
-                <div className="input-group">
-                  <textarea rows="4" required></textarea>
-                  <label>Why do you want to volunteer?</label>
-                </div>
-                <button type="submit" className="btn-primary w-full justify-center">
-                  Submit Application
-                  <Icon name="arrow_forward" size={20} />
-                </button>
-              </form>
+            <div className="rounded-xl border border-gray-200 bg-white p-6 text-center">
+              <p className="mb-4 text-gray-700">Tell us which role interests you and when you’re available.</p>
+              <a href={`mailto:${contactEmail}?subject=Volunteer%20with%20THA`} className="btn-primary">
+                Email about volunteering
+              </a>
             </div>
           </div>
         </section>
@@ -134,23 +104,23 @@ export const MakeADifference = () => {
         <section className="section-padding">
           <div className="container-custom">
             <div className="text-center mb-12">
-              <h2 className="heading-lg mb-4">Support Our Mission</h2>
+              <h2 className="heading-lg mb-4">Support THA’s work</h2>
               <p className="body-lg max-w-3xl mx-auto">
-                {funding.donationIntro || "We welcome support for clearly defined activities, with an agreed purpose, budget and reporting approach."}
+                {funding.donationIntro || "Fund a THA activity or ask us how to donate."}
               </p>
             </div>
 
             <div className="max-w-4xl mx-auto grid gap-6 md:grid-cols-2">
-              <div className="bg-white p-6 md:p-8 rounded-2xl shadow-card">
+              <div className="bg-white p-6 md:p-8 rounded-2xl border border-gray-200">
                 <div className="w-11 h-11 rounded-xl bg-primary/5 flex items-center justify-center mb-5">
                   <Icon name="assignment" size={22} category="primary" />
                 </div>
                 <h3 className="heading-sm mb-3">Fund a defined activity</h3>
                 <p className="body-md text-neutral-dark/70 mb-5">
-                  {funding.institutionalText || "For institutional or project funding, THA can agree the activity, target group, budget, timeline and reporting requirements before implementation begins."}
+                  {funding.institutionalText || "We can agree on the activity, who it will reach, the budget and how we will report back."}
                 </p>
                 <a
-                  href={`mailto:${contact.email || "info@tzhealthalliance.or.tz"}?subject=Funding%20or%20grant%20discussion`}
+                  href={`mailto:${contactEmail}?subject=Funding%20or%20grant%20discussion`}
                   className="inline-flex items-center gap-2 text-secondary font-semibold hover:underline"
                 >
                   Start a funding conversation
@@ -158,16 +128,16 @@ export const MakeADifference = () => {
                 </a>
               </div>
 
-              <div className="bg-white p-6 md:p-8 rounded-2xl shadow-card">
+              <div className="bg-white p-6 md:p-8 rounded-2xl border border-gray-200">
                 <div className="w-11 h-11 rounded-xl bg-primary/5 flex items-center justify-center mb-5">
                   <Icon name="account_balance" size={22} category="primary" />
                 </div>
                 <h3 className="heading-sm mb-3">Request verified donation details</h3>
                 <p className="body-md text-neutral-dark/70 mb-5">
-                  To protect donors and THA, current banking or payment instructions are shared directly by the organization rather than published as unverified website data.
+                  Contact THA to confirm current payment details before sending a donation.
                 </p>
                 <a
-                  href={`mailto:${contact.email || "info@tzhealthalliance.or.tz"}?subject=Request%20for%20verified%20THA%20donation%20details`}
+                  href={`mailto:${contactEmail}?subject=Request%20for%20verified%20THA%20donation%20details`}
                   className="inline-flex items-center gap-2 text-secondary font-semibold hover:underline"
                 >
                   Request payment instructions
@@ -175,15 +145,15 @@ export const MakeADifference = () => {
                 </a>
               </div>
 
-              <div className="md:col-span-2 rounded-2xl bg-primary p-6 md:p-8 text-white">
+              <div className="md:col-span-2 rounded-2xl border border-gray-200 bg-white p-6 md:p-8 text-primary">
                 <h3 className="text-xl font-bold mb-3">For grantmakers and institutional partners</h3>
-                <p className="text-white/80 mb-5 max-w-3xl">
-                  Registration information, public activity records and independent verification are available on our Documents & Accountability page. Additional due-diligence documents can be requested directly from THA.
+                <p className="text-gray-700 mb-5 max-w-3xl">
+                  See our registration and activity records. Contact THA for any other documents you need.
                 </p>
-                <a href="/documents" className="inline-flex items-center gap-2 font-semibold text-white hover:underline">
+                <Link to="/documents" className="inline-flex items-center gap-2 font-semibold text-primary hover:underline">
                   Review Documents & Accountability
-                  <Icon name="arrow_forward" size={17} color="white" />
-                </a>
+                  <Icon name="arrow_forward" size={17} color="currentColor" />
+                </Link>
               </div>
             </div>
           </div>
@@ -201,46 +171,11 @@ export const MakeADifference = () => {
               </p>
             </div>
 
-            <div className="max-w-3xl mx-auto bg-white p-6 md:p-12 rounded-2xl shadow-card">
-              <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="input-group">
-                    <input type="text" required />
-                    <label>Organization Name</label>
-                  </div>
-                  <div className="input-group">
-                    <input type="text" required />
-                    <label>Contact Person</label>
-                  </div>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="input-group">
-                    <input type="email" required />
-                    <label>Email Address</label>
-                  </div>
-                  <div className="input-group">
-                    <input type="tel" required />
-                    <label>Phone Number</label>
-                  </div>
-                </div>
-                <div className="input-group">
-                  <select className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-secondary focus:outline-none" required>
-                    <option value="">Partnership type</option>
-                    <option>Corporate Sponsorship</option>
-                    <option>Technical Partnership</option>
-                    <option>Research Collaboration</option>
-                    <option>Resource Sharing</option>
-                  </select>
-                </div>
-                <div className="input-group">
-                  <textarea rows="5" required></textarea>
-                  <label>Tell us about your organization and partnership goals</label>
-                </div>
-                <button type="submit" className="btn-primary w-full justify-center">
-                  Submit Partnership Inquiry
-                  <Icon name="arrow_forward" size={20} />
-                </button>
-              </form>
+            <div className="mx-auto max-w-3xl rounded-xl border border-gray-200 bg-white p-6 text-center">
+              <p className="mb-4 text-gray-700">Tell us about your organization and the work you’d like to do together.</p>
+              <a href={`mailto:${contactEmail}?subject=Partner%20with%20THA`} className="btn-primary">
+                Email about a partnership
+              </a>
             </div>
           </div>
         </section>
@@ -248,7 +183,7 @@ export const MakeADifference = () => {
 
       {/* Success Story */}
       {successStory.published && successStory.quote ? (
-        <section className="section-padding bg-gradient-to-br from-primary to-primary-dark text-white">
+        <section className="section-padding bg-primary-dark text-white">
           <div className="container-custom">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-8">
