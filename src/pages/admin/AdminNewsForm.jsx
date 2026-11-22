@@ -201,8 +201,8 @@ export default function AdminNewsForm() {
 
   async function generateDraft() {
     const details = assistant.details.trim();
-    if (!details || details.length > 5000) {
-      setErrors(prev => ({ ...prev, assistant: 'Enter the verified facts in up to 5,000 characters.' }));
+    if (!details) {
+      setErrors(prev => ({ ...prev, assistant: 'Write a short description of what happened.' }));
       return;
     }
 
@@ -212,9 +212,9 @@ export default function AdminNewsForm() {
       const res = await authFetch('/api/news/generate', {
         method: 'POST',
         body: JSON.stringify({
-          topic: details.slice(0, 300),
-          facts: details,
+          topic: details,
           purpose: PURPOSES[assistant.purpose],
+          images: uploadedImages.map(item => item.src),
           categories: categoryOptions,
         }),
       });
@@ -354,7 +354,7 @@ export default function AdminNewsForm() {
                   <p className="text-xs font-bold uppercase tracking-widest text-primary/70">AI-assisted posting</p>
                   <h2 className="text-xl font-bold text-primary mt-1">Tell us the story briefly</h2>
                   <p className="text-sm text-gray-500 mt-1">
-                    Include the date, location, who took part and what happened. Add a source link if you have one.
+                    A few factual details are enough. Do not worry about writing an article.
                   </p>
                 </div>
 
@@ -367,7 +367,6 @@ export default function AdminNewsForm() {
                         setErrors(prev => ({ ...prev, assistant: '' }));
                       }}
                       rows={6}
-                      maxLength={5000}
                       placeholder="Example: THA held a hepatitis awareness session in Dodoma on 3 October. Health workers and university students attended. The discussion focused on testing, vaccination and early treatment. About 80 people participated."
                       className={inputCls(errors.assistant)}
                     />
@@ -398,7 +397,7 @@ export default function AdminNewsForm() {
                     disabled={generatingDraft || processingImages}
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary-dark transition disabled:opacity-60"
                   >
-                    {generatingDraft ? 'Preparing draft…' : 'Suggest a draft'}
+                    {generatingDraft ? 'Preparing full article…' : 'Generate full article'}
                   </button>
                 </div>
               </section>

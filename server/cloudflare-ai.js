@@ -1,13 +1,3 @@
-async function requestWorkersAi(url, options) {
-  try {
-    return await fetch(url, { ...options, signal: AbortSignal.timeout(15000) });
-  } catch {
-    const error = new Error('AI service did not respond.');
-    error.code = 'AI_TEMPORARILY_UNAVAILABLE';
-    throw error;
-  }
-}
-
 async function generateCloudflareDraft({ topic, purpose, facts, categories }) {
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID?.trim();
   const apiToken = process.env.CLOUDFLARE_WORKERS_AI_TOKEN?.trim();
@@ -24,10 +14,7 @@ async function generateCloudflareDraft({ topic, purpose, facts, categories }) {
     'Never invent names, dates, locations, statistics, quotes, partnerships, outcomes, or medical claims.',
     'Use only the supplied topic and verified facts.',
     'Use clear English for a general Tanzanian audience and short paragraphs.',
-    'Start with what happened and why it matters to people in Tanzania when supplied facts support that connection.',
-    'Use only as many short paragraphs as the facts warrant. Avoid filler, slogans, repetition, hashtags, and Markdown headings.',
-    'Use periods, commas, or parentheses instead of long dashes.',
-    'Keep source names and links as supplied. Never add a source or a medical claim from memory.',
+    'Write 5 to 8 useful paragraphs with no Markdown headings, hashtags, or promotional exaggeration.',
     'Choose an existing category when suitable; otherwise suggest one concise professional category.',
   ].join(' ');
 
@@ -37,11 +24,11 @@ async function generateCloudflareDraft({ topic, purpose, facts, categories }) {
     properties: {
       title: { type: 'string', minLength: 10, maxLength: 200 },
       excerpt: { type: 'string', minLength: 30, maxLength: 500 },
-      content: { type: 'string', minLength: 30, maxLength: 12000 },
+      content: { type: 'string', minLength: 200, maxLength: 12000 },
       category: { type: 'string', minLength: 2, maxLength: 80 },
       tags: {
         type: 'array',
-        minItems: 0,
+        minItems: 2,
         maxItems: 8,
         items: { type: 'string', minLength: 2, maxLength: 50 },
       },
@@ -50,7 +37,7 @@ async function generateCloudflareDraft({ topic, purpose, facts, categories }) {
   };
 
   const model = process.env.CLOUDFLARE_AI_MODEL || '@cf/meta/llama-3.1-8b-instruct';
-  const response = await requestWorkersAi(
+  const response = await fetch(
     `https://api.cloudflare.com/client/v4/accounts/${encodeURIComponent(accountId)}/ai/run/${model}`,
     {
       method: 'POST',
@@ -71,8 +58,6 @@ async function generateCloudflareDraft({ topic, purpose, facts, categories }) {
             ].join('\n\n'),
           },
         ],
-        max_tokens: 1800,
-        temperature: 0.2,
         response_format: { type: 'json_schema', json_schema: schema },
       }),
     }
@@ -86,13 +71,10 @@ async function generateCloudflareDraft({ topic, purpose, facts, categories }) {
   }
 
   const payload = data?.result?.response ?? data?.result;
-  let draft = payload;
-  if (typeof draft === 'string') {
-    try { draft = JSON.parse(draft); } catch { draft = null; }
+  if (typeof payload === 'string') {
+    try { return JSON.parse(payload); } catch {}
   }
-  if (draft && ['title', 'excerpt', 'content'].every(field => (
-    typeof draft[field] === 'string' && draft[field].trim()
-  ))) return draft;
+  if (payload && typeof payload === 'object') return payload;
 
   const error = new Error('Invalid AI response');
   error.code = 'AI_INVALID_RESPONSE';
@@ -128,7 +110,6 @@ async function generateAdminAssistance({ section, action, instruction, current =
     'Write natural, human English suitable for a Tanzanian public-health NGO.',
     'Do not sound like marketing copy, a grant application, or generic AI prose.',
     'Never invent names, dates, locations, statistics, quotes, partnerships, awards, outcomes, legal facts, medical claims, or financial details.',
-    'Use periods, commas, or parentheses instead of long dashes.',
     'Preserve verified facts already present in the supplied content.',
     'For health content, do not diagnose or give individual medical advice.',
     'For policies, keep wording clear and cautious rather than pretending to be legal counsel.',
@@ -159,7 +140,7 @@ async function generateAdminAssistance({ section, action, instruction, current =
   };
 
   const model = process.env.CLOUDFLARE_AI_MODEL || '@cf/meta/llama-3.1-8b-instruct';
-  const response = await requestWorkersAi(
+  const response = await fetch(
     `https://api.cloudflare.com/client/v4/accounts/${encodeURIComponent(accountId)}/ai/run/${model}`,
     {
       method: 'POST',
@@ -181,8 +162,6 @@ async function generateAdminAssistance({ section, action, instruction, current =
             ].join('\n\n'),
           },
         ],
-        max_tokens: 1800,
-        temperature: 0.2,
         response_format: { type: 'json_schema', json_schema: schema },
       }),
     }
@@ -209,7 +188,7 @@ async function generateAdminAssistance({ section, action, instruction, current =
   const allowed = new Set(allowedFields.map(field => field.key));
   return {
     suggestions: parsed.suggestions
-      .filter(item => typeof item?.value === 'string' && allowed.has(String(item.field || '').trim()))
+      .filter(item => allowed.has(String(item.field || '').trim()))
       .map(item => ({
         field: String(item.field || '').trim(),
         value: String(item.value ?? '').trim(),

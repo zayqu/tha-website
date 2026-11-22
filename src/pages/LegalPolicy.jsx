@@ -12,7 +12,7 @@ export default function LegalPolicy({ type }) {
   return (
     <div className="bg-cool-gray pt-14 md:pt-16">
       <SEO title={policy.title} description={policy.intro} canonicalPath={`/${type}`} />
-      <section className="bg-primary-dark py-16 text-white md:py-20">
+      <section className="bg-gradient-to-br from-primary to-primary-dark py-16 text-white md:py-20">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <h1 className="text-3xl font-bold md:text-5xl">{policy.title}</h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-white/85">{policy.intro}</p>

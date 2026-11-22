@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 /** Shared heading and vertical rhythm for THA's public section pages. */
 export function PageHero({ title, description, eyebrow, backTo, backLabel = 'Back', meta }) {
-  return <section className="bg-primary-dark px-4 py-16 text-white sm:px-6 md:py-24 lg:px-8">
+  return <section className="bg-gradient-to-br from-primary to-primary-dark px-4 py-16 text-white sm:px-6 md:py-24 lg:px-8">
     <div className="container-custom">
       {backTo && <Link to={backTo} className="mb-6 inline-block text-sm font-semibold text-white/85 hover:text-white">← {backLabel}</Link>}
       <div className="mx-auto max-w-4xl text-center">
