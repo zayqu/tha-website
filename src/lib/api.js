@@ -164,7 +164,6 @@ export function getCachedSiteContent() {
   try {
     const cached = JSON.parse(window.localStorage.getItem('tha:site-content:v1') || 'null');
     if (cached && typeof cached === 'object') {
-      siteContentCache = cached;
       return cached;
     }
   } catch {}
